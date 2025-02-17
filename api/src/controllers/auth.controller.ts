@@ -65,7 +65,7 @@ export class AuthController {
 
     if (!credentials.id || !credentials.code) {
 
-      const gen_auth = await this.appUsersAuthenticatorRepository.execute('SELECT * FROM template.generate_authenticator()')
+      const gen_auth = await this.appUsersAuthenticatorRepository.execute('SELECT * FROM users.generate_authenticator()')
         .then((data) => data[0]);
 
       const authenticator = await this.appUsersAuthenticatorRepository.create({ app_users_id: user.id, code: gen_auth.code, expires: gen_auth.expires })
@@ -407,7 +407,7 @@ export class AuthController {
       });
 
       if (!findKey) return this.response.status(422).send({ message: 'Utilizador inválido. Contacte a entidade' });
-      await this.pedidosRemocaoRepository.execute(`SELECT template.fn_delete_user('${body.code}')`)
+      await this.pedidosRemocaoRepository.execute(`SELECT users.fn_delete_user('${body.code}')`)
       return
     }
 

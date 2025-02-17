@@ -10,7 +10,7 @@ const config = {
   user: 'postgres',
   password: 'postgres',
   database: 'postgres',
-  schema: 'template'
+  schema: 'users'
 };
 
 // Observe application's life cycle to disconnect the datasource when

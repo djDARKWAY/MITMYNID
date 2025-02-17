@@ -1,4 +1,4 @@
-INSERT INTO template.cookies_type
+INSERT INTO users.cookies_type
 (id, title, description, short_desc, optional, tags)
 VALUES(1, 'NECESSÁRIO',
 'Os Cookies são arquivos enviados a um navegador por meio de um servidor web para registrar as atividades do utilizador num site específico.
@@ -21,7 +21,7 @@ Quando preenche os formulários existentes no nosso Website, os dados pessoais d
 Caso disponibilize dados pessoais em nome de outra pessoa deverá assegurar-se que, antes de fazê-lo, essa pessoa leu a Politica de Privacidade.',
 'Os cookies necessários são cruciais para as funções básicas do site e o site não funcionará da maneira pretendida sem eles.', false, NULL);
 
-INSERT INTO template.cookies_type
+INSERT INTO users.cookies_type
 (id, title, description, short_desc, optional, tags)
 VALUES(2, 'GOOGLE ANALYTICS',
 'O Google Analytics utiliza principalmente cookies originais para comunicar as interações dos visitantes (também conhecidos como "utilizadores") em Websites de clientes do Google Analytics.
