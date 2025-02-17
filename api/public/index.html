@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Template API</title>
+
+  <meta
+  http-equiv="Content-Security-Policy"
+  content="
+    default-src 'self';
+    img-src data: 'self';
+    script-src 'self';
+    style-src 'self' 'sha256-TYU7EqjAMu7+rgwFl/T8//n3iwrcC7qohBYBwli/H4k=';
+    form-action 'self';"
+/>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico">
+
+  <style>
+    h3 {
+      margin-left: 25px;
+      text-align: center;
+    }
+
+    a, a:visited {
+      color: #c1c1c1;
+      text-align: center;
+      margin-bottom: 3em;
+      margin-top: 1em;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 8px;
+    }
+
+    h3 a {
+      margin-left: 10px;
+    }
+
+    a:hover, a:focus, a:active {
+      color: #a1a1a1;
+    }
+
+    .power {
+      position: absolute;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .power p {
+      color: #c1c1c1;
+      text-align: center;
+      margin-bottom: 3em;
+      margin-top: 1em;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10px;
+    }
+
+
+    .info {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%)
+    }
+
+    .info h1 {
+      text-align: center;
+      margin-bottom: 0;
+    }
+
+    .info img {
+      min-width: 300px;
+    }
+
+
+    .info p {
+      text-align: center;
+      margin-bottom: 3em;
+      margin-top: 1em;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+    }
+
+
+
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: rgb(29, 30, 32);
+        color: white;
+      }
+
+      a, a:visited {
+        color: #4990e2;
+      }
+
+      a:hover, a:focus, a:active {
+        color: #2b78ff;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="info">
+    <img src="/files/global/api_front.svg" />
+    <p>Version 1.0.0</p>
+  </div>
+
+  <footer class="power">
+    <a href="https://mitmynid.com" target="_blank">
+      <img src="/files/global/logoMMN.png" />
+    </a>
+    <br />
+    <p>
+	Credits:
+	<a href="https://storyset.com/sport">Sport illustrations by Storyset</a>
+    </p>
+  </footer>
+</body>
+
+</html>

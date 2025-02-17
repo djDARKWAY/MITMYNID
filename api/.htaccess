@@ -1,0 +1,215 @@
+Header set Content-Security-Policy "frame-ancestors 'none'; default-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; form-action 'self'"
+
+#  URLs Amigaveis
+
+# ORIGINAL
+#RewriteCond %{HTTP_HOST} !^www\.
+# LOCALHOST
+#RewriteCond %{HTTP_HOST} !^\.
+#RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+#RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/[0-9a-zA-Z_-]+$
+#RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+#RewriteCond %{REQUEST_URI} !^/\.well-known/cpanel-dcv/[0-9a-zA-Z_-]+$
+#RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/(?:\ Ballot169)?
+#RewriteRule ^(.*)$ http://www.%{HTTP_HOST}/$1 [R=301,L]
+
+RewriteEngine On
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+RewriteCond %{REQUEST_URI} !^/\.well-known/cpanel-dcv/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/(?:\ Ballot169)?
+RewriteRule .(/)?$ /redirect.php
+
+#
+#RewriteCond %{SERVER_PORT} ^443$
+#RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+#RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/[0-9a-zA-Z_-]+$
+#RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+#RewriteRule (.*) http://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+#Encaminhar para https
+#RewriteCond %{SERVER_PORT} !^443$
+#RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/[0-9a-zA-Z_-]+$
+#RewriteCond %{REQUEST_URI} !^/\.well-known/cpanel-dcv/[0-9a-zA-Z_-]+$
+#RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/(?:\ Ballot169)?
+#RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+#RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+####TUNE UP WEBSITE###
+<IfModule mod_deflate.c>
+<FilesMatch "\.(js|css|xml|html|xhtml|svg)$">
+SetOutputFilter DEFLATE
+</FilesMatch>
+</IfModule>
+
+<IfModule mod_headers.c>
+<FilesMatch "\.(css|xml|gz)$">
+Header append Vary Accept-Encoding
+</FilesMatch>
+</IfModule>
+
+#Check to see if browser can accept gzip files.
+ReWriteCond %{HTTP:accept-encoding} gzip
+RewriteCond %{HTTP_USER_AGENT} !Safari
+ReWriteCond %{REQUEST_FILENAME} !^.+\.gz$
+RewriteCond %{REQUEST_FILENAME}.gz -f
+RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+RewriteCond %{REQUEST_URI} !^/\.well-known/cpanel-dcv/[0-9a-zA-Z_-]+$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/(?:\ Ballot169)?
+RewriteRule ^(.+) $1.gz [QSA,L]
+
+# MONTH CACHE
+<FilesMatch "\.(flv|gif|jpg|jpeg|png|ico|swf|pdf|svg|woff|woff2|ttf|eot)$">
+Header set Cache-Control "max-age=2592000"
+</FilesMatch>
+
+# WEEK CACHE
+<FilesMatch "\.(css|php)$">
+#Header set Cache-Control "max-age=2592000"
+Header set Cache-Control "max-age=86400"
+</FilesMatch>
+
+# 4 HOUR CACHE
+<FilesMatch "\.(js)$">
+Header set Cache-Control "max-age=2592000"
+</FilesMatch>
+
+# Set Cache-Control and Expires headers
+<filesMatch "\\.(ico|pdf|flv|jpg|jpeg|png|gif|swf|mp3|mp4|html|htm|php)$">
+Header set Cache-Control "max-age=2592000, private"
+</filesMatch>
+<filesMatch "\\.(css|css.gz)$">
+Header set Cache-Control "max-age=2592000, private"
+</filesMatch>
+
+# Firefox Cache
+<If "%{HTTP_USER_AGENT} !~ /Chrome/">
+Header set Cache-Control "max-age=1"
+Header set Cache-Control "max-age=1, private"
+</If>
+
+<ifModule mod_headers.c>
+    Header set Connection keep-alive
+</ifModule>
+
+<IfModule mod_expires.c>
+ExpiresActive On
+<FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
+ExpiresDefault "access plus 30 days"
+</FilesMatch>
+</IfModule>
+
+<FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)(\.gz)?$">
+Header set Expires "Wed, 31 Dec 2014 20:00:00 GMT"
+Header unset ETag
+FileETag None
+</FilesMatch>
+
+<FilesMatch ".(js|css|html|htm|php|xml)$">
+SetOutputFilter DEFLATE
+</FilesMatch>
+####TUNE UP WEBSITE###
+
+# Permitir todos os paises, excepto estes
+SetEnvIf GEOIP_COUNTRY_CODE RU BlockCountry
+#SetEnvIf GEOIP_COUNTRY_CODE US BlockCountry - nao pode ser bloqueado por causa das imagens que vão nos emails
+SetEnvIf GEOIP_COUNTRY_CODE AM BlockCountry
+SetEnvIf GEOIP_COUNTRY_CODE BY BlockCountry
+SetEnvIf GEOIP_COUNTRY_CODE KZ BlockCountry
+SetEnvIf GEOIP_COUNTRY_CODE KG BlockCountry
+SetEnvIf GEOIP_COUNTRY_CODE TJ BlockCountry
+SetEnvIf GEOIP_COUNTRY_CODE RS BlockCountry
+SetEnvIf GEOIP_COUNTRY_CODE CU BlockCountry
+SetEnvIf GEOIP_COUNTRY_CODE VE BlockCountry
+SetEnvIf GEOIP_COUNTRY_CODE KP BlockCountry
+SetEnvIf GEOIP_COUNTRY_CODE IR BlockCountry
+SetEnvIf GEOIP_COUNTRY_CODE SY BlockCountry
+SetEnvIf GEOIP_COUNTRY_CODE YE BlockCountry
+
+Deny from env=BlockCountry
+
+
+# https://www.pccybersecurity.com/index.php/cyber-risks/geo-block-russia
+##### Start -- Redirect Geo Conflict Hotspots by Remote Host to The Honeypot -- Start #####
+RewriteCond %{REQUEST_URI} !void.php/
+RewriteCond %{REMOTE_HOST} \.ru$ [NC,OR] #Russia
+RewriteCond %{REMOTE_HOST} \.am$ [NC,OR] #Armenia
+RewriteCond %{REMOTE_HOST} \.by$ [NC,OR] #Belarus
+RewriteCond %{REMOTE_HOST} \.kz$ [NC,OR] #Kazakhstan
+RewriteCond %{REMOTE_HOST} \.kg$ [NC,OR] #Kyrgyzstan
+RewriteCond %{REMOTE_HOST} \.tj$ [NC,OR] #Tajikistan
+RewriteCond %{REMOTE_HOST} \.rs$ [NC,OR] #Serbia
+RewriteCond %{REMOTE_HOST} \.cu$ [NC,OR] #Cuba
+RewriteCond %{REMOTE_HOST} \.ve$ [NC,OR] #Venezuela
+RewriteCond %{REMOTE_HOST} \.kp$ [NC,OR] #North Korea
+RewriteCond %{REMOTE_HOST} \.ir$ [NC,OR] #Iran
+RewriteCond %{REMOTE_HOST} \.sy$ [NC,OR] #Syria
+RewriteCond %{REMOTE_HOST} \.ye$ [NC] #Yemen
+RewriteRule ^(.*)$ /void.php/ [NC,L]
+##### End -- Redirect Geo Conflict Hotspots by Remote Host to The Honeypot -- End #####
+
+##### Start -- Redirect Geo Conflict Hotspots by Forwarded Host to The Honeypot -- Start #####
+RewriteCond %{REQUEST_URI} !void.php/
+RewriteCond %{HTTP:X-Forwarded-Host} \.ru$ [NC,OR] #Russia
+RewriteCond %{HTTP:X-Forwarded-Host} \.am$ [NC,OR] #Armenia
+RewriteCond %{HTTP:X-Forwarded-Host} \.by$ [NC,OR] #Belarus
+RewriteCond %{HTTP:X-Forwarded-Host} \.kz$ [NC,OR] #Kazakhstan
+RewriteCond %{HTTP:X-Forwarded-Host} \.kg$ [NC,OR] #Kyrgyzstan
+RewriteCond %{HTTP:X-Forwarded-Host} \.tj$ [NC,OR] #Tajikistan
+RewriteCond %{HTTP:X-Forwarded-Host} \.rs$ [NC,OR] #Serbia
+RewriteCond %{HTTP:X-Forwarded-Host} \.cu$ [NC,OR] #Cuba
+RewriteCond %{HTTP:X-Forwarded-Host} \.ve$ [NC,OR] #Venezuela
+RewriteCond %{HTTP:X-Forwarded-Host} \.kp$ [NC,OR] #North Korea
+RewriteCond %{HTTP:X-Forwarded-Host} \.ir$ [NC,OR] #Iran
+RewriteCond %{HTTP:X-Forwarded-Host} \.sy$ [NC,OR] #Syria
+RewriteCond %{HTTP:X-Forwarded-Host} \.ye$ [NC] #Yemen
+RewriteRule ^(.*)$ /void.php/ [NC,L]
+##### End -- Redirect Geo Conflict Hotspots by Forwarded Host to The Honeypot -- End #####
+
+
+##### Start -- Redirect Geo Conflict Hotspots by Referral Website to The Honeypot -- Start #####
+RewriteCond %{REQUEST_URI} !void.php/
+RewriteCond %{HTTP_REFERER} \.ru$ [NC,OR] #Russia
+RewriteCond %{HTTP_REFERER} \.am$ [NC,OR] #Armenia
+RewriteCond %{HTTP_REFERER} \.by$ [NC,OR] #Belarus
+RewriteCond %{HTTP_REFERER} \.kz$ [NC,OR] #Kazakhstan
+RewriteCond %{HTTP_REFERER} \.kg$ [NC,OR] #Kyrgyzstan
+RewriteCond %{HTTP_REFERER} \.tj$ [NC,OR] #Tajikistan
+RewriteCond %{HTTP_REFERER} \.rs$ [NC,OR] #Serbia
+RewriteCond %{HTTP_REFERER} \.cu$ [NC,OR] #Cuba
+RewriteCond %{HTTP_REFERER} \.ve$ [NC,OR] #Venezuela
+RewriteCond %{HTTP_REFERER} \.kp$ [NC,OR] #North Korea
+RewriteCond %{HTTP_REFERER} \.ir$ [NC,OR] #Iran
+RewriteCond %{HTTP_REFERER} \.sy$ [NC,OR] #Syria
+RewriteCond %{HTTP_REFERER} \.ye$ [NC] #Yemen
+RewriteRule ^(.*)$ /void.php/ [NC,L]
+##### End -- Redirect Geo Conflict Hotspots by Referral Website to The Honeypot -- End #####
+
+##### Start -- Redirect Geo Conflict Hotspot Web Browsers to The Honeypot -- Start #####
+RewriteCond %{REQUEST_URI} !void.php/
+RewriteCond %{HTTP_USER_AGENT} YaBrowser [NC,OR] #Russia
+RewriteCond %{HTTP_USER_AGENT} Yowser [NC,OR] #Russia
+RewriteCond %{HTTP_USER_AGENT} YaApp [NC,OR] #Russia
+RewriteCond %{HTTP_USER_AGENT} naenara [NC] #North Korea
+RewriteRule ^(.*)$ /void.php/ [NC,L]
+##### End -- Redirect Geo Conflict Hotspot Web Browsers to The Honeypot -- End #####
+
+##### Start -- Redirect Geo Conflict Hotspot Bots to The Honeypot -- Start #####
+RewriteCond %{REQUEST_URI} !void.php/
+RewriteCond %{HTTP_USER_AGENT} YandexBot [NC,OR] #Russia SE Bot
+RewriteCond %{HTTP_USER_AGENT} YaDirectFetcher [NC,OR] #Russia SE Bot
+RewriteCond %{HTTP_USER_AGENT} rambler [NC,OR] #Russia SE Bot
+RewriteCond %{HTTP_USER_AGENT} Mail\.Ru [NC,OR] #Russia SE Bot
+RewriteCond %{HTTP_USER_AGENT} aport [NC,OR] #Russia SE Bot
+RewriteCond %{HTTP_USER_AGENT} yooz [NC,OR] #Iranian SE Bot
+RewriteCond %{HTTP_USER_AGENT} hivaBot [NC,OR] #Iranian SE Bot (yooz)
+RewriteCond %{HTTP_USER_AGENT} Parsijoo [NC,OR] #Iranian SE Bot
+RewriteCond %{HTTP_USER_AGENT} Rismoon [NC] #Iranian SE Bot
+RewriteRule ^(.*)$ /void.php/ [NC,L]
+##### End -- Redirect Geo Conflict Hotspot Bots to The Honeypot -- End #####

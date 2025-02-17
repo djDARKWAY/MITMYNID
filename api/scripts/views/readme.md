@@ -1,0 +1,1 @@
+## Assim que executar o migrate, é necessário apagar as tabelas que o loopback cria com o mesmo nome das views aqui presentes e executar o script das mesmas

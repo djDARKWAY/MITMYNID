@@ -1,0 +1,12 @@
+{
+  "email_server": {
+      "service": "gmail",
+      "username": "",
+      "pass": "",
+      "from": "",
+      "logo": {
+          "path": "./public/files/global/logoMMN.png",
+          "cid": "logoMMN"
+      }
+  }
+}
