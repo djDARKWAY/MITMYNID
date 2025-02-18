@@ -7,3 +7,6 @@ export * from './app-users-register.repository';
 export * from './pedidos-remocao.repository';
 export * from './app-users-authenticator.repository';
 export * from './cookies-type.repository';
+export * from './access-point.repository';
+export * from './certificate.repository';
+export * from './company.repository';

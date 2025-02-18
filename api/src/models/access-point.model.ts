@@ -116,25 +116,9 @@ export class AccessPoint extends Entity {
   isActive: boolean;
 
   @belongsTo(() => Certificate, {name: 'certificate'})
-  @property({
-    type: 'number',
-    postgresql: {
-      columnName: 'certificateId',
-      dataType: 'integer',
-      nullable: 'YES',
-    },
-  })
   certificateId?: number;
 
   @belongsTo(() => Company, {name: 'company'})
-  @property({
-    type: 'number',
-    postgresql: {
-      columnName: 'companyId',
-      dataType: 'integer',
-      nullable: 'YES',
-    },
-  })
   companyId?: number;
 
   constructor(data?: Partial<AccessPoint>) {
