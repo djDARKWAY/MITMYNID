@@ -1,93 +1,92 @@
-import { Entity, model, property } from '@loopback/repository';
+import { Entity, model, property } from "@loopback/repository";
 
 @model({
   settings: {
     strict: false,
     postgresql: {
-      table: 'pedidos_remocao',
+      table: "pedidos_remocao",
     },
-  }
+  },
 })
 export class PedidosRemocao extends Entity {
   @property({
-    type: 'number',
+    type: "number",
     id: true,
     generated: true,
     postgresql: {
-      columnName: 'id',
-      dataType: 'integer',
-      nullable: 'NO'
+      columnName: "id",
+      dataType: "integer",
+      nullable: "NO",
     },
   })
   id: number;
 
   @property({
-    type: 'string',
+    type: "string",
     required: true,
     postgresql: {
-      columnName: 'email_cliente',
-      dataType: 'text',
+      columnName: "email_cliente",
+      dataType: "text",
     },
   })
   email_cliente: string;
 
   @property({
-    type: 'string',
+    type: "string",
     jsonSchema: {
-      type: 'string',
-      nullable: true
+      type: "string",
+      nullable: true,
     },
     postgresql: {
-      columnName: 'motivo',
-      dataType: 'text',
+      columnName: "motivo",
+      dataType: "text",
     },
   })
   motivo?: string;
 
   @property({
-    type: 'string',
+    type: "string",
     required: true,
     postgresql: {
-      columnName: 'ip_cliente',
-      dataType: 'text',
+      columnName: "ip_cliente",
+      dataType: "text",
     },
   })
   ip_cliente: string;
 
   @property({
-    type: 'string',
+    type: "string",
     required: true,
     postgresql: {
-      columnName: 'code',
-      dataType: 'text',
+      columnName: "code",
+      dataType: "text",
     },
   })
   code: string;
 
   @property({
-    type: 'date',
+    type: "date",
     required: true,
-    defaultFn: 'now',
+    defaultFn: "now",
     postgresql: {
-      columnName: 'data_pedido',
-      dataType: 'timestamp with time zone',
+      columnName: "data_pedido",
+      dataType: "timestamp with time zone",
     },
   })
   data_pedido: string;
 
   @property({
-    type: 'date',
+    type: "date",
     jsonSchema: {
-      type: 'string',
-      nullable: true
+      type: "string",
+      nullable: true,
     },
     postgresql: {
-      columnName: 'data_confirm',
-      dataType: 'timestamp with time zone',
+      columnName: "data_confirm",
+      dataType: "timestamp with time zone",
     },
   })
   data_confirm?: string;
-
 
   constructor(data?: Partial<PedidosRemocao>) {
     super(data);
@@ -98,4 +97,5 @@ export interface PedidosRemocaoRelations {
   // describe navigational properties here
 }
 
-export type PedidosRemocaoWithRelations = PedidosRemocao & PedidosRemocaoRelations;
+export type PedidosRemocaoWithRelations = PedidosRemocao &
+  PedidosRemocaoRelations;

@@ -1,45 +1,45 @@
-import {Entity, model, property} from '@loopback/repository';
+import { Entity, model, property } from "@loopback/repository";
 
 @model({
   settings: {
     postgresql: {
-      table: 'app_users_role'
+      table: "app_users_role",
     },
-    description: 'Atribuição de perfis das aplicações aos utilizadores.'
-  }
+    description: "Atribuição de perfis das aplicações aos utilizadores.",
+  },
 })
 export class UserRole extends Entity {
   @property({
-    type: 'string',
+    type: "string",
     id: true,
     generated: false,
-    defaultFn: 'uuidv4',
+    defaultFn: "uuidv4",
     postgresql: {
-      columnName: 'id',
-      dataType: 'UUID',
-      nullable: 'NO'
+      columnName: "id",
+      dataType: "UUID",
+      nullable: "NO",
     },
   })
   id: string;
 
   @property({
-    type: 'string',
+    type: "string",
     required: true,
     postgresql: {
-      columnName: 'app_users_id',
-      dataType: 'UUID',
-      nullable: 'NO'
+      columnName: "app_users_id",
+      dataType: "UUID",
+      nullable: "NO",
     },
   })
   app_users_id: string;
 
   @property({
-    type: 'string',
+    type: "string",
     required: true,
     postgresql: {
-      columnName: 'role_id',
-      dataType: 'UUID',
-      nullable: 'NO'
+      columnName: "role_id",
+      dataType: "UUID",
+      nullable: "NO",
     },
   })
   role_id: string;

@@ -1,112 +1,112 @@
-import {Entity, model, property} from '@loopback/repository';
+import { Entity, model, property } from "@loopback/repository";
 
 @model()
 export class Certificate extends Entity {
   @property({
-    type: 'number',
+    type: "number",
     id: true,
     generated: true,
     postgresql: {
-      columnName: 'idCertificate',
-      dataType: 'serial',
-      nullable: 'NO',
+      columnName: "idCertificate",
+      dataType: "serial",
+      nullable: "NO",
     },
   })
   idCertificate?: number;
 
   @property({
-    type: 'string',
+    type: "string",
     required: true,
     postgresql: {
-      columnName: 'name',
-      dataType: 'varchar',
+      columnName: "name",
+      dataType: "varchar",
       dataLength: 255,
-      nullable: 'NO',
+      nullable: "NO",
     },
   })
   name: string;
 
   @property({
-    type: 'string',
+    type: "string",
     required: true,
     postgresql: {
-      columnName: 'filePath',
-      dataType: 'text',
-      nullable: 'NO',
+      columnName: "filePath",
+      dataType: "text",
+      nullable: "NO",
     },
   })
   filePath: string;
 
   @property({
-    type: 'string',
+    type: "string",
     postgresql: {
-      columnName: 'certificateText',
-      dataType: 'text',
-      nullable: 'YES',
+      columnName: "certificateText",
+      dataType: "text",
+      nullable: "YES",
     },
   })
   certificateText?: string;
 
   @property({
-    type: 'date',
+    type: "date",
     required: true,
     postgresql: {
-      columnName: 'issueDate',
-      dataType: 'date',
-      nullable: 'NO',
+      columnName: "issueDate",
+      dataType: "date",
+      nullable: "NO",
     },
   })
   issueDate: string;
 
   @property({
-    type: 'string',
+    type: "string",
     postgresql: {
-      columnName: 'issuerUrl',
-      dataType: 'text',
-      nullable: 'YES',
+      columnName: "issuerUrl",
+      dataType: "text",
+      nullable: "YES",
     },
   })
   issuerUrl?: string;
 
   @property({
-    type: 'string',
+    type: "string",
     postgresql: {
-      columnName: 'issuerName',
-      dataType: 'text',
-      nullable: 'YES',
+      columnName: "issuerName",
+      dataType: "text",
+      nullable: "YES",
     },
   })
   issuerName?: string;
 
   @property({
-    type: 'string',
+    type: "string",
     postgresql: {
-      columnName: 'certificateData',
-      dataType: 'text',
-      nullable: 'YES',
+      columnName: "certificateData",
+      dataType: "text",
+      nullable: "YES",
     },
   })
   certificateData?: string;
 
   @property({
-    type: 'date',
+    type: "date",
     required: true,
     postgresql: {
-      columnName: 'expirationDate',
-      dataType: 'date',
-      nullable: 'NO',
+      columnName: "expirationDate",
+      dataType: "date",
+      nullable: "NO",
     },
   })
   expirationDate: string;
 
   @property({
-    type: 'date',
+    type: "date",
     required: true,
     postgresql: {
-      columnName: 'lastModified',
-      dataType: 'timestamp with time zone',
-      nullable: 'NO',
-      default: 'NOW()',
+      columnName: "lastModified",
+      dataType: "timestamp with time zone",
+      nullable: "NO",
+      default: "NOW()",
     },
   })
   lastModified: string;

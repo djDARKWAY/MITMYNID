@@ -1,53 +1,52 @@
-import {Entity, model, property} from '@loopback/repository';
+import { Entity, model, property } from "@loopback/repository";
 
 @model({
   settings: {
     postgresql: {
-      table: 'prefs_util',
+      table: "prefs_util",
     },
     strict: false,
-  }
+  },
 })
 export class PrefsUtil extends Entity {
-
   @property({
-    type: 'string',
+    type: "string",
     id: true,
     generated: false,
-    defaultFn: 'uuidv4',
+    defaultFn: "uuidv4",
     postgresql: {
-      columnName: 'id_utilizador',
-      dataType: 'UUID',
-      nullable: 'NO'
+      columnName: "id_utilizador",
+      dataType: "UUID",
+      nullable: "NO",
     },
   })
   id_utilizador: string;
 
   @property({
-    type: 'string',
+    type: "string",
     postgresql: {
-      columnName: 'tema_fav',
-      dataType: 'text',
-      nullable: 'YES',
+      columnName: "tema_fav",
+      dataType: "text",
+      nullable: "YES",
     },
     jsonSchema: {
-      type: 'string',
-      nullable: true
-    }
+      type: "string",
+      nullable: true,
+    },
   })
   tema_fav?: string;
 
   @property({
-    type: 'string',
+    type: "string",
     postgresql: {
-      columnName: 'lang_fav',
-      dataType: 'text',
-      nullable: 'YES',
+      columnName: "lang_fav",
+      dataType: "text",
+      nullable: "YES",
     },
     jsonSchema: {
-      type: 'string',
-      nullable: true
-    }
+      type: "string",
+      nullable: true,
+    },
   })
   lang_fav?: string | null;
 

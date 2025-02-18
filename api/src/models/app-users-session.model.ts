@@ -1,80 +1,84 @@
-import {Entity, model, property, belongsTo} from '@loopback/repository';
-import {User} from './user.model';
+import { Entity, model, property, belongsTo } from "@loopback/repository";
+import { User } from "./user.model";
 // import {AppId} from './app-id.model';
 
 @model({
   settings: {
-    strict:false,  
+    strict: false,
     postgresql: {
-      table: 'app_users_session',
+      table: "app_users_session",
     },
-  }
+  },
 })
 export class AppUsersSession extends Entity {
   @property({
-    type: 'string',
+    type: "string",
     id: true,
     generated: false,
     required: true,
-    defaultFn: 'uuidv4',
+    defaultFn: "uuidv4",
     postgresql: {
-      columnName: 'id',
-      dataType: 'UUID',
-      nullable: 'NO'
+      columnName: "id",
+      dataType: "UUID",
+      nullable: "NO",
     },
   })
   id: string;
 
   @property({
-    type: 'string',
+    type: "string",
     required: true,
     postgresql: {
-      columnName: 'token',
-      dataType: 'text',
-      nullable: 'NO',
+      columnName: "token",
+      dataType: "text",
+      nullable: "NO",
     },
   })
   token: string;
 
   @property({
-    type: 'date',
+    type: "date",
     required: true,
     postgresql: {
-      columnName: 'validity',
-      dataType: 'timestamp',
-      nullable: 'NO',
+      columnName: "validity",
+      dataType: "timestamp",
+      nullable: "NO",
     },
   })
   validity: string;
 
   @property({
-    type: 'date',
+    type: "date",
     postgresql: {
-      columnName: 'login',
-      dataType: 'timestamp',
+      columnName: "login",
+      dataType: "timestamp",
     },
   })
   login?: string;
 
   @property({
-    type: 'date',
+    type: "date",
     postgresql: {
-      columnName: 'logout',
-      dataType: 'timestamp',
+      columnName: "logout",
+      dataType: "timestamp",
     },
   })
   logout?: string;
 
-  @belongsTo(() => User, {name: 'user'}, {
-    type: 'string',
-    generated: false,
-    required: true,
-    postgresql: {
-      columnName: 'app_users_id',
-      dataType: 'UUID',
-      nullable: 'NO'
+  @belongsTo(
+    () => User,
+    { name: "user" },
+    {
+      type: "string",
+      generated: false,
+      required: true,
+      postgresql: {
+        columnName: "app_users_id",
+        dataType: "UUID",
+        nullable: "NO",
+      },
     }
-  })
+  )
   app_users_id: string;
 
   // @belongsTo(() => AppId, {name: 'appId'}, {
@@ -101,4 +105,5 @@ export interface AppUsersSessionRelations {
   // describe navigational properties here
 }
 
-export type AppUsersSessionWithRelations = AppUsersSession & AppUsersSessionRelations;
+export type AppUsersSessionWithRelations = AppUsersSession &
+  AppUsersSessionRelations;

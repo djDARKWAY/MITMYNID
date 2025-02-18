@@ -1,80 +1,79 @@
-import {Entity, model, property} from '@loopback/repository';
+import { Entity, model, property } from "@loopback/repository";
 
 @model({
   settings: {
-    strict:false,
+    strict: false,
     postgresql: {
-      table: 'cookies_type',
+      table: "cookies_type",
     },
-  }
-
+  },
 })
 export class CookiesType extends Entity {
   @property({
-    type: 'number',
+    type: "number",
     id: true,
     generated: true,
     postgresql: {
-      columnName: 'id',
-      dataType: 'integer',
-      nullable: 'NO'
+      columnName: "id",
+      dataType: "integer",
+      nullable: "NO",
     },
   })
   id?: number;
 
   @property({
-    type: 'string',
+    type: "string",
     required: true,
     postgresql: {
-      columnName: 'title',
-      dataType: 'text',
-      nullable: 'NO'
+      columnName: "title",
+      dataType: "text",
+      nullable: "NO",
     },
   })
   title: string;
 
   @property({
-    type: 'string',
+    type: "string",
     required: true,
     postgresql: {
-      columnName: 'description',
-      dataType: 'text',
-      nullable: 'NO'
+      columnName: "description",
+      dataType: "text",
+      nullable: "NO",
     },
   })
   description: string;
 
   @property({
-    type: 'string',
+    type: "string",
     postgresql: {
-      columnName: 'short_desc',
-      dataType: 'text',
-      nullable: 'YES'
+      columnName: "short_desc",
+      dataType: "text",
+      nullable: "YES",
     },
     jsonSchema: {
-      type: 'string',
-      nullable: true
-    }
+      type: "string",
+      nullable: true,
+    },
   })
   short_desc?: string;
 
   @property({
-    type: 'boolean',
+    type: "boolean",
     required: true,
     default: true,
     postgresql: {
-      columnName: 'optional',
-      dataType: 'boolean',
-      nullable: 'NO'
+      columnName: "optional",
+      dataType: "boolean",
+      nullable: "NO",
     },
   })
   optional: boolean;
 
   @property({
-    type: 'any',
+    type: "any",
     postgresql: {
-      columnName: 'tags',
-      dataType: 'text',
+      columnName: "tags",
+      dataType: "text",
     },
   })
   tags?: string | null;

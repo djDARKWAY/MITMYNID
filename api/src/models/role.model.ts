@@ -1,39 +1,40 @@
-import {Entity, model, property} from '@loopback/repository';
+import { Entity, model, property } from "@loopback/repository";
 
 @model({
   settings: {
     postgresql: {
-      table: 'role'
+      table: "role",
     },
-    description: 'Perfis de utilizadores associados a cada aplicação instalada no sistema'
-  }
+    description:
+      "Perfis de utilizadores associados a cada aplicação instalada no sistema",
+  },
 })
 export class Role extends Entity {
   @property({
-    type: 'string',
+    type: "string",
     id: true,
     generated: false,
-    defaultFn: 'uuidv4',
+    defaultFn: "uuidv4",
     postgresql: {
-      columnName: 'id',
-      dataType: 'UUID',
-      nullable: 'NO'
+      columnName: "id",
+      dataType: "UUID",
+      nullable: "NO",
     },
   })
   id: string;
 
   @property({
-    type: 'string',
+    type: "string",
     required: true,
     postgresql: {
-      columnName: 'description',
-      dataType: 'VARCHAR',
-      nullable: 'NO',
-      dataLength: 100
+      columnName: "description",
+      dataType: "VARCHAR",
+      nullable: "NO",
+      dataLength: 100,
     },
     index: {
-      unique: true
-    }
+      unique: true,
+    },
   })
   description: string;
 
