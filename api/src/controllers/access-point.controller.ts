@@ -5,7 +5,7 @@ import {
   FilterExcludingWhere,
   repository,
   Where,
-} from '@loopback/repository';
+} from "@loopback/repository";
 import {
   post,
   param,
@@ -16,135 +16,146 @@ import {
   del,
   requestBody,
   response,
-} from '@loopback/rest';
-import {AccessPoint} from '../models';
-import {AccessPointRepository} from '../repositories';
+} from "@loopback/rest";
+import { AccessPoint } from "../models";
+import { AccessPointRepository } from "../repositories";
 
 export class AccessPointController {
   constructor(
     @repository(AccessPointRepository)
-    public accessPointRepository : AccessPointRepository,
+    public accessPointRepository: AccessPointRepository
   ) {}
 
-  @post('/access-points')
+  @post("/access-points")
   @response(200, {
-    description: 'AccessPoint model instance',
-    content: {'application/json': {schema: getModelSchemaRef(AccessPoint)}},
+    description: "AccessPoint model instance",
+    content: { "application/json": { schema: getModelSchemaRef(AccessPoint) } },
   })
   async create(
     @requestBody({
       content: {
-        'application/json': {
+        "application/json": {
           schema: getModelSchemaRef(AccessPoint, {
-            title: 'NewAccessPoint',
-            exclude: ['idAccessPoint'],
+            title: "NewAccessPoint",
+            exclude: ["idAccessPoint"],
           }),
         },
       },
     })
-    accessPoint: Omit<AccessPoint, 'idAccessPoint'>,
+    accessPoint: Omit<AccessPoint, "idAccessPoint">
   ): Promise<AccessPoint> {
     return this.accessPointRepository.create(accessPoint);
   }
 
-  @get('/access-points/count')
+  @get("/access-points/count")
   @response(200, {
-    description: 'AccessPoint model count',
-    content: {'application/json': {schema: CountSchema}},
+    description: "AccessPoint model count",
+    content: { "application/json": { schema: CountSchema } },
   })
   async count(
-    @param.where(AccessPoint) where?: Where<AccessPoint>,
+    @param.where(AccessPoint) where?: Where<AccessPoint>
   ): Promise<Count> {
     return this.accessPointRepository.count(where);
   }
 
-  @get('/access-points')
+  @get("/access-points")
   @response(200, {
-    description: 'Array of AccessPoint model instances',
+    description: "Array of AccessPoint model instances",
     content: {
-      'application/json': {
+      "application/json": {
         schema: {
-          type: 'array',
-          items: getModelSchemaRef(AccessPoint, {includeRelations: true}),
+          type: "array",
+          items: getModelSchemaRef(AccessPoint, { includeRelations: true }),
         },
       },
     },
   })
   async find(
-    @param.filter(AccessPoint) filter?: Filter<AccessPoint>,
+    @param.filter(AccessPoint) filter?: Filter<AccessPoint>
   ): Promise<AccessPoint[]> {
-    return this.accessPointRepository.find(filter);
+    return this.accessPointRepository.find({
+      fields: {
+        idAccessPoint: true,
+        locationDescription: true,
+        ipAddress: true,
+        apSoftware: true,
+        isActive: true,
+        certificateId: true,
+        companyId: true,
+      },
+    });
   }
 
-  @patch('/access-points')
+  @patch("/access-points")
   @response(200, {
-    description: 'AccessPoint PATCH success count',
-    content: {'application/json': {schema: CountSchema}},
+    description: "AccessPoint PATCH success count",
+    content: { "application/json": { schema: CountSchema } },
   })
   async updateAll(
     @requestBody({
       content: {
-        'application/json': {
-          schema: getModelSchemaRef(AccessPoint, {partial: true}),
+        "application/json": {
+          schema: getModelSchemaRef(AccessPoint, { partial: true }),
         },
       },
     })
     accessPoint: AccessPoint,
-    @param.where(AccessPoint) where?: Where<AccessPoint>,
+    @param.where(AccessPoint) where?: Where<AccessPoint>
   ): Promise<Count> {
     return this.accessPointRepository.updateAll(accessPoint, where);
   }
 
-  @get('/access-points/{id}')
+  @get("/access-points/{id}")
   @response(200, {
-    description: 'AccessPoint model instance',
+    description: "AccessPoint model instance",
     content: {
-      'application/json': {
-        schema: getModelSchemaRef(AccessPoint, {includeRelations: true}),
+      "application/json": {
+        schema: getModelSchemaRef(AccessPoint, { includeRelations: true }),
       },
     },
   })
   async findById(
-    @param.path.number('id') id: number,
-    @param.filter(AccessPoint, {exclude: 'where'}) filter?: FilterExcludingWhere<AccessPoint>
+    @param.path.number("id") id: number,
+    @param.filter(AccessPoint, { exclude: "where" })
+    filter?: FilterExcludingWhere<AccessPoint>
   ): Promise<AccessPoint> {
     return this.accessPointRepository.findById(id, filter);
   }
 
-  @patch('/access-points/{id}')
+  @patch("/access-points/{id}")
   @response(204, {
-    description: 'AccessPoint PATCH success',
+    description: "AccessPoint PATCH success",
   })
   async updateById(
-    @param.path.number('id') id: number,
+    @param.path.number("id") id: number,
     @requestBody({
       content: {
-        'application/json': {
-          schema: getModelSchemaRef(AccessPoint, {partial: true}),
+        "application/json": {
+          schema: getModelSchemaRef(AccessPoint, { partial: true }),
         },
       },
     })
-    accessPoint: AccessPoint,
+    accessPoint: AccessPoint
   ): Promise<void> {
     await this.accessPointRepository.updateById(id, accessPoint);
   }
 
-  @put('/access-points/{id}')
+  @put("/access-points/{id}")
   @response(204, {
-    description: 'AccessPoint PUT success',
+    description: "AccessPoint PUT success",
   })
   async replaceById(
-    @param.path.number('id') id: number,
-    @requestBody() accessPoint: AccessPoint,
+    @param.path.number("id") id: number,
+    @requestBody() accessPoint: AccessPoint
   ): Promise<void> {
     await this.accessPointRepository.replaceById(id, accessPoint);
   }
 
-  @del('/access-points/{id}')
+  @del("/access-points/{id}")
   @response(204, {
-    description: 'AccessPoint DELETE success',
+    description: "AccessPoint DELETE success",
   })
-  async deleteById(@param.path.number('id') id: number): Promise<void> {
+  async deleteById(@param.path.number("id") id: number): Promise<void> {
     await this.accessPointRepository.deleteById(id);
   }
 }

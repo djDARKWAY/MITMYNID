@@ -1,3 +1,6 @@
+-- Criação so schema "network"
+CREATE SCHEMA network;
+
 -- Criação da tabela "certificate"
 CREATE TABLE network.certificate (
   idCertificate SERIAL PRIMARY KEY,                               -- [PK] dentificador único

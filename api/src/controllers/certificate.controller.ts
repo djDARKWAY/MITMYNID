@@ -5,7 +5,7 @@ import {
   FilterExcludingWhere,
   repository,
   Where,
-} from '@loopback/repository';
+} from "@loopback/repository";
 import {
   post,
   param,
@@ -16,135 +16,145 @@ import {
   del,
   requestBody,
   response,
-} from '@loopback/rest';
-import {Certificate} from '../models';
-import {CertificateRepository} from '../repositories';
+} from "@loopback/rest";
+import { Certificate } from "../models";
+import { CertificateRepository } from "../repositories";
 
 export class CertificateController {
   constructor(
     @repository(CertificateRepository)
-    public certificateRepository : CertificateRepository,
+    public certificateRepository: CertificateRepository
   ) {}
 
-  @post('/certificates')
+  @post("/certificates")
   @response(200, {
-    description: 'Certificate model instance',
-    content: {'application/json': {schema: getModelSchemaRef(Certificate)}},
+    description: "Certificate model instance",
+    content: { "application/json": { schema: getModelSchemaRef(Certificate) } },
   })
   async create(
     @requestBody({
       content: {
-        'application/json': {
+        "application/json": {
           schema: getModelSchemaRef(Certificate, {
-            title: 'NewCertificate',
-            exclude: ['idCertificate'],
+            title: "NewCertificate",
+            exclude: ["idCertificate"],
           }),
         },
       },
     })
-    certificate: Omit<Certificate, 'idCertificate'>,
+    certificate: Omit<Certificate, "idCertificate">
   ): Promise<Certificate> {
     return this.certificateRepository.create(certificate);
   }
 
-  @get('/certificates/count')
+  @get("/certificates/count")
   @response(200, {
-    description: 'Certificate model count',
-    content: {'application/json': {schema: CountSchema}},
+    description: "Certificate model count",
+    content: { "application/json": { schema: CountSchema } },
   })
   async count(
-    @param.where(Certificate) where?: Where<Certificate>,
+    @param.where(Certificate) where?: Where<Certificate>
   ): Promise<Count> {
     return this.certificateRepository.count(where);
   }
 
-  @get('/certificates')
+  @get("/certificates")
   @response(200, {
-    description: 'Array of Certificate model instances',
+    description: "Array of Certificate model instances",
     content: {
-      'application/json': {
+      "application/json": {
         schema: {
-          type: 'array',
-          items: getModelSchemaRef(Certificate, {includeRelations: true}),
+          type: "array",
+          items: getModelSchemaRef(Certificate, { includeRelations: true }),
         },
       },
     },
   })
   async find(
-    @param.filter(Certificate) filter?: Filter<Certificate>,
+    @param.filter(Certificate) filter?: Filter<Certificate>
   ): Promise<Certificate[]> {
-    return this.certificateRepository.find(filter);
+    return this.certificateRepository.find({
+      fields: {
+        idCertificate: true,
+        name: true,
+        filePath: true,
+        issueDate: true,
+        issuerName: true,
+        expirationDate: true,
+      },
+    });
   }
 
-  @patch('/certificates')
+  @patch("/certificates")
   @response(200, {
-    description: 'Certificate PATCH success count',
-    content: {'application/json': {schema: CountSchema}},
+    description: "Certificate PATCH success count",
+    content: { "application/json": { schema: CountSchema } },
   })
   async updateAll(
     @requestBody({
       content: {
-        'application/json': {
-          schema: getModelSchemaRef(Certificate, {partial: true}),
+        "application/json": {
+          schema: getModelSchemaRef(Certificate, { partial: true }),
         },
       },
     })
     certificate: Certificate,
-    @param.where(Certificate) where?: Where<Certificate>,
+    @param.where(Certificate) where?: Where<Certificate>
   ): Promise<Count> {
     return this.certificateRepository.updateAll(certificate, where);
   }
 
-  @get('/certificates/{id}')
+  @get("/certificates/{id}")
   @response(200, {
-    description: 'Certificate model instance',
+    description: "Certificate model instance",
     content: {
-      'application/json': {
-        schema: getModelSchemaRef(Certificate, {includeRelations: true}),
+      "application/json": {
+        schema: getModelSchemaRef(Certificate, { includeRelations: true }),
       },
     },
   })
   async findById(
-    @param.path.number('id') id: number,
-    @param.filter(Certificate, {exclude: 'where'}) filter?: FilterExcludingWhere<Certificate>
+    @param.path.number("id") id: number,
+    @param.filter(Certificate, { exclude: "where" })
+    filter?: FilterExcludingWhere<Certificate>
   ): Promise<Certificate> {
     return this.certificateRepository.findById(id, filter);
   }
 
-  @patch('/certificates/{id}')
+  @patch("/certificates/{id}")
   @response(204, {
-    description: 'Certificate PATCH success',
+    description: "Certificate PATCH success",
   })
   async updateById(
-    @param.path.number('id') id: number,
+    @param.path.number("id") id: number,
     @requestBody({
       content: {
-        'application/json': {
-          schema: getModelSchemaRef(Certificate, {partial: true}),
+        "application/json": {
+          schema: getModelSchemaRef(Certificate, { partial: true }),
         },
       },
     })
-    certificate: Certificate,
+    certificate: Certificate
   ): Promise<void> {
     await this.certificateRepository.updateById(id, certificate);
   }
 
-  @put('/certificates/{id}')
+  @put("/certificates/{id}")
   @response(204, {
-    description: 'Certificate PUT success',
+    description: "Certificate PUT success",
   })
   async replaceById(
-    @param.path.number('id') id: number,
-    @requestBody() certificate: Certificate,
+    @param.path.number("id") id: number,
+    @requestBody() certificate: Certificate
   ): Promise<void> {
     await this.certificateRepository.replaceById(id, certificate);
   }
 
-  @del('/certificates/{id}')
+  @del("/certificates/{id}")
   @response(204, {
-    description: 'Certificate DELETE success',
+    description: "Certificate DELETE success",
   })
-  async deleteById(@param.path.number('id') id: number): Promise<void> {
+  async deleteById(@param.path.number("id") id: number): Promise<void> {
     await this.certificateRepository.deleteById(id);
   }
 }
