@@ -7,7 +7,7 @@ export interface CustomUserService<T = void> {
 }
 
 /**
- * @remark Este UserService foi desenvolvido para colocar regras de negócio mais extensas.
+ * @remark Este user foi desenvolvido para colocar regras de negócio mais extensas.
  * @remark Não foi implementado no
  */
 export class CustomClassUserService {

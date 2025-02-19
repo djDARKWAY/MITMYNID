@@ -1,4 +1,5 @@
-import { Entity, model, property } from "@loopback/repository";
+import { Entity, model, property, belongsTo } from "@loopback/repository";
+import { User } from "./user.model";
 
 @model()
 export class Certificate extends Entity {
@@ -110,6 +111,9 @@ export class Certificate extends Entity {
     },
   })
   lastModified: string;
+
+  @belongsTo(() => User, { name: "lastModifiedUserId" })
+  lastModifiedUserId?: number;
 
   constructor(data?: Partial<Certificate>) {
     super(data);

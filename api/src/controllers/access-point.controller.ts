@@ -82,6 +82,7 @@ export class AccessPointController {
         isActive: true,
         certificateId: true,
         companyId: true,
+        lastModifiedUserId: true,
       },
     });
   }

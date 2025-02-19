@@ -1,6 +1,7 @@
 import { Entity, model, property, belongsTo } from "@loopback/repository";
 import { Certificate } from "./certificate.model";
 import { Company } from "./company.model";
+import { User } from "./user.model";
 
 @model()
 export class AccessPoint extends Entity {
@@ -120,6 +121,9 @@ export class AccessPoint extends Entity {
 
   @belongsTo(() => Company, { name: "company" })
   companyId?: number;
+
+  @belongsTo(() => User, { name: "lastModifiedUserId" })
+  lastModifiedUserId?: number;
 
   constructor(data?: Partial<AccessPoint>) {
     super(data);

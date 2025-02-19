@@ -13,6 +13,12 @@ CREATE TABLE network.certificate (
   certificateData TEXT,                                           -- Dados para gerir certificados
   expirationDate DATE NOT NULL,                                   -- Data de validade ou expiração
   lastModified TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL    -- Data e hora da última atualização
+  lastModifiedUser UUID                                           -- Utilizador que fez a última atualização
+  
+  CONSTRAINT fk_certificate_user
+    FOREIGN KEY (lastModifiedUser)
+    REFERENCES auth.app_users (id)
+    ON DELETE SET NULL,                                           -- Caso o utilizador seja eliminado, retorna NULL
 );
 
 -- Criação da tabela "company"
@@ -29,6 +35,12 @@ CREATE TABLE network.company (
   website TEXT,                                                   -- Endereço Web
   createdDate TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,    -- Timestamp da criação
   lastModified TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL    -- Timestamp do último update
+  lastModifiedUser UUID                                           -- Utilizador que fez a última atualização
+
+  CONSTRAINT fk_company_user
+    FOREIGN KEY (lastModifiedUser)
+    REFERENCES auth.app_users (id)
+    ON DELETE SET NULL,                                           -- Caso o utilizador seja eliminado, retorna NULL
 );
 
 -- Criação da tabela "accessPoint"
@@ -45,6 +57,8 @@ CREATE TABLE network.accessPoint (
   isActive BOOLEAN DEFAULT true,                                  -- Estado (ativo/inativo)
   certificateId INTEGER,                                          -- [FK] Referência para o certificado
   companyId INTEGER,                                              -- [FK] Referência para a entidade
+  lastModifiedUser UUID                                           -- Utilizador que fez a última atualização
+  
   CONSTRAINT fk_certificate
     FOREIGN KEY (certificateId)
     REFERENCES network.certificate (idCertificate)
@@ -53,4 +67,8 @@ CREATE TABLE network.accessPoint (
     FOREIGN KEY (companyId)
     REFERENCES network.company (idCompany)
     ON DELETE CASCADE                                             -- Caso a entidade seja eliminada, APs também serão apagados
+  CONSTRAINT fk_accesspoint_user
+    FOREIGN KEY (lastModifiedUser)
+    REFERENCES auth.app_users (id)
+    ON DELETE SET NULL,                                           -- Caso o utilizador seja eliminado, retorna NULL
 );

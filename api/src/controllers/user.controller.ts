@@ -48,42 +48,42 @@ export class UserController {
     @inject(SecurityBindings.USER, { optional: true }) public user: UserProfile,
     @inject(EmailServiceBindings.EMAIL_SERVICE) public emailService: EmailService,
     @repository(AppUsersSessionRepository) public appUsersSessionRepository: AppUsersSessionRepository,
-  ) { }
+  ) {}
 
-  async count(
-    @param.where(User) where?: Where<User>,
-  ): Promise<Count> {
+  async count(@param.where(User) where?: Where<User>): Promise<Count> {
     return this.userRepository.count(where);
   }
 
-  @post('/users/one', {
+  @post("/users/one", {
     responses: {
-      '200': {
-        description: 'User',
+      "200": {
+        description: "User",
         content: {
-          'application/json': {
+          "application/json": {
             schema: getModelSchemaRef(User, {
-              exclude: ['id', 'roles', 'blocked', 'active'],
+              exclude: ["id", "roles", "blocked", "active"],
             }),
           },
         },
       },
     },
   })
-  @authenticate('jwt')
+  @authenticate("jwt")
   @authorize({
-    allowedRoles: ['ADMIN'],
+    allowedRoles: ["ADMIN"],
     voters: [basicAuthorization],
   })
   @intercept(log)
-  async create(@requestBody(CredentialsSignInRequestBody) newUserRequest: User,
+  async create(
+    @requestBody(CredentialsSignInRequestBody) newUserRequest: User
   ): Promise<User | Response> {
-
     // ensure a valid email value and password value
     //validateCredentials(_.pick(newUserRequest, ['person_name','email', 'password']));
 
     // encrypt the password
-    newUserRequest.password = await this.passwordHasher.hashPassword(newUserRequest.password);
+    newUserRequest.password = await this.passwordHasher.hashPassword(
+      newUserRequest.password
+    );
     newUserRequest.validation_date = new Date().toISOString();
     newUserRequest.username = newUserRequest.username.toLowerCase();
     newUserRequest.email = newUserRequest.email.toLowerCase();
@@ -91,149 +91,153 @@ export class UserController {
     const roles: string[] = newUserRequest.roles;
 
     try {
+      if (newUserRequest.photo && typeof newUserRequest.photo !== "string") {
+        const path = "./public/files/users/";
 
-
-      if (newUserRequest.photo && typeof newUserRequest.photo !== 'string') {
-        const path = './public/files/users/';
-
-        return await uploadImage(newUserRequest.photo.data, path, newUserRequest.photo.name).then(async (value) => {
-
+        return await uploadImage(
+          newUserRequest.photo.data,
+          path,
+          newUserRequest.photo.name
+        ).then(async (value) => {
           newUserRequest.photo = value.slice(9);
 
-          const savedUser = await this.userRepository.create(_.omit(newUserRequest, ['roles', 'blocked', 'active'])).then(async (user) => {
+          const savedUser = await this.userRepository
+            .create(_.omit(newUserRequest, ["roles", "blocked", "active"]))
+            .then(async (user) => {
+              let prefsUtil = {
+                id_utilizador: user.id,
+                lang_fav: undefined,
+                tema_fav: undefined,
+              } as PrefsUtil;
 
+              await this.prefsUserRepository.create(prefsUtil);
 
-            let prefsUtil = {
-              id_utilizador: user.id,
-              lang_fav: undefined,
-              tema_fav: undefined
-            } as PrefsUtil;
-
-            await this.prefsUserRepository.create(prefsUtil)
-
-            if (roles.length > 0) {
-              for (const value of roles) {
-                await this.userRoleRepository.create({
-                  role_id: value,
-                  app_users_id: user.id
-                })
+              if (roles.length > 0) {
+                for (const value of roles) {
+                  await this.userRoleRepository.create({
+                    role_id: value,
+                    app_users_id: user.id,
+                  });
+                }
               }
-            }
 
-            return user;
-
-          });
+              return user;
+            });
 
           return savedUser;
-
         });
-
       }
 
-      const savedUser = await this.userRepository.create(_.omit(newUserRequest, ['roles', 'blocked', 'active'])).then(async (user) => {
+      const savedUser = await this.userRepository
+        .create(_.omit(newUserRequest, ["roles", "blocked", "active"]))
+        .then(async (user) => {
+          const prefsUtil = {
+            id_utilizador: user.id,
+            lang_fav: undefined,
+            tema_fav: undefined,
+          } as PrefsUtil;
 
-        const prefsUtil = {
-          id_utilizador: user.id,
-          lang_fav: undefined,
-          tema_fav: undefined
-        } as PrefsUtil;
+          await this.prefsUserRepository.create(prefsUtil);
 
-        await this.prefsUserRepository.create(prefsUtil);
-
-        if (roles.length > 0) {
-          for (const value of roles) {
-            await this.userRoleRepository.create({
-              role_id: value,
-              app_users_id: user.id
-            })
+          if (roles.length > 0) {
+            for (const value of roles) {
+              await this.userRoleRepository.create({
+                role_id: value,
+                app_users_id: user.id,
+              });
+            }
           }
-        }
 
-        return user;
-
-      });
+          return user;
+        });
 
       return savedUser;
-
     } catch (err) {
-
       //postgres error code 23505 - duplicate value
-      if (err.code && err.code === '23505') {
+      if (err.code && err.code === "23505") {
         //detail: 'Key (username)=(pedro@gmail.com) already exists.',
         let errorCode = err.detail as string;
         //['Key', '(username)=(pedro@gmail.com)', 'already', 'exists.']
-        errorCode = errorCode.split(' ')[1];
+        errorCode = errorCode.split(" ")[1];
         //username
         errorCode = errorCode.substring(1, errorCode.indexOf(")"));
 
-        return this.response.status(422).send({ message: user_postgres_errors['pt'][errorCode as keyof typeof user_postgres_errors['pt']] });
+        return this.response
+          .status(422)
+          .send({
+            message:
+              user_postgres_errors["pt"][
+                errorCode as keyof (typeof user_postgres_errors)["pt"]
+              ],
+          });
       }
 
-      return this.response.status(422).send({ message: 'Erro a editar utilizador' });
+      return this.response
+        .status(422)
+        .send({ message: "Erro a editar utilizador" });
     }
-
   }
 
-  @get('/users')
+  @get("/users")
   @response(200, {
-    description: 'Array of User model instances',
+    description: "Array of User model instances",
     content: {
-      'application/json': {
+      "application/json": {
         schema: {
-          type: 'array',
+          type: "array",
           items: getModelSchemaRef(User, { includeRelations: true }),
         },
       },
     },
   })
-  @authenticate('jwt')
+  @authenticate("jwt")
   @authorize({
-    allowedRoles: ['ADMIN'],
+    allowedRoles: ["ADMIN"],
     voters: [basicAuthorization],
   })
-  async find(
-    @param.filter(User) filter?: Filter<User>,
-  ): Promise<User[]> {
-
+  async find(@param.filter(User) filter?: Filter<User>): Promise<User[]> {
     const user = this.user;
 
     if (!filter) {
-      filter = {}
+      filter = {};
     }
 
-    if (filter?.where && filter?.where.hasOwnProperty('person_name')) {
-
+    if (filter?.where && filter?.where.hasOwnProperty("person_name")) {
       filter.where = {
         ...filter.where,
         person_name: {
           //@ts-ignore
-          ilike: `%${filter?.where.person_name}%`
+          ilike: `%${filter?.where.person_name}%`,
         },
-      }
-
+      };
     }
 
     filter.where = {
       id: {
-        neq: user[securityId]
+        neq: user[securityId],
       },
       deleted: false,
-      ...filter.where
+      ...filter.where,
+    };
+
+    if (
+      filter.order &&
+      (filter.order.includes("id DESC") || filter.order.includes("id ASC"))
+    ) {
+      filter.order.splice(filter.order.indexOf("id DESC"), 1);
+      filter.order.splice(filter.order.indexOf("id ASC"), 1);
     }
 
-    if (filter.order && (filter.order.includes('id DESC') || filter.order.includes('id ASC'))) {
-      filter.order.splice(filter.order.indexOf('id DESC'), 1)
-      filter.order.splice(filter.order.indexOf('id ASC'), 1)
-    }
-
-    filter.order?.push('person_name ASC')
+    filter.order?.push("person_name ASC");
 
     return this.userRepository.find(filter).then(async (users) => {
-      this.response.setHeader('Access-Control-Expose-Headers', 'X-Total-Count');
-      this.response.setHeader('x-total-count', (await this.count(filter?.where)).count);
+      this.response.setHeader("Access-Control-Expose-Headers", "X-Total-Count");
+      this.response.setHeader(
+        "x-total-count",
+        (await this.count(filter?.where)).count
+      );
       return users;
     });
-
   }
 
   /*
@@ -256,156 +260,166 @@ export class UserController {
     return this.userRepository.updateAll(user, where);
   } */
 
-  @get('/users/{id}')
+  @get("/users/{id}")
   @response(200, {
-    description: 'User model instance',
+    description: "User model instance",
     content: {
-      'application/json': {
+      "application/json": {
         schema: getModelSchemaRef(User, { includeRelations: true }),
       },
     },
   })
-  @authenticate('jwt')
+  @authenticate("jwt")
   /*@authorize({
     allowedRoles: ['ADMIN', 'OCORRENCIAS_ENT_supervisor'],
     voters: [basicAuthorization],
   })*/
   async findById(
-    @param.path.string('id') id: string,
-    @param.filter(User, { exclude: 'where' }) filter?: FilterExcludingWhere<User>
+    @param.path.string("id") id: string,
+    @param.filter(User, { exclude: "where" })
+    filter?: FilterExcludingWhere<User>
   ): Promise<User | Response> {
-
     try {
       //detalhes do utilizador que está a tentar aceder
       const accessUser = await this.userRepository.findById(id, filter);
 
       return accessUser;
-    }
-    catch (err) {
+    } catch (err) {
       return this.response.status(422).send({ message: "Utilizador inválido" });
     }
   }
 
-
-  @patch('/users/{id}')
+  @patch("/users/{id}")
   @response(204, {
-    description: 'User PATCH success',
+    description: "User PATCH success",
   })
-  @authenticate('jwt')
+  @authenticate("jwt")
   /*@authorize({
     allowedRoles: ['ADMIN', 'OCORRENCIAS_ENT_supervisor'],
     voters: [basicAuthorization],
   })*/
   async updateById(
-    @param.path.string('id') id: string,
+    @param.path.string("id") id: string,
     @requestBody({
       content: {
-        'application/json': {
+        "application/json": {
           schema: getModelSchemaRef(User, { partial: true }),
         },
       },
     })
-    user: User,
+    user: User
   ): Promise<User | void | Response> {
-
-    let omitArray = [
-      'roles',
-      'password',
-      'token',
-      'prefs_util',
-      'photo'
-    ];
+    let omitArray = ["roles", "password", "token", "prefs_util", "photo"];
 
     //detalhes do utilizador que está a tentar aceder
     const accessUser = await this.userRepository.findById(id);
 
     //verifica se é o proprio
-    if (!this.user.roles.includes('ADMIN') && this.user[securityId] !== id) {
-      return this.response.status(422).send({ message: "Acess não autorizado" });
+    if (!this.user.roles.includes("ADMIN") && this.user[securityId] !== id) {
+      return this.response
+        .status(422)
+        .send({ message: "Acess não autorizado" });
     }
 
-    if (user.email && user.email !== accessUser.email) user.email = user.email.toLowerCase();
+    if (user.email && user.email !== accessUser.email)
+      user.email = user.email.toLowerCase();
 
-    if (user.username && user.email !== accessUser.username) user.username = user.username.toLowerCase();
+    if (user.username && user.email !== accessUser.username)
+      user.username = user.username.toLowerCase();
 
     if (user.active && accessUser.active !== user.active) {
       user.validation_date = new Date().toISOString();
     }
 
-    if (!this.user.roles.includes('ADMIN') || (this.user.roles.includes('ADMIN') && this.user[securityId] === id)) {
-      omitArray.push('username', 'active', 'blocked');
+    if (
+      !this.user.roles.includes("ADMIN") ||
+      (this.user.roles.includes("ADMIN") && this.user[securityId] === id)
+    ) {
+      omitArray.push("username", "active", "blocked");
     }
 
-
     try {
-      await this.userRepository.updateById(id, _.omit(user, omitArray)).then(async () => {
+      await this.userRepository
+        .updateById(id, _.omit(user, omitArray))
+        .then(async () => {
+          if (this.user.roles.includes("ADMIN")) {
+            if (this.user[securityId] !== id)
+              this.userService.updateRoles(user);
 
-        if (this.user.roles.includes('ADMIN')) {
-
-          if (this.user[securityId] !== id) this.userService.updateRoles(user);
-
-          if (user.password && user.password.replace(/\s+/g, '').length > 0) {
-            user.password = await this.passwordHasher.hashPassword(user.password);
-            await this.userRepository.updateById(id, { password: user.password });
+            if (user.password && user.password.replace(/\s+/g, "").length > 0) {
+              user.password = await this.passwordHasher.hashPassword(
+                user.password
+              );
+              await this.userRepository.updateById(id, {
+                password: user.password,
+              });
+            }
+          } else if (this.user[securityId] === id) {
+            if (user.password && user.password.replace(/\s+/g, "").length > 0) {
+              user.password = await this.passwordHasher.hashPassword(
+                user.password
+              );
+              await this.userRepository.updateById(id, {
+                password: user.password,
+              });
+            }
           }
 
-        }
-        else if (this.user[securityId] === id) {
+          if (
+            user.photo &&
+            typeof user.photo !== "string" &&
+            user.photo.src &&
+            user.photo.src.search("files/users/") === -1
+          ) {
+            const path = "./public/files/users/";
 
+            await uploadImage(user.photo.data, path, user.photo.name).then(
+              async (value) => {
+                //.slice para retirar ./public/ do caminho
+                user.photo = value.slice(9);
 
-          if (user.password && user.password.replace(/\s+/g, '').length > 0) {
-            user.password = await this.passwordHasher.hashPassword(user.password);
-            await this.userRepository.updateById(id, { password: user.password });
+                await this.userRepository.updateById(id, { photo: user.photo });
+              }
+            );
+          } else if (
+            accessUser.photo &&
+            user.photo !== undefined &&
+            accessUser.photo !== user.photo
+          ) {
+            await this.userRepository.updateById(id, { photo: null });
           }
 
-        }
-
-        if (user.photo && typeof user.photo !== 'string' && user.photo.src && user.photo.src.search('files/users/') === -1) {
-
-          const path = './public/files/users/';
-
-          await uploadImage(user.photo.data, path, user.photo.name).then(async (value) => {
-
-            //.slice para retirar ./public/ do caminho
-            user.photo = value.slice(9);
-
-            await this.userRepository.updateById(id, { photo: user.photo });
-
-          });
-
-        }
-        else if (accessUser.photo && user.photo !== undefined && accessUser.photo !== user.photo) {
-
-          await this.userRepository.updateById(id, { photo: null });
-        }
-
-        if (user.prefs_util) {
-          await this.prefsUserRepository.updateById(id, user.prefs_util)
-            .catch((err) => {
-              console.log('ERROR:', err)
-            });
-        }
-
-      });
+          if (user.prefs_util) {
+            await this.prefsUserRepository
+              .updateById(id, user.prefs_util)
+              .catch((err) => {
+                console.log("ERROR:", err);
+              });
+          }
+        });
 
       return this.userRepository.findById(id);
-
     } catch (err) {
-
       //postgres error code 23505 - duplicate value
-      if (err.code && err.code === '23505') {
+      if (err.code && err.code === "23505") {
         //detail: 'Key (username)=(pedro@gmail.com) already exists.',
         let errorCode = err.detail as string;
         //['Key', '(username)=(pedro@gmail.com)', 'already', 'exists.']
-        errorCode = errorCode.split(' ')[1];
+        errorCode = errorCode.split(" ")[1];
         //username
         errorCode = errorCode.substring(1, errorCode.indexOf(")"));
 
-        return this.response.status(422).send({ message: user_postgres_errors.pt[errorCode as keyof typeof user_postgres_errors['pt']] });
+        return this.response
+          .status(422)
+          .send({
+            message:
+              user_postgres_errors.pt[
+                errorCode as keyof (typeof user_postgres_errors)["pt"]
+              ],
+          });
       }
 
-      return this.response.status(422).send({ message: 'Utilizador inválido' });
-
+      return this.response.status(422).send({ message: "Utilizador inválido" });
     }
   }
 
@@ -426,149 +440,146 @@ export class UserController {
     await this.userRepository.updateById(id, _.omit(user, ['roles']));
   } */
 
-  @del('/users/{id}')
-  @authenticate('jwt')
+  @del("/users/{id}")
+  @authenticate("jwt")
   @authorize({
-    allowedRoles: ['ADMIN'],
+    allowedRoles: ["ADMIN"],
     voters: [basicAuthorization],
   })
   @response(204, {
-    description: 'User DELETE success',
+    description: "User DELETE success",
   })
-  async deleteById(@param.path.string('id') id: string): Promise<void | Response> {
-
+  async deleteById(
+    @param.path.string("id") id: string
+  ): Promise<void | Response> {
     if (this.user[securityId] === id) {
-      return this.response.status(422).send({ message: "Erro a eliminar utilizador" });
-    }
-    else if (!this.user.roles.includes('ADMIN')) {
-      return this.response.status(422).send({ message: "Erro a eliminar utilizador" });
-    }
-    else {
+      return this.response
+        .status(422)
+        .send({ message: "Erro a eliminar utilizador" });
+    } else if (!this.user.roles.includes("ADMIN")) {
+      return this.response
+        .status(422)
+        .send({ message: "Erro a eliminar utilizador" });
+    } else {
       await this.userRepository.deleteById(id);
       await this.prefsUserRepository.deleteById(id);
       await this.appUsersSessionRepository.deleteAll({ app_users_id: id });
       await this.userRoleRepository.deleteAll({ app_users_id: id });
     }
-
   }
 
-
-  @get('/validateUsers')
+  @get("/validateUsers")
   @response(200, {
-    description: 'Array of User model instances',
+    description: "Array of User model instances",
     content: {
-      'application/json': {
+      "application/json": {
         schema: {
-          type: 'array',
+          type: "array",
           items: getModelSchemaRef(User, { includeRelations: true }),
         },
       },
     },
   })
-  @authenticate('jwt')
+  @authenticate("jwt")
   @authorize({
-    allowedRoles: ['ADMIN'],
+    allowedRoles: ["ADMIN"],
     voters: [basicAuthorization],
   })
   async findValidate(
-    @param.filter(User) filter?: Filter<User>,
+    @param.filter(User) filter?: Filter<User>
   ): Promise<User[]> {
-
     const user = this.user;
 
     if (!filter) {
-      filter = {}
+      filter = {};
     }
 
-    if (filter?.where && filter?.where.hasOwnProperty('person_name')) {
-
+    if (filter?.where && filter?.where.hasOwnProperty("person_name")) {
       filter.where = {
         ...filter.where,
         person_name: {
           //@ts-ignore
-          ilike: `${filter?.where.person_name}%`
+          ilike: `${filter?.where.person_name}%`,
         },
-      }
-
+      };
     }
 
     filter.where = {
       id: {
-        neq: user[securityId]
+        neq: user[securityId],
       },
       deleted: false,
       active: false,
       validation_date: { neq: null },
-      ...filter.where
-    }
+      ...filter.where,
+    };
 
     return this.userRepository.find(filter).then(async (users) => {
-      this.response.setHeader('Access-Control-Expose-Headers', 'X-Total-Count');
-      this.response.setHeader('x-total-count', (await this.count(filter?.where)).count);
+      this.response.setHeader("Access-Control-Expose-Headers", "X-Total-Count");
+      this.response.setHeader(
+        "x-total-count",
+        (await this.count(filter?.where)).count
+      );
       return users;
     });
-
   }
 
-
-  @get('/validateUsers/{id}')
+  @get("/validateUsers/{id}")
   @response(200, {
-    description: 'User model instance',
+    description: "User model instance",
     content: {
-      'application/json': {
+      "application/json": {
         schema: getModelSchemaRef(User, { includeRelations: true }),
       },
     },
   })
-  @authenticate('jwt')
+  @authenticate("jwt")
   @authorize({
-    allowedRoles: ['ADMIN'],
+    allowedRoles: ["ADMIN"],
     voters: [basicAuthorization],
   })
   async findValidateById(
-    @param.path.string('id') id: string,
-    @param.filter(User, { exclude: 'where' }) filter?: FilterExcludingWhere<User>
+    @param.path.string("id") id: string,
+    @param.filter(User, { exclude: "where" })
+    filter?: FilterExcludingWhere<User>
   ): Promise<User | Response> {
-
     try {
       //detalhes do utilizador que está a tentar aceder
       const accessUser = await this.userRepository.findById(id, filter);
 
       return accessUser;
-    }
-    catch (err) {
+    } catch (err) {
       return this.response.status(422).send({ message: "Utilizador inválido" });
     }
   }
 
-  @get('/validateUsers/{id}/validate')
+  @get("/validateUsers/{id}/validate")
   @response(200, {
-    description: 'Array of User model instances',
+    description: "Array of User model instances",
     content: {
-      'application/json': {
+      "application/json": {
         schema: {
-          type: 'array',
+          type: "array",
           items: getModelSchemaRef(User, { includeRelations: true }),
         },
       },
     },
   })
-  @authenticate('jwt')
+  @authenticate("jwt")
   @authorize({
-    allowedRoles: ['ADMIN'],
+    allowedRoles: ["ADMIN"],
     voters: [basicAuthorization],
   })
-  async validate(
-    @param.path.string('id') id: string,
-  ): Promise<void> {
+  async validate(@param.path.string("id") id: string): Promise<void> {
+    const user = await this.userRepository.findById(id);
 
-    const user = await this.userRepository.findById(id)
+    await this.userRepository.updateById(id, { active: true });
+    this.emailService.sendMailRegisterActive(
+      "pt-pt",
+      user.email,
+      user.person_name
+    );
 
-    await this.userRepository.updateById(id, { active: true })
-    this.emailService.sendMailRegisterActive('pt-pt', user.email, user.person_name);
-
-    return
+    return;
   }
-
-
 }

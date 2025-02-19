@@ -1,7 +1,7 @@
 
--- DROP FUNCTION users.generate_authenticator(out text, out timestamp);
+-- DROP FUNCTION auth.generate_authenticator(out text, out timestamp);
 
-CREATE OR REPLACE FUNCTION users.generate_authenticator(OUT code text, OUT expires timestamp without time zone)
+CREATE OR REPLACE FUNCTION auth.generate_authenticator(OUT code text, OUT expires timestamp without time zone)
  RETURNS record
  LANGUAGE plpgsql
 AS $function$
