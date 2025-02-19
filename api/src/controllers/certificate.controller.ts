@@ -24,6 +24,7 @@ export class CertificateController {
     public certificateRepository: CertificateRepository
   ) {}
 
+  // POST endpoint:
   @post("/certificates")
   @response(200, {
     description: "Certificate model instance",
@@ -45,6 +46,7 @@ export class CertificateController {
     return this.certificateRepository.create(certificate);
   }
 
+  // GET endpoint:
   @get("/certificates")
   @response(200, {
     description: "Array of Certificate model instances",
@@ -89,24 +91,7 @@ export class CertificateController {
     return this.certificateRepository.findById(id, filter);
   }
 
-  @patch("/certificates/{id}")
-  @response(204, {
-    description: "Certificate PATCH success",
-  })
-  async updateById(
-    @param.path.number("id") id: number,
-    @requestBody({
-      content: {
-        "application/json": {
-          schema: getModelSchemaRef(Certificate, { partial: true }),
-        },
-      },
-    })
-    certificate: Certificate
-  ): Promise<void> {
-    await this.certificateRepository.updateById(id, certificate);
-  }
-
+  // PATCH endpoint:
   @put("/certificates/{id}")
   @response(204, {
     description: "Certificate PUT success",
@@ -118,6 +103,7 @@ export class CertificateController {
     await this.certificateRepository.replaceById(id, certificate);
   }
 
+  // DELETE endpoint:
   @del("/certificates/{id}")
   @response(204, {
     description: "Certificate DELETE success",

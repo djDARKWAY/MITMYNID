@@ -24,6 +24,7 @@ export class AccessPointController {
     public accessPointRepository: AccessPointRepository
   ) {}
 
+  // POST endpoint:
   @post("/access-points")
   @response(200, {
     description: "AccessPoint model instance",
@@ -45,6 +46,7 @@ export class AccessPointController {
     return this.accessPointRepository.create(accessPoint);
   }
 
+  // GET endpoint:
   @get("/access-points")
   @response(200, {
     description: "Array of AccessPoint model instances",
@@ -91,24 +93,7 @@ export class AccessPointController {
     return this.accessPointRepository.findById(id, filter);
   }
 
-  @patch("/access-points/{id}")
-  @response(204, {
-    description: "AccessPoint PATCH success",
-  })
-  async updateById(
-    @param.path.number("id") id: number,
-    @requestBody({
-      content: {
-        "application/json": {
-          schema: getModelSchemaRef(AccessPoint, { partial: true }),
-        },
-      },
-    })
-    accessPoint: AccessPoint
-  ): Promise<void> {
-    await this.accessPointRepository.updateById(id, accessPoint);
-  }
-
+  // PUT endpoint:
   @put("/access-points/{id}")
   @response(204, {
     description: "AccessPoint PUT success",
@@ -120,6 +105,7 @@ export class AccessPointController {
     await this.accessPointRepository.replaceById(id, accessPoint);
   }
 
+  // DELETE endpoint:
   @del("/access-points/{id}")
   @response(204, {
     description: "AccessPoint DELETE success",

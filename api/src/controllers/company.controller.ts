@@ -24,6 +24,7 @@ export class CompanyController {
     public companyRepository: CompanyRepository
   ) {}
 
+  // POST endpoint:
   @post("/companies")
   @response(200, {
     description: "Company model instance",
@@ -45,6 +46,7 @@ export class CompanyController {
     return this.companyRepository.create(company);
   }
 
+  // GET endpoints:
   @get("/companies")
   @response(200, {
     description: "Array of Company model instances",
@@ -88,24 +90,7 @@ export class CompanyController {
     return this.companyRepository.findById(id, filter);
   }
 
-  @patch("/companies/{id}")
-  @response(204, {
-    description: "Company PATCH success",
-  })
-  async updateById(
-    @param.path.number("id") id: number,
-    @requestBody({
-      content: {
-        "application/json": {
-          schema: getModelSchemaRef(Company, { partial: true }),
-        },
-      },
-    })
-    company: Company
-  ): Promise<void> {
-    await this.companyRepository.updateById(id, company);
-  }
-
+  // PUT endpoint:
   @put("/companies/{id}")
   @response(204, {
     description: "Company PUT success",
@@ -117,6 +102,7 @@ export class CompanyController {
     await this.companyRepository.replaceById(id, company);
   }
 
+  // DELETE endpoint:
   @del("/companies/{id}")
   @response(204, {
     description: "Company DELETE success",
