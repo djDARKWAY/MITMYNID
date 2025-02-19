@@ -1,6 +1,4 @@
 import {
-  Count,
-  CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
@@ -47,15 +45,6 @@ export class CompanyController {
     return this.companyRepository.create(company);
   }
 
-  @get("/companies/count")
-  @response(200, {
-    description: "Company model count",
-    content: { "application/json": { schema: CountSchema } },
-  })
-  async count(@param.where(Company) where?: Where<Company>): Promise<Count> {
-    return this.companyRepository.count(where);
-  }
-
   @get("/companies")
   @response(200, {
     description: "Array of Company model instances",
@@ -80,25 +69,6 @@ export class CompanyController {
         createdDate: true,
       },
     });
-  }
-
-  @patch("/companies")
-  @response(200, {
-    description: "Company PATCH success count",
-    content: { "application/json": { schema: CountSchema } },
-  })
-  async updateAll(
-    @requestBody({
-      content: {
-        "application/json": {
-          schema: getModelSchemaRef(Company, { partial: true }),
-        },
-      },
-    })
-    company: Company,
-    @param.where(Company) where?: Where<Company>
-  ): Promise<Count> {
-    return this.companyRepository.updateAll(company, where);
   }
 
   @get("/companies/{id}")

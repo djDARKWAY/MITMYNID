@@ -1,6 +1,4 @@
 import {
-  Count,
-  CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
@@ -47,17 +45,6 @@ export class CertificateController {
     return this.certificateRepository.create(certificate);
   }
 
-  @get("/certificates/count")
-  @response(200, {
-    description: "Certificate model count",
-    content: { "application/json": { schema: CountSchema } },
-  })
-  async count(
-    @param.where(Certificate) where?: Where<Certificate>
-  ): Promise<Count> {
-    return this.certificateRepository.count(where);
-  }
-
   @get("/certificates")
   @response(200, {
     description: "Array of Certificate model instances",
@@ -83,25 +70,6 @@ export class CertificateController {
         expirationDate: true,
       },
     });
-  }
-
-  @patch("/certificates")
-  @response(200, {
-    description: "Certificate PATCH success count",
-    content: { "application/json": { schema: CountSchema } },
-  })
-  async updateAll(
-    @requestBody({
-      content: {
-        "application/json": {
-          schema: getModelSchemaRef(Certificate, { partial: true }),
-        },
-      },
-    })
-    certificate: Certificate,
-    @param.where(Certificate) where?: Where<Certificate>
-  ): Promise<Count> {
-    return this.certificateRepository.updateAll(certificate, where);
   }
 
   @get("/certificates/{id}")

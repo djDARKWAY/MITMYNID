@@ -1,6 +1,4 @@
 import {
-  Count,
-  CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
@@ -47,17 +45,6 @@ export class AccessPointController {
     return this.accessPointRepository.create(accessPoint);
   }
 
-  @get("/access-points/count")
-  @response(200, {
-    description: "AccessPoint model count",
-    content: { "application/json": { schema: CountSchema } },
-  })
-  async count(
-    @param.where(AccessPoint) where?: Where<AccessPoint>
-  ): Promise<Count> {
-    return this.accessPointRepository.count(where);
-  }
-
   @get("/access-points")
   @response(200, {
     description: "Array of AccessPoint model instances",
@@ -85,25 +72,6 @@ export class AccessPointController {
         lastModifiedUserId: true,
       },
     });
-  }
-
-  @patch("/access-points")
-  @response(200, {
-    description: "AccessPoint PATCH success count",
-    content: { "application/json": { schema: CountSchema } },
-  })
-  async updateAll(
-    @requestBody({
-      content: {
-        "application/json": {
-          schema: getModelSchemaRef(AccessPoint, { partial: true }),
-        },
-      },
-    })
-    accessPoint: AccessPoint,
-    @param.where(AccessPoint) where?: Where<AccessPoint>
-  ): Promise<Count> {
-    return this.accessPointRepository.updateAll(accessPoint, where);
   }
 
   @get("/access-points/{id}")
