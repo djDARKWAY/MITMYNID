@@ -14,6 +14,7 @@ import {
   del,
   requestBody,
   response,
+  HttpErrors
 } from "@loopback/rest";
 import { AccessPoint } from "../models";
 import { AccessPointRepository } from "../repositories";
@@ -41,9 +42,14 @@ export class AccessPointController {
         },
       },
     })
-    accessPoint: Omit<AccessPoint, "idAccessPoint">
+    accessPoint: Omit<AccessPoint, "idAccessPoint" | "createdDate" | "lastModified" | "lastModifiedUser">
   ): Promise<AccessPoint> {
-    return this.accessPointRepository.create(accessPoint);
+    this.validateAccessPoint(accessPoint);
+
+    return this.accessPointRepository.create({
+      ...accessPoint,
+      lastModified: new Date().toISOString(),
+    });
   }
 
   // GET endpoint:
@@ -112,5 +118,24 @@ export class AccessPointController {
   })
   async deleteById(@param.path.number("id") id: number): Promise<void> {
     await this.accessPointRepository.deleteById(id);
+  }
+
+  validateAccessPoint(accessPoint: Omit<AccessPoint, "idAccessPoint" | "createdDate" | "lastModified" | "lastModifiedUser">): void {
+    const check = (condition: boolean, message: string) => {
+      if (condition) {
+        throw new HttpErrors.BadRequest(message);
+      }
+    };
+
+    // Validate locationDescription
+    check(!accessPoint.locationDescription || typeof accessPoint.locationDescription !== "string", "A descrição da localização é obrigatória.");
+    check(accessPoint.locationDescription.length > 255, "A descrição da localização não pode ter mais de 255 caracteres.");
+
+    // Validate ipAddress
+    check(!accessPoint.ipAddress || typeof accessPoint.ipAddress !== "string", "O endereço IP é obrigatório.");
+    check(!/^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(accessPoint.ipAddress) && !/^([0-9a-fA-F]{1,4}:){7}([0-9a-fA-F]{1,4})$/.test(accessPoint.ipAddress), "O endereço IP não é válido.");
+
+    // Validate isActive
+    check(accessPoint.isActive !== undefined && typeof accessPoint.isActive !== "boolean", "O estado do ponto de acesso (ativo/inativo) é obrigatório.");
   }
 }

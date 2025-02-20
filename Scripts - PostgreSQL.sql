@@ -26,8 +26,8 @@ CREATE TABLE network.company (
   idCompany SERIAL PRIMARY KEY,                                   -- [PK] Identificador único
   name VARCHAR(255) NOT NULL,                                     -- Nome completo da entidade
   address VARCHAR(255) NOT NULL,                                  -- Rua ou avenida
-  city VARCHAR(255) NOT NULL,                                     -- Cidade
-  country VARCHAR(100) NOT NULL,                                  -- País
+  city VARCHAR(100) NOT NULL,                                     -- Cidade
+  country VARCHAR(60) NOT NULL,                                   -- País
   zipCode VARCHAR(20) NOT NULL,                                   -- Código postal
   email TEXT,                                                     -- Email da entidade
   contact TEXT,                                                   -- Contacto da entidade
