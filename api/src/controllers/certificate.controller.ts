@@ -118,26 +118,30 @@ export class CertificateController {
     await this.certificateRepository.deleteById(id);
   }
 
-  validateCertificate(certificate: Omit<Certificate, "idCertificate" | "lastModified" | "lastModifiedUserId">): void {
-    const check = (condition: boolean, message: string) => {
-      if (condition) {
-        throw new HttpErrors.BadRequest(message);
-      }
+  validateCertificate(
+    certificate: Omit<Certificate, "idCertificate" | "lastModified" | "lastModifiedUserId">
+  ): void {
+    const validate = (condition: boolean, message: string) => { if (condition) throw new HttpErrors.BadRequest(message); };
+  
+    // Mandatory fields
+    const rules: { [key: string]: { condition: boolean; message: string }[] } = {
+      name: [
+        { condition: !certificate.name, message: "O nome do certificado é obrigatório!" },
+        { condition: certificate.name?.length > 255, message: "O nome do certificado deve ter no máximo 255 caracteres!" }
+      ],
+      filePath: [
+        { condition: !certificate.filePath, message: "O caminho do ficheiro é obrigatório!" },
+        { condition: !certificate.filePath.startsWith("/"), message: "O caminho do ficheiro deve começar por '/'!" },
+        { condition: !/\.(pem|crt|cer|key|der|pfx|p12|p7b|p7c)$/.test(certificate.filePath), message: "O ficheiro deve ser um ficheiro de certificado válido!" }
+      ],
+      dates: [
+        { condition: !certificate.issueDate || isNaN(Date.parse(certificate.issueDate)), message: "A data de emissão é obrigatória e deve ser válida!" },
+        { condition: !certificate.expirationDate || isNaN(Date.parse(certificate.expirationDate)), message: "A data de expiração é obrigatória e deve ser válida." }
+      ]
     };
-
-    // Validate certificate name
-    check(!certificate.name || typeof certificate.name !== "string", "O nome do certificado é obrigatório.");
-    check(certificate.name.length > 255, "O nome do certificado não pode ter mais de 255 caracteres.");
-
-    // Validate certificate filePath
-    check(!certificate.filePath || typeof certificate.filePath !== "string", "O caminho do ficheiro é obrigatório.");
-    check(!certificate.filePath.startsWith("/"), "O caminho do ficheiro deve começar por '/'.");
-    check(!/\.(pem|crt|cer|key|der|pfx|p12|p7b|p7c)$/.test(certificate.filePath), "O ficheiro deve ser um ficheiro de certificado válido.");
-
-    // Validate certificate issueDate
-    check(!certificate.issueDate || isNaN(Date.parse(certificate.issueDate)), "A data de emissão é obrigatória e deve ser uma data válida.");
-
-    // Validate certificate expirationDate
-    check(!certificate.expirationDate || isNaN(Date.parse(certificate.expirationDate)), "A data de expiração é obrigatória e deve ser uma data válida.");
-  }
+    Object.values(rules).flat().forEach(({ condition, message }) => validate(condition, message));
+  
+    // Optional fields
+    if (certificate.issuerUrl) validate(!/^https?:\/\/.+\..+/.test(certificate.issuerUrl), "O URL da entidade emissora deve ser uma URL válida.");
+  }  
 }

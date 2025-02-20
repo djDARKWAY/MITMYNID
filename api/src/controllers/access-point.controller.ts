@@ -120,22 +120,31 @@ export class AccessPointController {
     await this.accessPointRepository.deleteById(id);
   }
 
-  validateAccessPoint(accessPoint: Omit<AccessPoint, "idAccessPoint" | "createdDate" | "lastModified" | "lastModifiedUser">): void {
-    const check = (condition: boolean, message: string) => {
-      if (condition) {
-        throw new HttpErrors.BadRequest(message);
-      }
+  validateAccessPoint(
+    accessPoint: Omit<AccessPoint, "idAccessPoint" | "createdDate" | "lastModified" | "lastModifiedUser">
+  ): void {
+    const validate = (condition: boolean, message: string) => { if (condition) throw new HttpErrors.BadRequest(message); };
+
+    // Mandatory fields
+    const rules: { [key: string]: { condition: boolean; message: string }[] } = {
+      locationDescription: [
+        { condition: !accessPoint.locationDescription, message: "A descrição da localização é obrigatória!" },
+        { condition: accessPoint.locationDescription.length > 255, message: "A descrição da localização é muito longa!" }
+      ],
+      ipAddress: [
+        { condition: !accessPoint.ipAddress, message: "O endereço IP é obrigatório!" },
+        { condition: !/^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(accessPoint.ipAddress) &&
+                     !/^([0-9a-fA-F]{1,4}:){7}([0-9a-fA-F]{1,4})$/.test(accessPoint.ipAddress), message: "O endereço IP deve ser um IPv4 ou IPv6 válido!" }
+      ],
+      isActive: [
+        { condition: !accessPoint.isActive, message: "O estado do AP é obrigatório!" },
+        { condition: typeof accessPoint.isActive !== "boolean", message: "O estado do AP deve ser um valor booleano!" }
+      ]
     };
+    Object.values(rules).flat().forEach(({ condition, message }) => validate(condition, message));
 
-    // Validate locationDescription
-    check(!accessPoint.locationDescription || typeof accessPoint.locationDescription !== "string", "A descrição da localização é obrigatória.");
-    check(accessPoint.locationDescription.length > 255, "A descrição da localização não pode ter mais de 255 caracteres.");
-
-    // Validate ipAddress
-    check(!accessPoint.ipAddress || typeof accessPoint.ipAddress !== "string", "O endereço IP é obrigatório.");
-    check(!/^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(accessPoint.ipAddress) && !/^([0-9a-fA-F]{1,4}:){7}([0-9a-fA-F]{1,4})$/.test(accessPoint.ipAddress), "O endereço IP não é válido.");
-
-    // Validate isActive
-    check(accessPoint.isActive !== undefined && typeof accessPoint.isActive !== "boolean", "O estado do ponto de acesso (ativo/inativo) é obrigatório.");
+    // Optional fields
+    if (accessPoint.configurations) { validate(typeof accessPoint.configurations !== "object", "A configuração deve ser um objeto JSON válido."); }
+    if (accessPoint.permissions) {  validate(typeof accessPoint.permissions !== "object", "As permissões devem ser um objeto JSON válido."); }
   }
 }

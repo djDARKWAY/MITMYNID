@@ -413,5 +413,4 @@ export class AuthController {
 
     return this.response.status(422).send({ message: 'Utilizador inválido. Contacte a entidade' })
   }
-
 }

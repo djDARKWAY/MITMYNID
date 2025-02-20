@@ -117,31 +117,40 @@ export class CompanyController {
     await this.companyRepository.deleteById(id);
   }
 
-  validateCompany(company: Omit<Company, "idCompany" | "createdDate" | "lastModified" | "lastModifiedUser">): void {
-    const check = (condition: boolean, message: string) => {
-      if (condition) {
-        throw new HttpErrors.BadRequest(message);
-      }
+  validateCompany(
+    company: Omit<Company, "idCompany" | "createdDate" | "lastModified" | "lastModifiedUser">
+  ): void {
+    const validate = (condition: boolean, message: string) => { if (condition) throw new HttpErrors.BadRequest(message); };
+
+    // Mandatory fields
+    const rules: { [key: string]: { condition: boolean; message: string }[] } = {
+      name: [
+        { condition: !company.name, message: "O nome da empresa é obrigatório!" },
+        { condition: company.name?.length > 255, message: "O nome da empresa não pode ter mais de 255 caracteres!" }
+      ],
+      address: [
+        { condition: !company.address, message: "O endereço é obrigatório!" },
+        { condition: company.address.length > 255, message: "O endereço não pode ter mais de 255 caracteres!" }
+      ],
+      city: [
+        { condition: !company.city, message: "A cidade é obrigatória!" },
+        { condition: company.city.length > 100, message: "A cidade não pode ter mais de 100 caracteres!" }
+      ],
+      country: [
+        { condition: !company.country , message: "O país é obrigatório!" },
+        { condition: company.country.length > 60, message: "O país não pode ter mais de 60 caracteres!" }
+      ],
+      zipCode: [
+        { condition: !company.zipCode, message: "O código postal é obrigatório!" },
+        { condition: company.zipCode.length > 20, message: "O código postal não pode ter mais de 20 caracteres!" }
+      ]
     };
+    Object.values(rules).flat().forEach(({ condition, message }) => validate(condition, message));
 
-    // Validate company name
-    check(!company.name || typeof company.name !== "string", "O nome da empresa é obrigatório.");
-    check(company.name.length > 255, "O nome da empresa não pode ter mais de 255 caracteres.");
-
-    // Validate company address
-    check(!company.address || typeof company.address !== "string", "O endereço é obrigatório.");
-    check(company.address.length > 255, "O endereço não pode ter mais de 255 caracteres.");
-
-    // Validate company city
-    check(!company.city || typeof company.city !== "string", "A cidade é obrigatória.");
-    check(company.city.length > 255, "A cidade não pode ter mais de 255 caracteres.");
-
-    // Validate company country
-    check(!company.country || typeof company.country !== "string", "O país é obrigatório.");
-    check(company.country.length > 100, "O país não pode ter mais de 100 caracteres.");
-
-    // Validate company zipCode
-    check(!company.zipCode || typeof company.zipCode !== "string", "O código postal é obrigatório.");
-    check(company.zipCode.length > 20, "O código postal não pode ter mais de 20 caracteres.");
+    // Optional fields
+    if (company.email) validate(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(company.email), "O email não é válido!");
+    if (company.contact) validate(!/^\+?[0-9]+$/.test(company.contact), "O contacto deve conter apenas '+' para o indicativo e números (0-9)!");
+    if (company.phone) validate(!/^\+?[0-9]+$/.test(company.phone), "O telefone do responsável deve conter apenas '+' para o indicativo e números (0-9)!");
+    if (company.website) validate(!/^https?:\/\/[^\s$.?#].[^\s]*$/.test(company.website), "O website deve ser uma URL válida!");
   }
 }
