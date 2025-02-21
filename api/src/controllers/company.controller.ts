@@ -148,9 +148,10 @@ export class CompanyController {
     Object.values(rules).flat().forEach(({ condition, message }) => validate(condition, message));
 
     // Optional fields
+    const phoneRegex = /^\+?\d{1,3}[-.\s]?\(?\d+\)?[-.\s]?\d+[-.\s]?\d+$/;
     if (company.email) validate(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(company.email), "O email não é válido!");
-    if (company.contact) validate(!/^\+?[0-9]+$/.test(company.contact), "O contacto deve conter apenas '+' para o indicativo e números (0-9)!");
-    if (company.phone) validate(!/^\+?[0-9]+$/.test(company.phone), "O telefone do responsável deve conter apenas '+' para o indicativo e números (0-9)!");
+    if (company.contact) validate(!phoneRegex.test(company.contact), "O contacto deve ser um número de telefone válido!");
+    if (company.phone) validate(!phoneRegex.test(company.phone), "O telefone do responsável deve ser um número de telefone válido!");
     if (company.website) validate(!/^https?:\/\/[^\s$.?#].[^\s]*$/.test(company.website), "O website deve ser uma URL válida!");
   }
 }

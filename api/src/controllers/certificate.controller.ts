@@ -136,7 +136,8 @@ export class CertificateController {
       ],
       dates: [
         { condition: !certificate.issueDate || isNaN(Date.parse(certificate.issueDate)), message: "A data de emissão é obrigatória e deve ser válida!" },
-        { condition: !certificate.expirationDate || isNaN(Date.parse(certificate.expirationDate)), message: "A data de expiração é obrigatória e deve ser válida." }
+        { condition: !certificate.expirationDate || isNaN(Date.parse(certificate.expirationDate)), message: "A data de expiração é obrigatória e deve ser válida." },
+        { condition: certificate.expirationDate <= certificate.issueDate, message: "A data de expiração deve ser posterior à data de emissão." }
       ]
     };
     Object.values(rules).flat().forEach(({ condition, message }) => validate(condition, message));
