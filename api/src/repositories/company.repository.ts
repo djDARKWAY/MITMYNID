@@ -5,7 +5,7 @@ import {Company, CompanyRelations} from '../models';
 
 export class CompanyRepository extends DefaultCrudRepository<
   Company,
-  typeof Company.prototype.idCompany,
+  typeof Company.prototype.id_company,
   CompanyRelations
 > {
   constructor(

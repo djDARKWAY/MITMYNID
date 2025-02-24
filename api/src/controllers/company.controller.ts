@@ -37,18 +37,18 @@ export class CompanyController {
         "application/json": {
           schema: getModelSchemaRef(Company, {
             title: "NewCompany",
-            exclude: ["idCompany"],
+            exclude: ["id_company"],
           }),
         },
       },
     })
-    company: Omit<Company, "idCompany" | "lastModified" | "last_modified_user_id">
+    company: Omit<Company, "id_company" | "last_modified" | "last_modified_user_id">
   ): Promise<Company> {
     this.validateCompany(company);
 
     return this.companyRepository.create({
       ...company,
-      lastModified: new Date().toISOString(),
+      last_modified: new Date().toISOString(),
     });
   }
 
@@ -70,11 +70,11 @@ export class CompanyController {
   ): Promise<Company[]> {
     return this.companyRepository.find({
       fields: {
-        idCompany: true,
+        id_company: true,
         name: true,
         city: true,
         country: true,
-        createdDate: true,
+        created_date: true,
       },
     });
   }
@@ -126,7 +126,7 @@ export class CompanyController {
   }
 
   validateCompany(
-    company: Omit<Company, "idCompany" | "createdDate" | "lastModified" | "lastModifiedUser">
+    company: Omit<Company, "id_company" | "created_date" | "last_modified" | "last_modified_user">
   ): void {
     const validate = (condition: boolean, field: string, message: string) => { if (condition) throw new HttpErrors.BadRequest(`Erro no campo "${field}": ${message}`); };
 
@@ -148,9 +148,9 @@ export class CompanyController {
         { condition: !company.country , message: "O país é obrigatório!" },
         { condition: company.country.length > 60, message: "O país não pode ter mais de 60 caracteres!" }
       ],
-      zipCode: [
-        { condition: !company.zipCode, message: "O código postal é obrigatório!" },
-        { condition: company.zipCode.length > 20, message: "O código postal não pode ter mais de 20 caracteres!" }
+      zip_code: [
+        { condition: !company.zip_code, message: "O código postal é obrigatório!" },
+        { condition: company.zip_code.length > 20, message: "O código postal não pode ter mais de 20 caracteres!" }
       ]
     };
     Object.entries(rules).forEach(([field, validations]) => { 

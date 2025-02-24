@@ -8,12 +8,12 @@ export class Certificate extends Entity {
     id: true,
     generated: true,
     postgresql: {
-      columnName: "idCertificate",
+      columnName: "id_certificate",
       dataType: "serial",
       nullable: "NO",
     },
   })
-  idCertificate?: number;
+  id_certificate?: number;
 
   @property({
     type: "string",
@@ -31,86 +31,86 @@ export class Certificate extends Entity {
     type: "string",
     required: true,
     postgresql: {
-      columnName: "filePath",
+      columnName: "file_path",
       dataType: "text",
       nullable: "NO",
     },
   })
-  filePath: string;
+  file_path: string;
 
   @property({
     type: "string",
     postgresql: {
-      columnName: "certificateText",
+      columnName: "certificate_text",
       dataType: "text",
       nullable: "YES",
     },
   })
-  certificateText?: string;
+  certificate_text?: string;
 
   @property({
     type: "date",
     required: true,
     postgresql: {
-      columnName: "issueDate",
+      columnName: "issue_date",
       dataType: "date",
       nullable: "NO",
     },
   })
-  issueDate: string;
+  issue_date: string;
 
   @property({
     type: "string",
     postgresql: {
-      columnName: "issuerUrl",
+      columnName: "issuer_url",
       dataType: "text",
       nullable: "YES",
     },
   })
-  issuerUrl?: string;
+  issuer_url?: string;
 
   @property({
     type: "string",
     postgresql: {
-      columnName: "issuerName",
+      columnName: "issuer_name",
       dataType: "text",
       nullable: "YES",
     },
   })
-  issuerName?: string;
+  issuer_name?: string;
 
   @property({
     type: "string",
     postgresql: {
-      columnName: "certificateData",
+      columnName: "certificate_data",
       dataType: "text",
       nullable: "YES",
     },
   })
-  certificateData?: string;
+  certificate_data?: string;
 
   @property({
     type: "date",
     required: true,
     postgresql: {
-      columnName: "expirationDate",
+      columnName: "expiration_date",
       dataType: "date",
       nullable: "NO",
     },
   })
-  expirationDate: string;
+  expiration_date: string;
 
   @property({
     type: "date",
     required: true,
     postgresql: {
-      columnName: "lastModified",
+      columnName: "last_modified",
       dataType: "timestamp with time zone",
       nullable: "NO",
       default: "NOW()",
     },
   })
-  lastModified: string;
+  last_modified: string;
 
   @belongsTo(() => User, { name: "last_modified_user_id" })
   last_modified_user_id?: number;

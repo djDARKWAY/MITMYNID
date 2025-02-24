@@ -8,12 +8,12 @@ export class Company extends Entity {
     id: true,
     generated: true,
     postgresql: {
-      columnName: "idCompany",
+      columnName: "id_company",
       dataType: "serial",
       nullable: "NO",
     },
   })
-  idCompany?: number;
+  id_company?: number;
 
   @property({
     type: "string",
@@ -67,13 +67,13 @@ export class Company extends Entity {
     type: "string",
     required: true,
     postgresql: {
-      columnName: "zipCode",
+      columnName: "zip_code",
       dataType: "varchar",
       dataLength: 20,
       nullable: "NO",
     },
   })
-  zipCode: string;
+  zip_code: string;
 
   @property({
     type: "string",
@@ -119,25 +119,25 @@ export class Company extends Entity {
     type: "date",
     required: true,
     postgresql: {
-      columnName: "createdDate",
+      columnName: "created_date",
       dataType: "timestamp with time zone",
       nullable: "NO",
       default: "NOW()",
     },
   })
-  createdDate: string;
+  created_date: string;
 
   @property({
     type: "date",
     required: true,
     postgresql: {
-      columnName: "lastModified",
+      columnName: "last_modified",
       dataType: "timestamp with time zone",
       nullable: "NO",
       default: "NOW()",
     },
   })
-  lastModified: string;
+  last_modified: string;
 
   @belongsTo(() => User, { name: "last_modified_user_id" })
   last_modified_user_id?: number;

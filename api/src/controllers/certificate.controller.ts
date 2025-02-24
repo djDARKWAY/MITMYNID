@@ -37,18 +37,18 @@ export class CertificateController {
         "application/json": {
           schema: getModelSchemaRef(Certificate, {
             title: "NewCertificate",
-            exclude: ["idCertificate"],
+            exclude: ["id_certificate"],
           }),
         },
       },
     })
-    certificate: Omit<Certificate, "idCertificate" | "lastModified" | "last_modified_user_id">
+    certificate: Omit<Certificate, "id_certificate" | "last_modified" | "last_modified_user_id">
   ): Promise<Certificate> {
     this.validateCertificate(certificate);
 
     return this.certificateRepository.create({
       ...certificate,
-      lastModified: new Date().toISOString(),
+      last_modified: new Date().toISOString(),
     });
   }
 
@@ -70,12 +70,12 @@ export class CertificateController {
   ): Promise<Certificate[]> {
     return this.certificateRepository.find({
       fields: {
-        idCertificate: true,
+        id_certificate: true,
         name: true,
-        filePath: true,
-        issueDate: true,
-        issuerName: true,
-        expirationDate: true,
+        file_path: true,
+        issue_date: true,
+        issuer_name: true,
+        expiration_date: true,
       },
     });
   }
@@ -127,7 +127,7 @@ export class CertificateController {
   }
 
   validateCertificate(
-    certificate: Omit<Certificate, "idCertificate" | "lastModified" | "last_modified_user_id">
+    certificate: Omit<Certificate, "id_certificate" | "last_modified" | "last_modified_user_id">
   ): void {
     const validate = (condition: boolean, field: string, message: string) => { if (condition) throw new HttpErrors.BadRequest(`Erro no campo "${field}": ${message}`); };
 
@@ -137,15 +137,15 @@ export class CertificateController {
         { condition: !certificate.name, message: "O nome do certificado é obrigatório!" },
         { condition: certificate.name?.length > 255, message: "O nome do certificado deve ter no máximo 255 caracteres!" }
       ],
-      filePath: [
-        { condition: !certificate.filePath, message: "O caminho do ficheiro é obrigatório!" },
-        { condition: !certificate.filePath.startsWith("/"), message: "O caminho do ficheiro deve começar por '/'!" },
-        { condition: !/\.(pem|crt|cer|key|der|pfx|p12|p7b|p7c)$/.test(certificate.filePath), message: "O ficheiro deve ser um ficheiro de certificado válido!" }
+      file_path: [
+        { condition: !certificate.file_path, message: "O caminho do ficheiro é obrigatório!" },
+        { condition: !certificate.file_path.startsWith("/"), message: "O caminho do ficheiro deve começar por '/'!" },
+        { condition: !/\.(pem|crt|cer|key|der|pfx|p12|p7b|p7c)$/.test(certificate.file_path), message: "O ficheiro deve ser um ficheiro de certificado válido!" }
       ],
       dates: [
-        { condition: !certificate.issueDate || isNaN(Date.parse(certificate.issueDate)), message: "A data de emissão é obrigatória e deve ser válida!" },
-        { condition: !certificate.expirationDate || isNaN(Date.parse(certificate.expirationDate)), message: "A data de expiração é obrigatória e deve ser válida." },
-        { condition: certificate.expirationDate < certificate.issueDate, message: "A data de expiração deve ser posterior à data de emissão." }
+        { condition: !certificate.issue_date || isNaN(Date.parse(certificate.issue_date)), message: "A data de emissão é obrigatória e deve ser válida!" },
+        { condition: !certificate.expiration_date || isNaN(Date.parse(certificate.expiration_date)), message: "A data de expiração é obrigatória e deve ser válida." },
+        { condition: certificate.expiration_date < certificate.issue_date, message: "A data de expiração deve ser posterior à data de emissão." }
       ]
     };
 
@@ -154,6 +154,6 @@ export class CertificateController {
     });
 
     // Optional fields
-    if (certificate.issuerUrl) { validate(!/^https?:\/\/.+\..+/.test(certificate.issuerUrl), "issuerUrl", "O URL da entidade emissora deve ser uma URL válida."); }
+    if (certificate.issuer_url) { validate(!/^https?:\/\/.+\..+/.test(certificate.issuer_url), "issuer_url", "O URL da entidade emissora deve ser uma URL válida."); }
   }
 }

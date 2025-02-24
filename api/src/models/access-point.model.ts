@@ -10,35 +10,35 @@ export class AccessPoint extends Entity {
     id: true,
     generated: true,
     postgresql: {
-      columnName: "idAccessPoint",
+      columnName: "id_access_point",
       dataType: "serial",
       nullable: "NO",
     },
   })
-  idAccessPoint?: number;
+  id_access_point?: number;
 
   @property({
     type: "string",
     required: true,
     postgresql: {
-      columnName: "locationDescription",
+      columnName: "location_description",
       dataType: "varchar",
       dataLength: 255,
       nullable: "NO",
     },
   })
-  locationDescription: string;
+  location_description: string;
 
   @property({
     type: "string",
     required: true,
     postgresql: {
-      columnName: "ipAddress",
+      columnName: "ip_address",
       dataType: "inet",
       nullable: "NO",
     },
   })
-  ipAddress: string;
+  ip_address: string;
 
   @property({
     type: "object",
@@ -63,58 +63,58 @@ export class AccessPoint extends Entity {
   @property({
     type: "string",
     postgresql: {
-      columnName: "apSoftware",
+      columnName: "ap_software",
       dataType: "text",
       nullable: "YES",
     },
   })
-  apSoftware?: string;
+  ap_software?: string;
 
   @property({
     type: "string",
     postgresql: {
-      columnName: "softwareVersion",
+      columnName: "software_version",
       dataType: "text",
       nullable: "YES",
     },
   })
-  softwareVersion?: string;
+  software_version?: string;
 
   @property({
     type: "date",
     required: true,
     postgresql: {
-      columnName: "createdDate",
+      columnName: "created_date",
       dataType: "timestamp with time zone",
       nullable: "NO",
       default: "NOW()",
     },
   })
-  createdDate: string;
+  created_date: string;
 
   @property({
     type: "date",
     required: true,
     postgresql: {
-      columnName: "lastModified",
+      columnName: "last_modified",
       dataType: "timestamp with time zone",
       nullable: "NO",
       default: "NOW()",
     },
   })
-  lastModified: string;
+  last_modified: string;
 
   @property({
     type: "boolean",
     required: true,
     postgresql: {
-      columnName: "isActive",
+      columnName: "is_active",
       dataType: "boolean",
       nullable: "YES",
       default: true,
     },
   })
-  isActive: boolean;
+  is_active: boolean;
 
   @belongsTo(() => Certificate, { name: "certificate" })
   certificate_id?: number;

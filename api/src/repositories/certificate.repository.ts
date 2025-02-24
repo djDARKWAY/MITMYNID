@@ -5,7 +5,7 @@ import {Certificate, CertificateRelations} from '../models';
 
 export class CertificateRepository extends DefaultCrudRepository<
   Certificate,
-  typeof Certificate.prototype.idCertificate,
+  typeof Certificate.prototype.id_certificate,
   CertificateRelations
 > {
   constructor(
