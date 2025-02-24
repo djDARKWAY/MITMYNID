@@ -42,7 +42,7 @@ export class CompanyController {
         },
       },
     })
-    company: Omit<Company, "idCompany" | "lastModified" | "lastModifiedUserId">
+    company: Omit<Company, "idCompany" | "lastModified" | "last_modified_user_id">
   ): Promise<Company> {
     this.validateCompany(company);
 

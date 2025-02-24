@@ -42,7 +42,7 @@ export class CertificateController {
         },
       },
     })
-    certificate: Omit<Certificate, "idCertificate" | "lastModified" | "lastModifiedUserId">
+    certificate: Omit<Certificate, "idCertificate" | "lastModified" | "last_modified_user_id">
   ): Promise<Certificate> {
     this.validateCertificate(certificate);
 
@@ -127,7 +127,7 @@ export class CertificateController {
   }
 
   validateCertificate(
-    certificate: Omit<Certificate, "idCertificate" | "lastModified" | "lastModifiedUserId">
+    certificate: Omit<Certificate, "idCertificate" | "lastModified" | "last_modified_user_id">
   ): void {
     const validate = (condition: boolean, field: string, message: string) => { if (condition) throw new HttpErrors.BadRequest(`Erro no campo "${field}": ${message}`); };
 

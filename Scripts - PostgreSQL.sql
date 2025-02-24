@@ -14,10 +14,10 @@ CREATE TABLE network.certificate (
   expirationDate DATE NOT NULL,                                   -- Data de validade ou expiração
   lastModified TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL    -- Data e hora da última atualização
   isExpired BOOLEAN DEFAULT false,                                -- Estado de expiração (expirado/não-expirado)
-  lastModifiedUser UUID                                           -- [FK] Referência para o utilizador
+  lastModifiedUserId UUID                                           -- [FK] Referência para o utilizador
   
   CONSTRAINT fk_certificate_user
-    FOREIGN KEY (lastModifiedUser)
+    FOREIGN KEY (lastModifiedUserId)
     REFERENCES auth.app_users (id)
     ON DELETE SET NULL,                                           -- Se o utilizador for eliminado retorna NULL
 );
@@ -35,11 +35,11 @@ CREATE TABLE network.company (
   phone TEXT,                                                     -- Contacto da pessoa responsável
   website TEXT,                                                   -- Endereço Web
   createdDate TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,    -- Timestamp da criação
-  lastModified TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL    -- Timestamp do último update
-  lastModifiedUser UUID                                           -- [FK] Referência para o utilizador
+  lastModified TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,   -- Timestamp do último update
+  lastModifiedUserId UUID                                           -- [FK] Referência para o utilizador
 
   CONSTRAINT fk_company_user
-    FOREIGN KEY (lastModifiedUser)
+    FOREIGN KEY (lastModifiedUserId)
     REFERENCES auth.app_users (id)
     ON DELETE SET NULL,                                           -- Se o utilizador for eliminado retorna NULL
 );
@@ -58,7 +58,7 @@ CREATE TABLE network.accessPoint (
   isActive BOOLEAN DEFAULT true,                                  -- Estado de ativação (ativo/inativo)
   certificateId INTEGER,                                          -- [FK] Referência para o certificado
   companyId INTEGER,                                              -- [FK] Referência para a entidade
-  lastModifiedUser UUID                                           -- [FK] Referência para o utilizador
+  lastModifiedUserId UUID                                           -- [FK] Referência para o utilizador
   
   CONSTRAINT fk_certificate
     FOREIGN KEY (certificateId)
@@ -69,7 +69,7 @@ CREATE TABLE network.accessPoint (
     REFERENCES network.company (idCompany)
     ON DELETE CASCADE                                             -- Se a entidade for eliminada, AP será eliminado
   CONSTRAINT fk_accesspoint_user
-    FOREIGN KEY (lastModifiedUser)
+    FOREIGN KEY (lastModifiedUserId)
     REFERENCES auth.app_users (id)
     ON DELETE SET NULL,                                           -- Se o utilizador for eliminado retorna NULL
 );

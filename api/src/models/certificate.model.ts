@@ -112,8 +112,8 @@ export class Certificate extends Entity {
   })
   lastModified: string;
 
-  @belongsTo(() => User, { name: "lastModifiedUserId" })
-  lastModifiedUserId?: number;
+  @belongsTo(() => User, { name: "last_modified_user_id" })
+  last_modified_user_id?: number;
 
   constructor(data?: Partial<Certificate>) {
     super(data);

@@ -117,13 +117,13 @@ export class AccessPoint extends Entity {
   isActive: boolean;
 
   @belongsTo(() => Certificate, { name: "certificate" })
-  certificateId?: number;
+  certificate_id?: number;
 
   @belongsTo(() => Company, { name: "company" })
-  companyId?: number;
+  company_id?: number;
 
-  @belongsTo(() => User, { name: "lastModifiedUserId" })
-  lastModifiedUserId?: number;
+  @belongsTo(() => User, { name: "last_modified_user_id" })
+  last_modified_user_id?: number;
 
   constructor(data?: Partial<AccessPoint>) {
     super(data);

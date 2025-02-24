@@ -76,9 +76,9 @@ export class AccessPointController {
         ipAddress: true,
         apSoftware: true,
         isActive: true,
-        certificateId: true,
-        companyId: true,
-        lastModifiedUserId: true,
+        certificate_id: true,
+        company_id: true,
+        last_modified_user_id: true,
       },
     });
   }
