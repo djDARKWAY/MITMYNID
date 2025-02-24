@@ -48,6 +48,7 @@ export class AccessPointController {
 
     return this.accessPointRepository.create({
       ...accessPoint,
+      createdDate: new Date().toISOString(),
       lastModified: new Date().toISOString(),
     });
   }
@@ -108,6 +109,10 @@ export class AccessPointController {
     @param.path.number("id") id: number,
     @requestBody() accessPoint: AccessPoint
   ): Promise<void> {
+    const existingAccessPoint = await this.accessPointRepository.findById(id);
+    if (!existingAccessPoint) {
+      throw new HttpErrors.NotFound('AP não encontrado!');
+    }
     await this.accessPointRepository.replaceById(id, accessPoint);
   }
 
@@ -117,13 +122,17 @@ export class AccessPointController {
     description: "AccessPoint DELETE success",
   })
   async deleteById(@param.path.number("id") id: number): Promise<void> {
+    const existingAccessPoint = await this.accessPointRepository.findById(id);
+    if (!existingAccessPoint) {
+      throw new HttpErrors.NotFound('AP não encontrado!');
+    }
     await this.accessPointRepository.deleteById(id);
   }
 
   validateAccessPoint(
     accessPoint: Omit<AccessPoint, "idAccessPoint" | "createdDate" | "lastModified" | "lastModifiedUser">
   ): void {
-    const validate = (condition: boolean, message: string) => { if (condition) throw new HttpErrors.BadRequest(message); };
+    const validate = (condition: boolean, field: string, message: string) => {  if (condition) throw new HttpErrors.BadRequest(`Erro no campo "${field}": ${message}`); };
 
     // Mandatory fields
     const rules: { [key: string]: { condition: boolean; message: string }[] } = {
@@ -137,14 +146,26 @@ export class AccessPointController {
                      !/^([0-9a-fA-F]{1,4}:){7}([0-9a-fA-F]{1,4})$/.test(accessPoint.ipAddress), message: "O endereço IP deve ser um IPv4 ou IPv6 válido!" }
       ],
       isActive: [
-        { condition: !accessPoint.isActive, message: "O estado do AP é obrigatório!" },
+        { condition: accessPoint.isActive === undefined, message: "O estado do AP é obrigatório!" },
         { condition: typeof accessPoint.isActive !== "boolean", message: "O estado do AP deve ser um valor booleano!" }
       ]
     };
-    Object.values(rules).flat().forEach(({ condition, message }) => validate(condition, message));
-
+    
+    Object.entries(rules).forEach(([field, validations]) => { validations.forEach(({ condition, message }) => validate(condition, field, message)); });
+    
     // Optional fields
-    if (accessPoint.configurations) { validate(typeof accessPoint.configurations !== "object", "A configuração deve ser um objeto JSON válido."); }
-    if (accessPoint.permissions) {  validate(typeof accessPoint.permissions !== "object", "As permissões devem ser um objeto JSON válido."); }
-  }
+    if (accessPoint.configurations) {
+      try {
+        JSON.stringify(accessPoint.configurations);
+      } catch {
+        throw new HttpErrors.BadRequest("A configuração deve ser um objeto JSON válido.");
+      }
+    }
+    if (accessPoint.permissions) {
+      try {
+        JSON.stringify(accessPoint.permissions);
+      } catch {
+        throw new HttpErrors.BadRequest("As permissões devem ser um objeto JSON válido.");
+      }
+    }}
 }

@@ -105,6 +105,10 @@ export class CompanyController {
     @param.path.number("id") id: number,
     @requestBody() company: Company
   ): Promise<void> {
+    const existingCompany = await this.companyRepository.findById(id);
+    if (!existingCompany) {
+      throw new HttpErrors.NotFound('Empresa não encontrada!');
+    }
     await this.companyRepository.replaceById(id, company);
   }
 
@@ -114,13 +118,17 @@ export class CompanyController {
     description: "Company DELETE success",
   })
   async deleteById(@param.path.number("id") id: number): Promise<void> {
+    const existingCompany = await this.companyRepository.findById(id);
+    if (!existingCompany) {
+      throw new HttpErrors.NotFound('Empresa não encontrada!');
+    }
     await this.companyRepository.deleteById(id);
   }
 
   validateCompany(
     company: Omit<Company, "idCompany" | "createdDate" | "lastModified" | "lastModifiedUser">
   ): void {
-    const validate = (condition: boolean, message: string) => { if (condition) throw new HttpErrors.BadRequest(message); };
+    const validate = (condition: boolean, field: string, message: string) => { if (condition) throw new HttpErrors.BadRequest(`Erro no campo "${field}": ${message}`); };
 
     // Mandatory fields
     const rules: { [key: string]: { condition: boolean; message: string }[] } = {
@@ -145,13 +153,15 @@ export class CompanyController {
         { condition: company.zipCode.length > 20, message: "O código postal não pode ter mais de 20 caracteres!" }
       ]
     };
-    Object.values(rules).flat().forEach(({ condition, message }) => validate(condition, message));
+    Object.entries(rules).forEach(([field, validations]) => { 
+      validations.forEach(({ condition, message }) => validate(condition, field, message)); 
+    });
 
     // Optional fields
     const phoneRegex = /^\+?\d{1,3}[-.\s]?\(?\d+\)?[-.\s]?\d+[-.\s]?\d+$/;
-    if (company.email) validate(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(company.email), "O email não é válido!");
-    if (company.contact) validate(!phoneRegex.test(company.contact), "O contacto deve ser um número de telefone válido!");
-    if (company.phone) validate(!phoneRegex.test(company.phone), "O telefone do responsável deve ser um número de telefone válido!");
-    if (company.website) validate(!/^https?:\/\/[^\s$.?#].[^\s]*$/.test(company.website), "O website deve ser uma URL válida!");
+    if (company.email) validate(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(company.email), "email", "O email não é válido!");
+    if (company.contact) validate(!phoneRegex.test(company.contact), "contact", "O contacto deve ser um número de telefone válido!");
+    if (company.phone) validate(!phoneRegex.test(company.phone), "phone", "O telefone do responsável deve ser um número de telefone válido!");
+    if (company.website) validate(!/^https?:\/\/[^\s$.?#].[^\s]*$/.test(company.website), "website", "O website deve ser uma URL válida!");
   }
 }

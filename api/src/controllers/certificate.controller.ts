@@ -97,7 +97,7 @@ export class CertificateController {
     return this.certificateRepository.findById(id, filter);
   }
 
-  // PATCH endpoint:
+  // PUT endpoint:
   @put("/certificates/{id}")
   @response(204, {
     description: "Certificate PUT success",
@@ -106,6 +106,10 @@ export class CertificateController {
     @param.path.number("id") id: number,
     @requestBody() certificate: Certificate
   ): Promise<void> {
+    const existingCertificate = await this.certificateRepository.findById(id);
+    if (!existingCertificate) {
+      throw new HttpErrors.NotFound('Certificado não encontrado!');
+    }
     await this.certificateRepository.replaceById(id, certificate);
   }
 
@@ -115,14 +119,18 @@ export class CertificateController {
     description: "Certificate DELETE success",
   })
   async deleteById(@param.path.number("id") id: number): Promise<void> {
+    const existingCertificate = await this.certificateRepository.findById(id);
+    if (!existingCertificate) {
+      throw new HttpErrors.NotFound('Certificado não encontrado!');
+    }
     await this.certificateRepository.deleteById(id);
   }
 
   validateCertificate(
     certificate: Omit<Certificate, "idCertificate" | "lastModified" | "lastModifiedUserId">
   ): void {
-    const validate = (condition: boolean, message: string) => { if (condition) throw new HttpErrors.BadRequest(message); };
-  
+    const validate = (condition: boolean, field: string, message: string) => { if (condition) throw new HttpErrors.BadRequest(`Erro no campo "${field}": ${message}`); };
+
     // Mandatory fields
     const rules: { [key: string]: { condition: boolean; message: string }[] } = {
       name: [
@@ -137,12 +145,15 @@ export class CertificateController {
       dates: [
         { condition: !certificate.issueDate || isNaN(Date.parse(certificate.issueDate)), message: "A data de emissão é obrigatória e deve ser válida!" },
         { condition: !certificate.expirationDate || isNaN(Date.parse(certificate.expirationDate)), message: "A data de expiração é obrigatória e deve ser válida." },
-        { condition: certificate.expirationDate <= certificate.issueDate, message: "A data de expiração deve ser posterior à data de emissão." }
+        { condition: certificate.expirationDate < certificate.issueDate, message: "A data de expiração deve ser posterior à data de emissão." }
       ]
     };
-    Object.values(rules).flat().forEach(({ condition, message }) => validate(condition, message));
-  
+
+    Object.entries(rules).forEach(([field, validations]) => { 
+      validations.forEach(({ condition, message }) => validate(condition, field, message)); 
+    });
+
     // Optional fields
-    if (certificate.issuerUrl) validate(!/^https?:\/\/.+\..+/.test(certificate.issuerUrl), "O URL da entidade emissora deve ser uma URL válida.");
-  }  
+    if (certificate.issuerUrl) { validate(!/^https?:\/\/.+\..+/.test(certificate.issuerUrl), "issuerUrl", "O URL da entidade emissora deve ser uma URL válida."); }
+  }
 }
