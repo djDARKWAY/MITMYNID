@@ -44,7 +44,7 @@ export class AccessPointController {
     })
     accessPoint: Omit<AccessPoint, "id_access_point" | "created_date" | "last_modified" | "last_modified_user">
   ): Promise<AccessPoint> {
-    this.validateAccessPoint(accessPoint);
+    this.validateAccessPoints(accessPoint);
 
     return this.accessPointRepository.create({
       ...accessPoint,
@@ -53,7 +53,7 @@ export class AccessPointController {
     });
   }
 
-  // GET endpoint:
+  // GET endpoints:
   @get("/access-points")
   @response(200, {
     description: "Array of AccessPoint model instances",
@@ -99,6 +99,22 @@ export class AccessPointController {
     return this.accessPointRepository.findById(id, filter);
   }
 
+  @get('/access-points/validate/{id}')
+  @response(200, {
+    description: 'Validação do estado do Access Point',
+    content: {'application/json': {schema: {type: 'object'}}},
+  })
+  async validateAccessPoint(
+    @param.path.number('id') id: number,
+  ): Promise<{id: number; is_active: boolean; message: string}> {
+    const accessPoint = await this.accessPointRepository.findById(id);
+
+    const isActive = accessPoint.is_active;
+    const message = isActive ? 'O Access Point está ativo.' : 'O Access Point está inativo.';
+
+    return { id, is_active: isActive, message, };
+  }
+
   // PUT endpoint:
   @put("/access-points/{id}")
   @response(204, {
@@ -128,7 +144,7 @@ export class AccessPointController {
     await this.accessPointRepository.deleteById(id);
   }
 
-  validateAccessPoint(
+  validateAccessPoints(
     accessPoint: Omit<AccessPoint, "id_access_point" | "created_date" | "last_modified" | "last_modified_user">
   ): void {
     const validate = (condition: boolean, field: string, message: string) => {  if (condition) throw new HttpErrors.BadRequest(`Erro no campo "${field}": ${message}`); };

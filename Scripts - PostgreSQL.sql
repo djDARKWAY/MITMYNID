@@ -55,7 +55,7 @@ CREATE TABLE network.accessPoint (
   software_version TEXT,	                                        -- Versão do software
   created_date TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,   -- Timestamp da criação
   last_modified TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,  -- Timestamp do último update
-  is_active BOOLEAN DEFAULT true,                                 -- Estado de ativação (ativo/inativo)
+  is_active BOOLEAN NOT NULL DEFAULT true,                        -- Estado de ativação (ativo/inativo)
   certificate_id INTEGER,                                         -- [FK] Referência para o certificado
   company_id INTEGER,                                             -- [FK] Referência para a entidade
   last_modified_user_id UUID,                                     -- [FK] Referência para o utilizador

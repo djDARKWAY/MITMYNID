@@ -58,7 +58,7 @@ export class CertificateController {
     });
   }
 
-  // GET endpoint:
+  // GET endpoints:
   @get("/certificates")
   @response(200, {
     description: "Array of Certificate model instances",
