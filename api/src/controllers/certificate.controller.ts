@@ -42,6 +42,7 @@ export class CertificateController {
           schema: getModelSchemaRef(Certificate, {
             title: "NewCertificate",
             exclude: ["id_certificate"],
+            optional: ["last_modified", "last_modified_user_id"],
           }),
         },
       },
