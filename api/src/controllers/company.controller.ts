@@ -18,6 +18,9 @@ import {
 } from "@loopback/rest";
 import { Company } from "../models";
 import { CompanyRepository } from "../repositories";
+import { authenticate, TokenService, UserService } from '@loopback/authentication';
+import { basicAuthorization } from '../middlewares/auth.middleware';
+import { authorize } from '@loopback/authorization';
 
 export class CompanyController {
   constructor(

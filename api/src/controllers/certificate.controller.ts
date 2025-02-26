@@ -17,6 +17,9 @@ import {
 } from "@loopback/rest";
 import { Certificate } from "../models";
 import { CertificateRepository } from "../repositories";
+import { authenticate, TokenService, UserService } from '@loopback/authentication';
+import { basicAuthorization } from '../middlewares/auth.middleware';
+import { authorize } from '@loopback/authorization';
 import * as dotenv from 'dotenv';
 import * as fs from "fs";
 import * as path from "path";
