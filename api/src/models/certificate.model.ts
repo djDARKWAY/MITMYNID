@@ -112,6 +112,18 @@ export class Certificate extends Entity {
   })
   last_modified: string;
 
+  @property({
+    type: "boolean",
+    required: true,
+    postgresql: {
+      columnName: "is_expired",
+      dataType: "boolean",
+      nullable: "NO",
+      default: false,
+    },
+  })
+  is_expired: boolean;
+
   @belongsTo(() => User, { name: "last_modified_user_id" })
   last_modified_user_id?: number;
 

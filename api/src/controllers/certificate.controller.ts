@@ -50,7 +50,7 @@ export class CertificateController {
     })
     certificate: Omit<Certificate, "id_certificate" | "last_modified" | "last_modified_user_id">
   ): Promise<Certificate> {
-    this.validateCertificate(certificate);
+    this.validateCertificates(certificate);
 
     return this.certificateRepository.create({
       ...certificate,
@@ -102,6 +102,22 @@ export class CertificateController {
   ): Promise<Certificate> {
     return this.certificateRepository.findById(id, filter);
   }
+  
+  @get('/certificates/validate/{id}')
+  @response(200, {
+    description: 'Validação do Certificado',
+    content: {'application/json': {schema: {type: 'object'}}},
+  })
+  async validateCertificate(
+    @param.path.number('id') id: number,
+  ): Promise<{id: number; is_valid: boolean; message: string, expires_at?: Date}> {
+    const certificate = await this.certificateRepository.findById(id);
+
+    const isValid = !certificate.is_expired;
+    const message = isValid ? 'O certificado é válido.' : 'O certificado está expirado.';
+
+    return { id, is_valid: isValid, message, expires_at: new Date(certificate.expiration_date) };
+  }
 
   // PUT endpoint:
   @put("/certificates/{id}")
@@ -135,7 +151,6 @@ export class CertificateController {
         throw new Error("Faltam variáveis de ambiente do Azure");
       }
 
-      // Conectar ao Azure Blob Storage
       const blobServiceClient = new BlobServiceClient(
         `https://${process.env.AZURE_STORAGE_ACCOUNT_NAME}.blob.core.windows.net/?${process.env.AZURE_STORAGE_SAS_TOKEN}`
       );
@@ -143,11 +158,10 @@ export class CertificateController {
       const blobName = path.basename(localPath);
       const blockBlobClient = containerClient.getBlockBlobClient(blobName);
       const fileStream = fs.createReadStream(localPath);
-
       await blockBlobClient.uploadStream(fileStream);
 
       await this.certificateRepository.updateById(id, {
-        file_path: blockBlobClient.url,
+        file_path: new URL(blockBlobClient.url).pathname,
         last_modified: new Date().toISOString(),
       });
 
@@ -172,7 +186,7 @@ export class CertificateController {
     await this.certificateRepository.deleteById(id);
   }
 
-  validateCertificate(
+  validateCertificates(
     certificate: Omit<Certificate, "id_certificate" | "last_modified" | "last_modified_user_id">
   ): void {
     const validate = (condition: boolean, field: string, message: string) => { if (condition) throw new HttpErrors.BadRequest(`Erro no campo "${field}": ${message}`); };

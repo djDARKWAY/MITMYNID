@@ -13,7 +13,7 @@ CREATE TABLE network.certificate (
   certificate_data TEXT,                                          -- Dados para gerir certificados
   expiration_date DATE NOT NULL,                                  -- Data de validade ou expiração
   last_modified TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,  -- Data e hora da última atualização
-  is_expired BOOLEAN DEFAULT false,                               -- Estado de expiração (expirado/não-expirado)
+  is_expired BOOLEAN NOT NULL DEFAULT false,                      -- Estado de expiração (expirado/não-expirado)
   last_modified_user_id UUID,                                     -- [FK] Referência para o utilizador
   
   CONSTRAINT fk_certificate_user
