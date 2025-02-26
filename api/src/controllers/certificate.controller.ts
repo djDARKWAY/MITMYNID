@@ -2,14 +2,12 @@ import {
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
 } from "@loopback/repository";
 import {
   post,
   param,
   get,
   getModelSchemaRef,
-  patch,
   put,
   del,
   requestBody,
@@ -18,6 +16,12 @@ import {
 } from "@loopback/rest";
 import { Certificate } from "../models";
 import { CertificateRepository } from "../repositories";
+import * as dotenv from 'dotenv';
+import * as fs from "fs";
+import * as path from "path";
+
+const { BlobServiceClient } = require('@azure/storage-blob');
+dotenv.config({ path: "src/controllers/specs/azure/.env" });
 
 export class CertificateController {
   constructor(
@@ -50,6 +54,37 @@ export class CertificateController {
       ...certificate,
       last_modified: new Date().toISOString(),
     });
+  }
+
+  @post("/certificates/upload")
+  @response(200, {
+    description: "Carregamento de certificado para o Azure Blob Storage",
+  })
+  async uploadCertificate(
+    @requestBody() certificateFile: { localPath: string }
+  ): Promise<any> {
+    try {
+      const { localPath } = certificateFile;
+
+      if (!process.env.AZURE_STORAGE_CONTAINER_NAME || !process.env.AZURE_STORAGE_CONTAINER_NAME || !process.env.AZURE_STORAGE_SAS_TOKEN) {
+        throw new Error("Faltam variáveis de ambiente do Azure");
+      }
+  
+      const blobServiceClient = new BlobServiceClient(
+        `https://${process.env.AZURE_STORAGE_ACCOUNT_NAME}.blob.core.windows.net/?${process.env.AZURE_STORAGE_SAS_TOKEN}`
+      );
+  
+      const containerClient = blobServiceClient.getContainerClient(process.env.AZURE_STORAGE_CONTAINER_NAME);
+      const blobName = path.basename(localPath);
+      const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+      const fileStream = fs.createReadStream(localPath);
+  
+      await blockBlobClient.uploadStream(fileStream);
+  
+      return { message: "Certificado carregado com sucesso!", blobUrl: blockBlobClient.url };
+    } catch (error) {
+      throw new HttpErrors.BadRequest(`Erro ao carregar o arquivo: ${error.message}`);
+    }
   }
 
   // GET endpoint:
@@ -140,7 +175,7 @@ export class CertificateController {
       file_path: [
         { condition: !certificate.file_path, message: "O caminho do ficheiro é obrigatório!" },
         { condition: !certificate.file_path.startsWith("/"), message: "O caminho do ficheiro deve começar por '/'!" },
-        { condition: !/\.(pem|crt|cer|key|der|pfx|p12|p7b|p7c)$/.test(certificate.file_path), message: "O ficheiro deve ser um ficheiro de certificado válido!" }
+        { condition: !/\.(pem|crt|key)$/.test(certificate.file_path), message: "O ficheiro deve ser um ficheiro de certificado válido!" }
       ],
       dates: [
         { condition: !certificate.issue_date || isNaN(Date.parse(certificate.issue_date)), message: "A data de emissão é obrigatória e deve ser válida!" },
