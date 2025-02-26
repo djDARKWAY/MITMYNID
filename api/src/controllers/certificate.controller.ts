@@ -10,6 +10,7 @@ import {
   getModelSchemaRef,
   put,
   del,
+  patch,
   requestBody,
   response,
   HttpErrors,
@@ -55,37 +56,6 @@ export class CertificateController {
       ...certificate,
       last_modified: new Date().toISOString(),
     });
-  }
-
-  @post("/certificates/upload")
-  @response(200, {
-    description: "Carregamento de certificado para o Azure Blob Storage",
-  })
-  async uploadCertificate(
-    @requestBody() certificateFile: { localPath: string }
-  ): Promise<any> {
-    try {
-      const { localPath } = certificateFile;
-
-      if (!process.env.AZURE_STORAGE_CONTAINER_NAME || !process.env.AZURE_STORAGE_CONTAINER_NAME || !process.env.AZURE_STORAGE_SAS_TOKEN) {
-        throw new Error("Faltam variáveis de ambiente do Azure");
-      }
-  
-      const blobServiceClient = new BlobServiceClient(
-        `https://${process.env.AZURE_STORAGE_ACCOUNT_NAME}.blob.core.windows.net/?${process.env.AZURE_STORAGE_SAS_TOKEN}`
-      );
-  
-      const containerClient = blobServiceClient.getContainerClient(process.env.AZURE_STORAGE_CONTAINER_NAME);
-      const blobName = path.basename(localPath);
-      const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-      const fileStream = fs.createReadStream(localPath);
-  
-      await blockBlobClient.uploadStream(fileStream);
-  
-      return { message: "Certificado carregado com sucesso!", blobUrl: blockBlobClient.url };
-    } catch (error) {
-      throw new HttpErrors.BadRequest(`Erro ao carregar o arquivo: ${error.message}`);
-    }
   }
 
   // GET endpoint:
@@ -147,6 +117,46 @@ export class CertificateController {
       throw new HttpErrors.NotFound('Certificado não encontrado!');
     }
     await this.certificateRepository.replaceById(id, certificate);
+  }
+
+  // PATCH endpoint:
+  @patch("/certificates/{id}")
+  @response(200, {
+    description: "Atualiza o certificado com o arquivo carregado",
+  })
+  async uploadFile(
+    @param.path.number('id') id: number,
+    @requestBody() certificateFile: { localPath: string }
+  ): Promise<Certificate> {
+    try {
+      const { localPath } = certificateFile;
+
+      if (!process.env.AZURE_STORAGE_CONTAINER_NAME || !process.env.AZURE_STORAGE_SAS_TOKEN) {
+        throw new Error("Faltam variáveis de ambiente do Azure");
+      }
+
+      // Conectar ao Azure Blob Storage
+      const blobServiceClient = new BlobServiceClient(
+        `https://${process.env.AZURE_STORAGE_ACCOUNT_NAME}.blob.core.windows.net/?${process.env.AZURE_STORAGE_SAS_TOKEN}`
+      );
+      const containerClient = blobServiceClient.getContainerClient(process.env.AZURE_STORAGE_CONTAINER_NAME);
+      const blobName = path.basename(localPath);
+      const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+      const fileStream = fs.createReadStream(localPath);
+
+      await blockBlobClient.uploadStream(fileStream);
+
+      await this.certificateRepository.updateById(id, {
+        file_path: blockBlobClient.url,
+        last_modified: new Date().toISOString(),
+      });
+
+      const updatedCertificate = await this.certificateRepository.findById(id);
+
+      return updatedCertificate;
+    } catch (error) {
+      throw new HttpErrors.BadRequest(`Erro ao carregar o arquivo: ${error.message}`);
+    }
   }
 
   // DELETE endpoint:
