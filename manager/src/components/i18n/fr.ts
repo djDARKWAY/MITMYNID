@@ -206,6 +206,9 @@ const frenchMessages: TranslationMessages = {
     menu: {
       config: 'Configuration',
       seguranca: 'Sécurité',
+      accesspoint: "Point d'accès",
+      certificates: 'Certificats',
+      monitorizacao: 'Surveillance',
       language: 'Langue'
     },
     language: 'Langue'
@@ -219,6 +222,18 @@ const frenchMessages: TranslationMessages = {
         app_id: 'Application',
         validity: 'Validité'
       }
+    },
+    accesspoints: {
+      list: "Liste des PAs",
+      manage: "Gestion des accès"
+    },
+    certificates: {
+      list: "Liste des certificats",
+      validations: "Validations"
+    },
+    monitoring: {
+      status: "État du réseau",
+      logs: "Journaux"
     },
     utilizadores: {
       name: "Utilisateurs",

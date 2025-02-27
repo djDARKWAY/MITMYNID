@@ -203,6 +203,9 @@ const portugueseMessages: TranslationMessages = {
     menu: {
       config: 'Configuração',
       seguranca: 'Segurança',
+      acesspoint: 'Punto de acceso',
+      certificates: 'Certificados',
+      monitorizacao: 'Monitorización',
       language: 'Idioma'
     },
     language: 'Idioma',
@@ -216,6 +219,18 @@ const portugueseMessages: TranslationMessages = {
         app_id: 'Aplicação',
         validity: 'Validade'
       }
+    },
+    accesspoints: {
+      list: "Lista de PAs",
+      manage: "Gestión de accesos"
+    },
+    certificates: {
+      list: "Lista de certificados",
+      validations: "Validaciones"
+    },
+    monitoring: {
+      status: "Estado de la red",
+      logs: "Registros"
     },
     utilizadores: {
       name: "Utilizadores",

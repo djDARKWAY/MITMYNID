@@ -207,6 +207,9 @@ const portugueseMessages: TranslationMessages = {
     menu: {
       config: 'Configuração',
       seguranca: 'Segurança',
+      accesspoint: 'Pontos de Acesso',
+      certificates: 'Certificados',
+      monitorizacao: 'Monitorização',
       language: 'Idioma'
     },
     language: 'Idioma',
@@ -221,11 +224,23 @@ const portugueseMessages: TranslationMessages = {
         validity: 'Validade'
       }
     },
+    accesspoints: {
+      list: "Lista de APs",
+      manage: "Gestão de acessos"
+    },
+    certificates: {
+      list: "Lista de certificados",
+      validations: "Validações"
+    },
+    monitoring: {
+      status: "Estado da rede",
+      logs: "Logs"
+    },
     utilizadores: {
       name: "Utilizadores",
       edit_title: 'Editar Utilizador',
       create_title: "Criar Utilizador",
-      validate: 'Validar Utilizadores',
+      validate: 'Validar utilizadores',
       tabs: {
         prefs_util: 'Preferências'
       },
