@@ -40,12 +40,12 @@ export class AccessPointController {
         "application/json": {
           schema: getModelSchemaRef(AccessPoint, {
             title: "NewAccessPoint",
-            exclude: ["id_access_point"],
+            exclude: ["id"],
           }),
         },
       },
     })
-    accessPoint: Omit<AccessPoint, "id_access_point" | "created_date" | "last_modified" | "last_modified_user">
+    accessPoint: Omit<AccessPoint, "id" | "created_date" | "last_modified" | "last_modified_user">
   ): Promise<AccessPoint> {
     this.validateAccessPoints(accessPoint);
 
@@ -74,7 +74,7 @@ export class AccessPointController {
   ): Promise<AccessPoint[]> {
     return this.accessPointRepository.find({
       fields: {
-        id_access_point: true,
+        id: true,
         location_description: true,
         ip_address: true,
         ap_software: true,
@@ -148,7 +148,7 @@ export class AccessPointController {
   }
 
   validateAccessPoints(
-    accessPoint: Omit<AccessPoint, "id_access_point" | "created_date" | "last_modified" | "last_modified_user">
+    accessPoint: Omit<AccessPoint, "id" | "created_date" | "last_modified" | "last_modified_user">
   ): void {
     const validate = (condition: boolean, field: string, message: string) => {  if (condition) throw new HttpErrors.BadRequest(`Erro no campo "${field}": ${message}`); };
 

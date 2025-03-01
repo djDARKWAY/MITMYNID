@@ -52,6 +52,9 @@ const lb4Provider = (
       }),
     });
 
+    console.log('getList params:', params); // Log dos parâmetros recebidos
+    console.log('getList URL:', URL); // Log da URL da requisição
+
     const result = await httpClient(`${apiUrl}/${resource}?${query}`, {
       method: "GET",
       headers: new Headers({
@@ -60,6 +63,8 @@ const lb4Provider = (
         Authorization: `Bearer ${localStorage.getItem('token') ? localStorage.getItem('token') : ''}`
       }),
     });
+
+    console.log('getList result:', result);
 
     return {
       data: result.json

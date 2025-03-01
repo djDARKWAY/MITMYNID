@@ -8,12 +8,12 @@ export class Certificate extends Entity {
     id: true,
     generated: true,
     postgresql: {
-      columnName: "id_certificate",
+      columnName: "id",
       dataType: "serial",
       nullable: "NO",
     },
   })
-  id_certificate?: number;
+  id?: number;
 
   @property({
     type: "string",

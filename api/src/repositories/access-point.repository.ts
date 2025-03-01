@@ -5,7 +5,7 @@ import { AccessPoint, AccessPointRelations } from "../models";
 
 export class AccessPointRepository extends DefaultCrudRepository<
   AccessPoint,
-  typeof AccessPoint.prototype.id_access_point,
+  typeof AccessPoint.prototype.id,
   AccessPointRelations
 > {
   constructor(@inject("datasources.network") dataSource: NetworkDataSource) {

@@ -3,7 +3,7 @@ CREATE SCHEMA network;
 
 -- Criação da tabela "certificate"
 CREATE TABLE network.certificate (
-  id_certificate SERIAL PRIMARY KEY,                              -- [PK] Identificador único
+  id SERIAL PRIMARY KEY,                              -- [PK] Identificador único
   name VARCHAR(255) NOT NULL,                                     -- Nome do certificado
   file_path TEXT NOT NULL,                                        -- Caminho para o certificado
   certificate_text TEXT,                                          -- Certificado em formato de texto    
@@ -24,7 +24,7 @@ CREATE TABLE network.certificate (
 
 -- Criação da tabela "company"
 CREATE TABLE network.company (
-  id_company SERIAL PRIMARY KEY,                                  -- [PK] Identificador único
+  id SERIAL PRIMARY KEY,                                  -- [PK] Identificador único
   name VARCHAR(255) NOT NULL,                                     -- Nome completo da entidade
   address VARCHAR(255) NOT NULL,                                  -- Rua ou avenida
   city VARCHAR(100) NOT NULL,                                     -- Cidade
@@ -46,7 +46,7 @@ CREATE TABLE network.company (
 
 -- Criação da tabela "accessPoint"
 CREATE TABLE network.accessPoint (
-  id_access_point SERIAL PRIMARY KEY,                             -- [PK] Identificador único
+  id SERIAL PRIMARY KEY,                             -- [PK] Identificador único
   location_description VARCHAR(255) NOT NULL,                     -- Localização física
   ip_address INET NOT NULL,                                       -- Endereço IPv4/IPv6
   configurations JSONB,                                           -- Configuração técnica em JSON
@@ -62,11 +62,11 @@ CREATE TABLE network.accessPoint (
   
   CONSTRAINT fk_certificate
     FOREIGN KEY (certificate_id)
-    REFERENCES network.certificate (id_certificate)
+    REFERENCES network.certificate (id)
     ON DELETE SET NULL,                                           -- Se o certificado for eliminado retorna NULL
   CONSTRAINT fk_company
     FOREIGN KEY (company_id)
-    REFERENCES network.company (id_company)
+    REFERENCES network.company (id)
     ON DELETE CASCADE,                                            -- Se a entidade for eliminada, AP será eliminado
   CONSTRAINT fk_access_point_user
     FOREIGN KEY (last_modified_user_id)
@@ -74,7 +74,7 @@ CREATE TABLE network.accessPoint (
     ON DELETE SET NULL                                            -- Se o utilizador for eliminado retorna NULL
 );
 
--- Criação da função e trigger "update_certificate_status & check_certificate_expiry"
+-- Criação das funções e triggers
 CREATE OR REPLACE FUNCTION update_certificate_status()
 RETURNS TRIGGER AS $$
 BEGIN

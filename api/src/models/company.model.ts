@@ -8,12 +8,12 @@ export class Company extends Entity {
     id: true,
     generated: true,
     postgresql: {
-      columnName: "id_company",
+      columnName: "id",
       dataType: "serial",
       nullable: "NO",
     },
   })
-  id_company?: number;
+  id?: number;
 
   @property({
     type: "string",

@@ -1,34 +1,30 @@
-import { UsersCreate } from "./UsersCreate"
-import { UsersEdit } from "./UsersEdit"
-import { UsersList } from "./UsersList"
+import { UsersCreate } from "./UsersCreate";
+import { UsersEdit } from "./UsersEdit";
+import { UsersList } from "./UsersList";
 
-export const users = (permissions ?: string[]) => {
+export const users = (permissions?: string[]) => {
+  //console.log(permissions)
 
-    //console.log(permissions)
+  let users = null;
 
-    let users = null;
+  if (!permissions) return users;
 
-    if(!permissions) return users;
-
-    switch(true){
-        case permissions.includes('ADMIN') : {
-            users = {
-                list: UsersList,
-                create: UsersCreate,
-                edit: UsersEdit
-            }
-            break;
-        }
-        default: {
-            users = {
-                edit: UsersEdit
-            }
-            break;
-        }
-            
+  switch (true) {
+    case permissions.includes("ADMIN"): {
+      users = {
+        list: UsersList,
+        create: UsersCreate,
+        edit: UsersEdit,
+      };
+      break;
     }
+    default: {
+      users = {
+        edit: UsersEdit,
+      };
+      break;
+    }
+  }
 
-    
-
-    return users
-}
+  return users;
+};

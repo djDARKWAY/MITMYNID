@@ -45,13 +45,13 @@ export class CertificateController {
         "application/json": {
           schema: getModelSchemaRef(Certificate, {
             title: "NewCertificate",
-            exclude: ["id_certificate"],
+            exclude: ["id"],
             optional: ["last_modified", "last_modified_user_id"],
           }),
         },
       },
     })
-    certificate: Omit<Certificate, "id_certificate" | "last_modified" | "last_modified_user_id">
+    certificate: Omit<Certificate, "id" | "last_modified" | "last_modified_user_id">
   ): Promise<Certificate> {
     this.validateCertificates(certificate);
 
@@ -79,7 +79,7 @@ export class CertificateController {
   ): Promise<Certificate[]> {
     return this.certificateRepository.find({
       fields: {
-        id_certificate: true,
+        id: true,
         name: true,
         file_path: true,
         issue_date: true,
@@ -190,7 +190,7 @@ export class CertificateController {
   }
 
   validateCertificates(
-    certificate: Omit<Certificate, "id_certificate" | "last_modified" | "last_modified_user_id">
+    certificate: Omit<Certificate, "id" | "last_modified" | "last_modified_user_id">
   ): void {
     const validate = (condition: boolean, field: string, message: string) => { if (condition) throw new HttpErrors.BadRequest(`Erro no campo "${field}": ${message}`); };
 

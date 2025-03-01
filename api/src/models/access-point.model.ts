@@ -10,12 +10,12 @@ export class AccessPoint extends Entity {
     id: true,
     generated: true,
     postgresql: {
-      columnName: "id_access_point",
+      columnName: "id",
       dataType: "serial",
       nullable: "NO",
     },
   })
-  id_access_point?: number;
+  id?: number;
 
   @property({
     type: "string",

@@ -40,12 +40,12 @@ export class CompanyController {
         "application/json": {
           schema: getModelSchemaRef(Company, {
             title: "NewCompany",
-            exclude: ["id_company"],
+            exclude: ["id"],
           }),
         },
       },
     })
-    company: Omit<Company, "id_company" | "last_modified" | "last_modified_user_id">
+    company: Omit<Company, "id" | "last_modified" | "last_modified_user_id">
   ): Promise<Company> {
     this.validateCompany(company);
 
@@ -73,7 +73,7 @@ export class CompanyController {
   ): Promise<Company[]> {
     return this.companyRepository.find({
       fields: {
-        id_company: true,
+        id: true,
         name: true,
         city: true,
         country: true,
@@ -129,7 +129,7 @@ export class CompanyController {
   }
 
   validateCompany(
-    company: Omit<Company, "id_company" | "created_date" | "last_modified" | "last_modified_user">
+    company: Omit<Company, "id" | "created_date" | "last_modified" | "last_modified_user">
   ): void {
     const validate = (condition: boolean, field: string, message: string) => { if (condition) throw new HttpErrors.BadRequest(`Erro no campo "${field}": ${message}`); };
 
