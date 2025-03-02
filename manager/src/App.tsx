@@ -15,6 +15,8 @@ import { Unauthorized } from './components/general/Unauthorized';
 import Dashboard from './pages/dashboard';
 import Register from './components/layout/register';
 import { validateUsers } from './pages/ValidateUsers';
+import { CertificatesList } from './pages/certificates/CertificatesList';
+import { certificates } from './pages/certificates';
 
 const httpClient = (url: string, options = {}) => {
 
@@ -69,12 +71,15 @@ const App = () => {
           <Resource name="validateUsers" {...validateUsers(permissions)} recordRepresentation={(record) => record.person_name} />,
           <Resource name="roles" {...roles(permissions)} />,
           <Resource name="user-roles" />,
+          <Resource name="certificates" {...certificates(permissions)} />,
 
           <CustomRoutes>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/register" element={<Register />} />
             <Route path="/configuration" element={<Configuration />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/certificates" element={<CertificatesList />} />
+
             <Route path="/unauthorized" key={"/unauthorized"} element={<Unauthorized />} />
           </CustomRoutes>,
         ]

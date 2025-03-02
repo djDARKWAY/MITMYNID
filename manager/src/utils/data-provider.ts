@@ -52,9 +52,6 @@ const lb4Provider = (
       }),
     });
 
-    console.log('getList params:', params); // Log dos parâmetros recebidos
-    console.log('getList URL:', URL); // Log da URL da requisição
-
     const result = await httpClient(`${apiUrl}/${resource}?${query}`, {
       method: "GET",
       headers: new Headers({
@@ -95,7 +92,7 @@ const lb4Provider = (
 
     return {
       data: result.json,
-      total: parseInt(result.headers.get("x-total-count") || "0"),
+      total: result.json.length,
     };
   },
   getOne: async (resource, params) => {
