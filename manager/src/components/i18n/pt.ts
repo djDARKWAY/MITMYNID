@@ -246,6 +246,20 @@ const portugueseMessages: TranslationMessages = {
         issuer_name: "Emissor",
       },
     },
+    accessPoints: {
+      list: "Lista de APs",
+      manage: "Gestão de acessos",
+      name: "Pontos de Acesso",
+      fields: {
+        company_id: "Empresa",
+        location_description: "Localização",
+        ip_address: "Endereço IP",
+        ap_software: "Software",
+        software_version: "Versão",
+        created_date: "Data de Criação",
+        is_active: "Estado",
+      },
+    },
     monitoring: {
       status: "Estado da rede",
       logs: "Logs",

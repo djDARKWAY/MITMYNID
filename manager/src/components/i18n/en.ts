@@ -226,6 +226,16 @@ const englishMessages: TranslationMessages = {
     accesspoints: {
       list: "APs list",
       manage: "Access Management",
+      name: "Access Points",
+      fields: {
+        company_id: "Company",
+        location_description: "Location",
+        ip_address: "IP Address",
+        ap_software: "Software",
+        software_version: "Version",
+        created_date: "Creation Date",
+        is_active: "Status",
+      },
     },
     certificates: {
       name: "Certificates",

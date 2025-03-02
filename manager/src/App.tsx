@@ -1,6 +1,6 @@
 import './App.css';
 import lb4Provider from './utils/data-provider';
-import { Admin, CustomRoutes, fetchUtils, ReferenceField, Resource, useRecordContext } from 'react-admin';
+import { Admin, CustomRoutes, fetchUtils, Resource } from 'react-admin';
 import MyLayout from './components/layout';
 import { roles } from './pages/roles';
 import { users } from './pages/users';
@@ -17,9 +17,10 @@ import Register from './components/layout/register';
 import { validateUsers } from './pages/ValidateUsers';
 import { CertificatesList } from './pages/certificates/CertificatesList';
 import { certificates } from './pages/certificates';
+import { AccessPointsList } from './pages/accessPoints/AccessPointsList';
+import { accessPoints } from './pages/accessPoints';
 
 const httpClient = (url: string, options = {}) => {
-
   //@ts-ignore
   //options.headers = new Headers({ Accept: "application/json", Authorization: `Bearer ${localStorage.getItem('token') ? localStorage.getItem('token') : ''}` });
 
@@ -27,7 +28,6 @@ const httpClient = (url: string, options = {}) => {
 };
 
 const aggregate = (resource: any) => {
-
   // switch(resource){
   //   case 'users':
   //     return [
@@ -38,20 +38,14 @@ const aggregate = (resource: any) => {
   //   default:
   //     break;
   // }
-
   return [];
 };
 
 export let url = import.meta.env.VITE_REST_API ? import.meta.env.VITE_REST_API : 'http://127.0.0.1:13001/';
-
 const dataProvider = lb4Provider(url, aggregate, httpClient);
 
-
-
 const App = () => {
-
   return (
-
     <Admin
       lightTheme={themes['light']}
       darkTheme={themes['dark']}
@@ -72,6 +66,7 @@ const App = () => {
           <Resource name="roles" {...roles(permissions)} />,
           <Resource name="user-roles" />,
           <Resource name="certificates" {...certificates(permissions)} />,
+          <Resource name="access-points" {...accessPoints(permissions)} />,
 
           <CustomRoutes>
             <Route path="/dashboard" element={<Dashboard />} />
@@ -79,13 +74,13 @@ const App = () => {
             <Route path="/configuration" element={<Configuration />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/certificates" element={<CertificatesList />} />
+            <Route path="/access-points" element={<AccessPointsList />} />
 
             <Route path="/unauthorized" key={"/unauthorized"} element={<Unauthorized />} />
           </CustomRoutes>,
         ]
       }}
     </Admin>
-
   );
 }
 

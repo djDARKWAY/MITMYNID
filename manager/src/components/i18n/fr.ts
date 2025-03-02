@@ -235,6 +235,16 @@ const frenchMessages: TranslationMessages = {
     accesspoints: {
       list: "Liste des PAs",
       manage: "Gestion des accès",
+      name: "Points d'accès",
+      fields: {
+        company_id: "Entreprise",
+        location_description: "Localisation",
+        ip_address: "Adresse IP",
+        ap_software: "Logiciel",
+        software_version: "Version",
+        created_date: "Date de création",
+        is_active: "État",
+      },
     },
     certificates: {
       name: "Certificats",

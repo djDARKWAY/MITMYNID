@@ -46,7 +46,7 @@ CREATE TABLE network.company (
 
 -- Criação da tabela "accessPoint"
 CREATE TABLE network.accessPoint (
-  id SERIAL PRIMARY KEY,                             -- [PK] Identificador único
+  id SERIAL PRIMARY KEY,                                          -- [PK] Identificador único
   location_description VARCHAR(255) NOT NULL,                     -- Localização física
   ip_address INET NOT NULL,                                       -- Endereço IPv4/IPv6
   configurations JSONB,                                           -- Configuração técnica em JSON

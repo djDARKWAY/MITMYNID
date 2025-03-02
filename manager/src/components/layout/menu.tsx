@@ -182,7 +182,7 @@ const MyMenu = ({ dense = false }: MenuProps) => {
           dense={dense}
         >
           <MenuItemLink
-            to={{ pathname: "/." }}
+            to={{ pathname: "/access-points" }}
             className={"submenuItem " + (open ? "open" : "close")}
             primaryText={translate(`resources.accesspoints.list`)}
             sx={{ color: !open ? "transparent" : "default" }}
