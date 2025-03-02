@@ -40,7 +40,7 @@ export const CertificatesList = () => {
             perPage={perPageDefault}
             empty={<CustomEmptyPage />}
             exporter={false}
-            title="resources.certificados.name"
+            title="resources.certificates.name"
             sx={{ paddingLeft: '10px' }}
         >
             {isSmall ? (
@@ -51,8 +51,11 @@ export const CertificatesList = () => {
                 />
             ) : (
                 <Datagrid>
-                    <TextField source="id" label="resources.certificados.fields.id" />
-                    <TextField source="name" label="resources.certificados.fields.name" />
+                    <TextField source="name" label="resources.certificates.fields.name" />
+                    <TextField source="file_path" label="resources.certificates.fields.file_path" />
+                    <DateField source="issue_date" label="resources.certificates.fields.issue_date" />
+                    <DateField source="expiration_date" label="resources.certificates.fields.expiration_date" />
+                    <TextField source="issuer_name" label="resources.certificates.fields.issuer_name" />
                 </Datagrid>
             )}
         </List>
