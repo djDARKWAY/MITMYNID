@@ -212,7 +212,7 @@ const MyMenu = ({ dense = false }: MenuProps) => {
           dense={dense}
         >
           <MenuItemLink
-            to={{ pathname: "/." }}
+            to={{ pathname: "/certificates" }}
             className={"submenuItem " + (open ? "open" : "close")}
             primaryText={translate(`resources.certificates.list`)}
             sx={{ color: !open ? "transparent" : "default" }}
