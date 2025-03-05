@@ -9,7 +9,7 @@ export const AccessPointsFilters = (permissions: string[]) => {
     const fetchSoftwareChoices = async () => {
       try {
         const { json } = await fetchUtils.fetchJson('http://127.0.0.1:13090/access-points/ap-software');
-        setSoftwareChoices(json);
+        setSoftwareChoices(json.sort());
       } catch (error) {
         setSoftwareChoices([]);
       }

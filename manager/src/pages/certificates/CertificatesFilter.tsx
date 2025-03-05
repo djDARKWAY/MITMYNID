@@ -9,7 +9,7 @@ export const CertificatesFilters = (permissions: string[]) => {
     const fetchIssuers = async () => {
       try {
         const { json } = await fetchUtils.fetchJson("http://127.0.0.1:13090/certificates/issuers");
-        setIssuers(json);
+        setIssuers(json.sort());
       } catch (error) {
         setIssuers([]);
       }
