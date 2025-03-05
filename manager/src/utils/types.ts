@@ -93,3 +93,12 @@ export interface Certificates extends RaRecord {
   issue_date: string;
   issuer_name: string;
 }
+export interface AccessPoint extends RaRecord {
+  id: string;
+  location_description: string;
+  ip_address: string;
+  ap_software: string;
+  software_version: string;
+  is_active: boolean;
+  company_id: string;
+}
