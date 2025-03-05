@@ -77,7 +77,11 @@ export class CertificateController {
   async find(
     @param.filter(Certificate) filter?: Filter<Certificate>
   ): Promise<Certificate[]> {
+    if (filter?.where && (filter.where as any).name) {
+      (filter.where as any).name = { ilike: `%${(filter.where as any).name}%` };
+    }
     return this.certificateRepository.find({
+      ...filter,
       fields: {
         id: true,
         name: true,
@@ -120,6 +124,24 @@ export class CertificateController {
     const message = isValid ? 'O certificado é válido.' : 'O certificado está expirado.';
 
     return { id, is_valid: isValid, message, expires_at: new Date(certificate.expiration_date) };
+  }
+
+  @get("/certificates/issuers")
+  @response(200, {
+    description: "Lista de emissores únicos de certificados",
+    content: {
+      "application/json": {
+        schema: {
+          type: "array",
+          items: { type: "string" },
+        },
+      },
+    },
+  })
+  async getIssuers(): Promise<string[]> {
+    const certificates = await this.certificateRepository.find();
+    const issuers = [...new Set(certificates.map(cert => cert.issuer_name).filter((issuer): issuer is string => issuer !== undefined))];
+    return issuers;
   }
 
   // PUT endpoint:
@@ -203,7 +225,7 @@ export class CertificateController {
       file_path: [
         { condition: !certificate.file_path, message: "O caminho do ficheiro é obrigatório!" },
         { condition: !certificate.file_path.startsWith("/"), message: "O caminho do ficheiro deve começar por '/'!" },
-        { condition: !/\.(pem|crt|key)$/.test(certificate.file_path), message: "O ficheiro deve ser um ficheiro de certificado válido!" }
+        { condition: !/\.(pem|crt|key|jks)$/.test(certificate.file_path), message: "O ficheiro deve ser um ficheiro de certificado válido!" }
       ],
       dates: [
         { condition: !certificate.issue_date || isNaN(Date.parse(certificate.issue_date)), message: "A data de emissão é obrigatória e deve ser válida!" },

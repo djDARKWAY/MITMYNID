@@ -201,6 +201,10 @@ const englishMessages: TranslationMessages = {
     },
   },
   pos: {
+    certificates: {
+      name: "Certificate name",
+      issuer: "Issuer",
+    },
     labels: {
       search: "Search by name",
       searchTitle: "Search by title",

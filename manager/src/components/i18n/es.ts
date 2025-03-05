@@ -206,6 +206,10 @@ const spanishMessages: TranslationMessages = {
     },
   },
   pos: {
+    certificates: {
+      name: "Nombre del certificado",
+      issuer: "Emisor",
+    },
     labels: {
       search: "Buscar por nombre",
       searchTitle: "Buscar por título",

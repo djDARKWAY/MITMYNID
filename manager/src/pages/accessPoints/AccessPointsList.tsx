@@ -57,7 +57,6 @@ export const AccessPointsList = () => {
                     <TextField source="location_description" label="resources.accessPoints.fields.location_description" />
                     <TextField source="ip_address" label="resources.accessPoints.fields.ip_address" />
                     <TextField source="ap_software" label="resources.accessPoints.fields.ap_software" />
-                    <TextField source="software_version" label="resources.accessPoints.fields.software_version" />
                     <FunctionField source="is_active" label="resources.accessPoints.fields.is_active" render={record => record.is_active ? '🟢' : '🔴'} />
                 </Datagrid>
             )}

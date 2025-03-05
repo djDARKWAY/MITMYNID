@@ -210,6 +210,10 @@ const frenchMessages: TranslationMessages = {
     },
   },
   pos: {
+    certificats : {
+      nom : "Nom du certificat",
+      émetteur : "Émetteur",
+    },
     labels: {
       search: "Rechercher par nom",
       searchTitle: "Rechercher par titre",

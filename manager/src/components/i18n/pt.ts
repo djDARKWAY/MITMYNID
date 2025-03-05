@@ -208,6 +208,10 @@ const portugueseMessages: TranslationMessages = {
     },
   },
   pos: {
+    certificates: {
+      name: "Nome do certificado",
+      issuer: "Emissor",
+    },
     labels: {
       search: "Procurar por nome",
       searchTitle: "Procurar por titulo",

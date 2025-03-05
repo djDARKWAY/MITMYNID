@@ -78,7 +78,6 @@ export class AccessPointController {
         location_description: true,
         ip_address: true,
         ap_software: true,
-        software_version: true,
         is_active: true,
         company_id: true,
       },
