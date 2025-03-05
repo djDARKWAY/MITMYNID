@@ -89,6 +89,7 @@ export class CertificateController {
         issue_date: true,
         issuer_name: true,
         expiration_date: true,
+        is_expired: true,
       },
     });
   }

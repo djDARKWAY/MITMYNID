@@ -79,7 +79,9 @@ CREATE OR REPLACE FUNCTION update_certificate_status()
 RETURNS TRIGGER AS $$
 BEGIN
     IF NEW.expiration_date < CURRENT_DATE THEN
-        NEW.is_expired := TRUE;
+      NEW.is_expired := TRUE;
+    ELSE
+      NEW.is_expired := FALSE;
     END IF;
     RETURN NEW;
 END;

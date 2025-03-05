@@ -11,7 +11,6 @@ export const AccessPointsFilters = (permissions: string[]) => {
         const { json } = await fetchUtils.fetchJson('http://127.0.0.1:13090/access-points/ap-software');
         setSoftwareChoices(json);
       } catch (error) {
-        console.error("Erro ao buscar software:", error);
         setSoftwareChoices([]);
       }
     };
@@ -28,14 +27,7 @@ export const AccessPointsFilters = (permissions: string[]) => {
 
   if (permissions.includes('ADMIN')) {
     filters.push(
-      <TextInput
-        key="admin_only_field"
-        source="admin_only_field"
-        size="small"
-        label="pos.labels.admin"
-        fullWidth
-        resettable
-      />
+      <TextInput key="admin_only_field" source="admin_only_field" size="small" label="pos.labels.admin" fullWidth resettable />
     );
   }
 

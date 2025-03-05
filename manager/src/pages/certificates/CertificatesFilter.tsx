@@ -11,7 +11,6 @@ export const CertificatesFilters = (permissions: string[]) => {
         const { json } = await fetchUtils.fetchJson("http://127.0.0.1:13090/certificates/issuers");
         setIssuers(json);
       } catch (error) {
-        console.error("Erro ao buscar emissores:", error);
         setIssuers([]);
       }
     };
@@ -21,7 +20,8 @@ export const CertificatesFilters = (permissions: string[]) => {
 
   const filters = [
     <TextInput key="name" source="name" size="small" label="pos.certificates.name" fullWidth alwaysOn resettable />,
-    <SelectInput key="issuer" source="issuer_name" label="pos.certificates.issuer" choices={issuers.map(issuer => ({ id: issuer, name: issuer }))} fullWidth alwaysOn resettable />
+    <SelectInput key="issuer" source="issuer_name" label="pos.certificates.issuer" choices={issuers.map(issuer => ({ id: issuer, name: issuer }))} fullWidth alwaysOn resettable />,
+    <SelectInput key="is_expired" source="is_expired" label="pos.certificates.is_expired" choices={[{ id: false, name: "Ativo" }, { id: true, name: "Inativo" }, ]} fullWidth alwaysOn resettable />,
 ];
 
 if (permissions.includes('ADMIN')) {

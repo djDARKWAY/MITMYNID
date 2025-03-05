@@ -211,6 +211,7 @@ const portugueseMessages: TranslationMessages = {
     certificates: {
       name: "Nome do certificado",
       issuer: "Emissor",
+      is_expired: "Estado",
     },
     accessPoints: {
       company_name: "Nome da empresa",
@@ -240,9 +241,18 @@ const portugueseMessages: TranslationMessages = {
         validity: "Validade",
       },
     },
-    accesspoints: {
+    accessPoints: {
       list: "Lista de APs",
       manage: "Gestão de acessos",
+      name: "Pontos de Acesso",
+      fields: {
+        company_id: "Empresa",
+        location_description: "Localização",
+        ip_address: "Endereço IP",
+        ap_software: "Software",
+        created_date: "Data de Criação",
+        is_active: "Estado",
+      },
     },
     certificates: {
       name: "Certificados",
@@ -254,20 +264,7 @@ const portugueseMessages: TranslationMessages = {
         issue_date: "Data de Emissão",
         expiration_date: "Data de Expiração",
         issuer_name: "Emissor",
-      },
-    },
-    accessPoints: {
-      list: "Lista de APs",
-      manage: "Gestão de acessos",
-      name: "Pontos de Acesso",
-      fields: {
-        company_id: "Empresa",
-        location_description: "Localização",
-        ip_address: "Endereço IP",
-        ap_software: "Software",
-        software_version: "Versão",
-        created_date: "Data de Criação",
-        is_active: "Estado",
+        is_expired: "Estado",
       },
     },
     monitoring: {

@@ -6,8 +6,7 @@ const frenchMessages: TranslationMessages = {
       add_filter: "Filtre",
       add: "Ajouter",
       back: "Retour",
-      bulk_actions:
-        "%{smart_count} sélectionné |||| %{smart_count} sélectionnés",
+      bulk_actions: "%{smart_count} sélectionné |||| %{smart_count} sélectionnés",
       cancel: "Annuler",
       clear_input_value: "Vider le champ",
       clear_array_input: "Effacer les valeurs",
@@ -210,9 +209,10 @@ const frenchMessages: TranslationMessages = {
     },
   },
   pos: {
-    certificats : {
-      nom : "Nom du certificat",
-      émetteur : "Émetteur",
+    certificates: {
+      name: "Nom du certificat",
+      issuer: "Émetteur",
+      is_expired: "État",
     },
     accessPoints: {
       company_name: "Nom de l'entreprise",
@@ -266,6 +266,7 @@ const frenchMessages: TranslationMessages = {
         issue_date: "Date d'émission",
         expiration_date: "Date d'expiration",
         issuer_name: "Émetteur",
+        is_expired: "État",
       },
     },
     monitoring: {

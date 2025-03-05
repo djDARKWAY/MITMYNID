@@ -204,6 +204,7 @@ const englishMessages: TranslationMessages = {
     certificates: {
       name: "Certificate name",
       issuer: "Issuer",
+      is_expired: "Status",
     },
     accessPoints: {
       company_name: "Company Name",
@@ -253,10 +254,11 @@ const englishMessages: TranslationMessages = {
       validations: "Validations",
       fields: {
         name: "Name",
-        file_path: "File Path",
-        issue_date: "Issue Date",
-        expiration_date: "Expiration Date",
+        file_path: "File path",
+        issue_date: "Issue date",
+        expiration_date: "Expiration date",
         issuer_name: "Issuer",
+        is_expired: "Status",
       },
     },
     monitoring: {

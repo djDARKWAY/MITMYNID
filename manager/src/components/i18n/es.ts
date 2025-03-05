@@ -6,8 +6,7 @@ const spanishMessages: TranslationMessages = {
       add_filter: "Filtrar",
       add: "Añadir",
       back: "Volver",
-      bulk_actions:
-        "1 elemento seleccionado |||| %{smart_count} elementos seleccionados",
+      bulk_actions: "1 elemento seleccionado |||| %{smart_count} elementos seleccionados",
       cancel: "Cancelar",
       clear_input_value: "Limpiar campo",
       clear_array_input: "Limpiar campos",
@@ -209,6 +208,7 @@ const spanishMessages: TranslationMessages = {
     certificates: {
       name: "Nombre del certificado",
       issuer: "Emisor",
+      is_expired: "Estado",
     },
     accessPoints: {
       company_name: "Nombre de la empresa",
@@ -262,6 +262,7 @@ const spanishMessages: TranslationMessages = {
         issue_date: "Fecha de Emisión",
         expiration_date: "Fecha de Expiración",
         issuer_name: "Emisor",
+        is_expired: "Estado",
       },
     },
     monitoring: {
