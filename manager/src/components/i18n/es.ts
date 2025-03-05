@@ -210,6 +210,11 @@ const spanishMessages: TranslationMessages = {
       name: "Nombre del certificado",
       issuer: "Emisor",
     },
+    accessPoints: {
+      company_name: "Nombre de la empresa",
+      ap_software: "Software",
+      is_active: "Estado",
+    },
     labels: {
       search: "Buscar por nombre",
       searchTitle: "Buscar por título",

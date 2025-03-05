@@ -1,19 +1,45 @@
-import { TextInput } from "react-admin";
+import { useEffect, useState } from 'react';
+import { TextInput, SelectInput } from "react-admin";
+import { fetchUtils } from 'react-admin';
 
 export const AccessPointsFilters = (permissions: string[]) => {
-    let filters = [
-        <TextInput source="name" size="small" label={'pos.labels.search'} fullWidth alwaysOn resettable={true} />,
-    ];
+  const [softwareChoices, setSoftwareChoices] = useState<string[]>([]);
 
-    switch (true) {
-        case permissions.includes('ADMIN'):
-            filters.push(
-                <TextInput source="admin_only_field" size="small" label={'pos.labels.admin'} fullWidth resettable={true} />
-            );
-            break;
-        default:
-            break;
-    }
+  useEffect(() => {
+    const fetchSoftwareChoices = async () => {
+      try {
+        const { json } = await fetchUtils.fetchJson('http://127.0.0.1:13090/access-points/ap-software');
+        setSoftwareChoices(json);
+      } catch (error) {
+        console.error("Erro ao buscar software:", error);
+        setSoftwareChoices([]);
+      }
+    };
 
-    return filters;
-}
+    fetchSoftwareChoices();
+  }, []);
+
+  const filters = [
+    <TextInput key="company_name" source="company_name" size="small" label="pos.accessPoints.company_name" fullWidth alwaysOn resettable />,
+    <SelectInput key="ap_software" source="ap_software" label="pos.accessPoints.ap_software" choices={softwareChoices.map(software => ({ id: software, name: software }))} fullWidth resettable />,
+    <SelectInput key="is_active" source="is_active" label="pos.accessPoints.is_active" choices={[
+      { id: true, name: "Ativo" },
+      { id: false, name: "Inativo" },
+    ]} fullWidth resettable />,
+  ];
+
+  if (permissions.includes('ADMIN')) {
+    filters.push(
+      <TextInput
+        key="admin_only_field"
+        source="admin_only_field"
+        size="small"
+        label="pos.labels.admin"
+        fullWidth
+        resettable
+      />
+    );
+  }
+
+  return filters;
+};

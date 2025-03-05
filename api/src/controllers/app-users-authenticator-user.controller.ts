@@ -1,29 +1,20 @@
-import {
-  repository,
-} from '@loopback/repository';
-import {
-  param,
-  get,
-  getModelSchemaRef,
-} from '@loopback/rest';
-import {
-  AppUsersAuthenticator,
-  User,
-} from '../models';
-import {AppUsersAuthenticatorRepository} from '../repositories';
+import { repository } from "@loopback/repository";
+import { param, get, getModelSchemaRef } from "@loopback/rest";
+import { AppUsersAuthenticator, User } from "../models";
+import { AppUsersAuthenticatorRepository } from "../repositories";
 
 export class AppUsersAuthenticatorUserController {
   constructor(
     @repository(AppUsersAuthenticatorRepository)
-    public appUsersAuthenticatorRepository: AppUsersAuthenticatorRepository,
-  ) { }
+    public appUsersAuthenticatorRepository: AppUsersAuthenticatorRepository
+  ) {}
 
-  @get('/app-users-authenticators/{id}/user', {
+  @get("/app-users-authenticators/{id}/user", {
     responses: {
-      '200': {
-        description: 'User belonging to AppUsersAuthenticator',
+      "200": {
+        description: "User belonging to AppUsersAuthenticator",
         content: {
-          'application/json': {
+          "application/json": {
             schema: getModelSchemaRef(User),
           },
         },
@@ -31,7 +22,7 @@ export class AppUsersAuthenticatorUserController {
     },
   })
   async getUser(
-    @param.path.string('id') id: typeof AppUsersAuthenticator.prototype.id,
+    @param.path.string("id") id: typeof AppUsersAuthenticator.prototype.id
   ): Promise<User> {
     return this.appUsersAuthenticatorRepository.user(id);
   }

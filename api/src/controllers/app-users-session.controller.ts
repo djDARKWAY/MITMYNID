@@ -1,11 +1,6 @@
 import { authenticate } from '@loopback/authentication';
 import { inject } from '@loopback/core';
-import {
-  Count,
-  Filter,
-  repository,
-  Where,
-} from '@loopback/repository';
+import { Count, Filter, repository, Where } from "@loopback/repository";
 import {
   post,
   param,

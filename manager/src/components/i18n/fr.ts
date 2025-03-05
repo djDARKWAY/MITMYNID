@@ -214,6 +214,11 @@ const frenchMessages: TranslationMessages = {
       nom : "Nom du certificat",
       émetteur : "Émetteur",
     },
+    accessPoints: {
+      company_name: "Nom de l'entreprise",
+      ap_software: "Logiciel",
+      is_active: "État",
+    },
     labels: {
       search: "Rechercher par nom",
       searchTitle: "Rechercher par titre",

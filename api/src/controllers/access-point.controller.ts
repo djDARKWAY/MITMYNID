@@ -18,14 +18,15 @@ import {
 } from "@loopback/rest";
 import { AccessPoint } from "../models";
 import { AccessPointRepository } from "../repositories";
+import { CompanyRepository } from '../repositories';
 import { authenticate, TokenService, UserService } from '@loopback/authentication';
 import { basicAuthorization } from '../middlewares/auth.middleware';
 import { authorize } from '@loopback/authorization';
 
 export class AccessPointController {
   constructor(
-    @repository(AccessPointRepository)
-    public accessPointRepository: AccessPointRepository
+    @repository(AccessPointRepository) public accessPointRepository: AccessPointRepository,
+    @repository(CompanyRepository) public companyRepository: CompanyRepository
   ) {}
 
   // POST endpoint:
@@ -72,12 +73,31 @@ export class AccessPointController {
   async find(
     @param.filter(AccessPoint) filter?: Filter<AccessPoint>
   ): Promise<AccessPoint[]> {
+    if (filter?.where && (filter.where as any).company_name) {
+      const companyName = (filter.where as any).company_name;
+      
+      const companies = await this.companyRepository.find({
+        where: {
+          name: { ilike: `%${companyName}%` }
+        }
+      });
+
+      const companyIds = companies.map(company => company.id);
+
+      filter.where = {
+        ...filter.where,
+        company_id: { inq: companyIds }
+      };
+    }
+
     return this.accessPointRepository.find({
+      ...filter,
       fields: {
         id: true,
         location_description: true,
         ip_address: true,
         ap_software: true,
+        software_version: true,
         is_active: true,
         company_id: true,
       },
@@ -115,6 +135,24 @@ export class AccessPointController {
     const message = isActive ? 'O Access Point está ativo.' : 'O Access Point está inativo.';
 
     return { id, is_active: isActive, message, };
+  }
+
+  @get("/access-points/ap-software")
+  @response(200, {
+    description: "Lista de softwares únicos de Access Points",
+    content: {
+      "application/json": {
+        schema: {
+          type: "array",
+          items: { type: "string" },
+        },
+      },
+    },
+  })
+  async getApSoftware(): Promise<string[]> {
+    const accessPoints = await this.accessPointRepository.find();
+    const apSoftware = [...new Set(accessPoints.map(ap => ap.ap_software).filter((software): software is string => software !== undefined))];
+    return apSoftware;
   }
 
   // PUT endpoint:

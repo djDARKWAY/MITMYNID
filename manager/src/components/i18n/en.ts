@@ -205,6 +205,11 @@ const englishMessages: TranslationMessages = {
       name: "Certificate name",
       issuer: "Issuer",
     },
+    accessPoints: {
+      company_name: "Company Name",
+      ap_software: "Software",
+      is_active: "Status",
+    },
     labels: {
       search: "Search by name",
       searchTitle: "Search by title",
