@@ -219,6 +219,8 @@ const spanishMessages: TranslationMessages = {
     labels: {
       search: "Buscar por nombre",
       searchTitle: "Buscar por título",
+      active: "Activo",
+      inactive: "Inactivo",
     },
     menu: {
       config: "Configuración",

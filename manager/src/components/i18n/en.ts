@@ -215,6 +215,8 @@ const englishMessages: TranslationMessages = {
     labels: {
       search: "Search by name",
       searchTitle: "Search by title",
+      active: "Active",
+      inactive: "Inactive",
     },
     menu: {
       config: "Configuration",

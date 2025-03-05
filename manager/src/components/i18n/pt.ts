@@ -1,3 +1,4 @@
+import { act } from "react";
 import { TranslationMessages } from "react-admin";
 
 const portugueseMessages: TranslationMessages = {
@@ -222,6 +223,8 @@ const portugueseMessages: TranslationMessages = {
     labels: {
       search: "Procurar por nome",
       searchTitle: "Procurar por titulo",
+      active: "Ativo",
+      inactive: "Inativo",
     },
     menu: {
       config: "Configuração",

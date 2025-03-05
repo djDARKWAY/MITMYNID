@@ -223,6 +223,8 @@ const frenchMessages: TranslationMessages = {
     labels: {
       search: "Rechercher par nom",
       searchTitle: "Rechercher par titre",
+      active: "Actif",
+      inactive: "Inactif",
     },
     menu: {
       config: "Configuration",

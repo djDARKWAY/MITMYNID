@@ -1,4 +1,5 @@
 import { AccessPointsList } from "./AccessPointsList";
+import { AccessPointsShow } from "./AccessPointsShow";
 
 export const accessPoints = (permissions?: string[]) => {
     let accessPoints = null;
@@ -9,6 +10,7 @@ export const accessPoints = (permissions?: string[]) => {
         case permissions.includes("ADMIN"): {
             accessPoints = {
                 list: AccessPointsList,
+                show: AccessPointsShow,
             };
             break;
         }

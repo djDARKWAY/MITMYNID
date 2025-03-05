@@ -28,7 +28,7 @@ export const AccessPointsList = () => {
                     linkType={"edit"}
                 />
             ) : (
-                <Datagrid>
+                <Datagrid rowClick="show">
                     <ReferenceField source="company_id" reference="companies" label="resources.accessPoints.fields.company_id">
                         <TextField source="name" />
                     </ReferenceField>
