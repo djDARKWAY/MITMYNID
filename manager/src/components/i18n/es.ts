@@ -223,7 +223,7 @@ const spanishMessages: TranslationMessages = {
     menu: {
       config: "Configuración",
       seguranca: "Seguridad",
-      acesspoint: "Punto de acceso",
+      accessPoints: "Punto de acceso",
       certificates: "Certificados",
       monitorizacao: "Monitorización",
       language: "Idioma",

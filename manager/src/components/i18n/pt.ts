@@ -226,7 +226,7 @@ const portugueseMessages: TranslationMessages = {
     menu: {
       config: "Configuração",
       seguranca: "Segurança",
-      accesspoint: "Pontos de Acesso",
+      accessPoints: "Pontos de Acesso",
       certificates: "Certificados",
       monitorizacao: "Monitorização",
       language: "Idioma",

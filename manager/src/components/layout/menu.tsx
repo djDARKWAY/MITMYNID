@@ -177,14 +177,14 @@ const MyMenu = ({ dense = false }: MenuProps) => {
         <SubMenu
           handleToggle={() => handleToggle("menuAccessPoint")}
           isOpen={state.menuAccessPoint}
-          name="pos.menu.accesspoint"
+          name="pos.menu.accessPoints"
           icon={<CellTowerRounded />}
           dense={dense}
         >
           <MenuItemLink
             to={{ pathname: "/access-points" }}
             className={"submenuItem " + (open ? "open" : "close")}
-            primaryText={translate(`resources.accesspoints.list`)}
+            primaryText={translate(`resources.accessPoints.list`)}
             sx={{ color: !open ? "transparent" : "default" }}
             leftIcon={<EditNoteRounded />}
             dense={dense}
@@ -194,7 +194,7 @@ const MyMenu = ({ dense = false }: MenuProps) => {
             <MenuItemLink
               to={{ pathname: "/." }}
               className={"submenuItem " + (open ? "open" : "close")}
-              primaryText={translate("resources.accesspoints.manage")}
+              primaryText={translate("resources.accessPoints.manage")}
               sx={{ color: !open ? "transparent" : "default" }}
               leftIcon={<SignalWifi3BarLockRounded />}
               dense={dense}

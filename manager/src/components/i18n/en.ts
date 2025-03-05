@@ -219,7 +219,7 @@ const englishMessages: TranslationMessages = {
     menu: {
       config: "Configuration",
       seguranca: "Security",
-      accesspoint: "Access Point",
+      accessPoints: "Access Point",
       certificates: "Certificates",
       monitorizacao: "Monitoring",
       language: "Language",

@@ -227,7 +227,7 @@ const frenchMessages: TranslationMessages = {
     menu: {
       config: "Configuration",
       seguranca: "Sécurité",
-      accesspoint: "Point d'accès",
+      accessPoints: "Point d'accès",
       certificates: "Certificats",
       monitorizacao: "Surveillance",
       language: "Langue",
