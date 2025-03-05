@@ -21,11 +21,9 @@ export const AccessPointsFilters = (permissions: string[]) => {
 
   const filters = [
     <TextInput key="company_name" source="company_name" size="small" label="pos.accessPoints.company_name" fullWidth alwaysOn resettable />,
-    <SelectInput key="ap_software" source="ap_software" label="pos.accessPoints.ap_software" choices={softwareChoices.map(software => ({ id: software, name: software }))} fullWidth resettable />,
-    <SelectInput key="is_active" source="is_active" label="pos.accessPoints.is_active" choices={[
-      { id: true, name: "Ativo" },
-      { id: false, name: "Inativo" },
-    ]} fullWidth resettable />,
+    <TextInput key="ip_address" source="ip_address" size="small" label="pos.accessPoints.ip_address" fullWidth alwaysOn resettable />,
+    <SelectInput key="ap_software" source="ap_software" label="pos.accessPoints.ap_software" choices={softwareChoices.map(software => ({ id: software, name: software }))} fullWidth alwaysOn resettable />,
+    <SelectInput key="is_active" source="is_active" label="pos.accessPoints.is_active" choices={[{ id: true, name: "Ativo" }, { id: false, name: "Inativo" }, ]} fullWidth alwaysOn resettable />,
   ];
 
   if (permissions.includes('ADMIN')) {

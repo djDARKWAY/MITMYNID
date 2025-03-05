@@ -21,7 +21,7 @@ export const CertificatesFilters = (permissions: string[]) => {
 
   const filters = [
     <TextInput key="name" source="name" size="small" label="pos.certificates.name" fullWidth alwaysOn resettable />,
-    <SelectInput key="issuer" source="issuer_name" label="pos.certificates.issuer" choices={issuers.map(issuer => ({ id: issuer, name: issuer }))} fullWidth resettable />
+    <SelectInput key="issuer" source="issuer_name" label="pos.certificates.issuer" choices={issuers.map(issuer => ({ id: issuer, name: issuer }))} fullWidth alwaysOn resettable />
 ];
 
 if (permissions.includes('ADMIN')) {

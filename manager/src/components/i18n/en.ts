@@ -207,6 +207,7 @@ const englishMessages: TranslationMessages = {
     },
     accessPoints: {
       company_name: "Company Name",
+      ip_address: "IP Address",
       ap_software: "Software",
       is_active: "Status",
     },

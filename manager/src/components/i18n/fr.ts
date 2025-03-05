@@ -216,6 +216,7 @@ const frenchMessages: TranslationMessages = {
     },
     accessPoints: {
       company_name: "Nom de l'entreprise",
+      ip_address: "Adresse IP",
       ap_software: "Logiciel",
       is_active: "État",
     },
