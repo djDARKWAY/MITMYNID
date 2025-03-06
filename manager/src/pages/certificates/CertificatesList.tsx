@@ -28,7 +28,7 @@ export const CertificatesList = () => {
                     linkType={"edit"}
                 />
             ) : (
-                <Datagrid>
+                <Datagrid rowClick="show">
                     <TextField source="name" label="resources.certificates.fields.name" />
                     <TextField source="file_path" label="resources.certificates.fields.file_path" />
                     <DateField source="issue_date" label="resources.certificates.fields.issue_date" />

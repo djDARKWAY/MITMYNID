@@ -1,4 +1,5 @@
 import { CertificatesList } from "./CertificatesList";
+import { CertificatesShow } from "./CertificatesShow";
 
 export const certificates = (permissions?: string[]) => {
     let certificates = null;
@@ -9,6 +10,7 @@ export const certificates = (permissions?: string[]) => {
         case permissions.includes("ADMIN"): {
             certificates = {
                 list: CertificatesList,
+                show: CertificatesShow,
             };
             break;
         }
