@@ -72,12 +72,6 @@ export const AccessPointsShow = () => (
             <ReferenceField source="last_modified_user_id" reference="users" label="show.accessPoints.last_modified_user">
                 <TextField source="username" />
             </ReferenceField>
-
-             {/* Ações */}
-            <Box display="flex" justifyContent="left" mt={2}>
-                <Button variant="contained" color="primary" sx={{ mr: 1 }}>Editar</Button>
-                <Button variant="contained" color="secondary">Eliminar</Button>
-            </Box>
         </SimpleShowLayout>
     </Show>
 );

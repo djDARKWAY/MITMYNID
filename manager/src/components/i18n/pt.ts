@@ -480,6 +480,7 @@ const portugueseMessages: TranslationMessages = {
     },
     certificates: {
       identification: "Identificação",
+      name: "Nome",
       file_path: "Localização do ficheiro",
       issuer_name: "Nome do Emissor",
       issuer_url: "URL do Emissor",

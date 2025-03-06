@@ -348,6 +348,7 @@ const frenchMessages: TranslationMessages = {
     },
     certificates: {
       identification: "Identification",
+      name: "Nom",
       file_path: "Emplacement du fichier",
       issuer_name: "Nom de l'émetteur",
       issuer_url: "URL de l'émetteur",

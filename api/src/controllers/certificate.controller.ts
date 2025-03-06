@@ -150,22 +150,6 @@ export class CertificateController {
   @response(204, {
     description: "Certificate PUT success",
   })
-  async replaceById(
-    @param.path.number("id") id: number,
-    @requestBody() certificate: Certificate
-  ): Promise<void> {
-    const existingCertificate = await this.certificateRepository.findById(id);
-    if (!existingCertificate) {
-      throw new HttpErrors.NotFound('Certificado não encontrado!');
-    }
-    await this.certificateRepository.replaceById(id, certificate);
-  }
-
-  // PATCH endpoint:
-  @patch("/certificates/{id}")
-  @response(200, {
-    description: "Atualiza o certificado com o arquivo carregado",
-  })
   async uploadFile(
     @param.path.number('id') id: number,
     @requestBody() certificateFile: { localPath: string }
@@ -197,6 +181,29 @@ export class CertificateController {
     } catch (error) {
       throw new HttpErrors.BadRequest(`Erro ao carregar o arquivo: ${error.message}`);
     }
+  }
+
+  // PATCH endpoint:
+  @patch("/certificates/{id}")
+  @response(204, {
+    description: "Certificate PATCH success",
+  })
+  async updateById(
+    @param.path.number("id") id: number,
+    @requestBody() certificate: Partial<Certificate>
+  ): Promise<void> {
+    const existingCertificate = await this.certificateRepository.findById(id);
+    if (!existingCertificate) {
+      throw new HttpErrors.NotFound('Certificado não encontrado!');
+    }
+
+    const { is_expired, ...certificateData } = certificate;
+
+    // Automatically set last_modified_user_id
+    const userId = await this.getCurrentUserId();
+    certificateData.last_modified_user_id = userId;
+
+    await this.certificateRepository.updateById(id, certificateData);
   }
 
   // DELETE endpoint:
@@ -241,5 +248,11 @@ export class CertificateController {
 
     // Optional fields
     if (certificate.issuer_url) { validate(!/^https?:\/\/.+\..+/.test(certificate.issuer_url), "issuer_url", "O URL da entidade emissora deve ser uma URL válida."); }
+  }
+
+  private async getCurrentUserId(): Promise<number> {
+    // Implement logic to get the current user's ID
+    // This is a placeholder implementation
+    return 1;
   }
 }

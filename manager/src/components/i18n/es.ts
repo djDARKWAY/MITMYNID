@@ -430,6 +430,7 @@ const spanishMessages: TranslationMessages = {
     },
     certificates: {
       identification: "Identificación",
+      name: "Nombre",
       file_path: "Ubicación del archivo",
       issuer_name: "Nombre del Emisor",
       issuer_url: "URL del Emisor",

@@ -1,5 +1,6 @@
 import { CertificatesList } from "./CertificatesList";
 import { CertificatesShow } from "./CertificatesShow";
+import { CertificatesEdit } from "./CertificatesEdit";
 
 export const certificates = (permissions?: string[]) => {
     let certificates = null;
@@ -11,6 +12,7 @@ export const certificates = (permissions?: string[]) => {
             certificates = {
                 list: CertificatesList,
                 show: CertificatesShow,
+                edit: CertificatesEdit,
             };
             break;
         }

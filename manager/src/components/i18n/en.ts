@@ -338,6 +338,7 @@ const englishMessages: TranslationMessages = {
     },
     certificates: {
       identification: "Identification",
+      name: "Name",
       file_path: "File Path",
       issuer_name: "Issuer Name",
       issuer_url: "Issuer URL",
