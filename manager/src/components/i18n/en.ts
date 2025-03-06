@@ -138,7 +138,6 @@ const englishMessages: TranslationMessages = {
       copy_error: "Error copying item",
       application_update_available: "",
     },
-
     message: {
       about: "About",
       are_you_sure: "Are you sure?",
@@ -317,6 +316,25 @@ const englishMessages: TranslationMessages = {
       fields: {
         nome: "Description",
       },
+    },
+  },
+  show: {
+    accessPoints: {
+      identification: "Identification",
+      location_description: "Location",
+      ip_address: "IP Address",
+      technical_configuration: "Technical Configuration",
+      software: "Software",
+      software_version: "Software Version",
+      permissions: "Permissions",
+      state: "State",
+      is_active: "Active",
+      created_date: "Creation Date",
+      last_modified: "Last Modified",
+      associations: "Associations",
+      certificates: "Certificate",
+      company: "Company",
+      last_modified_user: "Last Modified User",
     },
   },
 };

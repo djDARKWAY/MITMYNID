@@ -410,6 +410,25 @@ const spanishMessages: TranslationMessages = {
       name: "Tipo de Equipo |||| Tipos de Equipo",
     },
   },
+  show: {
+    accessPoints: {
+      identification: "Identificación",
+      location_description: "Localización",
+      ip_address: "Dirección IP",
+      technical_configuration: "Configuración Técnica",
+      software: "Software",
+      software_version: "Versión del software",
+      permissions: "Permisos",
+      state: "Estado",
+      is_active: "Activo",
+      created_date: "Fecha de creación",
+      last_modified: "Última modificación",
+      associations: "Asociaciones",
+      certificates: "Certificado",
+      company: "Empresa",
+      last_modified_user: "Último modificador",
+    },
+  },
 };
 
 export default spanishMessages;

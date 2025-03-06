@@ -328,6 +328,25 @@ const frenchMessages: TranslationMessages = {
       },
     },
   },
+  show: {
+    accessPoints: {
+      identification: "Identification",
+      location_description: "Localisation",
+      ip_address: "Adresse IP",
+      technical_configuration: "Configuration technique",
+      software: "Logiciel",
+      software_version: "Version du logiciel",
+      permissions: "Permissions",
+      state: "État",
+      is_active: "Actif",
+      created_date: "Date de création",
+      last_modified: "Dernière modification",
+      associations: "Associations",
+      certificates: "Certificat",
+      company: "Entreprise",
+      last_modified_user: "Dernier modificateur",
+    },
+  },
 };
 
 export default frenchMessages;

@@ -1,5 +1,6 @@
 import { act } from "react";
 import { TranslationMessages } from "react-admin";
+import { accessPoints } from "../../pages/accessPoints";
 
 const portugueseMessages: TranslationMessages = {
   ra: {
@@ -457,6 +458,25 @@ const portugueseMessages: TranslationMessages = {
         tipo: "Tipo",
         observacoes: "Observações",
       },
+    },
+  },
+  show: {
+    accessPoints: {
+      identification: "Identificação",
+      location_description: "Localização",
+      ip_address: "Endereço IP",
+      technical_configuration: "Configuração Técnica",
+      software: "Software",
+      software_version: "Versão do software",
+      permissions: "Permissões",
+      state: "Estado",
+      is_active: "Ativo",
+      created_date: "Data de criação",
+      last_modified: "Última modificação",
+      associations: "Associações",
+      certificates: "Certificado",
+      company: "Empresa",
+      last_modified_user: "Último modificador",
     },
   },
 };

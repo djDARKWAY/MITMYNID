@@ -2,6 +2,7 @@ import { Show, SimpleShowLayout, TextField, DateField, BooleanField, ReferenceFi
 import { Card, Typography, Divider, Button, Box } from "@mui/material";
 import IdentificationIcon from '@mui/icons-material/PermIdentity';
 import SettingsIcon from '@mui/icons-material/Settings';
+import LockIcon from '@mui/icons-material/Lock';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import LinkIcon from '@mui/icons-material/Link';
 
@@ -24,21 +25,29 @@ export const AccessPointsShow = () => (
             {/* Identificação */}
             <Box display="flex" alignItems="center">
                 <IdentificationIcon />
-                <Typography variant="h6" sx={{ ml: 1 }}>Identificação</Typography>
+                <Typography variant="h6" sx={{ ml: 1 }}>show.accessPoints.identification</Typography>
             </Box>
             <Divider sx={{ mb: 1 }} />
             <TextField source="id" label="ID" />
-            <TextField source="location_description" label="Localização" />
-            <TextField source="ip_address" label="Endereço IP" />
+            <TextField source="location_description" label="show.accessPoints.location_description" />
+            <TextField source="ip_address" label="show.accessPoints.ip_address" />
 
-            {/* Software */}
+            {/* Configuração Técnica */}
             <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
                 <SettingsIcon />
-                <Typography variant="h6" sx={{ ml: 1 }}>Software</Typography>
+                <Typography variant="h6" sx={{ ml: 1 }}>Configuração Técnica</Typography>
             </Box>
             <Divider sx={{ mb: 1 }} />
-            <TextField source="ap_software" label="Software" />
-            <TextField source="software_version" label="Versão do software" />
+            <TextField source="ap_software" label="show.accessPoints.software" />
+            <TextField source="software_version" label="show.accessPoints.software_version" />
+            <Typography variant="subtitle2" sx={{ mt: 1, fontWeight: 'bold' }}>PMode</Typography>
+            <Card variant="outlined" sx={{ p: 1, bgcolor: "InfoBackground", maxHeight: "300px", overflow: "auto" }}>
+                <TextField source="pmode" label="PMode XML" sx={{ 
+                    whiteSpace: "pre-wrap", 
+                    fontFamily: "monospace",
+                    '& .RaTextField-input': { display: 'block' } 
+                }} />
+            </Card>
 
             {/* Estado */}
             <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
@@ -46,9 +55,9 @@ export const AccessPointsShow = () => (
                 <Typography variant="h6" sx={{ ml: 1 }}>Estado</Typography>
             </Box>
             <Divider sx={{ mb: 1 }} />
-            <BooleanField source="is_active" label="Ativo" />
-            <DateField source="created_date" label="Data de criação" showTime />
-            <DateField source="last_modified" label="Última modificação" showTime />
+            <BooleanField source="is_active" label="show.accessPoints.is_active" />
+            <DateField source="created_date" label="show.accessPoints.created_date" showTime />
+            <DateField source="last_modified" label="show.accessPoints.last_modified" showTime />
 
             {/* Associações */}
             <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
@@ -56,13 +65,13 @@ export const AccessPointsShow = () => (
                 <Typography variant="h6" sx={{ ml: 1 }}>Associações</Typography>
             </Box>
             <Divider sx={{ mb: 1 }} />
-            <ReferenceField source="certificate_id" reference="certificates" label="Certificado">
+            <ReferenceField source="certificate_id" reference="certificates" label="show.accessPoints.certificates">
                 <TextField source="name" />
             </ReferenceField>
-            <ReferenceField source="company_id" reference="companies" label="Empresa">
+            <ReferenceField source="company_id" reference="companies" label="show.accessPoints.company">
                 <TextField source="name" />
             </ReferenceField>
-            <ReferenceField source="last_modified_user_id" reference="users" label="Último modificador">
+            <ReferenceField source="last_modified_user_id" reference="users" label="show.accessPoints.last_modified_user">
                 <TextField source="username" />
             </ReferenceField>
             <Box display="flex" justifyContent="left" mt={2}>
