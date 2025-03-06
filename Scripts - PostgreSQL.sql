@@ -3,7 +3,7 @@ CREATE SCHEMA network;
 
 -- Criação da tabela "certificate"
 CREATE TABLE network.certificate (
-  id SERIAL PRIMARY KEY,                              -- [PK] Identificador único
+  id SERIAL PRIMARY KEY,                                          -- [PK] Identificador único
   name VARCHAR(255) NOT NULL,                                     -- Nome do certificado
   file_path TEXT NOT NULL,                                        -- Caminho para o certificado
   certificate_text TEXT,                                          -- Certificado em formato de texto    
@@ -24,7 +24,7 @@ CREATE TABLE network.certificate (
 
 -- Criação da tabela "company"
 CREATE TABLE network.company (
-  id SERIAL PRIMARY KEY,                                  -- [PK] Identificador único
+  id SERIAL PRIMARY KEY,                                          -- [PK] Identificador único
   name VARCHAR(255) NOT NULL,                                     -- Nome completo da entidade
   address VARCHAR(255) NOT NULL,                                  -- Rua ou avenida
   city VARCHAR(100) NOT NULL,                                     -- Cidade
@@ -44,13 +44,12 @@ CREATE TABLE network.company (
     ON DELETE SET NULL                                            -- Se o utilizador for eliminado retorna NULL
 );
 
--- Criação da tabela "accessPoint"
-CREATE TABLE network.accessPoint (
+-- Criação da tabela "accesspoint"
+CREATE TABLE network.accesspoint (
   id SERIAL PRIMARY KEY,                                          -- [PK] Identificador único
   location_description VARCHAR(255) NOT NULL,                     -- Localização física
   ip_address INET NOT NULL,                                       -- Endereço IPv4/IPv6
-  configurations JSONB,                                           -- Configuração técnica em JSON
-  permissions JSONB,                                              -- Permissões em JSON
+  pmode XML,                                                      -- Configuração do PMode
   ap_software TEXT,                                               -- Software utilizado
   software_version TEXT,	                                        -- Versão do software
   created_date TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,   -- Timestamp da criação
@@ -98,49 +97,3 @@ CREATE INDEX idx_accessPoint_certificate ON network.accessPoint(certificate_id);
 CREATE INDEX idx_company_name ON network.company(name);
 CREATE INDEX idx_certificate_name ON network.certificate(name);
 CREATE INDEX idx_certificate_file_path ON network.certificate(file_path);
-
--- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
--- Criação do schema "logs"
-CREATE SCHEMA logs;
-
--- Criação da tabela "log_category"
-CREATE TABLE logs.log_category (
-    id_category SERIAL PRIMARY KEY,                               -- [PK] Identificador único da categoria
-    name VARCHAR(255) NOT NULL,                                   -- Nome da categoria (ex: "Rede", "Login", etc.)
-    description TEXT                                              -- Descrição da categoria
-);
-
--- Criação da tabela "log_type"
-CREATE TABLE logs.log_type (
-    id_type SERIAL PRIMARY KEY,                                   -- [PK] Identificador único do tipo
-    name VARCHAR(255) NOT NULL,                                   -- Nome do tipo de log (ex: "Aviso", "Erro", etc.)
-    description TEXT                                              -- Descrição do tipo
-);
-
--- Criação da tabela "log_entries"
-CREATE TABLE logs.log_entries (
-  id_log SERIAL PRIMARY KEY,                                      -- [PK] Identificador único
-  cur_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,          -- Data, hora e fuso horário
-  message TEXT,                                                   -- Mensagem principal
-  details TEXT,                                                   -- Detalhes adicionais do log
-  ip_address INET,                                                -- Endereço IP relacionado
-  error_code INT,                                                 -- Código de erro
-  url TEXT,                                                       -- URL relacionada ao log
-  category_id INT NOT NULL,                                       -- [FK] Referência para a tabela "log_category"
-  type_id INT NOT NULL,                                           -- [FK] Referência para a tabela "log_type"
-  user_id UUID,                                                   -- [FK] Referência para o utilizador
-  
-  CONSTRAINT fk_category
-    FOREIGN KEY (category_id)
-    REFERENCES logs.log_category(id_category)
-    ON DELETE CASCADE,                                            -- Se a categoria for eliminada, logs serão eliminados
-  CONSTRAINT fk_type
-    FOREIGN KEY (type_id)
-    REFERENCES logs.log_type(id_type)
-    ON DELETE CASCADE,                                            -- Se o tipo de log for eliminado, logs serão eliminados
-  CONSTRAINT fk_user
-    FOREIGN KEY (user_id)
-    REFERENCES auth.app_users(id)
-    ON DELETE SET NULL                                            -- Se o utilizador for eliminado retorna NULL
-);

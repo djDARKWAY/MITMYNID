@@ -43,22 +43,12 @@ export class AccessPoint extends Entity {
   @property({
     type: "object",
     postgresql: {
-      columnName: "configurations",
-      dataType: "jsonb",
+      columnName: "pmode",
+      dataType: "xml",
       nullable: "YES",
     },
   })
-  configurations?: object;
-
-  @property({
-    type: "object",
-    postgresql: {
-      columnName: "permissions",
-      dataType: "jsonb",
-      nullable: "YES",
-    },
-  })
-  permissions?: object;
+  pmode?: object;
 
   @property({
     type: "string",

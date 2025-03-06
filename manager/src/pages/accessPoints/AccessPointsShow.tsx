@@ -2,7 +2,6 @@ import { Show, SimpleShowLayout, TextField, DateField, BooleanField, ReferenceFi
 import { Card, Typography, Divider, Button, Box } from "@mui/material";
 import IdentificationIcon from '@mui/icons-material/PermIdentity';
 import SettingsIcon from '@mui/icons-material/Settings';
-import LockIcon from '@mui/icons-material/Lock';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import LinkIcon from '@mui/icons-material/Link';
 
@@ -28,29 +27,20 @@ export const AccessPointsShow = () => (
                 <Typography variant="h6" sx={{ ml: 1 }}>Identificação</Typography>
             </Box>
             <Divider sx={{ mb: 1 }} />
-            <TextField source="id" label="Id" />
+            <TextField source="id" label="ID" />
             <TextField source="location_description" label="Localização" />
-            <TextField source="ip_address" label="Endereço ip" />
+            <TextField source="ip_address" label="Endereço IP" />
 
-            {/* Configuração Técnica */}
+            {/* Software */}
             <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
                 <SettingsIcon />
-                <Typography variant="h6" sx={{ ml: 1 }}>Configuração técnica</Typography>
+                <Typography variant="h6" sx={{ ml: 1 }}>Software</Typography>
             </Box>
             <Divider sx={{ mb: 1 }} />
             <TextField source="ap_software" label="Software" />
             <TextField source="software_version" label="Versão do software" />
-            <JsonField source="configurations" />
 
-            {/* Permissões */}
-            <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
-                <LockIcon />
-                <Typography variant="h6" sx={{ ml: 1 }}>Permissões</Typography>
-            </Box>
-            <Divider sx={{ mb: 1 }} />
-            <JsonField source="permissions" />
-
-            {/* Estado e Histórico */}
+            {/* Estado */}
             <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
                 <CalendarTodayIcon />
                 <Typography variant="h6" sx={{ ml: 1 }}>Estado</Typography>

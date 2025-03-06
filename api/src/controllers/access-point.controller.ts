@@ -19,11 +19,8 @@ import {
 import { AccessPoint } from "../models";
 import { AccessPointRepository } from "../repositories";
 import { CompanyRepository } from "../repositories";
-import {
-  authenticate,
-  TokenService,
-  UserService,
-} from "@loopback/authentication";
+import { XMLValidator } from "fast-xml-parser";
+import { authenticate, TokenService, UserService } from "@loopback/authentication";
 import { basicAuthorization } from "../middlewares/auth.middleware";
 import { authorize } from "@loopback/authorization";
 
@@ -264,21 +261,17 @@ export class AccessPointController {
     });
 
     // Optional fields
-    if (accessPoint.configurations) {
+    if (accessPoint.pmode) {
       try {
-        JSON.stringify(accessPoint.configurations);
-      } catch {
-        throw new HttpErrors.BadRequest(
-          "A configuração deve ser um objeto JSON válido."
+        const validationResult = XMLValidator.validate(
+          accessPoint.pmode as unknown as string
         );
-      }
-    }
-    if (accessPoint.permissions) {
-      try {
-        JSON.stringify(accessPoint.permissions);
-      } catch {
+        if (validationResult !== true) {
+          throw new Error(validationResult.err.msg);
+        }
+      } catch (error) {
         throw new HttpErrors.BadRequest(
-          "As permissões devem ser um objeto JSON válido."
+          `O PMode deve ser um documento XML válido. ${error instanceof Error ? error.message : ""}`
         );
       }
     }
