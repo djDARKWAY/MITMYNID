@@ -42,8 +42,7 @@ export const CertificatesEdit = () => (
             </Card>
             <Typography variant="subtitle2" sx={{ mt: 1, fontWeight: 'bold' }}></Typography>
             <TextInput source="certificate_data" label="show.certificates.certificate_data" multiline fullWidth />            
-            */}
-            
+            */}            
         </SimpleForm>
     </Edit>
 );

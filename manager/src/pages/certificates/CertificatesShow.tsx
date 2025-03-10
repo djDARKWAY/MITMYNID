@@ -1,9 +1,8 @@
 import { Show, SimpleShowLayout, TextField, DateField, BooleanField, ReferenceField, useRecordContext, useRedirect } from "react-admin";
 import { Card, Typography, Divider, Button, Box } from "@mui/material";
-import Person from '@mui/icons-material/Person';
 import FeedOutlined from '@mui/icons-material/FeedOutlined';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import { AccessTimeFilled } from "@mui/icons-material";
+import { AccessTimeFilled, CardMembership } from "@mui/icons-material";
 
 const JsonField = ({ source }: { source: string }) => {
     const record = useRecordContext();
@@ -27,8 +26,8 @@ export const CertificatesShow = () => {
             <SimpleShowLayout>
                 {/* Identificação */}
                 <Box display="flex" alignItems="center">
-                    <Person />
-                    <Typography variant="h6" sx={{ ml: 1 }}>Identificação</Typography>
+                    <CardMembership />
+                    <Typography variant="h6" sx={{ ml: 1 }}> Certificado </Typography>
                 </Box>
                 <Divider sx={{ mb: 1 }} />
                 <TextField source="id" label="ID" />
@@ -38,7 +37,7 @@ export const CertificatesShow = () => {
                 {/* Detalhes do certificado */}
                 <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
                     <CalendarTodayIcon />
-                    <Typography variant="h6" sx={{ ml: 1 }}>Detalhes</Typography>
+                    <Typography variant="h6" sx={{ ml: 1 }}> Detalhes </Typography>
                 </Box>
                 <Divider sx={{ mb: 1 }} />
                 <TextField source="issuer_name" label="show.certificates.issuer_name" />
@@ -53,7 +52,7 @@ export const CertificatesShow = () => {
                     <Typography variant="h6" sx={{ ml: 1 }}>Conteúdo</Typography>
                 </Box>
                 <Divider sx={{ mb: 1 }} />
-                <Typography variant="subtitle2" sx={{ mt: 1, fontWeight: 'bold' }}>Texto</Typography>
+                <Typography variant="subtitle2" sx={{ mt: 1, fontWeight: 'bold' }}> Dados </Typography>
                 <Card variant="outlined" sx={{ p: 1, bgcolor: "InfoBackground", maxHeight: "300px", overflow: "auto" }}>
                     <TextField source="certificate_text" label="show.certificates.certificate_text" sx={{ 
                         whiteSpace: "pre-wrap", 
@@ -62,13 +61,13 @@ export const CertificatesShow = () => {
                     }} />
                 </Card>
 
-                <Typography variant="subtitle2" sx={{ mt: 1, fontWeight: 'bold' }}>Dados</Typography>
+                <Typography variant="subtitle2" sx={{ mt: 1, fontWeight: 'bold' }}> Elementos </Typography>
                 <JsonField source="certificate_data" />
 
                 {/* Última Modificação */}
                 <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
                     <AccessTimeFilled />
-                    <Typography variant="h6" sx={{ ml: 1 }}>Logs</Typography>
+                    <Typography variant="h6" sx={{ ml: 1 }}> Logs </Typography>
                 </Box>
                 <Divider sx={{ mb: 1 }} />
                 <DateField source="last_modified" label="Última Modificação" showTime />

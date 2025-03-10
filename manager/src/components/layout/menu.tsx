@@ -138,7 +138,7 @@ const MyMenu = ({ dense = false }: MenuProps) => {
         <SubMenu
           handleToggle={() => handleToggle("menuSeguranca")}
           isOpen={state.menuSeguranca}
-          name="pos.menu.seguranca"
+          name="pos.menu.security"
           icon={<SecurityRounded />}
           dense={dense}
         >
@@ -237,7 +237,7 @@ const MyMenu = ({ dense = false }: MenuProps) => {
         <SubMenu
           handleToggle={() => handleToggle("menuMonitorizacao")}
           isOpen={state.menuMonitorizacao}
-          name="pos.menu.monitorizacao"
+          name="pos.menu.monitoring"
           icon={<Insights />}
           dense={dense}
         >

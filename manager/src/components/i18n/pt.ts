@@ -1,6 +1,4 @@
-import { act } from "react";
 import { TranslationMessages } from "react-admin";
-import { accessPoints } from "../../pages/accessPoints";
 
 const portugueseMessages: TranslationMessages = {
   ra: {
@@ -223,16 +221,16 @@ const portugueseMessages: TranslationMessages = {
     },
     labels: {
       search: "Procurar por nome",
-      searchTitle: "Procurar por titulo",
+      searchTitle: "Procurar por título",
       active: "Ativo",
       inactive: "Inativo",
     },
     menu: {
       config: "Configuração",
-      seguranca: "Segurança",
+      security: "Segurança",
       accessPoints: "Pontos de Acesso",
       certificates: "Certificados",
-      monitorizacao: "Monitorização",
+      monitoring: "Monitorização",
       language: "Idioma",
     },
     language: "Idioma",
@@ -271,10 +269,6 @@ const portugueseMessages: TranslationMessages = {
         is_expired: "Estado",
       },
     },
-    monitoring: {
-      status: "Estado da rede",
-      logs: "Logs",
-    },
     utilizadores: {
       name: "Utilizadores",
       edit_title: "Editar Utilizador",
@@ -295,7 +289,6 @@ const portugueseMessages: TranslationMessages = {
         foto: "Imagem",
         ativo: "Ativo",
         ult_acesso: "Último acesso",
-        // entidade: 'Entidade',
         roles: "Perfis",
         username: "Utilizador",
         confirm_password: "Confirmar senha",
@@ -401,81 +394,19 @@ const portugueseMessages: TranslationMessages = {
         url_empresa: "URL Empresa",
       },
     },
-    pesquisa: {
-      name: "Pesquisa |||| Pesquisas",
-      fields: {
-        nome: "Nome",
-        n_registos: "Resultados",
-      },
-    },
-    local: {
-      name: "Local |||| Locais",
-      fields: {
-        nome: "Nome",
-      },
-    },
-    pais: {
-      name: "País |||| Países",
-      fields: {
-        nome: "Nome",
-        nome_curto: "Nome Curto",
-        codigo: "Código",
-        indicativo: "Indicativo",
-      },
-    },
-    tipoHorario: {
-      name: "Horário |||| Horários",
-      fields: {
-        descricao: "Descrição",
-        notas: "Notas",
-      },
-    },
-    atributo: {
-      name: "Característica |||| Caracteristícas",
-      reference: "teste",
-      fields: {
-        nome: "Nome",
-        sufixo: "Sufixo",
-        ordem: "Ordem",
-        tipo_id: "Tipo",
-        opcoes: "Opções",
-        top_mae_id: "Nível superior",
-      },
-    },
-    equipamentos: {
-      name: "Equipamento |||| Equipamentos",
-      fields: {
-        tipo_id: "Tipo",
-        descricao: "Descrição",
-        limite_min: "Limite Min.",
-        limite_max: "Limite Max.",
-        unidades: "Unidades.",
-      },
-    },
-    tipoEquipamento: {
-      name: "Tipo de Equipamento |||| Tipos de Equipamento",
-      fields: {
-        tipo: "Tipo",
-        observacoes: "Observações",
-      },
-    },
   },
   show: {
     accessPoints: {
-      identification: "Identificação",
       location_description: "Localização",
       ip_address: "Endereço IP",
-      technical_configuration: "Configuração Técnica",
       software: "Software",
       software_version: "Versão do software",
       permissions: "Permissões",
-      state: "Estado",
       is_active: "Ativo",
-      created_date: "Data de criação",
-      last_modified: "Última modificação",
-      associations: "Associações",
       certificates: "Certificado",
       company: "Empresa",
+      created_date: "Data de criação",
+      last_modified: "Última modificação",
       last_modified_user: "Modificado por",
     },
     certificates: {

@@ -2,8 +2,7 @@ import { Show, SimpleShowLayout, TextField, DateField, BooleanField, ReferenceFi
 import { Card, Typography, Divider, Button, Box } from "@mui/material";
 import Person from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
-import LinkIcon from '@mui/icons-material/Link';
-import { AccessTimeFilled } from "@mui/icons-material";
+import { AccessTimeFilled, CardMembership } from "@mui/icons-material";
 
 const JsonField = ({ source }: { source: string }) => {
     const record = useRecordContext();
@@ -34,7 +33,7 @@ export const AccessPointsShow = () => (
             {/* Configuração Técnica */}
             <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
                 <SettingsIcon />
-                <Typography variant="h6" sx={{ ml: 1 }}>Configuração</Typography>
+                <Typography variant="h6" sx={{ ml: 1 }}> Configuração </Typography>
             </Box>
             <Divider sx={{ mb: 1 }} />
             <TextField source="ap_software" label="show.accessPoints.software" />
@@ -51,8 +50,8 @@ export const AccessPointsShow = () => (
 
             {/* Certificado */}
             <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
-                <LinkIcon />
-                <Typography variant="h6" sx={{ ml: 1 }}>Certificado</Typography>
+                <CardMembership />
+                <Typography variant="h6" sx={{ ml: 1 }}> Certificado </Typography>
             </Box>
             <Divider sx={{ mb: 1 }} />
             <ReferenceField source="certificate_id" reference="certificates" label="show.accessPoints.certificates">
@@ -65,7 +64,7 @@ export const AccessPointsShow = () => (
             {/* Última Modificação */}
             <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
                 <AccessTimeFilled />
-                <Typography variant="h6" sx={{ ml: 1 }}>Logs</Typography>
+                <Typography variant="h6" sx={{ ml: 1 }}> Logs </Typography>
             </Box>
             <DateField source="created_date" label="show.accessPoints.created_date" showTime />
             <DateField source="last_modified" label="show.accessPoints.last_modified" showTime />
