@@ -1,37 +1,21 @@
 import { useRef, useState } from "react";
 import {
-  People,
-  DisplaySettings,
-  Security,
-  AddBusiness,
   Key,
-  MapsHomeWork,
-  Handyman,
-  Category,
-  Flaky,
   Insights,
-  WarningAmber,
-  Assignment,
-  AccountTreeOutlined,
-  Approval,
-  ManageSearch,
-  CellTowerOutlined,
   CellTowerRounded,
-  CellTowerTwoTone,
-  CellTowerSharp,
-  EditNoteRounded,
-  SignalWifi3BarTwoTone,
-  SignalWifi3BarLockRounded,
   CardMembershipRounded,
   CreditScoreRounded,
   WifiTetheringErrorRounded,
-  EventNoteTwoTone,
-  EventNoteRounded,
-  HistoryToggleOffRounded,
   HowToRegRounded,
   PeopleAltRounded,
   SecurityRounded,
   HistoryOutlined,
+  HubRounded,
+  ViewCarousel,
+  Visibility,
+  SignalWifi4BarLock,
+  WarehouseRounded,
+  ManageAccountsRounded,
 } from "@mui/icons-material";
 import {
   useTranslate,
@@ -50,7 +34,8 @@ type MenuName =
   | "menuAccessPoint"
   | "menuMonitorizacao"
   | "menuCertificados"
-  | "menuConfig";
+  | "menuConfig"
+  | "menuArmazens";
 
 const MyMenu = ({ dense = false }: MenuProps) => {
   const logoBigImg = useRef<string>("MMN_H_RGB.svg");
@@ -67,6 +52,7 @@ const MyMenu = ({ dense = false }: MenuProps) => {
     menuCertificados: resource === "menuConfig" ? true : false,
     menuMonitorizacao: resource === "menuConfig" ? true : false,
     menuConfig: resource === "menuConfig" ? true : false,
+    menuArmazens: resource === "menuArmazens" ? true : false,
   });
 
   const handleToggle = (menu: MenuName) => {
@@ -187,7 +173,7 @@ const MyMenu = ({ dense = false }: MenuProps) => {
             className={"submenuItem " + (open ? "open" : "close")}
             primaryText={translate(`resources.accessPoints.list`)}
             sx={{ color: !open ? "transparent" : "default" }}
-            leftIcon={<EditNoteRounded />}
+            leftIcon={<HubRounded />}
             dense={dense}
           />
 
@@ -197,7 +183,7 @@ const MyMenu = ({ dense = false }: MenuProps) => {
               className={"submenuItem " + (open ? "open" : "close")}
               primaryText={translate("resources.accessPoints.manage")}
               sx={{ color: !open ? "transparent" : "default" }}
-              leftIcon={<SignalWifi3BarLockRounded />}
+              leftIcon={<SignalWifi4BarLock />}
               dense={dense}
             />
           )}
@@ -217,7 +203,7 @@ const MyMenu = ({ dense = false }: MenuProps) => {
             className={"submenuItem " + (open ? "open" : "close")}
             primaryText={translate(`resources.certificates.list`)}
             sx={{ color: !open ? "transparent" : "default" }}
-            leftIcon={<EditNoteRounded />}
+            leftIcon={<ViewCarousel />}
             dense={dense}
           />
 
@@ -236,10 +222,29 @@ const MyMenu = ({ dense = false }: MenuProps) => {
 
       {permissions.includes("ADMIN") && (
         <SubMenu
+          handleToggle={() => handleToggle("menuArmazens")}
+          isOpen={state.menuArmazens}
+          name="pos.menu.companies"
+          icon={<WarehouseRounded />}
+          dense={dense}
+        >
+          <MenuItemLink
+            to={{ pathname: "/companies" }}
+            className={"submenuItem " + (open ? "open" : "close")}
+            primaryText={translate(`resources.companies.manage`)}
+            sx={{ color: !open ? "transparent" : "default" }}
+            leftIcon={<ManageAccountsRounded />}
+            dense={dense}
+          />
+        </SubMenu>
+      )}
+
+      {permissions.includes("ADMIN") && (
+        <SubMenu
           handleToggle={() => handleToggle("menuMonitorizacao")}
           isOpen={state.menuMonitorizacao}
           name="pos.menu.monitoring"
-          icon={<Insights />}
+          icon={<Visibility />}
           dense={dense}
         >
           <MenuItemLink

@@ -221,6 +221,10 @@ const spanishMessages: TranslationMessages = {
       ap_software: "Software",
       is_active: "Estado",
     },
+    companies: {
+      name: "Nombre",
+      country: "País",
+    },
     labels: {
       search: "Buscar por nombre",
       searchTitle: "Buscar por título",
@@ -231,6 +235,7 @@ const spanishMessages: TranslationMessages = {
       config: "Configuración",
       security: "Seguridad",
       accessPoints: "Puntos de acceso",
+      companies: "Empresas",
       certificates: "Certificados",
       monitoring: "Monitoreo",
       language: "Idioma",
@@ -269,6 +274,16 @@ const spanishMessages: TranslationMessages = {
         expiration_date: "Fecha de expiración",
         issuer_name: "Emisor",
         is_active: "Estado",
+      },
+    },
+    companies: {
+      name: "Empresas",
+      list: "Empresas",
+      fields: {
+        name: "Nombre",
+        zip_code: "Código Postal",
+        city: "Ciudad",
+        country_id: "País",
       },
     },
     monitoring: {
@@ -429,6 +444,21 @@ const spanishMessages: TranslationMessages = {
       certificate_data: "Datos",
       modified_by: "Modificado por",
     },
+  },
+  companies: {
+    identification: "Identificación",
+    name: "Nombre",
+    address: "Dirección",
+    city: "Ciudad",
+    country: "País",
+    zip_code: "Código postal",
+    email: "Correo electrónico",
+    contact: "Persona de contacto",
+    phone: "Teléfono",
+    website: "URL",
+    created_date: "Fecha de creación",
+    last_modified: "Última modificación",
+    last_modified_user: "Modificado por",
   },
 };
 

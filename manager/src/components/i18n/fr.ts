@@ -222,6 +222,10 @@ const frenchMessages: TranslationMessages = {
       ap_software: "Logiciel",
       is_active: "État",
     },
+    companies: {
+      name: "Nom",
+      country: "Pays",
+    },
     labels: {
       search: "Rechercher par nom",
       searchTitle: "Rechercher par titre",
@@ -232,6 +236,7 @@ const frenchMessages: TranslationMessages = {
       config: "Configuration",
       security: "Sécurité",
       accessPoints: "Points d'accès",
+      companies: "Entreprises",
       certificates: "Certificats",
       monitoring: "Surveillance",
       language: "Langue",
@@ -270,6 +275,16 @@ const frenchMessages: TranslationMessages = {
         expiration_date: "Date d'expiration",
         issuer_name: "Émetteur",
         is_active: "État",
+      },
+    },
+    companies: {
+      name: "Entreprises",
+      list: "Entreprises",
+      fields: {
+        name: "Nom",
+        zip_code: "Code Postal",
+        city: "Ville",
+        country_id: "Pays",
       },
     },
     monitoring: {
@@ -430,6 +445,21 @@ const frenchMessages: TranslationMessages = {
       certificate_text: "Texte",
       certificate_data: "Données",
       modified_by: "Modifié par",
+    },
+    companies: {
+      identification: "Identification",
+      name: "Nom",
+      address: "Adresse",
+      city: "Ville",
+      country: "Pays",
+      zip_code: "Code postal",
+      email: "Email",
+      contact: "Personne de contact",
+      phone: "Téléphone",
+      website: "URL",
+      created_date: "Date de création",
+      last_modified: "Dernière modification",
+      last_modified_user: "Modifié par",
     },
   },
 };

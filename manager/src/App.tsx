@@ -19,6 +19,8 @@ import { CertificatesList } from './pages/certificates/CertificatesList';
 import { certificates } from './pages/certificates';
 import { AccessPointsList } from './pages/accessPoints/AccessPointsList';
 import { accessPoints } from './pages/accessPoints';
+import { CompaniesList } from './pages/companies/CompaniesList';
+import { companies } from './pages/companies';
 
 const httpClient = (url: string, options = {}) => {
   //@ts-ignore
@@ -67,6 +69,7 @@ const App = () => {
           <Resource name="user-roles" />,
           <Resource name="certificates" {...certificates(permissions)} />,
           <Resource name="access-points" {...accessPoints(permissions)} />,
+          <Resource name="companies" {...companies(permissions)} />,
 
           <CustomRoutes>
             <Route path="/dashboard" element={<Dashboard />} />
@@ -75,6 +78,7 @@ const App = () => {
             <Route path="/profile" element={<Profile />} />
             <Route path="/certificates" element={<CertificatesList />} />
             <Route path="/access-points" element={<AccessPointsList />} />
+            <Route path="/companies" element={<CompaniesList />} />
 
             <Route path="/unauthorized" key={"/unauthorized"} element={<Unauthorized />} />
           </CustomRoutes>,

@@ -219,6 +219,10 @@ const portugueseMessages: TranslationMessages = {
       ap_software: "Software",
       is_active: "Estado",
     },
+    companies: {
+      name: "Nome",
+      country: "País",
+    },
     labels: {
       search: "Procurar por nome",
       searchTitle: "Procurar por título",
@@ -229,6 +233,7 @@ const portugueseMessages: TranslationMessages = {
       config: "Configuração",
       security: "Segurança",
       accessPoints: "Pontos de Acesso",
+      companies: "Empresas",
       certificates: "Certificados",
       monitoring: "Monitorização",
       language: "Idioma",
@@ -244,7 +249,7 @@ const portugueseMessages: TranslationMessages = {
       },
     },
     accessPoints: {
-      list: "Dispositivos de Rede",
+      list: "Dispositivos de rede",
       manage: "Gestão de acessos",
       name: "Pontos de Acesso",
       fields: {
@@ -267,6 +272,16 @@ const portugueseMessages: TranslationMessages = {
         expiration_date: "Data de Expiração",
         issuer_name: "Emissor",
         is_active: "Estado",
+      },
+    },
+    companies: {
+      name: "Empresas",
+      list: "Empresas",
+      fields: {
+        name: "Nome",
+        zip_code: "Código Postal",
+        city: "Cidade",
+        country_id: "País",
       },
     },
     monitoring: {
@@ -425,6 +440,21 @@ const portugueseMessages: TranslationMessages = {
       certificate_text: "Texto",
       certificate_data: "Dados",
       modified_by: "Modificado por",
+    },
+    companies: {
+      identification: "Identificação",
+      name: "Nome",
+      address: "Morada",
+      city: "Cidade",
+      country: "País",
+      zip_code: "Código postal",
+      email: "Email",
+      contact: "Pessoa de contacto",
+      phone: "Telefone",
+      website: "URL",
+      created_date: "Data de criação",
+      last_modified: "Última modificação",
+      last_modified_user: "Modificado por",
     },
   },
 };

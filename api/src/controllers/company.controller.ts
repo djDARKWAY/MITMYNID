@@ -71,13 +71,24 @@ export class CompanyController {
   async find(
     @param.filter(Company) filter?: Filter<Company>
   ): Promise<Company[]> {
+    if (filter?.where && (filter.where as any).name) {
+      const name = (filter.where as any).name;
+      (filter.where as any).name = { ilike: `%${name}%` };
+    }
+    if (filter?.where && (filter.where as any).country) {
+      const country = (filter.where as any).country;
+      (filter.where as any).country_id = { like: `${country}` };
+      delete (filter.where as any).country;
+    }
+  
     return this.companyRepository.find({
+      ...filter,
       fields: {
         id: true,
         name: true,
         city: true,
         country_id: true,
-        created_date: true,
+        zip_code: true,
       },
     });
   }

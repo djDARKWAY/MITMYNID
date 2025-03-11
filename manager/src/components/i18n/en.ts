@@ -213,6 +213,10 @@ const englishMessages: TranslationMessages = {
       ap_software: "Software",
       is_active: "Status",
     },
+    companies: {
+      name: "Name",
+      country: "Country",
+    },
     labels: {
       search: "Search by name",
       searchTitle: "Search by title",
@@ -223,6 +227,7 @@ const englishMessages: TranslationMessages = {
       config: "Configuration",
       security: "Security",
       accessPoints: "Access Points",
+      companies: "Companies",
       certificates: "Certificates",
       monitoring: "Monitoring",
       language: "Language",
@@ -261,6 +266,16 @@ const englishMessages: TranslationMessages = {
         expiration_date: "Expiration date",
         issuer_name: "Issuer",
         is_active: "Status",
+      },
+    },
+    companies: {
+      name: "Companies",
+      list: "Companies",
+      fields: {
+        name: "Name",
+        zip_code: "Zip Code",
+        city: "City",
+        country_id: "Country",
       },
     },
     monitoring: {
@@ -420,6 +435,21 @@ const englishMessages: TranslationMessages = {
       certificate_data: "Data",
       modified_by: "Modified by",
     },
+  },
+  companies: {
+    identification: "Identification",
+    name: "Name",
+    address: "Address",
+    city: "City",
+    country: "Country",
+    zip_code: "Postal code",
+    email: "Email",
+    contact: "Contact person",
+    phone: "Phone",
+    website: "Website",
+    created_date: "Creation date",
+    last_modified: "Last modified",
+    last_modified_user: "Modified by",
   },
 };
 
