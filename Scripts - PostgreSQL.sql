@@ -28,7 +28,7 @@ CREATE TABLE network.company (
   name VARCHAR(255) NOT NULL,                                     -- Nome completo da entidade
   address VARCHAR(255) NOT NULL,                                  -- Rua ou avenida
   city VARCHAR(100) NOT NULL,                                     -- Cidade
-  country_id VARCHAR(60) NOT NULL,                                 -- [FK] País
+  country_id CHAR(2) NOT NULL,                                    -- [FK] País
   zip_code VARCHAR(20) NOT NULL,                                  -- Código postal
   email TEXT,                                                     -- Email da entidade
   contact TEXT,                                                   -- Contacto da entidade
@@ -104,9 +104,9 @@ CREATE INDEX idx_certificate_file_path ON network.certificate(file_path);
 
 -- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+-- Criação da tabela "country"
 CREATE TABLE network.country (
-    id SERIAL PRIMARY KEY,
-    code CHAR(2) NOT NULL,
-    name VARCHAR(100) NOT NULL,
-    country_code INTEGER NOT NULL
+  id CHAR(2) NOT NULL,                                          -- [PK] Código do país (ISO 3166-1 alpha-2)
+  name VARCHAR(100),                                            -- Nome do país [inglês]
+  country_code INTEGER NOT NULL                                 -- Código do número de telemóvel
 );

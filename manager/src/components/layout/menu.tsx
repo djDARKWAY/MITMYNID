@@ -31,6 +31,7 @@ import {
   HowToRegRounded,
   PeopleAltRounded,
   SecurityRounded,
+  HistoryOutlined,
 } from "@mui/icons-material";
 import {
   useTranslate,
@@ -255,7 +256,7 @@ const MyMenu = ({ dense = false }: MenuProps) => {
               className={"submenuItem " + (open ? "open" : "close")}
               primaryText={translate(`resources.monitoring.logs`)}
               sx={{ color: !open ? "transparent" : "default" }}
-              leftIcon={<HistoryToggleOffRounded />}
+              leftIcon={<HistoryOutlined />}
               dense={dense}
             />
           )}

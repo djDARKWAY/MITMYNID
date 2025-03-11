@@ -3,17 +3,11 @@ import {Entity, model, property} from '@loopback/repository';
 @model()
 export class Country extends Entity {
   @property({
-    type: 'number',
-    id: true,
-    generated: true,
-  })
-  id?: number;
-
-  @property({
     type: 'string',
+    id: true,
     required: true,
   })
-  code: string;
+  id?: string;
 
   @property({
     type: 'string',

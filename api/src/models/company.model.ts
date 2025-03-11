@@ -56,11 +56,11 @@ export class Company extends Entity {
     required: true,
     postgresql: {
       columnName: "country_id",
-      dataType: "integer",
-      nullable: "NO",
+      dataType: "varchar",
+      dataLenght: 2,
     },
   })
-  country_id: number;
+  country_id: string;
 
   @property({
     type: "string",
