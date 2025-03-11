@@ -76,7 +76,7 @@ export class CompanyController {
         id: true,
         name: true,
         city: true,
-        country: true,
+        country_id: true,
         created_date: true,
       },
     });
@@ -146,10 +146,6 @@ export class CompanyController {
       city: [
         { condition: !company.city, message: "A cidade é obrigatória!" },
         { condition: company.city.length > 100, message: "A cidade não pode ter mais de 100 caracteres!" }
-      ],
-      country: [
-        { condition: !company.country , message: "O país é obrigatório!" },
-        { condition: company.country.length > 60, message: "O país não pode ter mais de 60 caracteres!" }
       ],
       zip_code: [
         { condition: !company.zip_code, message: "O código postal é obrigatório!" },

@@ -28,7 +28,7 @@ CREATE TABLE network.company (
   name VARCHAR(255) NOT NULL,                                     -- Nome completo da entidade
   address VARCHAR(255) NOT NULL,                                  -- Rua ou avenida
   city VARCHAR(100) NOT NULL,                                     -- Cidade
-  country VARCHAR(60) NOT NULL,                                   -- País
+  country_id VARCHAR(60) NOT NULL,                                 -- [FK] País
   zip_code VARCHAR(20) NOT NULL,                                  -- Código postal
   email TEXT,                                                     -- Email da entidade
   contact TEXT,                                                   -- Contacto da entidade
@@ -42,6 +42,10 @@ CREATE TABLE network.company (
     FOREIGN KEY (last_modified_user_id)
     REFERENCES auth.app_users (id)
     ON DELETE SET NULL                                            -- Se o utilizador for eliminado retorna NULL
+  CONSTRAINT fk_company_country
+    FOREIGN KEY (country_id)
+    REFERENCES network.country(id)
+    ON DELETE SET NULL;                                           -- Se o país for eliminado retorna NULL
 );
 
 -- Criação da tabela "accesspoint"
@@ -97,3 +101,12 @@ CREATE INDEX idx_accessPoint_certificate ON network.accessPoint(certificate_id);
 CREATE INDEX idx_company_name ON network.company(name);
 CREATE INDEX idx_certificate_name ON network.certificate(name);
 CREATE INDEX idx_certificate_file_path ON network.certificate(file_path);
+
+-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+CREATE TABLE network.country (
+    id SERIAL PRIMARY KEY,
+    code CHAR(2) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    country_code INTEGER NOT NULL
+);
