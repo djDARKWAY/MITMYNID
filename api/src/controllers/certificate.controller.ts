@@ -89,7 +89,7 @@ export class CertificateController {
         issue_date: true,
         issuer_name: true,
         expiration_date: true,
-        is_expired: true,
+        is_active: true,
       },
     });
   }
@@ -121,7 +121,7 @@ export class CertificateController {
   ): Promise<{id: number; is_valid: boolean; message: string, expires_at?: Date}> {
     const certificate = await this.certificateRepository.findById(id);
 
-    const isValid = !certificate.is_expired;
+    const isValid = !certificate.is_active;
     const message = isValid ? 'O certificado é válido.' : 'O certificado está expirado.';
 
     return { id, is_valid: isValid, message, expires_at: new Date(certificate.expiration_date) };
@@ -197,7 +197,7 @@ export class CertificateController {
       throw new HttpErrors.NotFound('Certificado não encontrado!');
     }
 
-    const { is_expired, ...certificateData } = certificate;
+    const { is_active, ...certificateData } = certificate;
 
     // Automatically set last_modified_user_id
     const userId = await this.getCurrentUserId();

@@ -34,7 +34,7 @@ export const CertificatesList = () => {
                     <DateField source="issue_date" label="resources.certificates.fields.issue_date" />
                     <DateField source="expiration_date" label="resources.certificates.fields.expiration_date" />
                     <TextField source="issuer_name" label="resources.certificates.fields.issuer_name" />
-                    <FunctionField source="is_expired" label="resources.certificates.fields.is_expired" render={record => record.is_expired ? '🔴' : '🟢'} />
+                    <FunctionField source="is_active" label="resources.certificates.fields.is_active" render={record => record.is_active ? '🟢' : '🔴'} />
                 </Datagrid>
             )}
         </List>

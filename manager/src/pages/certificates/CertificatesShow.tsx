@@ -19,7 +19,10 @@ const JsonField = ({ source }: { source: string }) => {
 
 export const CertificatesShow = () => {
     const record = useRecordContext();
-    const redirect = useRedirect();
+
+    // Adicionando console log para verificar o valor de is_active
+    console.log("record:", record);
+    console.log("is_active:", record?.is_active);
 
     return (
         <Show>
@@ -44,7 +47,7 @@ export const CertificatesShow = () => {
                 <TextField source="issuer_url" label="show.certificates.issuer_url" />
                 <DateField source="issue_date" label="show.certificates.issue_date" />
                 <DateField source="expiration_date" label="show.certificates.expiration_date" />
-                <BooleanField source="is_expired" label="show.certificates.is_expired" />
+                <BooleanField source="is_active" label="show.certificates.is_active" />
 
                 {/* Seção do Certificado */}
                 <Box display="flex" alignItems="center" sx={{ mt: 3 }}>

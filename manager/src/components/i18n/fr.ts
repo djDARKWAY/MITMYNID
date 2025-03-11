@@ -214,7 +214,7 @@ const frenchMessages: TranslationMessages = {
     certificates: {
       name: "Nom du certificat",
       issuer: "Émetteur",
-      is_expired: "État",
+      is_active: "État",
     },
     accessPoints: {
       company_name: "Nom de l'entreprise",
@@ -269,12 +269,12 @@ const frenchMessages: TranslationMessages = {
         issue_date: "Date d'émission",
         expiration_date: "Date d'expiration",
         issuer_name: "Émetteur",
-        is_expired: "État",
+        is_active: "État",
       },
     },
     monitoring: {
       status: "État du réseau",
-      logs: "Historique",
+      logs: "Historique des enregistrements",
     },
     utilizadores: {
       name: "Utilisateurs",
@@ -426,7 +426,7 @@ const frenchMessages: TranslationMessages = {
       issuer_url: "URL de l'émetteur",
       issue_date: "Date d'émission",
       expiration_date: "Date d'expiration",
-      is_expired: "Actif",
+      is_active: "Actif",
       certificate_text: "Texte",
       certificate_data: "Données",
       modified_by: "Modifié par",

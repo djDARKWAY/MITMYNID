@@ -93,7 +93,7 @@ export interface Certificates extends RaRecord {
   issue_date: string;
   expiration_date: string;
   issuer_name: string;
-  is_expired: boolean;
+  is_active: boolean;
 }
 export interface AccessPoint extends RaRecord {
   id: string;

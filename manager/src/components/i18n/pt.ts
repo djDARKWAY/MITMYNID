@@ -211,7 +211,7 @@ const portugueseMessages: TranslationMessages = {
     certificates: {
       name: "Nome do certificado",
       issuer: "Emissor",
-      is_expired: "Estado",
+      is_active: "Estado",
     },
     accessPoints: {
       company_name: "Nome da empresa",
@@ -266,7 +266,7 @@ const portugueseMessages: TranslationMessages = {
         issue_date: "Data de Emissão",
         expiration_date: "Data de Expiração",
         issuer_name: "Emissor",
-        is_expired: "Estado",
+        is_active: "Estado",
       },
     },
     monitoring: {
@@ -421,7 +421,7 @@ const portugueseMessages: TranslationMessages = {
       issuer_url: "URL do Emissor",
       issue_date: "Data de Emissão",
       expiration_date: "Data de Expiração",
-      is_expired: "Ativo",
+      is_active: "Ativo",
       certificate_text: "Texto",
       certificate_data: "Dados",
       modified_by: "Modificado por",
