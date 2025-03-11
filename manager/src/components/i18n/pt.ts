@@ -244,7 +244,7 @@ const portugueseMessages: TranslationMessages = {
       },
     },
     accessPoints: {
-      list: "Lista de APs",
+      list: "Dispositivos de Rede",
       manage: "Gestão de acessos",
       name: "Pontos de Acesso",
       fields: {
@@ -258,7 +258,7 @@ const portugueseMessages: TranslationMessages = {
     },
     certificates: {
       name: "Certificados",
-      list: "Lista de certificados",
+      list: "Gestão de certificados",
       validations: "Validações",
       fields: {
         name: "Nome",
@@ -271,7 +271,7 @@ const portugueseMessages: TranslationMessages = {
     },
     monitoring: {
       status: "Estado da rede",
-      logs: "Histórico de registos",
+      logs: "Registo de atividades ",
     },
     utilizadores: {
       name: "Utilizadores",

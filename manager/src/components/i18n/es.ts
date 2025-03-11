@@ -246,7 +246,7 @@ const spanishMessages: TranslationMessages = {
       },
     },
     accessPoints: {
-      list: "Lista de APs",
+      list: "Dispositivos de Red", 
       manage: "Gestión de accesos",
       name: "Puntos de acceso",
       fields: {
@@ -260,7 +260,7 @@ const spanishMessages: TranslationMessages = {
     },
     certificates: {
       name: "Certificados",
-      list: "Lista de certificados",
+      list: "Gestión de certificados",
       validations: "Validaciones",
       fields: {
         name: "Nombre",
@@ -273,7 +273,7 @@ const spanishMessages: TranslationMessages = {
     },
     monitoring: {
       status: "Estado de la red",
-      logs: "Histórico de registros",
+      logs: "Registro de actividades",
     },
     utilizadores: {
       name: "Usuarios",

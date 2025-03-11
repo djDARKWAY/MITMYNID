@@ -247,7 +247,7 @@ const frenchMessages: TranslationMessages = {
       },
     },
     accessPoints: {
-      list: "Liste des AP",
+      list: "Liste des points d'accès",
       manage: "Gestion des accès",
       name: "Points d'accès",
       fields: {
@@ -261,7 +261,7 @@ const frenchMessages: TranslationMessages = {
     },
     certificates: {
       name: "Certificats",
-      list: "Liste des certificats",
+      list: "Gestion des certificats",
       validations: "Validations",
       fields: {
         name: "Nom",
@@ -274,7 +274,7 @@ const frenchMessages: TranslationMessages = {
     },
     monitoring: {
       status: "État du réseau",
-      logs: "Historique des enregistrements",
+      logs: "Registre des activités",
     },
     utilizadores: {
       name: "Utilisateurs",
@@ -287,8 +287,8 @@ const frenchMessages: TranslationMessages = {
       fields: {
         nome: "Nom",
         morada: "Adresse",
-        nif: "Numéro d'identification fiscale",
-        nic: "Numéro d'identification civile",
+        nif: "Nº d'identification fiscale",
+        nic: "Nº d'identification civile",
         cc: "Carte d'identité",
         telefone: "Téléphone",
         telemovel: "Portable",
@@ -297,7 +297,7 @@ const frenchMessages: TranslationMessages = {
         ativo: "Actif",
         ult_acesso: "Dernier accès",
         roles: "Rôles",
-        username: "Utilisateur",
+        username: "Nom d'utilisateur",
         confirm_password: "Confirmer le mot de passe",
         cod_postal: "Code postal",
         validation_date: "Date de validation",

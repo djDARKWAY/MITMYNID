@@ -1,7 +1,6 @@
 import { Edit, SimpleForm, TextInput, DateInput } from "react-admin";
-import { Card, Typography, Divider, Box } from "@mui/material";
+import { Typography, Divider, Box } from "@mui/material";
 import Person from '@mui/icons-material/Person';
-import FeedOutlined from '@mui/icons-material/FeedOutlined';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 export const CertificatesEdit = () => (

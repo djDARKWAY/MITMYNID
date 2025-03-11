@@ -238,7 +238,7 @@ const englishMessages: TranslationMessages = {
       },
     },
     accessPoints: {
-      list: "AP List",
+      list: "Network Devices",
       manage: "Access management",
       name: "Access Points",
       fields: {
@@ -252,7 +252,7 @@ const englishMessages: TranslationMessages = {
     },
     certificates: {
       name: "Certificates",
-      list: "Certificate list",
+      list: "Certificate management",
       validations: "Validations",
       fields: {
         name: "Name",
@@ -265,7 +265,7 @@ const englishMessages: TranslationMessages = {
     },
     monitoring: {
       status: "Network Status",
-      logs: "Log History",
+      logs: "Activity Logs",
     },
     utilizadores: {
       name: "Users",

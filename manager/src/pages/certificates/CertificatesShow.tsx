@@ -1,5 +1,5 @@
 import { Show, SimpleShowLayout, TextField, DateField, BooleanField, ReferenceField, useRecordContext, useRedirect } from "react-admin";
-import { Card, Typography, Divider, Button, Box } from "@mui/material";
+import { Card, Typography, Divider, Box } from "@mui/material";
 import FeedOutlined from '@mui/icons-material/FeedOutlined';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { AccessTimeFilled, CardMembership } from "@mui/icons-material";
@@ -19,10 +19,6 @@ const JsonField = ({ source }: { source: string }) => {
 
 export const CertificatesShow = () => {
     const record = useRecordContext();
-
-    // Adicionando console log para verificar o valor de is_active
-    console.log("record:", record);
-    console.log("is_active:", record?.is_active);
 
     return (
         <Show>
@@ -63,8 +59,6 @@ export const CertificatesShow = () => {
                         '& .RaTextField-input': { display: 'block' } 
                     }} />
                 </Card>
-
-                <Typography variant="subtitle2" sx={{ mt: 1, fontWeight: 'bold' }}> Elementos </Typography>
                 <JsonField source="certificate_data" />
 
                 {/* Última Modificação */}
