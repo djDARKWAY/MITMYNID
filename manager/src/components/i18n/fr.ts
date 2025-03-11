@@ -272,6 +272,10 @@ const frenchMessages: TranslationMessages = {
         is_expired: "État",
       },
     },
+    monitoring: {
+      status: "État du réseau",
+      logs: "Historique",
+    },
     utilizadores: {
       name: "Utilisateurs",
       edit_title: "Modifier l'utilisateur",

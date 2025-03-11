@@ -269,6 +269,10 @@ const portugueseMessages: TranslationMessages = {
         is_expired: "Estado",
       },
     },
+    monitoring: {
+      status: "Estado da rede",
+      logs: "Histórico de registos",
+    },
     utilizadores: {
       name: "Utilizadores",
       edit_title: "Editar Utilizador",
