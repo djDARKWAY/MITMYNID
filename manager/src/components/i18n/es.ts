@@ -277,6 +277,7 @@ const spanishMessages: TranslationMessages = {
       },
     },
     companies: {
+      manage: "Gestionar empresas",
       name: "Empresas",
       list: "Empresas",
       fields: {

@@ -269,8 +269,9 @@ const englishMessages: TranslationMessages = {
       },
     },
     companies: {
-      name: "Companies",
-      list: "Companies",
+      manage: "Warehouse panel",
+      name: "Warehouse",
+      list: "Warehouse",
       fields: {
         name: "Name",
         zip_code: "Zip Code",

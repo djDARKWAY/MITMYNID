@@ -278,7 +278,8 @@ const frenchMessages: TranslationMessages = {
       },
     },
     companies: {
-      name: "Entreprises",
+      manage: "Gestion des entrepôts",
+      name: "Entrepôts",
       list: "Entreprises",
       fields: {
         name: "Nom",

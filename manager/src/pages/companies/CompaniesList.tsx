@@ -32,7 +32,7 @@ export const CompaniesList = () => {
                     <TextField source="name" label="resources.companies.fields.name" />
                     <TextField source="zip_code" label="resources.companies.fields.zip_code" />
                     <TextField source="city" label="resources.companies.fields.city" />
-                    <ReferenceField source="country_id" reference="countries" label="resources.companies.fields.country_id">
+                    <ReferenceField source="country_id" reference="countries" label="resources.companies.fields.country_id" link={false}>
                         <TextField source="name" />
                     </ReferenceField>
                 </Datagrid>

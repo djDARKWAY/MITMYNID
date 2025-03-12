@@ -233,7 +233,7 @@ const portugueseMessages: TranslationMessages = {
       config: "Configuração",
       security: "Segurança",
       accessPoints: "Pontos de Acesso",
-      companies: "Empresas",
+      companies: "Armazéns",
       certificates: "Certificados",
       monitoring: "Monitorização",
       language: "Idioma",
@@ -251,7 +251,7 @@ const portugueseMessages: TranslationMessages = {
     accessPoints: {
       list: "Dispositivos de rede",
       manage: "Gestão de acessos",
-      name: "Pontos de Acesso",
+      name: "Ponto de Acesso",
       fields: {
         company_id: "Empresa",
         location_description: "Localização",
@@ -262,7 +262,7 @@ const portugueseMessages: TranslationMessages = {
       },
     },
     certificates: {
-      name: "Certificados",
+      name: "Certificado",
       list: "Gestão de certificados",
       validations: "Validações",
       fields: {
@@ -275,8 +275,9 @@ const portugueseMessages: TranslationMessages = {
       },
     },
     companies: {
-      name: "Empresas",
-      list: "Empresas",
+      manage: "Painel de armazéns",
+      name: "Armazém",
+      list: "Armazéns",
       fields: {
         name: "Nome",
         zip_code: "Código Postal",
