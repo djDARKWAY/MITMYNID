@@ -143,6 +143,30 @@ export class CompanyController {
     await this.companyRepository.deleteById(id);
   }
 
+  @del("/companies")
+  @response(204, {
+    description: "Companies DELETE success",
+  })
+  async deleteMany(
+    @param.query.string("filter") filterStr: string
+  ): Promise<void> {
+    let filter;
+    try {
+      filter = JSON.parse(filterStr);
+    } catch (error) {
+      throw new HttpErrors.BadRequest('Invalid filter format.');
+    }
+
+    const ids = filter?.where?.id?.inq;
+    if (!ids || ids.length === 0) {
+      throw new HttpErrors.BadRequest('No IDs provided for deletion.');
+    }
+
+    await this.companyRepository.deleteAll({
+      id: { inq: ids },
+    });
+  }
+
   validateCompany(
     company: Omit<Company, "id" | "created_date" | "last_modified" | "last_modified_user">
   ): void {

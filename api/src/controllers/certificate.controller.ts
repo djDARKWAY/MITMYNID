@@ -218,6 +218,30 @@ export class CertificateController {
     await this.certificateRepository.deleteById(id);
   }
 
+  @del("/certificates")
+  @response(204, {
+    description: "Certificates DELETE success",
+  })
+  async deleteMany(
+    @param.query.string("filter") filterStr: string
+  ): Promise<void> {
+    let filter;
+    try {
+      filter = JSON.parse(filterStr);
+    } catch (error) {
+      throw new HttpErrors.BadRequest('Invalid filter format.');
+    }
+
+    const ids = filter?.where?.id?.inq;
+    if (!ids || ids.length === 0) {
+      throw new HttpErrors.BadRequest('No IDs provided for deletion.');
+    }
+
+    await this.certificateRepository.deleteAll({
+      id: { inq: ids },
+    });
+  }
+
   validateCertificates(
     certificate: Omit<Certificate, "id" | "last_modified" | "last_modified_user_id">
   ): void {
