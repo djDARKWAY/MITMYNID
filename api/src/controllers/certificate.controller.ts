@@ -197,19 +197,12 @@ export class CertificateController {
       throw new HttpErrors.NotFound('Certificado não encontrado!');
     }
 
-    const { is_active, ...certificateData } = certificate;
+    const { last_modified_user_id, ...certificateData } = certificate;
 
-    // Automatically set last_modified_user_id
-    const userId = await this.getCurrentUserId();
-    certificateData.last_modified_user_id = userId;
-
-    // Ensure last_modified is updated
-    certificateData.last_modified = new Date().toISOString();
-
-    // Remove navigational properties
-    const { last_modified_user_id, ...dataToUpdate } = certificateData;
-
-    await this.certificateRepository.updateById(id, dataToUpdate);
+    await this.certificateRepository.updateById(id, {
+      ...certificateData,
+      last_modified: new Date().toISOString(),
+    });
   }
 
   // DELETE endpoint:

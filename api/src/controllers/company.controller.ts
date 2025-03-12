@@ -124,7 +124,10 @@ export class CompanyController {
       throw new HttpErrors.NotFound('Armazém não encontrado!');
     }
     const { last_modified_user_id, ...companyData } = company;
-    await this.companyRepository.updateById(id, companyData);
+    await this.companyRepository.updateById(id, {
+      ...companyData,
+      last_modified: new Date().toISOString(),
+    });
   }
 
   // DELETE endpoint:
