@@ -203,7 +203,13 @@ export class CertificateController {
     const userId = await this.getCurrentUserId();
     certificateData.last_modified_user_id = userId;
 
-    await this.certificateRepository.updateById(id, certificateData);
+    // Ensure last_modified is updated
+    certificateData.last_modified = new Date().toISOString();
+
+    // Remove navigational properties
+    const { last_modified_user_id, ...dataToUpdate } = certificateData;
+
+    await this.certificateRepository.updateById(id, dataToUpdate);
   }
 
   // DELETE endpoint:

@@ -110,20 +110,21 @@ export class CompanyController {
     return this.companyRepository.findById(id, filter);
   }
 
-  // PUT endpoint:
-  @put("/companies/{id}")
+  // PATCH endpoint:
+  @patch("/companies/{id}")
   @response(204, {
-    description: "Company PUT success",
+    description: "Company PATCH success",
   })
-  async replaceById(
+  async updateById(
     @param.path.number("id") id: number,
-    @requestBody() company: Company
+    @requestBody() company: Partial<Company>
   ): Promise<void> {
     const existingCompany = await this.companyRepository.findById(id);
     if (!existingCompany) {
-      throw new HttpErrors.NotFound('Empresa não encontrada!');
+      throw new HttpErrors.NotFound('Armazém não encontrado!');
     }
-    await this.companyRepository.replaceById(id, company);
+    const { last_modified_user_id, ...companyData } = company;
+    await this.companyRepository.updateById(id, companyData);
   }
 
   // DELETE endpoint:
@@ -134,7 +135,7 @@ export class CompanyController {
   async deleteById(@param.path.number("id") id: number): Promise<void> {
     const existingCompany = await this.companyRepository.findById(id);
     if (!existingCompany) {
-      throw new HttpErrors.NotFound('Empresa não encontrada!');
+      throw new HttpErrors.NotFound('Armazém não encontrado!');
     }
     await this.companyRepository.deleteById(id);
   }
@@ -147,8 +148,8 @@ export class CompanyController {
     // Mandatory fields
     const rules: { [key: string]: { condition: boolean; message: string }[] } = {
       name: [
-        { condition: !company.name, message: "O nome da empresa é obrigatório!" },
-        { condition: company.name?.length > 255, message: "O nome da empresa não pode ter mais de 255 caracteres!" }
+        { condition: !company.name, message: "O nome do armazém é obrigatório!" },
+        { condition: company.name?.length > 255, message: "O nome do armazém não pode ter mais de 255 caracteres!" }
       ],
       address: [
         { condition: !company.address, message: "O endereço é obrigatório!" },

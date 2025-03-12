@@ -405,7 +405,7 @@ const englishMessages: TranslationMessages = {
         linha_3: "Line 3",
         pessoa_contacto: "Contact person",
         imagem: "Image",
-        url_empresa: "Company URL",
+        url_empresa: "Warehouse URL",
       },
     },
   },
