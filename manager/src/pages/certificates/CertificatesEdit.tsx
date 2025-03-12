@@ -1,7 +1,6 @@
 import { Edit, TabbedForm, TextInput, DateInput } from "react-admin";
 import { Typography, Divider, Box } from "@mui/material";
-import Person from '@mui/icons-material/Person';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import { CalendarToday, Person } from "@mui/icons-material";
 
 export const CertificatesEdit = () => (
     <Edit>
@@ -17,7 +16,7 @@ export const CertificatesEdit = () => (
             </TabbedForm.Tab>
             <TabbedForm.Tab label="Detalhes">
                 <Box display="flex" alignItems="center">
-                    <CalendarTodayIcon />
+                    <CalendarToday />
                     <Typography variant="h6" sx={{ ml: 1 }}>Detalhes</Typography>
                 </Box>
                 <Divider sx={{ mb: 3 }} />
