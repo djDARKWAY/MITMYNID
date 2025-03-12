@@ -13,6 +13,7 @@ export const CompaniesEdit = () => (
                 <Divider sx={{ mb: 3 }} />
                 <TextInput source="name" label="show.companies.name" fullWidth />
             </TabbedForm.Tab>
+            
             <TabbedForm.Tab label="Localização">
                 <Box display="flex" alignItems="center">
                     <Home />
@@ -20,12 +21,18 @@ export const CompaniesEdit = () => (
                 </Box>
                 <Divider sx={{ mb: 3 }} />
                 <TextInput source="address" label="show.companies.address" fullWidth />
-                <TextInput source="city" label="show.companies.city" fullWidth />
-                <ReferenceInput source="country_id" reference="countries" label="show.companies.country" perPage={200} sort={{ field: 'name', order: 'ASC' }}>
-                    <SelectInput optionText="name" fullWidth />
-                </ReferenceInput>
+
+                <Box display="flex" gap={2} width="100%" alignItems="center">
+                    <Box sx={{ width: "50%" }}>
+                        <ReferenceInput source="country_id" reference="countries" label="show.companies.country" perPage={180} sort={{ field: 'name', order: 'ASC' }} >
+                            <SelectInput optionText="name" fullWidth />
+                        </ReferenceInput>
+                    </Box>
+                    <TextInput source="city" label="show.companies.city" sx={{ width: "50%" }} />
+                </Box>
                 <TextInput source="zip_code" label="show.companies.zip_code" fullWidth />
             </TabbedForm.Tab>
+
             <TabbedForm.Tab label="Contactos">
                 <Box display="flex" alignItems="center">
                     <ContactMail />
