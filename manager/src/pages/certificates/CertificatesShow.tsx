@@ -1,8 +1,6 @@
 import { Show, SimpleShowLayout, TextField, DateField, BooleanField, ReferenceField, useRecordContext, useRedirect } from "react-admin";
 import { Card, Typography, Divider, Box } from "@mui/material";
-import FeedOutlined from '@mui/icons-material/FeedOutlined';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import { AccessTimeFilled, CardMembership } from "@mui/icons-material";
+import { FeedOutlined, AccessTimeFilled, CardMembership, CalendarToday } from "@mui/icons-material";
 
 const JsonField = ({ source }: { source: string }) => {
     const record = useRecordContext();
@@ -35,7 +33,7 @@ export const CertificatesShow = () => {
 
                 {/* Detalhes do certificado */}
                 <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
-                    <CalendarTodayIcon />
+                    <CalendarToday />
                     <Typography variant="h6" sx={{ ml: 1 }}> Detalhes </Typography>
                 </Box>
                 <Divider sx={{ mb: 1 }} />

@@ -1,5 +1,6 @@
 import { CompaniesList } from "./CompaniesList";
 import { CompaniesShow } from "./CompaniesShow";
+import { CompaniesEdit } from "./CompaniesEdit";
 
 export const companies = (permissions?: string[]) => {
     let companies = null;
@@ -11,6 +12,7 @@ export const companies = (permissions?: string[]) => {
             companies = {
                 list: CompaniesList,
                 show: CompaniesShow,
+                edit: CompaniesEdit,
             };
             break;
         }

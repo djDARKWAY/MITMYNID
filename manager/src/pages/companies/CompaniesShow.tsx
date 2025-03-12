@@ -1,7 +1,6 @@
 import { Show, SimpleShowLayout, TextField, DateField, ReferenceField } from "react-admin";
 import { Typography, Divider, Box } from "@mui/material";
-import Person from "@mui/icons-material/Person";
-import { Home, ContactMail, Language, AccessTimeFilled } from "@mui/icons-material";
+import { Home, ContactMail, Language, AccessTimeFilled, Person } from "@mui/icons-material";
 
 export const CompaniesShow = () => (
     <Show>
