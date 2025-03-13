@@ -196,10 +196,9 @@ export class CompanyController {
     });
 
     // Optional fields
-    const phoneRegex = /^\+?\d{1,3}[-.\s]?\(?\d+\)?[-.\s]?\d+[-.\s]?\d+$/;
     if (company.email) validate(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(company.email), "email", "O email não é válido!");
-    if (company.contact) validate(!phoneRegex.test(company.contact), "contact", "O contacto deve ser um número de telefone válido!");
-    if (company.phone) validate(!phoneRegex.test(company.phone), "phone", "O telefone do responsável deve ser um número de telefone válido!");
-    if (company.website) validate(!/^https?:\/\/[^\s$.?#].[^\s]*$/.test(company.website), "website", "O website deve ser uma URL válida!");
+    if (company.contact) validate(!Number.isInteger(company.contact), "contact", "O contacto deve ser um número inteiro!");
+    if (company.phone) validate(!Number.isInteger(company.phone), "phone", "O telefone do responsável deve ser um número inteiro!");
+    if (company.website) validate(!/^(https?:\/\/)?[^\s$.?#].[^\s]*$/.test(company.website), "website", "O website deve ser uma URL válida!");
   }
 }

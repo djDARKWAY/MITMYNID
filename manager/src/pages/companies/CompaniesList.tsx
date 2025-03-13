@@ -1,9 +1,15 @@
-import { List, Datagrid, TextField, SimpleList, usePermissions, ReferenceField } from "react-admin";
-import { useTheme } from '@mui/material';
+import { List, Datagrid, TextField, SimpleList, usePermissions, ReferenceField, TopToolbar, CreateButton } from "react-admin";
+import { useTheme, Box, Typography, Divider } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CustomEmptyPage from "../../components/general/CustomEmptyPage";
 import CustomPagination, { perPageDefault } from "../../components/general/CustomPagination";
 import { CompaniesFilters } from "./CompaniesFilter";
+
+const ListActions = () => (
+    <TopToolbar>
+        <CreateButton label="NOVO" />
+    </TopToolbar>
+);
 
 export const CompaniesList = () => {
     const { permissions } = usePermissions();
@@ -19,6 +25,7 @@ export const CompaniesList = () => {
             empty={<CustomEmptyPage />}
             exporter={false}
             title="resources.companies.name"
+            actions={<ListActions />}
             sx={{ paddingLeft: '10px' }}
         >
             {isSmall ? (

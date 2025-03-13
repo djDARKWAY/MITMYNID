@@ -52,7 +52,7 @@ export class Company extends Entity {
   city: string;
 
   @property({
-    type: "number",
+    type: "string",
     required: true,
     postgresql: {
       columnName: "country_id",
@@ -85,24 +85,24 @@ export class Company extends Entity {
   email?: string;
 
   @property({
-    type: "string",
+    type: "number",
     postgresql: {
       columnName: "contact",
-      dataType: "text",
+      dataType: "integer",
       nullable: "YES",
     },
   })
-  contact?: string;
+  contact?: number;
 
   @property({
-    type: "string",
+    type: "number",
     postgresql: {
       columnName: "phone",
-      dataType: "text",
+      dataType: "integer",
       nullable: "YES",
     },
   })
-  phone?: string;
+  phone?: number;
 
   @property({
     type: "string",
@@ -139,7 +139,7 @@ export class Company extends Entity {
   last_modified: string;
 
   @belongsTo(() => User, { name: "last_modified_user_id" })
-  last_modified_user_id?: number;
+  last_modified_user_id?: string;
 
   constructor(data?: Partial<Company>) {
     super(data);

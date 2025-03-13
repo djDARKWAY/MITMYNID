@@ -15,5 +15,4 @@ export const userFilters = (permissions : string[]) => {
     }
 
     return filters;
-
 }
