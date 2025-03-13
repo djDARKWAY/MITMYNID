@@ -21,6 +21,11 @@ export class Country extends Entity {
   })
   country_code: number;
 
+  @property({
+    type: 'string',
+    required: false,
+  })
+  flag_url?: string;
 
   constructor(data?: Partial<Country>) {
     super(data);

@@ -1,4 +1,4 @@
-import { Edit, TabbedForm, Tab, ReferenceInput, SelectInput, TextInput } from "react-admin";
+import { Edit, TabbedForm, ReferenceInput, SelectInput, TextInput } from "react-admin";
 import { Typography, Divider, Box } from "@mui/material";
 import { Home, ContactMail, Language, Person } from "@mui/icons-material";
 
@@ -25,7 +25,7 @@ export const CompaniesEdit = () => (
                 <Box display="flex" gap={2} width="100%" alignItems="center">
                     <Box sx={{ width: "50%" }}>
                         <ReferenceInput source="country_id" reference="countries" label="show.companies.country" perPage={180} sort={{ field: 'name', order: 'ASC' }} >
-                            <SelectInput optionText="name" fullWidth />
+                            <SelectInput optionText={country => ( <Box display="flex" alignItems="center"> <img src={country.flag_url} alt={country.name} style={{ width: 20, height: 15, marginRight: 8 }} /> {country.name} </Box> )} fullWidth />
                         </ReferenceInput>
                     </Box>
                     <TextInput source="city" label="show.companies.city" sx={{ width: "50%" }} />
