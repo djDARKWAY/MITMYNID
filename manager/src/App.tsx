@@ -21,6 +21,7 @@ import { AccessPointsList } from './pages/accessPoints/AccessPointsList';
 import { accessPoints } from './pages/accessPoints';
 import { CompaniesList } from './pages/companies/CompaniesList';
 import { companies } from './pages/companies';
+import StatusTest from './pages/status/StatusTest';
 
 const httpClient = (url: string, options = {}) => {
   //@ts-ignore
@@ -79,6 +80,7 @@ const App = () => {
             <Route path="/certificates" element={<CertificatesList />} />
             <Route path="/access-points" element={<AccessPointsList />} />
             <Route path="/companies" element={<CompaniesList />} />
+            <Route path="/status-test" element={<StatusTest />} />
 
             <Route path="/unauthorized" key={"/unauthorized"} element={<Unauthorized />} />
           </CustomRoutes>,

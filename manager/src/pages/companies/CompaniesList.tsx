@@ -5,12 +5,6 @@ import CustomEmptyPage from "../../components/general/CustomEmptyPage";
 import CustomPagination, { perPageDefault } from "../../components/general/CustomPagination";
 import { CompaniesFilters } from "./CompaniesFilter";
 
-const ListActions = () => (
-    <TopToolbar>
-        <CreateButton label="NOVO" />
-    </TopToolbar>
-);
-
 export const CompaniesList = () => {
     const { permissions } = usePermissions();
     const isSmall = useMediaQuery(useTheme().breakpoints.down('lg'));
@@ -25,7 +19,6 @@ export const CompaniesList = () => {
             empty={<CustomEmptyPage />}
             exporter={false}
             title="resources.companies.name"
-            actions={<ListActions />}
             sx={{ paddingLeft: '10px' }}
         >
             {isSmall ? (
@@ -35,7 +28,7 @@ export const CompaniesList = () => {
                     linkType={"edit"}
                 />
             ) : (
-                <Datagrid rowClick="show">
+                <Datagrid rowClick="show"> 
                     <TextField source="name" label="resources.companies.fields.name" />
                     <TextField source="zip_code" label="resources.companies.fields.zip_code" />
                     <TextField source="city" label="resources.companies.fields.city" />
