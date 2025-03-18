@@ -30,7 +30,7 @@ const DomibusTestPage = () => {
         }
     };
 
-    const handlePostPmode = async () => {
+    const handlePostPmode = async (url: string) => {
         if (!file || !description) {
             setError("É necessário selecionar um ficheiro XML e fornecer uma descrição.");
             return;
@@ -41,7 +41,7 @@ const DomibusTestPage = () => {
         formData.append("description", description);
 
         try {
-            const response = await fetch("http://192.168.1.64:8080/domibus/ext/pmode", {
+            const response = await fetch(url, {
                 method: "POST",
                 headers: {
                     "Authorization": "Basic " + btoa("DomibusAdmin:dF55fKYf7fdF55fKYf7f!")
@@ -73,7 +73,6 @@ const DomibusTestPage = () => {
             <Button variant="contained" color="info" onClick={() => handleRequest("http://192.168.1.64:8080/domibus/ext/monitoring/messages/failed")} style={{ marginLeft: "10px" }}> Failed Messages </Button>
             <Button variant="contained" color="info" onClick={() => handleRequest("http://192.168.1.64:8080/domibus/ext/truststore/entries")} style={{ marginLeft: "10px" }}> Truststore Entries </Button>
             <Button variant="contained" color="info" onClick={() => handleRequest("http://192.168.1.64:8080/domibus/ext/party/processes")} style={{ marginLeft: "10px" }}> Party Processes </Button>
-            <Button variant="contained" color="info" onClick={() => handleRequest("http://192.168.1.64:8080/domibus/ext/monitoring/application/status")} style={{ marginLeft: "10px" }}> Application Status </Button>
 
             {/* Upload de ficheiro e POST */}
             <Paper elevation={3} style={{ marginTop: "20px", padding: "20px" }}>
@@ -92,9 +91,7 @@ const DomibusTestPage = () => {
                     onChange={(e) => setDescription(e.target.value)}
                     style={{ marginTop: "10px" }}
                 />
-                <Button variant="contained" color="primary" onClick={handlePostPmode} style={{ marginTop: "10px" }}>
-                    Enviar PMode
-                </Button>
+                <Button variant="contained" color="info" onClick={() => handleRequest("http://192.168.1.64:8080/domibus/ext/pmode")} style={{ marginTop: "10px" }}> Send PMode </Button>
             </Paper>
 
             {responseData && (
