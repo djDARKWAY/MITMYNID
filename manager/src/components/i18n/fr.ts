@@ -292,6 +292,15 @@ const frenchMessages: TranslationMessages = {
       status: "État du réseau",
       logs: "Registre des activités",
     },
+    logs: {
+      name: "Journaux",
+      fields: {
+        category: "Catégorie",
+        message: "Message",
+        timestamp: "Date",
+        history: "Historique",
+      },
+    },
     utilizadores: {
       name: "Utilisateurs",
       edit_title: "Modifier l'utilisateur",

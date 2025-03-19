@@ -33,13 +33,6 @@ const DashboardStatusPage = () => {
     }
   };
 
-  useEffect(() => {
-    fetchData("/monitoring/application/status", (data) => setServices(data.services || []));
-    fetchData("/metrics/metrics", (data) => setCounters(data.counters || {}));
-    fetchData("/party", setParties);
-    fetchData("/truststore/entries", setTruststoreEntries);
-  }, []);
-
   const getStatusColor = (status: string) => {
     switch (status) {
       case "NORMAL":
@@ -52,6 +45,13 @@ const DashboardStatusPage = () => {
         return "default";
     }
   };
+
+  useEffect(() => {
+    fetchData("/monitoring/application/status", (data) => setServices(data.services || []));
+    fetchData("/metrics/metrics", (data) => setCounters(data.counters || {}));
+    fetchData("/party", setParties);
+    fetchData("/truststore/entries", setTruststoreEntries);
+  }, []);
 
   return (
     <Container>
@@ -102,15 +102,12 @@ const DashboardStatusPage = () => {
             <Grid item xs={12} sm={6} md={4} key={index}>
               <Typography variant="h6">{party.name}</Typography>
               <Typography variant="body2"><strong>Endpoint:</strong> {party.endpoint}</Typography>
-              
               {party.identifiers && party.identifiers.length > 0 && (
                 <Typography variant="body2"><strong>Party ID:</strong> {party.identifiers[0].partyId}</Typography>
               )}
-              
               <Typography variant="body2">
                 <strong>Inicia:</strong> {party.processesWithPartyAsInitiator.map((p: { name: string }) => p.name).join(", ") || "Nenhum"}
               </Typography>
-              
               <Typography variant="body2">
                 <strong>Responde:</strong> {party.processesWithPartyAsResponder.map((p: { name: string }) => p.name).join(", ") || "Nenhum"}
               </Typography>

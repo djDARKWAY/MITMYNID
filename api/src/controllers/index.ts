@@ -9,3 +9,4 @@ export * from './certificate.controller';
 export * from './company.controller';
 export * from './access-point.controller';
 export * from './country.controller';
+export * from './log.controller';

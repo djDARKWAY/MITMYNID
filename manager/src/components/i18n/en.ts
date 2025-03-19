@@ -283,6 +283,15 @@ const englishMessages: TranslationMessages = {
       status: "Network Status",
       logs: "Activity Logs",
     },
+    logs: {
+      name: "Logs",
+      fields: {
+        category: "Category",
+        message: "Message",
+        timestamp: "Date",
+        history: "History",
+      },
+    },
     utilizadores: {
       name: "Users",
       edit_title: "Edit User",

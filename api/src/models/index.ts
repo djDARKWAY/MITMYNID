@@ -11,3 +11,4 @@ export * from "./certificate.model";
 export * from "./company.model";
 export * from "./access-point.model";
 export * from './country.model';
+export * from './log.model';

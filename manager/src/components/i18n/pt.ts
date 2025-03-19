@@ -1,4 +1,5 @@
 import { TranslationMessages } from "react-admin";
+import { logs } from "../../pages/logs";
 
 const portugueseMessages: TranslationMessages = {
   ra: {
@@ -288,6 +289,15 @@ const portugueseMessages: TranslationMessages = {
     monitoring: {
       status: "Estado da rede",
       logs: "Registo de atividades ",
+    },
+    logs : {
+      name: "Logs",
+      fields: {
+        category: "Categoria",
+        message: "Mensagem",
+        timestamp: "Data",
+        history: "Histórico",
+      }
     },
     utilizadores: {
       name: "Utilizadores",

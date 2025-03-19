@@ -21,6 +21,8 @@ import { AccessPointsList } from './pages/accessPoints/AccessPointsList';
 import { accessPoints } from './pages/accessPoints';
 import { CompaniesList } from './pages/companies/CompaniesList';
 import { companies } from './pages/companies';
+import { LogsList } from './pages/logs/logsList';
+import { logs } from './pages/logs';
 import StatusTest from './pages/status/StatusTest';
 import StatusTestv2 from './pages/status/StatusTestv2';
 
@@ -72,6 +74,7 @@ const App = () => {
           <Resource name="certificates" {...certificates(permissions)} />,
           <Resource name="access-points" {...accessPoints(permissions)} />,
           <Resource name="companies" {...companies(permissions)} />,
+          <Resource name="logs" {...logs(permissions)} />,
 
           <CustomRoutes>
             <Route path="/dashboard" element={<Dashboard />} />
@@ -81,6 +84,8 @@ const App = () => {
             <Route path="/certificates" element={<CertificatesList />} />
             <Route path="/access-points" element={<AccessPointsList />} />
             <Route path="/companies" element={<CompaniesList />} />
+            <Route path="/logs" element={<LogsList />} />
+
             <Route path="/status-test" element={<StatusTest />} />
             <Route path="/status-testv2" element={<StatusTestv2 />} />
 

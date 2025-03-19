@@ -291,6 +291,15 @@ const spanishMessages: TranslationMessages = {
       status: "Estado de la red",
       logs: "Registro de actividades",
     },
+    logs: {
+      name: "Registros",
+      fields: {
+        category: "Categoría",
+        message: "Mensaje",
+        timestamp: "Fecha",
+        history: "Histórico",
+      },
+    },
     utilizadores: {
       name: "Usuarios",
       edit_title: "Editar usuario",
