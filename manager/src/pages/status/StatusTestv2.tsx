@@ -7,6 +7,7 @@ const DashboardStatusPage = () => {
   const [services, setServices] = useState<any[]>([]);
   const [counters, setCounters] = useState<any>({});
   const [parties, setParties] = useState<any[]>([]);
+  const [truststoreEntries, setTruststoreEntries] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const fetchData = async (endpoint: string, setState: (data: any) => void) => {
@@ -36,6 +37,7 @@ const DashboardStatusPage = () => {
     fetchData("/monitoring/application/status", (data) => setServices(data.services || []));
     fetchData("/metrics/metrics", (data) => setCounters(data.counters || {}));
     fetchData("/party", setParties);
+    fetchData("/truststore/entries", setTruststoreEntries);
   }, []);
 
   const getStatusColor = (status: string) => {
@@ -58,10 +60,9 @@ const DashboardStatusPage = () => {
       {/* Estado da rede */}
       <Typography variant="h5" gutterBottom> Estado da rede </Typography>
       <Grid item xs={12} sm={6} md={4} style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "5px" }}>
-        <Typography variant="h6">DOMIBUS</Typography>
-        <Chip
-          label={services.every(service => service.status === "NORMAL") ? "NORMAL" : services.some(service => service.status === "CRITICAL") ? "CRITICAL" : "WARNING"}
-        />
+        <Typography variant="subtitle1">
+          DOMIBUS: {services.every(service => service.status === "NORMAL") ? "NORMAL" : services.some(service => service.status === "CRITICAL") ? "CRITICAL" : "WARNING"}
+        </Typography>
       </Grid>
       <Paper elevation={3} style={{ padding: "20px", marginBottom: "20px" }}>
         <Grid container spacing={3}>
@@ -113,6 +114,23 @@ const DashboardStatusPage = () => {
               <Typography variant="body2">
                 <strong>Responde:</strong> {party.processesWithPartyAsResponder.map((p: { name: string }) => p.name).join(", ") || "Nenhum"}
               </Typography>
+            </Grid>
+          ))}
+        </Grid>
+      </Paper>
+
+      {/* Truststore Entries */}
+      <Typography variant="h5" gutterBottom> Truststore Entries </Typography>
+      <Paper elevation={3} style={{ padding: "20px", marginBottom: "20px" }}>
+        <Grid container spacing={3}>
+          {truststoreEntries.map((entry, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <Typography variant="h6">{entry.name}</Typography>
+              <Typography variant="body2"><strong>Subject:</strong> {entry.subject}</Typography>
+              <Typography variant="body2"><strong>Issuer:</strong> {entry.issuer}</Typography>
+              <Typography variant="body2"><strong>Válido de:</strong> {entry.validFrom}</Typography>
+              <Typography variant="body2"><strong>Válido até:</strong> {entry.validUntil}</Typography>
+              <Typography variant="body2"><strong>Fingerprint:</strong> {entry.fingerprints}</Typography>
             </Grid>
           ))}
         </Grid>
