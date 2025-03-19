@@ -41,6 +41,15 @@ export class LogController {
   async find(
     @param.filter(Log) filter?: Filter<Log>,
   ): Promise<Log[]> {
+    if (filter?.where && 'timestamp' in filter.where) {
+      const timestamp = (filter.where as any).timestamp;
+      (filter.where as any).timestamp = {
+        between: [
+          new Date(timestamp).toISOString(),
+          new Date(timestamp).toISOString().replace("T00:00:00.000Z", "T23:59:59.999Z")
+        ]
+      };
+    }
     return this.logRepository.find(filter);
   }
 

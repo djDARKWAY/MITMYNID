@@ -257,7 +257,7 @@ const MyMenu = ({ dense = false }: MenuProps) => {
           />
           {permissions.includes("ADMIN") && (
             <MenuItemLink
-              to={{ pathname: "/." }}
+              to={{ pathname: "/logs" }}
               className={"submenuItem " + (open ? "open" : "close")}
               primaryText={translate(`resources.monitoring.logs`)}
               sx={{ color: !open ? "transparent" : "default" }}
