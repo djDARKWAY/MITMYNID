@@ -21,7 +21,7 @@ import { AccessPointsList } from './pages/accessPoints/AccessPointsList';
 import { accessPoints } from './pages/accessPoints';
 import { CompaniesList } from './pages/companies/CompaniesList';
 import { companies } from './pages/companies';
-import { LogsList } from './pages/logs/logsList';
+import { LogsList } from './pages/logs/LogsList';
 import { logs } from './pages/logs';
 import StatusTest from './pages/status/StatusTest';
 import StatusTestv2 from './pages/status/StatusTestv2';
