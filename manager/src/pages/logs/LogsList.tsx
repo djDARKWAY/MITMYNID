@@ -31,7 +31,10 @@ export const LogsList = () => {
             ) : (
                 <Datagrid rowClick="show" bulkActionButtons={false}> 
                     <FunctionField label="resources.logs.fields.type" render={record => record?.type?.type} />
-                    <DateField source="timestamp" label="resources.logs.fields.timestamp" />
+                    <FunctionField label="resources.logs.fields.timestamp" render={record => {
+                        const date = new Date(record.timestamp);
+                        return `${date.toLocaleString('pt-PT', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })}.${date.getMilliseconds()}`;
+                    }} />
                     <TextField source="message" label="resources.logs.fields.message" />
                 </Datagrid>
             )}
