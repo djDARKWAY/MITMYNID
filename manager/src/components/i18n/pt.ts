@@ -295,7 +295,7 @@ const portugueseMessages: TranslationMessages = {
       fields: {
         category: "Categoria",
         message: "Mensagem",
-        timestamp: "Data",
+        timestamp: "Data/hora",
         history: "Histórico",
       }
     },

@@ -288,7 +288,7 @@ const englishMessages: TranslationMessages = {
       fields: {
         category: "Category",
         message: "Message",
-        timestamp: "Date",
+        timestamp: "Date/hour",
         history: "History",
       },
     },

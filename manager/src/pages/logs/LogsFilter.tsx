@@ -29,7 +29,7 @@ export const LogsFilters = (permissions: string[]) => {
 
     const filters = [
         <SelectInput key="type_id" source="type_id" label="pos.logs.type" choices={logTypes.map(logType => ({ id: logType.id, name: logType.type }))} fullWidth alwaysOn resettable />,
-        <DateInput key="timestamp" source="timestamp" label="pos.logs.timestamp" fullWidth />,
+        <DateInput key="timestamp" source="timestamp" label="pos.logs.timestamp" fullWidth alwaysOn/>,
     ];
 
     return filters;
