@@ -18,12 +18,14 @@ import {
   response,
 } from '@loopback/rest';
 import {Log} from '../models';
-import {LogRepository} from '../repositories';
+import {LogRepository, LogTypeRepository} from '../repositories';
 
 export class LogController {
   constructor(
     @repository(LogRepository)
-    public logRepository : LogRepository,
+    public logRepository: LogRepository,
+    @repository(LogTypeRepository)
+    public logTypeRepository: LogTypeRepository,
   ) {}
 
   @get('/logs')
@@ -50,7 +52,10 @@ export class LogController {
         ]
       };
     }
-    return this.logRepository.find(filter);
+    return this.logRepository.find({
+      include: [{relation: 'type'}],
+        ...filter
+  });
   }
 
   @get('/logs/types')
@@ -66,8 +71,7 @@ export class LogController {
     },
   })
   async findLogTypes(): Promise<string[]> {
-    const logs = await this.logRepository.find();
-    const types = logs.map(log => log.type);
-    return Array.from(new Set(types));
+    const logTypes = await this.logTypeRepository.find();
+    return logTypes.map(logType => logType.type);
   }
 }

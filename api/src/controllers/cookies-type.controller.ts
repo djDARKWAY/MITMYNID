@@ -30,32 +30,6 @@ export class CookiesTypeController {
     @inject(RestBindings.Http.RESPONSE) private response: Response,
   ) {}
 
-  // @post('/cookiesTypes')
-  // @response(200, {
-  //   description: 'CookiesType model instance',
-  //   content: {'application/json': {schema: getModelSchemaRef(CookiesType)}},
-  // })
-  // async create(
-  //   @requestBody({
-  //     content: {
-  //       'application/json': {
-  //         schema: getModelSchemaRef(CookiesType, {
-  //           title: 'NewCookiesType',
-  //           exclude: ['id'],
-  //         }),
-  //       },
-  //     },
-  //   })
-  //   cookiesType: Omit<CookiesType, 'id'>,
-  // ): Promise<CookiesType> {
-  //   return this.cookiesTypeRepository.create(cookiesType);
-  // }
-
-  // @get('/cookiesTypes/count')
-  // @response(200, {
-  //   description: 'CookiesType model count',
-  //   content: {'application/json': {schema: CountSchema}},
-  // })
   async count(
     @param.where(CookiesType) where?: Where<CookiesType>,
   ): Promise<Count> {
@@ -84,25 +58,6 @@ export class CookiesTypeController {
     });
   }
 
-  // @patch('/cookiesTypes')
-  // @response(200, {
-  //   description: 'CookiesType PATCH success count',
-  //   content: {'application/json': {schema: CountSchema}},
-  // })
-  // async updateAll(
-  //   @requestBody({
-  //     content: {
-  //       'application/json': {
-  //         schema: getModelSchemaRef(CookiesType, {partial: true}),
-  //       },
-  //     },
-  //   })
-  //   cookiesType: CookiesType,
-  //   @param.where(CookiesType) where?: Where<CookiesType>,
-  // ): Promise<Count> {
-  //   return this.cookiesTypeRepository.updateAll(cookiesType, where);
-  // }
-
   @get('/cookiesTypes/{id}')
   @response(200, {
     description: 'CookiesType model instance',
@@ -118,41 +73,4 @@ export class CookiesTypeController {
   ): Promise<CookiesType> {
     return this.cookiesTypeRepository.findById(id, filter);
   }
-
-  // @patch('/cookiesTypes/{id}')
-  // @response(204, {
-  //   description: 'CookiesType PATCH success',
-  // })
-  // async updateById(
-  //   @param.path.number('id') id: number,
-  //   @requestBody({
-  //     content: {
-  //       'application/json': {
-  //         schema: getModelSchemaRef(CookiesType, {partial: true}),
-  //       },
-  //     },
-  //   })
-  //   cookiesType: CookiesType,
-  // ): Promise<void> {
-  //   await this.cookiesTypeRepository.updateById(id, cookiesType);
-  // }
-
-  // @put('/cookiesTypes/{id}')
-  // @response(204, {
-  //   description: 'CookiesType PUT success',
-  // })
-  // async replaceById(
-  //   @param.path.number('id') id: number,
-  //   @requestBody() cookiesType: CookiesType,
-  // ): Promise<void> {
-  //   await this.cookiesTypeRepository.replaceById(id, cookiesType);
-  // }
-
-  // @del('/cookiesTypes/{id}')
-  // @response(204, {
-  //   description: 'CookiesType DELETE success',
-  // })
-  // async deleteById(@param.path.number('id') id: number): Promise<void> {
-  //   await this.cookiesTypeRepository.deleteById(id);
-  // }
 }

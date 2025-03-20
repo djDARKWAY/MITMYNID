@@ -12,3 +12,4 @@ export * from './certificate.repository';
 export * from './company.repository';
 export * from './country.repository';
 export * from './log.repository';
+export * from './log-type.repository';

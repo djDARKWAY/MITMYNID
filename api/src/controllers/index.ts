@@ -10,3 +10,4 @@ export * from './company.controller';
 export * from './access-point.controller';
 export * from './country.controller';
 export * from './log.controller';
+export * from './log-type.controller';

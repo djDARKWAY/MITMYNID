@@ -1,4 +1,5 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, belongsTo } from '@loopback/repository';
+import {LogType} from './log-type.model';
 
 @model()
 export class Log extends Entity {
@@ -8,12 +9,6 @@ export class Log extends Entity {
     generated: true,
   })
   id?: number;
-
-  @property({
-    type: 'string',
-    required: true,
-  })
-  type: string;
 
   @property({
     type: 'string',
@@ -32,11 +27,8 @@ export class Log extends Entity {
   })
   metadata?: object;
 
-  @property({
-    type: 'string',
-  })
-  icon?: string;
-
+  @belongsTo(() => LogType, {name: 'type'})
+  type_id: number;
 
   constructor(data?: Partial<Log>) {
     super(data);
