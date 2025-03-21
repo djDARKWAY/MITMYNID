@@ -91,7 +91,7 @@ const DomibusTestPage = () => {
                     onChange={(e) => setDescription(e.target.value)}
                     style={{ marginTop: "10px" }}
                 />
-                <Button variant="contained" color="info" onClick={() => handleRequest("http://192.168.1.64:8080/domibus/ext/pmode")} style={{ marginTop: "10px" }}> Send PMode </Button>
+                <Button variant="contained" color="info" onClick={() => handlePostPmode("http://192.168.1.64:8080/domibus/ext/pmode")} style={{ marginTop: "10px" }}> Send PMode </Button>
             </Paper>
 
             {responseData && (
