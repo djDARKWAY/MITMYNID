@@ -217,6 +217,10 @@ const englishMessages: TranslationMessages = {
       name: "Name",
       country: "Country",
     },
+    logs: {
+      type: "Category",
+      timestamp: "Date/Time",
+    },
     labels: {
       search: "Search by name",
       searchTitle: "Search by title",

@@ -225,6 +225,10 @@ const spanishMessages: TranslationMessages = {
       name: "Nombre",
       country: "País",
     },
+    logs: {
+      type: "Categoría",
+      timestamp: "Fecha/Hora",
+    },
     labels: {
       search: "Buscar por nombre",
       searchTitle: "Buscar por título",

@@ -1,5 +1,6 @@
 import { TranslationMessages } from "react-admin";
 import { logs } from "../../pages/logs";
+import { time } from "console";
 
 const portugueseMessages: TranslationMessages = {
   ra: {
@@ -223,6 +224,10 @@ const portugueseMessages: TranslationMessages = {
     companies: {
       name: "Nome",
       country: "País",
+    },
+    logs:{
+      type: "Categoria",
+      timestamp: "Data/hora",
     },
     labels: {
       search: "Procurar por nome",

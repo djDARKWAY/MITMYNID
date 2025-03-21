@@ -226,6 +226,10 @@ const frenchMessages: TranslationMessages = {
       name: "Nom",
       country: "Pays",
     },
+    logs: {
+      type: "Catégorie",
+      timestamp: "Date/heure",
+    },
     labels: {
       search: "Rechercher par nom",
       searchTitle: "Rechercher par titre",
