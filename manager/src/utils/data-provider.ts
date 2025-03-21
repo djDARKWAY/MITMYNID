@@ -193,7 +193,7 @@ const lb4Provider = (
 
     }
 
-    const result = await httpClient(`${apiUrl}/${resource}/one`, {
+    const result = await httpClient(`${apiUrl}/${resource}`, {
       method: "POST",
       body: JSON.stringify(params.data),
       headers: new Headers({

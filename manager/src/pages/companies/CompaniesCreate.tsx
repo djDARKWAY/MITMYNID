@@ -99,7 +99,7 @@ const CompaniesCreate = () => {
               checked={useEmailAsContact}
               onChange={(e) => setUseEmailAsContact(e.target.checked)}
             />
-            <Typography>Usar email como contato</Typography>
+            <Typography>Usar email como contacto</Typography>
           </Box>
 
           {!useEmailAsContact && (

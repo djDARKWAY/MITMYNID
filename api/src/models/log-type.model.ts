@@ -22,7 +22,7 @@ export class LogType extends Entity {
   @property({
     type: 'string',
   })
-  icon?: string;
+  description?: string;
 
 
   constructor(data?: Partial<LogType>) {

@@ -1,5 +1,4 @@
-import { List, DatagridConfigurable , TextField, FunctionField, SimpleList, usePermissions, DateField } from "react-admin";
-import * as Icon from '@mui/icons-material'; // Import all Material-UI icons
+import { List, DatagridConfigurable , TextField, FunctionField, SimpleList, usePermissions } from "react-admin";
 import { useTheme } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CustomEmptyPage from "../../components/general/CustomEmptyPage";
@@ -10,6 +9,18 @@ export const LogsList = () => {
     const { permissions } = usePermissions();
     const isSmall = useMediaQuery(useTheme().breakpoints.down('lg'));
 
+    const getBackgroundColor = (logType: string) => {
+        switch (logType) {
+            case "INFO": return "#90A4AE";
+            case "ERROR": return "#F44336";
+            case "WARNING": return "#FFA500";
+            case "DEBUG": return "#505050";
+            case "SECURITY": return "#2196F3";
+            case "AUDIT": return "#4CAF50";
+            default: return "#000000";
+        }
+    };
+    
     return (
         <List
             resource="logs"
@@ -24,7 +35,7 @@ export const LogsList = () => {
         >
             {isSmall ? (
                 <SimpleList
-                    primaryText={record => record.type}
+                    primaryText={record => record.type?.type || "Desconhecido"}
                     secondaryText={record => record.message}
                     tertiaryText={record => new Date(record.timestamp).toLocaleString()}
                     linkType={"edit"}
@@ -32,30 +43,26 @@ export const LogsList = () => {
             ) : (
                 <DatagridConfigurable rowClick="show" bulkActionButtons={false} >
                     <FunctionField
+                        label="resources.logs.fields.category" 
                         render={record => {
-                            const logType = record.type;
-                            const IconComponent = logType?.icon && Icon[logType.icon as keyof typeof Icon] ? Icon[logType.icon as keyof typeof Icon] : null;
-                            
+                            const logType = record.type?.type || "Desconhecido"; 
+
                             return (
-                                <div style={{ display: 'flex', alignItems: 'center', width: '1px' }}>
-                                    {IconComponent && <IconComponent style={{ marginRight: '8px' }} />}
-                                </div>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '72px', height: '23px', borderRadius: '8px', backgroundColor: getBackgroundColor(logType), color: '#fff', fontWeight: 'bold', fontSize: '0.7rem', textTransform: 'uppercase' }}>{logType}</div>
                             );
                         }}
                     />
                     <FunctionField 
                         label="resources.logs.fields.timestamp"  
-                        render={record => {
-                            return (
-                                <div style={{ width: '1px', whiteSpace: 'nowrap' }}>
-                                    {new Date(record.timestamp).toLocaleString('pt-PT', { 
-                                        day: '2-digit', month: '2-digit', year: 'numeric', 
-                                        hour: '2-digit', minute: '2-digit', second: '2-digit', 
-                                        fractionalSecondDigits: 3 
-                                    })}
-                                </div>
-                            );
-                        }} 
+                        render={record => (
+                            <div>
+                                {new Date(record.timestamp).toLocaleString('pt-PT', { 
+                                    day: '2-digit', month: '2-digit', year: 'numeric', 
+                                    hour: '2-digit', minute: '2-digit', second: '2-digit', 
+                                    fractionalSecondDigits: 3 
+                                })}
+                            </div>
+                        )}
                     />
                     <TextField source="message" label="resources.logs.fields.message" />
                 </DatagridConfigurable >
