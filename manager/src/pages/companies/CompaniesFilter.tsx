@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { TextInput, SelectInput } from "react-admin";
 import { fetchUtils } from "react-admin";
 
-export const CompaniesFilters = (permissions: string[]) => {
-    const [countries, setCountries] = useState<{ id: string; name: string }[]>([]);
+const FLAG_BASE_URL = import.meta.env.REACT_APP_FLAG_BASE_URL || "http://127.0.0.1:13090/files/flags/";
+
+export const CompaniesFilters = () => {
+    const [countries, setCountries] = useState<{ id: string; name: string; flag_url: string }[]>([]);
 
     useEffect(() => {
         const fetchIssuers = async () => {
@@ -21,7 +23,26 @@ export const CompaniesFilters = (permissions: string[]) => {
 
     const filters = [
         <TextInput key="name" source="name" size="small" label="pos.companies.name" fullWidth alwaysOn resettable />,
-        <SelectInput key="country" source="country" label="pos.companies.country" choices={countries} optionText="name" optionValue="id" fullWidth resettable />
+        <SelectInput
+            key="country"
+            source="country"
+            label="pos.companies.country"
+            choices={countries}
+            optionText={(choice) => (
+                <span>
+                    <img
+                        src={`${FLAG_BASE_URL}${choice.flag_url || "xx.svg"}`}
+                        alt={choice.name}
+                        onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => (e.currentTarget.src = `${FLAG_BASE_URL}xx.svg`)}
+                        style={{ width: "20px", marginRight: "10px", verticalAlign: "middle" }}
+                    />
+                    {choice.name}
+                </span>
+            )}
+            optionValue="id"
+            fullWidth
+            resettable
+        />
     ];
 
     return filters;

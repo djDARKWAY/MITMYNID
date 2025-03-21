@@ -1,5 +1,6 @@
 import { Entity, model, property, belongsTo } from "@loopback/repository";
 import { User } from "./user.model";
+import { Country } from "./country.model";
 
 @model()
 export class Company extends Entity {
@@ -50,17 +51,6 @@ export class Company extends Entity {
     },
   })
   city: string;
-
-  @property({
-    type: "string",
-    required: true,
-    postgresql: {
-      columnName: "country_id",
-      dataType: "varchar",
-      dataLenght: 2,
-    },
-  })
-  country_id: string;
 
   @property({
     type: "string",
@@ -138,7 +128,10 @@ export class Company extends Entity {
   })
   last_modified: string;
 
-  @belongsTo(() => User, { name: "last_modified_user_id" })
+  @belongsTo(() => Country, { name: 'country', keyFrom: 'country_id', keyTo: 'id' })
+  country_id: string;
+
+  @belongsTo(() => User, {name: "last_modified_user_id", keyFrom: 'last_modified_user_id', keyTo: 'id'})
   last_modified_user_id?: string;
 
   constructor(data?: Partial<Company>) {
@@ -147,7 +140,8 @@ export class Company extends Entity {
 }
 
 export interface CompanyRelations {
-  // describe navigational properties here
+  country?: Country;
+  last_modified_user_id?: User;
 }
 
 export type CompanyWithRelations = Company & CompanyRelations;
