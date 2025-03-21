@@ -17,6 +17,7 @@ import { decode } from 'jsonwebtoken';
 import { JWT } from "../types";
 import { randomBytes } from "crypto";
 import { EmailService } from "../services/email.service";
+import {LogService} from '../services/log.service';
 
 export class AuthController {
   constructor(
@@ -29,6 +30,7 @@ export class AuthController {
     @inject(TokenServiceBindings.TOKEN_SERVICE) public jwtService: TokenService,
     @inject(AuthServiceBindings.AUTH_SERVICE) public authService: UserService<User, Credentials>,
     @inject(SecurityBindings.USER, { optional: true }) public user: UserProfile,
+    @inject('services.LogService') private logService: LogService,
     @repository(AppUsersSessionRepository) public appUsersSessionRepository: AppUsersSessionRepository,
     @repository(AppUsersRegisterRepository) public appUsersRegisterRepository: AppUsersRegisterRepository,
     @repository(AppUsersAuthenticatorRepository) public appUsersAuthenticatorRepository: AppUsersAuthenticatorRepository,
@@ -128,29 +130,36 @@ export class AuthController {
   async loginMan(
     @requestBody(CredentialsLoginRequestBody) credentials: Credentials,
   ): Promise<{ token: string } | { authenticator: string } | void> {
+    const ip = this.request.ip;
+    try {
+      // ensure the user exists, and the password is correct
+      const user = await this.authService.verifyCredentials(credentials);
 
-    // ensure the user exists, and the password is correct
-    const user = await this.authService.verifyCredentials(credentials);
+      // convert a User object into a UserProfile object (reduced set of properties)
+      const userProfile = this.authService.convertToUserProfile(user);
 
-    // convert a User object into a UserProfile object (reduced set of properties)
-    const userProfile = this.authService.convertToUserProfile(user);
+      // create a JSON Web Token based on the user profile
+      const token = await this.jwtService.generateToken(userProfile);
+      const decodedToken = decode(token) as JWT;
 
-    // create a JSON Web Token based on the user profile
-    const token = await this.jwtService.generateToken(userProfile);
-    const decodedToken = decode(token) as JWT;
+      if (!decodedToken) return;
 
-    if (!decodedToken) return
+      const tokenValidaty = new Date(decodedToken.exp * 1000);
 
-    const tokenValidaty = new Date(decodedToken.exp * 1000);
+      await this.appUsersSessionRepository.create({
+        app_users_id: userProfile[securityId],
+        token: token,
+        login: new Date().toISOString(),
+        validity: tokenValidaty.toISOString(),
+      });
 
-    await this.appUsersSessionRepository.create({
-      app_users_id: userProfile[securityId],
-      token: token,
-      login: new Date().toISOString(),
-      validity: tokenValidaty.toISOString()
-    });
+      await this.logService.logLoginSuccess(credentials.username, ip as string);
 
-    return { token: token };
+      return { token: token };
+    } catch (err) {
+        await this.logService.logLoginFailure(credentials.username, ip as string, err.message);
+      throw err;
+    }
   }
 
   @get('/auth/logout', {

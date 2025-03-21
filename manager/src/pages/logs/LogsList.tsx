@@ -32,6 +32,7 @@ export const LogsList = () => {
             exporter={false}
             title="resources.logs.name"
             sx={{ paddingLeft: '10px' }}
+            sort={{ field: 'timestamp', order: 'DESC' }}
         >
             {isSmall ? (
                 <SimpleList

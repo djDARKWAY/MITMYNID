@@ -35,6 +35,12 @@ export class LogController {
         ],
       };
     }
+    if (!filter?.order) {
+    filter = {
+      ...filter,
+      order: ["timestamp DESC"],
+    };
+  }
     return this.logRepository.find({
       include: [{ relation: "type" }],
       ...filter,
