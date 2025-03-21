@@ -74,7 +74,6 @@ const DomibusTestPage = () => {
             <Button variant="contained" color="info" onClick={() => handleRequest("http://192.168.1.64:8080/domibus/ext/truststore/entries")} style={{ marginLeft: "10px" }}> Truststore Entries </Button>
             <Button variant="contained" color="info" onClick={() => handleRequest("http://192.168.1.64:8080/domibus/ext/party/processes")} style={{ marginLeft: "10px" }}> Party Processes </Button>
 
-            {/* Upload de ficheiro e POST */}
             <Paper elevation={3} style={{ marginTop: "20px", padding: "20px" }}>
                 <Typography variant="h6">Enviar PMode</Typography>
                 <input
