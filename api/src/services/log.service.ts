@@ -1,6 +1,5 @@
 import {inject} from '@loopback/core';
 import {LogRepository} from '../repositories';
-import {Log} from '../models';
 
 export class LogService {
   constructor(
@@ -19,10 +18,19 @@ export class LogService {
 
   async logLoginFailure(username: string, ip: string, reason: string) {
     await this.logRepository.create({
-      type_id: 6,
+      type_id: 5,
       message: `Tentativa de login falhada para o utilizador "${username}": ${reason}`,
       timestamp: new Date().toISOString(),
       metadata: { ip },
+    });
+  }
+
+  async logCertificateEdit(userId: string, certificateId: number, changes: object) {
+    await this.logRepository.create({
+      type_id: 7,
+      message: `Utilizador "${userId}" editou o certificado "${certificateId}".`,
+      timestamp: new Date().toISOString(),
+      metadata: { changes },
     });
   }
 }

@@ -11,7 +11,6 @@ import {
   UserProfileSchema,
   CredentialsPublicSignRequestBody
 } from "./specs/user-controller.specs";
-import { log } from "../interceptors/log";
 import { SecurityBindings, securityId, UserProfile } from '@loopback/security';
 import { decode } from 'jsonwebtoken';
 import { JWT } from "../types";

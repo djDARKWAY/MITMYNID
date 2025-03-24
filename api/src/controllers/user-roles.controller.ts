@@ -2,7 +2,6 @@ import { authenticate } from "@loopback/authentication";
 import { authorize } from "@loopback/authorization";
 import {
   Count,
-  CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,

@@ -2,6 +2,8 @@ import { Edit, TabbedForm, ReferenceInput, SelectInput, TextInput } from "react-
 import { Typography, Divider, Box } from "@mui/material";
 import { Home, ContactMail, Language, Person } from "@mui/icons-material";
 
+const FLAG_BASE_URL = import.meta.env.REACT_APP_FLAG_BASE_URL || "http://127.0.0.1:13090/files/flags/";
+
 export const CompaniesEdit = () => (
     <Edit>
         <TabbedForm>
@@ -24,8 +26,8 @@ export const CompaniesEdit = () => (
 
                 <Box display="flex" gap={2} width="100%" alignItems="center">
                     <Box sx={{ width: "50%" }}>
-                        <ReferenceInput source="country_id" reference="countries" label="show.companies.country" perPage={180} sort={{ field: 'name', order: 'ASC' }} >
-                            <SelectInput optionText={country => ( <Box display="flex" alignItems="center"> <img src={country.flag_url} alt={country.name} style={{ width: 20, height: 15, marginRight: 8 }} /> {country.name} </Box> )} fullWidth />
+                        <ReferenceInput source="country_id" reference="countries" label="show.companies.country" perPage={180} sort={{ field: 'name', order: 'ASC' }}>
+                            <SelectInput optionText={record => (<Box display="flex" alignItems="center">{record.flag_url && (<img src={`${FLAG_BASE_URL}/${record.flag_url}`} alt={record.name} width={20} height={15} style={{ borderRadius: "3px", marginRight: 8 }} />)}{record.name}</Box>)} fullWidth />
                         </ReferenceInput>
                     </Box>
                     <TextInput source="city" label="show.companies.city" sx={{ width: "50%" }} />
