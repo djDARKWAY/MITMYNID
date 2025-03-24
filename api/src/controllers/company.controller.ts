@@ -83,6 +83,7 @@ export class CompanyController {
   
     return this.companyRepository.find({
       ...filter,
+      include: [{ relation: "country" }],
       fields: {
         id: true,
         name: true,
