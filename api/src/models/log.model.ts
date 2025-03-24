@@ -1,34 +1,68 @@
-import {Entity, model, property, belongsTo } from '@loopback/repository';
-import {LogType} from './log-type.model';
+import { Entity, model, property, belongsTo } from "@loopback/repository";
+import { LogType } from "./log-type.model";
 
-@model()
+@model({
+  settings: {
+    postgresql: { schema: "status", table: "log" },
+  },
+})
 export class Log extends Entity {
   @property({
-    type: 'number',
+    type: "number",
     id: true,
     generated: true,
+    postgresql: {
+      columnName: "id",
+      dataType: "serial",
+      nullable: "NO",
+    },
   })
   id?: number;
 
+  @belongsTo(
+    () => LogType,
+    { name: "type" },
+    {
+      postgresql: {
+        columnName: "type_id",
+        dataType: "integer",
+        nullable: "NO",
+      },
+    }
+  )
+  type_id: number;
+
   @property({
-    type: 'string',
+    type: "string",
     required: true,
+    postgresql: {
+      columnName: "message",
+      dataType: "text",
+      nullable: "NO",
+    },
   })
   message: string;
 
   @property({
-    type: 'date',
+    type: "date",
     required: true,
+    postgresql: {
+      columnName: "timestamp",
+      dataType: "timestamp with time zone",
+      nullable: "NO",
+    },
   })
   timestamp: string;
 
   @property({
-    type: 'object',
+    type: "object",
+    postgresql: {
+      columnName: "metadata",
+      dataType: "jsonb",
+      nullable: "YES",
+    },
   })
   metadata?: object;
-
-  @belongsTo(() => LogType, {name: 'type'})
-  type_id: number;
 
   constructor(data?: Partial<Log>) {
     super(data);
