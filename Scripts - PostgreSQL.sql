@@ -77,6 +77,14 @@ CREATE TABLE network.accesspoint (
     ON DELETE SET NULL                                            -- Se o utilizador for eliminado retorna NULL
 );
 
+-- Criação da tabela "country"
+CREATE TABLE network.country (
+  id CHAR(2) NOT NULL,                                            -- [PK] Código do país (ISO 3166-1 alpha-2)
+  name VARCHAR(100),                                              -- Nome do país [inglês]
+  country_code INTEGER NOT NULL                                   -- Código do número de telemóvel
+  flag_url TEXT                                                   -- URL da bandeira
+);
+
 -- Criação das funções e triggers
 CREATE OR REPLACE FUNCTION update_certificate_status()
 RETURNS TRIGGER AS $$
@@ -102,12 +110,27 @@ CREATE INDEX idx_company_name ON network.company(name);
 CREATE INDEX idx_certificate_name ON network.certificate(name);
 CREATE INDEX idx_certificate_file_path ON network.certificate(file_path);
 
--- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-- //////////////////////////////////////////////////////////////////////
 
--- Criação da tabela "country"
-CREATE TABLE network.country (
-  id CHAR(2) NOT NULL,                                          -- [PK] Código do país (ISO 3166-1 alpha-2)
-  name VARCHAR(100),                                            -- Nome do país [inglês]
-  country_code INTEGER NOT NULL                                 -- Código do número de telemóvel
-  flag_url TEXT                                                 -- URL da bandeira
+-- Criação do schema "network"
+CREATE SCHEMA status;
+
+-- Criação da tabela "log_type"
+CREATE TABLE status.log_type (
+  id SERIAL PRIMARY KEY,                                          -- [PK] Identificador único
+  type VARCHAR(50) NOT NULL,                                      -- Tipo de log
+  description TEXT                                                -- Descrição do tipo de log
+);
+
+-- Criação da tabela "log"
+CREATE TABLE status.log (
+  id SERIAL PRIMARY KEY,                                          -- [PK] Identificador único
+  type_id INTEGER NOT NULL,                                       -- [FK] Referência para o tipo de log
+  message TEXT NOT NULL,                                          -- Mensagem do log
+  timestamp TIMESTAMP WITH TIME ZONE NOT NULL,                    -- Timestamp do log
+  metadata JSONB,                                                 -- Metadados adicionais
+  CONSTRAINT fk_log_type
+    FOREIGN KEY (type_id)
+    REFERENCES status.log_type (id)
+    ON DELETE CASCADE                                             -- Se o tipo de log for eliminado, os logs associados também serão
 );
