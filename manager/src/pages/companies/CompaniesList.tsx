@@ -12,7 +12,7 @@ export const CompaniesList = () => {
     return (
         <List
             resource="companies"
-            filters={CompaniesFilters()}
+            filters={CompaniesFilters(permissions)}
             queryOptions={{ refetchOnWindowFocus: false }}
             pagination={<CustomPagination />}
             perPage={perPageDefault}
