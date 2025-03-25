@@ -7,6 +7,7 @@ export class LogService {
     private logRepository: LogRepository,
   ) {}
 
+  // Métodos relacionados a Login
   async logLoginSuccess(userId: number | string, ip: string) {
     await this.logRepository.create({
       type_id: 5,
@@ -25,6 +26,7 @@ export class LogService {
     });
   }
 
+  // Métodos relacionados a Certificate
   async logCertificateChange(userId: string, certificateId: number | string, ip: string) {
     await this.logRepository.create({
       type_id: 1,

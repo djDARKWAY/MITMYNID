@@ -248,28 +248,47 @@ export class CertificateController {
   }
 
   @del("/certificates")
-  @response(204, {
-    description: "Certificates DELETE success",
-  })
-  async deleteMany(
-    @param.query.string("filter") filterStr: string
-  ): Promise<void> {
-    let filter;
-    try {
-      filter = JSON.parse(filterStr);
-    } catch (error) {
-      throw new HttpErrors.BadRequest('Invalid filter format.');
-    }
-
-    const ids = filter?.where?.id?.inq;
-    if (!ids || ids.length === 0) {
-      throw new HttpErrors.BadRequest('No IDs provided for deletion.');
-    }
-
-    await this.certificateRepository.deleteAll({
-      id: { inq: ids },
-    });
+  @authenticate("jwt")
+@response(204, {
+  description: "Certificates DELETE success",
+})
+async deleteMany(
+  @param.query.string("filter") filterStr: string,
+  @inject(SecurityBindings.USER) currentUser: UserProfile,
+): Promise<void> {
+  let filter;
+  try {
+    filter = JSON.parse(filterStr);
+  } catch (error) {
+    throw new HttpErrors.BadRequest('Invalid filter format.');
   }
+
+  const ids = filter?.where?.id?.inq;
+  if (!ids || ids.length === 0) {
+    throw new HttpErrors.BadRequest('No IDs provided for deletion.');
+  }
+
+  // Apagar os certificados
+  const certificatesToDelete = await this.certificateRepository.find({
+    where: {
+      id: { inq: ids },
+    },
+  });
+
+  // Eliminar os certificados
+  await this.certificateRepository.deleteAll({
+    id: { inq: ids },
+  });
+
+  // Logar para cada certificado apagado
+  certificatesToDelete.forEach((certificate) => {
+    this.logService.logCertificateDelete(
+      currentUser.person_name || 'unknown',
+      certificate.id || 'unknown',
+      this.request.ip || 'unknown',
+    );
+  });
+}
 
   validateCertificates(
     certificate: Omit<Certificate, "id" | "last_modified" | "last_modified_user_id">
