@@ -16,21 +16,21 @@ export class LogService {
     });
   }
 
-  async logLoginFailure(username: string, ip: string, reason: string) {
+  async logLoginFailure(userId: string, ip: string, reason: string) {
     await this.logRepository.create({
       type_id: 5,
-      message: `Tentativa de login falhada para o utilizador "${username}": ${reason}`,
+      message: `Tentativa de login falhada para o utilizador "${userId}": ${reason}`,
       timestamp: new Date().toISOString(),
       metadata: { ip },
     });
   }
 
-  async logCertificateEdit(userId: string, certificateId: number, changes: object) {
+  async logCertificateChange(userId: string, certificateId: number | string, ip: string) {
     await this.logRepository.create({
-      type_id: 7,
-      message: `Utilizador "${userId}" editou o certificado "${certificateId}".`,
+      type_id: 1,
+      message: `Utilizador "${userId}" alterou o certificado com ID "${certificateId}".`,
       timestamp: new Date().toISOString(),
-      metadata: { changes },
+      metadata: { ip },
     });
   }
 }

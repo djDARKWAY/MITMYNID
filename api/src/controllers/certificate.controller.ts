@@ -15,7 +15,8 @@ import {
   response,
   HttpErrors,
   Response,
-  RestBindings
+  RestBindings,
+  Request
 } from "@loopback/rest";
 import { Certificate } from "../models";
 import { CertificateRepository } from "../repositories";
@@ -25,7 +26,9 @@ import { authorize } from '@loopback/authorization';
 import * as dotenv from 'dotenv';
 import * as fs from "fs";
 import * as path from "path";
+import { SecurityBindings, UserProfile } from '@loopback/security';
 import { inject } from "@loopback/core";
+import { LogService } from "../services/log.service";
 
 const { BlobServiceClient } = require('@azure/storage-blob');
 dotenv.config({ path: "src/controllers/specs/azure/.env" });
@@ -33,7 +36,9 @@ dotenv.config({ path: "src/controllers/specs/azure/.env" });
 export class CertificateController {
   constructor(
     @repository(CertificateRepository)
-    public certificateRepository: CertificateRepository
+    public certificateRepository: CertificateRepository,
+    @inject(RestBindings.Http.REQUEST) private request: Request,
+    @inject('services.LogService') private logService: LogService,
   ) {}
 
   // POST endpoint:
@@ -193,24 +198,29 @@ export class CertificateController {
 
   // PATCH endpoint:
   @patch("/certificates/{id}")
+  @authenticate("jwt")
   @response(204, {
     description: "Certificate PATCH success",
   })
   async updateById(
     @param.path.number("id") id: number,
-    @requestBody() certificate: Partial<Certificate>
+    @requestBody() certificate: Partial<Certificate>,
+    @inject(SecurityBindings.USER) currentUser: UserProfile,
   ): Promise<void> {
     const existingCertificate = await this.certificateRepository.findById(id);
     if (!existingCertificate) {
       throw new HttpErrors.NotFound('Certificado não encontrado!');
     }
-
     const { last_modified_user_id, ...certificateData } = certificate;
 
     await this.certificateRepository.updateById(id, {
       ...certificateData,
       last_modified: new Date().toISOString(),
     });
+
+    const updatedCertificate = await this.certificateRepository.findById(id);
+
+    await this.logService.logCertificateChange(currentUser.person_name || 'unknown', updatedCertificate.id || 'unknown', this.request.ip || 'unknown');
   }
 
   // DELETE endpoint:
@@ -279,11 +289,5 @@ export class CertificateController {
 
     // Optional fields
     if (certificate.issuer_url) { validate(!/^https?:\/\/.+\..+/.test(certificate.issuer_url), "issuer_url", "O URL da entidade emissora deve ser uma URL válida."); }
-  }
-
-  private async getCurrentUserId(): Promise<number> {
-    // Implement logic to get the current user's ID
-    // This is a placeholder implementation
-    return 1;
   }
 }

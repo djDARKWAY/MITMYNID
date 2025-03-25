@@ -131,13 +131,8 @@ export class AuthController {
   ): Promise<{ token: string } | { authenticator: string } | void> {
     const ip = this.request.ip;
     try {
-      // ensure the user exists, and the password is correct
       const user = await this.authService.verifyCredentials(credentials);
-
-      // convert a User object into a UserProfile object (reduced set of properties)
       const userProfile = this.authService.convertToUserProfile(user);
-
-      // create a JSON Web Token based on the user profile
       const token = await this.jwtService.generateToken(userProfile);
       const decodedToken = decode(token) as JWT;
 
@@ -152,7 +147,7 @@ export class AuthController {
         validity: tokenValidaty.toISOString(),
       });
 
-      await this.logService.logLoginSuccess(credentials.username, ip as string);
+      await this.logService.logLoginSuccess(user.person_name, ip as string);
 
       return { token: token };
     } catch (err) {

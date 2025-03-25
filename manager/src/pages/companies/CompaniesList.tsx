@@ -44,14 +44,14 @@ const CompanyCard = ({ record }: { record?: { id: number | string; name: string;
                     position: "absolute",
                     bottom: 0,
                     right: 0,
-                    width: "44px",
-                    height: "33px",
+                    width: "53px",
+                    height: "40px",
                     backgroundImage: `url(${FLAG_BASE_URL}${record.country.flag_url})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
-                    opacity: 0.7,
-                    maskImage: 'linear-gradient(to top left, black 20%, transparent 55%)',
-                    WebkitMaskImage: 'linear-gradient(to top left, black 2%, transparent 55%)'}}
+                    opacity: 0.6,
+                    maskImage: 'linear-gradient(to top left, black 20%, transparent 56%)',
+                    WebkitMaskImage: 'linear-gradient(to top left, black 20%, transparent 56%)'}}
             />
         )}
         </Paper>
