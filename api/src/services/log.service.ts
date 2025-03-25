@@ -10,7 +10,7 @@ export class LogService {
   async logLoginSuccess(userId: number | string, ip: string) {
     await this.logRepository.create({
       type_id: 5,
-      message: `Utilizador "${userId}" efetuou login com sucesso.`,
+      message: `O utilizador '${userId}' realizou login com sucesso.`,
       timestamp: new Date().toISOString(),
       metadata: { ip },
     });
@@ -19,7 +19,7 @@ export class LogService {
   async logLoginFailure(userId: string, ip: string, reason: string) {
     await this.logRepository.create({
       type_id: 5,
-      message: `Tentativa de login falhada para o utilizador "${userId}": ${reason}`,
+      message: `Falha de login para o utilizador '${userId}'. Motivo: ${reason}.`,
       timestamp: new Date().toISOString(),
       metadata: { ip },
     });
@@ -28,7 +28,16 @@ export class LogService {
   async logCertificateChange(userId: string, certificateId: number | string, ip: string) {
     await this.logRepository.create({
       type_id: 1,
-      message: `Utilizador "${userId}" alterou o certificado com ID "${certificateId}".`,
+      message: `O utilizador '${userId}' atualizou o certificado com o ID '${certificateId}'.`,
+      timestamp: new Date().toISOString(),
+      metadata: { ip },
+    });
+  }
+
+  async logCertificateDelete(userId: string, certificateId: number | string, ip: string) {
+    await this.logRepository.create({
+      type_id: 1,
+      message: `O utilizador '${userId}' apagou o certificado com o ID '${certificateId}'.`,
       timestamp: new Date().toISOString(),
       metadata: { ip },
     });

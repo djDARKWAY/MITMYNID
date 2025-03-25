@@ -225,15 +225,26 @@ export class CertificateController {
 
   // DELETE endpoint:
   @del("/certificates/{id}")
+  @authenticate("jwt")
   @response(204, {
     description: "Certificate DELETE success",
   })
-  async deleteById(@param.path.number("id") id: number): Promise<void> {
+  async deleteById(
+    @param.path.number("id") id: number,
+    @inject(SecurityBindings.USER) currentUser: UserProfile,
+  ): Promise<void> {
     const existingCertificate = await this.certificateRepository.findById(id);
     if (!existingCertificate) {
       throw new HttpErrors.NotFound('Certificado não encontrado!');
     }
+
     await this.certificateRepository.deleteById(id);
+
+    await this.logService.logCertificateDelete(
+      currentUser.person_name || 'unknown',
+      id,
+      this.request.ip || 'unknown'
+    );
   }
 
   @del("/certificates")
