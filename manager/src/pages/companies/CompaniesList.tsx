@@ -49,7 +49,7 @@ const CompanyCard = ({ record }: { record?: { id: number | string; name: string;
                     backgroundImage: `url(${FLAG_BASE_URL}${record.country.flag_url})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
-                    opacity: 0.6,
+                    opacity: 0.7,
                     maskImage: 'linear-gradient(to top left, black 20%, transparent 55%)',
                     WebkitMaskImage: 'linear-gradient(to top left, black 2%, transparent 55%)'}}
             />

@@ -1,5 +1,6 @@
 import { Filter, repository } from "@loopback/repository";
-import { param, get, getModelSchemaRef, response } from "@loopback/rest";
+import { param, get, getModelSchemaRef, response, Response, RestBindings } from "@loopback/rest";
+import { inject } from "@loopback/core";
 import { Log } from "../models";
 import { LogRepository, LogTypeRepository } from "../repositories";
 
@@ -23,7 +24,10 @@ export class LogController {
       },
     },
   })
-  async find(@param.filter(Log) filter?: Filter<Log>): Promise<Log[]> {
+  async find(
+    @inject(RestBindings.Http.RESPONSE) response: Response,
+    @param.filter(Log) filter?: Filter<Log>
+  ): Promise<Log[]> {
     if (filter?.where && "timestamp" in filter.where) {
       const timestamp = (filter.where as any).timestamp;
       (filter.where as any).timestamp = {
@@ -36,11 +40,13 @@ export class LogController {
       };
     }
     if (!filter?.order) {
-    filter = {
-      ...filter,
-      order: ["timestamp DESC"],
-    };
-  }
+      filter = { ...filter, order: ["timestamp DESC"] };
+    }
+    
+    const countResult = await this.logRepository.count(filter?.where || {});
+    response.setHeader("x-total-count", countResult.count);
+    response.setHeader("Access-Control-Expose-Headers", "x-total-count");
+
     return this.logRepository.find({
       include: [{ relation: "type" }],
       ...filter,

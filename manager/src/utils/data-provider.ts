@@ -81,18 +81,20 @@ const lb4Provider = (
       }),
     });
 
-    const result = await httpClient(params && params.meta && params.meta.id ? `${apiUrl}/${resource}/${params.meta.id}?${query}` : `${apiUrl}/${resource}?${query}`, {
+    const result = await httpClient(params && params.meta && params.meta.id 
+      ? `${apiUrl}/${resource}/${params.meta.id}?${query}` 
+      : `${apiUrl}/${resource}?${query}`, {
       method: "GET",
       headers: new Headers({
         "X-Total": "true",
         Accept: "application/json",
-        Authorization: `Bearer ${localStorage.getItem('token') ? localStorage.getItem('token') : ''}`
+        Authorization: `Bearer ${localStorage.getItem('token') || ''}`
       }),
     });
 
     return {
       data: result.json,
-      total: result.json.length,
+      total: parseInt(result.headers.get("x-total-count") || "0"),
     };
   },
   getOne: async (resource, params) => {

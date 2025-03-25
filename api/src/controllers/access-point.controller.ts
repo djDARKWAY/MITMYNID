@@ -15,6 +15,8 @@ import {
   requestBody,
   response,
   HttpErrors,
+  Response,
+  RestBindings,
 } from "@loopback/rest";
 import { AccessPoint } from "../models";
 import { AccessPointRepository } from "../repositories";
@@ -23,6 +25,7 @@ import { XMLValidator } from "fast-xml-parser";
 import { authenticate, TokenService, UserService } from "@loopback/authentication";
 import { basicAuthorization } from "../middlewares/auth.middleware";
 import { authorize } from "@loopback/authorization";
+import { inject } from "@loopback/core";
 
 export class AccessPointController {
   constructor(
@@ -76,6 +79,7 @@ export class AccessPointController {
     },
   })
   async find(
+    @inject(RestBindings.Http.RESPONSE) response: Response,
     @param.filter(AccessPoint) filter?: Filter<AccessPoint>
   ): Promise<AccessPoint[]> {
     if (filter?.where && (filter.where as any).company_name) {
@@ -99,6 +103,10 @@ export class AccessPointController {
       const ipAddress = (filter.where as any).ip_address;
       (filter.where as any).ip_address = { ilike: `${ipAddress}%` };
     }
+
+    const countResult = await this.accessPointRepository.count(filter?.where || {});
+    response.setHeader("x-total-count", countResult.count);
+    response.setHeader("Access-Control-Expose-Headers", "x-total-count");
 
     return this.accessPointRepository.find({
       ...filter,

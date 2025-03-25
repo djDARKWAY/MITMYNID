@@ -14,8 +14,11 @@ import {
   del,
   requestBody,
   response,
-  HttpErrors
+  HttpErrors,
+  Response,
+  RestBindings
 } from "@loopback/rest";
+import { inject } from "@loopback/core";
 import { Company } from "../models";
 import { CompanyRepository } from "../repositories";
 import { authenticate, TokenService, UserService } from '@loopback/authentication';
@@ -69,6 +72,7 @@ export class CompanyController {
     },
   })
   async find(
+    @inject(RestBindings.Http.RESPONSE) response: Response,
     @param.filter(Company) filter?: Filter<Company>
   ): Promise<Company[]> {
     if (filter?.where && (filter.where as any).name) {
@@ -80,7 +84,11 @@ export class CompanyController {
       (filter.where as any).country_id = { like: `${country}` };
       delete (filter.where as any).country;
     }
-  
+    
+    const countResult = await this.companyRepository.count((filter && filter.where) ? filter.where : {});
+    response.setHeader("x-total-count", countResult.count);
+    response.setHeader("Access-Control-Expose-Headers", "x-total-count");
+
     return this.companyRepository.find({
       ...filter,
       include: [{ relation: "country" }],
@@ -110,6 +118,18 @@ export class CompanyController {
   ): Promise<Company> {
     return this.companyRepository.findById(id, filter);
   }
+
+  // GET count endpoint:
+  @get("/companies/count")
+  @response(200, {
+    description: "Company model count",
+    content: { "application/json": { schema: { type: "object", properties: { count: { type: "number" } } } } },
+  })
+  async count(
+    @param.where(Company) where?: Where<Company>
+  ): Promise<{ count: number }> {
+    return this.companyRepository.count(where);
+  }  
 
   // PATCH endpoint:
   @patch("/companies/{id}")

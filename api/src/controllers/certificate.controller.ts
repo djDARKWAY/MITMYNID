@@ -14,6 +14,8 @@ import {
   requestBody,
   response,
   HttpErrors,
+  Response,
+  RestBindings
 } from "@loopback/rest";
 import { Certificate } from "../models";
 import { CertificateRepository } from "../repositories";
@@ -23,6 +25,7 @@ import { authorize } from '@loopback/authorization';
 import * as dotenv from 'dotenv';
 import * as fs from "fs";
 import * as path from "path";
+import { inject } from "@loopback/core";
 
 const { BlobServiceClient } = require('@azure/storage-blob');
 dotenv.config({ path: "src/controllers/specs/azure/.env" });
@@ -75,11 +78,16 @@ export class CertificateController {
     },
   })
   async find(
+    @inject(RestBindings.Http.RESPONSE) response: Response,
     @param.filter(Certificate) filter?: Filter<Certificate>
   ): Promise<Certificate[]> {
     if (filter?.where && (filter.where as any).name) {
       (filter.where as any).name = { ilike: `%${(filter.where as any).name}%` };
     }
+    const countResult = await this.certificateRepository.count(filter?.where || {});
+    response.setHeader("x-total-count", countResult.count);
+    response.setHeader("Access-Control-Expose-Headers", "x-total-count");
+    
     return this.certificateRepository.find({
       ...filter,
       fields: {
