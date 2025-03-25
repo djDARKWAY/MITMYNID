@@ -249,38 +249,35 @@ export class CertificateController {
 
   @del("/certificates")
   @authenticate("jwt")
-@response(204, {
-  description: "Certificates DELETE success",
-})
-async deleteMany(
-  @param.query.string("filter") filterStr: string,
-  @inject(SecurityBindings.USER) currentUser: UserProfile,
-): Promise<void> {
-  let filter;
-  try {
-    filter = JSON.parse(filterStr);
-  } catch (error) {
-    throw new HttpErrors.BadRequest('Invalid filter format.');
-  }
+  @response(204, {
+    description: "Certificates DELETE success",
+  })
+  async deleteMany(
+    @param.query.string("filter") filterStr: string,
+    @inject(SecurityBindings.USER) currentUser: UserProfile,
+  ): Promise<void> {
+    let filter;
+    try {
+      filter = JSON.parse(filterStr);
+    } catch (error) {
+      throw new HttpErrors.BadRequest('Invalid filter format.');
+    }
 
-  const ids = filter?.where?.id?.inq;
-  if (!ids || ids.length === 0) {
-    throw new HttpErrors.BadRequest('No IDs provided for deletion.');
-  }
+    const ids = filter?.where?.id?.inq;
+    if (!ids || ids.length === 0) {
+      throw new HttpErrors.BadRequest('No IDs provided for deletion.');
+    }
 
-  // Apagar os certificados
   const certificatesToDelete = await this.certificateRepository.find({
     where: {
       id: { inq: ids },
     },
   });
 
-  // Eliminar os certificados
   await this.certificateRepository.deleteAll({
     id: { inq: ids },
   });
 
-  // Logar para cada certificado apagado
   certificatesToDelete.forEach((certificate) => {
     this.logService.logCertificateDelete(
       currentUser.person_name || 'unknown',
