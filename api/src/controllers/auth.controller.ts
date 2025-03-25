@@ -17,6 +17,7 @@ import { JWT } from "../types";
 import { randomBytes } from "crypto";
 import { EmailService } from "../services/email.service";
 import {LogService} from '../services/log.service';
+import * as useragent from 'useragent';
 
 export class AuthController {
   constructor(
@@ -130,6 +131,13 @@ export class AuthController {
     @requestBody(CredentialsLoginRequestBody) credentials: Credentials,
   ): Promise<{ token: string } | { authenticator: string } | void> {
     const ip = this.request.ip;
+    const userAgentHeader = this.request.headers['user-agent'] || 'unknown';
+    const agent = useragent.parse(userAgentHeader);
+    const deviceInfo = {
+      device: agent.device.toString(),
+      os: agent.os.toString(),
+    };
+
     try {
       const user = await this.authService.verifyCredentials(credentials);
       const userProfile = this.authService.convertToUserProfile(user);
@@ -147,11 +155,17 @@ export class AuthController {
         validity: tokenValidaty.toISOString(),
       });
 
-      await this.logService.logLoginSuccess(user.person_name, ip as string);
+      await this.logService.logLoginSuccess(user.person_name, ip as string, {
+        device: deviceInfo.device,
+        os: deviceInfo.os,
+      }, userProfile[securityId]);
 
       return { token: token };
     } catch (err) {
-        await this.logService.logLoginFailure(credentials.username, ip as string, err.message);
+      await this.logService.logLoginFailure(credentials.username, ip as string, err.message, {
+        device: deviceInfo.device,
+        os: deviceInfo.os,
+      });
       throw err;
     }
   }
@@ -178,6 +192,17 @@ export class AuthController {
 
     if (lastSession) await this.appUsersSessionRepository.updateById(lastSession.id, { logout: new Date().toISOString() })
 
+    const userAgentHeader = this.request.headers['user-agent'] || 'unknown';
+    const agent = useragent.parse(userAgentHeader);
+    const deviceInfo = {
+      device: agent.device.toString(),
+      os: agent.os.toString(),
+    };
+
+    await this.logService.logLoginSuccess(currentUserProfile.name || 'unknown', this.request.ip || 'unknown', {
+      device: deviceInfo.device,
+      os: deviceInfo.os,
+    }, currentUserProfile[securityId]);
   }
 
   @get('/auth/me', {
@@ -225,11 +250,6 @@ export class AuthController {
     });
 
     if (userDetails) return this.response.status(422).send({ message: 'Utilizador inválido. Contacte a entidade' });
-
-    // if (userDetails && userDetails.active) return this.response.status(422).send({ message: 'Utilizador inválido. Contacte a entidade' });
-
-    // if (userDetails && userDetails.blocked) return this.response.status(422).send({ message: 'Utilizador inválido. Contacte a entidade' });
-
     const hashPassword = await this.passwordHasher.hashPassword(credentials.password);
 
     await this.userRepository.create({
@@ -294,13 +314,6 @@ export class AuthController {
     });
 
     if (!userDetails) return
-
-    // if (userDetails && userDetails.active) return this.response.status(422).send({ message: 'Utilizador inválido. Contacte a entidade' });
-
-    // if (userDetails && userDetails.blocked) return this.response.status(422).send({ message: 'Utilizador inválido. Contacte a entidade' });
-
-
-
     const encryptedString = encodeURIComponent(randomBytes(64).toString('base64url'));
 
     await this.appUsersRegisterRepository.create({

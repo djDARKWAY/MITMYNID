@@ -29,6 +29,7 @@ import * as path from "path";
 import { SecurityBindings, UserProfile } from '@loopback/security';
 import { inject } from "@loopback/core";
 import { LogService } from "../services/log.service";
+import * as useragent from 'useragent';
 
 const { BlobServiceClient } = require('@azure/storage-blob');
 dotenv.config({ path: "src/controllers/specs/azure/.env" });
@@ -220,7 +221,20 @@ export class CertificateController {
 
     const updatedCertificate = await this.certificateRepository.findById(id);
 
-    await this.logService.logCertificateChange(currentUser.person_name || 'unknown', updatedCertificate.id || 'unknown', this.request.ip || 'unknown');
+    const userAgentHeader = this.request.headers['user-agent'] || 'unknown';
+    const agent = useragent.parse(userAgentHeader);
+    const deviceInfo = {
+      device: agent.device.toString(),
+      os: agent.os.toString(),
+    };
+
+    await this.logService.logCertificateChange(
+      currentUser.person_name || 'unknown',
+      updatedCertificate.id || 'unknown',
+      this.request.ip || 'unknown',
+      currentUser.id || 'unknown',
+      deviceInfo
+    );
   }
 
   // DELETE endpoint:
@@ -240,10 +254,19 @@ export class CertificateController {
 
     await this.certificateRepository.deleteById(id);
 
+    const userAgentHeader = this.request.headers['user-agent'] || 'unknown';
+    const agent = useragent.parse(userAgentHeader);
+    const deviceInfo = {
+      device: agent.device.toString(),
+      os: agent.os.toString(),
+    };
+
     await this.logService.logCertificateDelete(
       currentUser.person_name || 'unknown',
       id,
-      this.request.ip || 'unknown'
+      this.request.ip || 'unknown',
+      currentUser.id || 'unknown',
+      deviceInfo
     );
   }
 
@@ -259,33 +282,35 @@ export class CertificateController {
     let filter;
     try {
       filter = JSON.parse(filterStr);
-    } catch (error) {
+    } catch {
       throw new HttpErrors.BadRequest('Invalid filter format.');
     }
 
     const ids = filter?.where?.id?.inq;
-    if (!ids || ids.length === 0) {
+    if (!ids?.length) {
       throw new HttpErrors.BadRequest('No IDs provided for deletion.');
     }
 
-  const certificatesToDelete = await this.certificateRepository.find({
-    where: {
-      id: { inq: ids },
-    },
-  });
+    const certificatesToDelete = await this.certificateRepository.find({ where: { id: { inq: ids } } });
+    await this.certificateRepository.deleteAll({ id: { inq: ids } });
 
-  await this.certificateRepository.deleteAll({
-    id: { inq: ids },
-  });
+    const userAgentHeader = this.request.headers['user-agent'] || 'unknown';
+    const agent = useragent.parse(userAgentHeader);
+    const deviceInfo = {
+      device: agent.device.toString(),
+      os: agent.os.toString(),
+    };
 
-  certificatesToDelete.forEach((certificate) => {
-    this.logService.logCertificateDelete(
-      currentUser.person_name || 'unknown',
-      certificate.id || 'unknown',
-      this.request.ip || 'unknown',
-    );
-  });
-}
+    for (const cert of certificatesToDelete) {
+      await this.logService.logCertificateDelete(
+        currentUser.person_name || 'unknown',
+        cert.id || 'unknown',
+        this.request.ip || 'unknown',
+        currentUser.id || 'unknown',
+        deviceInfo
+      );
+    }
+  }
 
   validateCertificates(
     certificate: Omit<Certificate, "id" | "last_modified" | "last_modified_user_id">
