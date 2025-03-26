@@ -66,6 +66,7 @@ export const AccessPointsShow = () => (
                 <AccessTimeFilled />
                 <Typography variant="h6" sx={{ ml: 1 }}> Logs </Typography>
             </Box>
+            <Divider sx={{ mb: 1 }} />
             <DateField source="created_date" label="show.accessPoints.created_date" showTime />
             <DateField source="last_modified" label="show.accessPoints.last_modified" showTime />
             <ReferenceField source="last_modified_user_id" reference="users" label="show.accessPoints.last_modified_user">

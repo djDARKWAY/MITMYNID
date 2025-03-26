@@ -281,6 +281,12 @@ export class User extends Entity {
   })
   last_access?: string;
 
+  @property({
+    type: 'number',
+    required: false,
+  })
+  company_id?: number;
+
   @hasMany(() => Role, {
     through: {
       model: () => UserRole,

@@ -54,7 +54,7 @@ export class UserController {
     return this.userRepository.count(where);
   }
 
-  @post("/users/one", {
+  @post("/users", {
     responses: {
       "200": {
         description: "User",
@@ -77,23 +77,34 @@ export class UserController {
   async create(
     @requestBody(CredentialsSignInRequestBody) newUserRequest: User
   ): Promise<User | Response> {
-    // ensure a valid email value and password value
-    //validateCredentials(_.pick(newUserRequest, ['person_name','email', 'password']));
+    // Validate required fields
+    if (!newUserRequest.person_name || !newUserRequest.email || !newUserRequest.password) {
+      return this.response
+        .status(400)
+        .send({ message: "Missing required fields: person_name, email, or password" });
+    }
 
-    // encrypt the password
-    newUserRequest.password = await this.passwordHasher.hashPassword(
-      newUserRequest.password
-    );
-    newUserRequest.validation_date = new Date().toISOString();
-    newUserRequest.username = newUserRequest.username.toLowerCase();
+    // Ensure email and username are in lowercase
+    newUserRequest.username = newUserRequest.username?.toLowerCase();
     newUserRequest.email = newUserRequest.email.toLowerCase();
-    // @ts-ignore
-    const roles: string[] = newUserRequest.roles;
+
+    // Encrypt the password
+    newUserRequest.password = await this.passwordHasher.hashPassword(newUserRequest.password);
+    newUserRequest.validation_date = new Date().toISOString();
+
+    // Extract roles
+    const roles: string[] = (newUserRequest.roles || []).map(role => typeof role === 'string' ? role : role.id);
+
+    // Ensure company_id is valid (optional validation)
+    if (newUserRequest.company_id && typeof newUserRequest.company_id !== 'number') {
+      return this.response.status(400).send({ message: "Invalid company_id. It must be a number." });
+    }
 
     try {
       if (newUserRequest.photo && typeof newUserRequest.photo !== "string") {
         const path = "./public/files/users/";
 
+        console.log("Uploading image...");
         return await uploadImage(
           newUserRequest.photo.data,
           path,
@@ -101,10 +112,11 @@ export class UserController {
         ).then(async (value) => {
           newUserRequest.photo = value.slice(9);
 
+          console.log("Creating user with photo...");
           const savedUser = await this.userRepository
             .create(_.omit(newUserRequest, ["roles", "blocked", "active"]))
             .then(async (user) => {
-              let prefsUtil = {
+              const prefsUtil = {
                 id_utilizador: user.id,
                 lang_fav: undefined,
                 tema_fav: undefined,
@@ -120,10 +132,8 @@ export class UserController {
                   });
                 }
               }
-
               return user;
             });
-
           return savedUser;
         });
       }
@@ -153,13 +163,9 @@ export class UserController {
 
       return savedUser;
     } catch (err) {
-      //postgres error code 23505 - duplicate value
       if (err.code && err.code === "23505") {
-        //detail: 'Key (username)=(pedro@gmail.com) already exists.',
         let errorCode = err.detail as string;
-        //['Key', '(username)=(pedro@gmail.com)', 'already', 'exists.']
         errorCode = errorCode.split(" ")[1];
-        //username
         errorCode = errorCode.substring(1, errorCode.indexOf(")"));
 
         return this.response
@@ -168,13 +174,13 @@ export class UserController {
             message:
               user_postgres_errors["pt"][
                 errorCode as keyof (typeof user_postgres_errors)["pt"]
-              ],
+              ] || `Duplicate value for field: ${errorCode}`,
           });
       }
 
       return this.response
-        .status(422)
-        .send({ message: "Erro a editar utilizador" });
+        .status(500)
+        .send({ message: "Erro inesperado ao criar utilizador" });
     }
   }
 

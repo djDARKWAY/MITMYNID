@@ -112,8 +112,14 @@ export const UsersCreate = () => {
               <ReferenceArrayInput reference="roles" source="roles">
                 <SelectArrayInput optionValue="id" variant='standard' optionText="description" fullWidth label="resources.utilizadores.fields.roles" size="small" validate={required()} />
               </ReferenceArrayInput>
-              <ReferenceInput source="armazem_id" reference="armazem">
-                <AutocompleteInput size="small" fullWidth filterToQuery={(searchText: string) => ({ localidade: `%${searchText}%` })} />
+              <ReferenceInput source="company_id" reference="companies">
+                <AutocompleteInput
+                  size="small"
+                  fullWidth
+                  filterToQuery={(searchText: string) => ({ localidade: `%${searchText}%` })}
+                  label="resources.utilizadores.fields.company"
+                  validate={required()}
+                />
               </ReferenceInput>
             </Box>
             <Box>

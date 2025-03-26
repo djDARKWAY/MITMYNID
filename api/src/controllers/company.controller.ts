@@ -125,7 +125,6 @@ export class CompanyController {
     return this.companyRepository.findById(id, filter);
   }
 
-  // GET count endpoint:
   @get("/companies/count")
   @response(200, {
     description: "Company model count",

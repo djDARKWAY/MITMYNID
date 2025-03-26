@@ -110,6 +110,11 @@ CREATE INDEX idx_company_name ON network.company(name);
 CREATE INDEX idx_certificate_name ON network.certificate(name);
 CREATE INDEX idx_certificate_file_path ON network.certificate(file_path);
 
+-- Reniciar a sequência para as tabelas "certificate", "company" e "accessPoint"
+SELECT setval('network.accesspoint_idaccesspoint_seq', 1, false);
+SELECT setval('network.certificate_idcertificate_seq', 1, false);
+SELECT setval('network.company_idcompany_seq', 1, false);
+
 -- //////////////////////////////////////////////////////////////////////
 
 -- Criação do schema "network"
