@@ -12,6 +12,7 @@ import {
   patch,
   put,
   del,
+  Request,
   requestBody,
   response,
   HttpErrors,
@@ -34,7 +35,9 @@ export class AccessPointController {
   constructor(
     @repository(AccessPointRepository)
     public accessPointRepository: AccessPointRepository,
-    @repository(CompanyRepository) public companyRepository: CompanyRepository
+    @repository(CompanyRepository) public companyRepository: CompanyRepository,
+    @inject(RestBindings.Http.REQUEST) private request: Request,
+    @inject('services.LogService') private logService: LogService,
   ) {}
 
   // POST endpoint:
@@ -186,6 +189,7 @@ export class AccessPointController {
 
   // PATCH endpoint:
   @patch("/access-points/{id}")
+  @authenticate("jwt")
   @response(204, {
     description: "AccessPoint PATCH success",
   })
@@ -198,7 +202,8 @@ export class AccessPointController {
         },
       },
     })
-    accessPoint: Partial<AccessPoint>
+    accessPoint: Partial<AccessPoint>,
+    @inject(SecurityBindings.USER) currentUser: UserProfile
   ): Promise<void> {
     const existingAccessPoint = await this.accessPointRepository.findById(id);
     if (!existingAccessPoint) {
@@ -211,19 +216,100 @@ export class AccessPointController {
       ...accessPointData,
       last_modified: new Date().toISOString(),
     });
+
+    const updatedAccessPoint = await this.accessPointRepository.findById(id);
+
+    const userAgentHeader = this.request.headers["user-agent"] || "unknown";
+    const agent = useragent.parse(userAgentHeader);
+    const deviceInfo = {
+      device: agent.device.toString(),
+      os: agent.os.toString(),
+    };
+
+    await this.logService.logAccessPointChange(
+      currentUser.person_name || "unknown",
+      updatedAccessPoint.id || "unknown",
+      this.request.ip || "unknown",
+      currentUser.id || "unknown",
+      deviceInfo
+    );
   }
 
   // DELETE endpoint:
   @del("/access-points/{id}")
+  @authenticate("jwt")
   @response(204, {
     description: "AccessPoint DELETE success",
   })
-  async deleteById(@param.path.number("id") id: number): Promise<void> {
+  async deleteById(
+    @param.path.number("id") id: number,
+    @inject(SecurityBindings.USER) currentUser: UserProfile,
+  ): Promise<void> {
     const existingAccessPoint = await this.accessPointRepository.findById(id);
     if (!existingAccessPoint) {
       throw new HttpErrors.NotFound("AP não encontrado!");
     }
+
     await this.accessPointRepository.deleteById(id);
+
+    const userAgentHeader = this.request.headers["user-agent"] || "unknown";
+    const agent = useragent.parse(userAgentHeader);
+    const deviceInfo = {
+      device: agent.device.toString(),
+      os: agent.os.toString(),
+    };
+
+    await this.logService.logAccessPointDelete(
+      currentUser.person_name || "unknown",
+      id,
+      this.request.ip || "unknown",
+      currentUser.id || "unknown",
+      deviceInfo
+    );
+  }
+
+  @del("/access-points")
+  @authenticate("jwt")
+  @response(204, {
+    description: "AccessPoints DELETE success",
+  })
+  async deleteMany(
+    @param.query.string("filter") filterStr: string,
+    @inject(SecurityBindings.USER) currentUser: UserProfile,
+  ): Promise<void> {
+    let filter;
+    try {
+      filter = JSON.parse(filterStr);
+    } catch {
+      throw new HttpErrors.BadRequest("Invalid filter format.");
+    }
+
+    const ids = filter?.where?.id?.inq;
+    if (!ids?.length) {
+      throw new HttpErrors.BadRequest("No IDs provided for deletion.");
+    }
+
+    const accessPointsToDelete = await this.accessPointRepository.find({
+      where: { id: { inq: ids } },
+    });
+    await this.accessPointRepository.deleteAll({ id: { inq: ids } });
+
+    const userAgentHeader = this.request.headers["user-agent"] || "unknown";
+    const agent = useragent.parse(userAgentHeader);
+    const deviceInfo = {
+      device: agent.device.toString(),
+      os: agent.os.toString(),
+    };
+
+    for (const ap of accessPointsToDelete) {
+      await this.logService.logAccessPointDelete(
+        currentUser.person_name || "unknown",
+        ap.id || "unknown",
+        this.request.ip || "unknown",
+        currentUser.id || "unknown",
+        deviceInfo
+      );
+    }
   }
 
   validateAccessPoints(

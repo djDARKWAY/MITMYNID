@@ -33,8 +33,8 @@ export class CompanyController {
   constructor(
     @repository(CompanyRepository)
     public companyRepository: CompanyRepository,
-        @inject(RestBindings.Http.REQUEST) private request: Request,
-        @inject('services.LogService') private logService: LogService,
+    @inject(RestBindings.Http.REQUEST) private request: Request,
+    @inject('services.LogService') private logService: LogService,
   ) {}
 
   // POST endpoint:
