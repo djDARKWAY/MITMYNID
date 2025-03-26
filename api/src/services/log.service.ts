@@ -63,4 +63,23 @@ export class LogService {
       metadata: { ip, userUuid, device: deviceInfo.device, os: deviceInfo.os, timestamp: new Date().toISOString() },
     });
   }
+
+  // Métodos relacionados a AccessPoint
+  async logAccessPointChange(userId: string, accessPointId: number | string, ip: string, userUuid: string, deviceInfo: { device: string; os: string }) {
+    await this.logRepository.create({
+      type_id: 1,
+      message: `O utilizador '${userId}' atualizou o ponto de acesso com o ID '${accessPointId}'`,
+      timestamp: new Date().toISOString(),
+      metadata: { ip, userUuid, device: deviceInfo.device, os: deviceInfo.os, timestamp: new Date().toISOString() },
+    });
+  }
+
+  async logAccessPointDelete(userId: string, accessPointId: number | string, ip: string, userUuid: string, deviceInfo: { device: string; os: string }) {
+    await this.logRepository.create({
+      type_id: 1,
+      message: `O utilizador '${userId}' apagou o ponto de acesso com o ID '${accessPointId}'`,
+      timestamp: new Date().toISOString(),
+      metadata: { ip, userUuid, device: deviceInfo.device, os: deviceInfo.os, timestamp: new Date().toISOString() },
+    });
+  }
 }

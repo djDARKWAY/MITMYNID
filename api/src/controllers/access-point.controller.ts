@@ -23,6 +23,9 @@ import { AccessPointRepository } from "../repositories";
 import { CompanyRepository } from "../repositories";
 import { XMLValidator } from "fast-xml-parser";
 import { inject } from "@loopback/core";
+import { LogService } from "../services/log.service";
+import { SecurityBindings, UserProfile } from '@loopback/security';
+import * as useragent from 'useragent';
 import { authenticate, TokenService, UserService } from "@loopback/authentication";
 import { basicAuthorization } from "../middlewares/auth.middleware";
 import { authorize } from "@loopback/authorization";
@@ -181,20 +184,33 @@ export class AccessPointController {
     return apSoftware;
   }
 
-  // PUT endpoint:
-  @put("/access-points/{id}")
+  // PATCH endpoint:
+  @patch("/access-points/{id}")
   @response(204, {
-    description: "AccessPoint PUT success",
+    description: "AccessPoint PATCH success",
   })
-  async replaceById(
+  async updateById(
     @param.path.number("id") id: number,
-    @requestBody() accessPoint: AccessPoint
+    @requestBody({
+      content: {
+        "application/json": {
+          schema: getModelSchemaRef(AccessPoint, { partial: true }),
+        },
+      },
+    })
+    accessPoint: Partial<AccessPoint>
   ): Promise<void> {
     const existingAccessPoint = await this.accessPointRepository.findById(id);
     if (!existingAccessPoint) {
       throw new HttpErrors.NotFound("AP não encontrado!");
     }
-    await this.accessPointRepository.replaceById(id, accessPoint);
+
+    const { last_modified_user_id, pmode, ...accessPointData } = accessPoint;
+
+    await this.accessPointRepository.updateById(id, {
+      ...accessPointData,
+      last_modified: new Date().toISOString(),
+    });
   }
 
   // DELETE endpoint:

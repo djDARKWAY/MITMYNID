@@ -1,5 +1,7 @@
 import { AccessPointsList } from "./AccessPointsList";
 import { AccessPointsShow } from "./AccessPointsShow";
+import { AccessPointsEdit } from "./AccessPointsEdit";
+
 
 export const accessPoints = (permissions?: string[]) => {
     let accessPoints = null;
@@ -11,6 +13,7 @@ export const accessPoints = (permissions?: string[]) => {
             accessPoints = {
                 list: AccessPointsList,
                 show: AccessPointsShow,
+                edit: AccessPointsEdit,
             };
             break;
         }

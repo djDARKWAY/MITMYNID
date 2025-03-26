@@ -113,7 +113,7 @@ export class AccessPoint extends Entity {
   company_id?: number;
 
   @belongsTo(() => User, { name: "last_modified_user_id" })
-  last_modified_user_id?: number;
+  last_modified_user_id?: string;
 
   constructor(data?: Partial<AccessPoint>) {
     super(data);
