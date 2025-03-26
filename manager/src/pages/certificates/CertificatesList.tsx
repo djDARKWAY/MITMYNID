@@ -1,9 +1,12 @@
-import { List, Datagrid, TextField, FunctionField, SimpleList, usePermissions, DateField } from "react-admin";
+import { List, Datagrid, TextField, FunctionField, SimpleList, usePermissions, DateField, WithRecord } from "react-admin";
 import { useTheme } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CustomEmptyPage from "../../components/general/CustomEmptyPage";
 import CustomPagination, { perPageDefault } from "../../components/general/CustomPagination";
 import { CertificatesFilters } from "./CertificatesFilter";
+import { Edit, Delete } from '@mui/icons-material';
+import CustomButtonToolTip, { commonListCSS } from "../../components/general/CustomButtonToolTip";
+import CustomConfirmButtonToolTip from "../../components/general/CustomConfirmButtonToolTip";
 
 export const CertificatesList = () => {
     const { permissions } = usePermissions();
@@ -28,13 +31,33 @@ export const CertificatesList = () => {
                     linkType={"edit"}
                 />
             ) : (
-                <Datagrid rowClick="show">
+                <Datagrid rowClick={false}>
                     <TextField source="name" label="resources.certificates.fields.name" />
                     <TextField source="file_path" label="resources.certificates.fields.file_path" />
                     <TextField source="issuer_name" label="resources.certificates.fields.issuer_name" />
                     <DateField source="issue_date" label="resources.certificates.fields.issue_date" />
                     <DateField source="expiration_date" label="resources.certificates.fields.expiration_date" />
                     <FunctionField source="is_active" label="resources.certificates.fields.is_active" render={record => record.is_active ? '🟢' : '🔴'} />
+                    <WithRecord render={(record) => (
+                        <div style={{ display: 'flex', gap: '4px', justifyContent: 'flex-end' }}>
+                            <CustomButtonToolTip
+                                icon={<Edit />}
+                                label={"ra.action.edit"}
+                                action={"redirect"}
+                                id={record.id}
+                                resource={"certificates"}
+                                sx={commonListCSS}
+                            />
+                            <CustomConfirmButtonToolTip
+                                sx={commonListCSS}
+                                label={"ra.action.delete"}
+                                color="error"
+                                icon={<Delete />}
+                                id={record.id}
+                                resource={"certificates"}
+                            />
+                        </div>
+                    )} />
                 </Datagrid>
             )}
         </List>

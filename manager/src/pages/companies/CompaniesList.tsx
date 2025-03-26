@@ -51,7 +51,7 @@ const CompanyCard = ({ record }: { record?: { id: number | string; name: string;
                     backgroundPosition: "center",
                     opacity: 0.6,
                     maskImage: 'linear-gradient(to top left, black 15%, transparent 52%)',
-                    WebkitMaskImage: 'linear-gradient(to top left, black 20%, transparent 52%)'}}
+                    WebkitMaskImage: 'linear-gradient(to top left, black 10%, transparent 52%)'}}
             />
         )}
         </Paper>
