@@ -55,14 +55,6 @@ const Configuration = () => {
                 >
                     es
                 </Button>
-                <Button
-                    variant="contained"
-                    sx={{margin: '1em'}}
-                    color={locale === 'ga' ? 'primary' : 'secondary'}
-                    onClick={() => {setLocale('ga')}}
-                >
-                    ga
-                </Button>
             </CardContent>
         </Card>
     );

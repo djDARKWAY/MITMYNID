@@ -57,7 +57,7 @@ export const UsersList = () => {
                         {
                         record.photo
                         ? 
-                        <img src={url + "/" + record.photo} style={{width: '40px', height: '40px', borderRadius: '30px'}} alt="user icon"/>
+                        <img src={`${url}/${record.photo}`} style={{width: '40px', height: '40px', borderRadius: '30px'}} alt="user icon"/>
                         :
                         <img src="default-user.svg" style={{width: '40px'}} alt="user icon"/>
                         }

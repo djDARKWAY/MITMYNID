@@ -77,25 +77,19 @@ export class UserController {
   async create(
     @requestBody(CredentialsSignInRequestBody) newUserRequest: User
   ): Promise<User | Response> {
-    // Validate required fields
     if (!newUserRequest.person_name || !newUserRequest.email || !newUserRequest.password) {
       return this.response
         .status(400)
         .send({ message: "Missing required fields: person_name, email, or password" });
     }
 
-    // Ensure email and username are in lowercase
     newUserRequest.username = newUserRequest.username?.toLowerCase();
     newUserRequest.email = newUserRequest.email.toLowerCase();
-
-    // Encrypt the password
     newUserRequest.password = await this.passwordHasher.hashPassword(newUserRequest.password);
     newUserRequest.validation_date = new Date().toISOString();
 
-    // Extract roles
     const roles: string[] = (newUserRequest.roles || []).map(role => typeof role === 'string' ? role : role.id);
 
-    // Ensure company_id is valid (optional validation)
     if (newUserRequest.company_id && typeof newUserRequest.company_id !== 'number') {
       return this.response.status(400).send({ message: "Invalid company_id. It must be a number." });
     }
@@ -104,15 +98,12 @@ export class UserController {
       if (newUserRequest.photo && typeof newUserRequest.photo !== "string") {
         const path = "./public/files/users/";
 
-        console.log("Uploading image...");
         return await uploadImage(
           newUserRequest.photo.data,
           path,
           newUserRequest.photo.name
         ).then(async (value) => {
           newUserRequest.photo = value.slice(9);
-
-          console.log("Creating user with photo...");
           const savedUser = await this.userRepository
             .create(_.omit(newUserRequest, ["roles", "blocked", "active"]))
             .then(async (user) => {
@@ -183,7 +174,7 @@ export class UserController {
         .send({ message: "Erro inesperado ao criar utilizador" });
     }
   }
-
+  
   @get("/users")
   @response(200, {
     description: "Array of User model instances",
@@ -260,6 +251,13 @@ export class UserController {
         "x-total-count",
         (await this.count(filter?.where)).count
       );
+
+      users.forEach((user) => {
+        if (user.photo) {
+          user.photo = `${user.photo}_xs.webp`;
+        }
+      });
+
       return users;
     });
   }
@@ -306,6 +304,10 @@ export class UserController {
     try {
       //detalhes do utilizador que está a tentar aceder
       const accessUser = await this.userRepository.findById(id, filter);
+
+      if (accessUser.photo) {
+        accessUser.photo = `${accessUser.photo}.webp`;
+      }
 
       return accessUser;
     } catch (err) {
