@@ -22,10 +22,10 @@ import { AccessPoint } from "../models";
 import { AccessPointRepository } from "../repositories";
 import { CompanyRepository } from "../repositories";
 import { XMLValidator } from "fast-xml-parser";
+import { inject } from "@loopback/core";
 import { authenticate, TokenService, UserService } from "@loopback/authentication";
 import { basicAuthorization } from "../middlewares/auth.middleware";
 import { authorize } from "@loopback/authorization";
-import { inject } from "@loopback/core";
 
 export class AccessPointController {
   constructor(
@@ -225,47 +225,21 @@ export class AccessPointController {
     const rules: { [key: string]: { condition: boolean; message: string }[] } =
       {
         location_description: [
-          {
-            condition: !accessPoint.location_description,
-            message: "A descrição da localização é obrigatória!",
-          },
-          {
-            condition: accessPoint.location_description.length > 255,
-            message: "A descrição da localização é muito longa!",
-          },
+          { condition: !accessPoint.location_description, message: "A descrição da localização é obrigatória!" },
+          { condition: accessPoint.location_description.length > 255, message: "A descrição da localização é muito longa!" },
         ],
         ip_address: [
-          {
-            condition: !accessPoint.ip_address,
-            message: "O endereço IP é obrigatório!",
-          },
-          {
-            condition:
-              !/^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(
-                accessPoint.ip_address
-              ) &&
-              !/^([0-9a-fA-F]{1,4}:){7}([0-9a-fA-F]{1,4})$/.test(
-                accessPoint.ip_address
-              ),
-            message: "O endereço IP deve ser um IPv4 ou IPv6 válido!",
-          },
+          { condition: !accessPoint.ip_address, message: "O endereço IP é obrigatório!" },
+          { condition: !/^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(accessPoint.ip_address) && !/^([0-9a-fA-F]{1,4}:){7}([0-9a-fA-F]{1,4})$/.test(accessPoint.ip_address), message: "O endereço IP deve ser um IPv4 ou IPv6 válido!"},
         ],
         is_active: [
-          {
-            condition: accessPoint.is_active === undefined,
-            message: "O estado do AP é obrigatório!",
-          },
-          {
-            condition: typeof accessPoint.is_active !== "boolean",
-            message: "O estado do AP deve ser um valor booleano!",
-          },
+          { condition: accessPoint.is_active === undefined, message: "O estado do AP é obrigatório!" },
+          { condition: typeof accessPoint.is_active !== "boolean", message: "O estado do AP deve ser um valor booleano!" },
         ],
       };
 
     Object.entries(rules).forEach(([field, validations]) => {
-      validations.forEach(({ condition, message }) =>
-        validate(condition, field, message)
-      );
+      validations.forEach(({ condition, message }) => validate(condition, field, message) );
     });
 
     // Optional fields

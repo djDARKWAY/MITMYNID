@@ -50,8 +50,8 @@ const CompanyCard = ({ record }: { record?: { id: number | string; name: string;
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     opacity: 0.6,
-                    maskImage: 'linear-gradient(to top left, black 20%, transparent 56%)',
-                    WebkitMaskImage: 'linear-gradient(to top left, black 20%, transparent 56%)'}}
+                    maskImage: 'linear-gradient(to top left, black 15%, transparent 55%)',
+                    WebkitMaskImage: 'linear-gradient(to top left, black 20%, transparent 55%)'}}
             />
         )}
         </Paper>

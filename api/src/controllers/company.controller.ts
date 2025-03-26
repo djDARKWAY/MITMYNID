@@ -12,6 +12,7 @@ import {
   patch,
   put,
   del,
+  Request,
   requestBody,
   response,
   HttpErrors,
@@ -21,6 +22,9 @@ import {
 import { inject } from "@loopback/core";
 import { Company } from "../models";
 import { CompanyRepository } from "../repositories";
+import { LogService } from "../services/log.service";
+import { SecurityBindings, UserProfile } from '@loopback/security';
+import * as useragent from 'useragent';
 import { authenticate, TokenService, UserService } from '@loopback/authentication';
 import { basicAuthorization } from '../middlewares/auth.middleware';
 import { authorize } from '@loopback/authorization';
@@ -28,7 +32,9 @@ import { authorize } from '@loopback/authorization';
 export class CompanyController {
   constructor(
     @repository(CompanyRepository)
-    public companyRepository: CompanyRepository
+    public companyRepository: CompanyRepository,
+        @inject(RestBindings.Http.REQUEST) private request: Request,
+        @inject('services.LogService') private logService: LogService,
   ) {}
 
   // POST endpoint:
@@ -133,59 +139,117 @@ export class CompanyController {
 
   // PATCH endpoint:
   @patch("/companies/{id}")
+  @authenticate("jwt")
   @response(204, {
     description: "Company PATCH success",
   })
   async updateById(
     @param.path.number("id") id: number,
-    @requestBody() company: Partial<Company>
+    @requestBody() company: Partial<Company>,
+    @inject(SecurityBindings.USER) currentUser: UserProfile,
   ): Promise<void> {
     const existingCompany = await this.companyRepository.findById(id);
     if (!existingCompany) {
       throw new HttpErrors.NotFound('Armazém não encontrado!');
     }
     const { last_modified_user_id, ...companyData } = company;
+
     await this.companyRepository.updateById(id, {
       ...companyData,
       last_modified: new Date().toISOString(),
     });
+
+    const updatedCompany = await this.companyRepository.findById(id);
+
+    const userAgentHeader = this.request.headers['user-agent'] || 'unknown';
+    const agent = useragent.parse(userAgentHeader);
+    const deviceInfo = {
+      device: agent.device.toString(),
+      os: agent.os.toString(),
+    };
+
+    await this.logService.logCompanyChange(
+      currentUser.person_name || 'unknown',
+      updatedCompany.id || 'unknown',
+      this.request.ip || 'unknown',
+      currentUser.id || 'unknown',
+      deviceInfo
+    );
   }
 
   // DELETE endpoint:
   @del("/companies/{id}")
+  @authenticate("jwt")
   @response(204, {
     description: "Company DELETE success",
   })
-  async deleteById(@param.path.number("id") id: number): Promise<void> {
+  async deleteById(
+    @param.path.number("id") id: number,
+    @inject(SecurityBindings.USER) currentUser: UserProfile,
+  ): Promise<void> {
     const existingCompany = await this.companyRepository.findById(id);
     if (!existingCompany) {
       throw new HttpErrors.NotFound('Armazém não encontrado!');
     }
+
     await this.companyRepository.deleteById(id);
+
+    const userAgentHeader = this.request.headers['user-agent'] || 'unknown';
+    const agent = useragent.parse(userAgentHeader);
+    const deviceInfo = {
+      device: agent.device.toString(),
+      os: agent.os.toString(),
+    };
+
+    await this.logService.logCompanyDelete(
+      currentUser.person_name || 'unknown',
+      id,
+      this.request.ip || 'unknown',
+      currentUser.id || 'unknown',
+      deviceInfo
+    );
   }
 
   @del("/companies")
+  @authenticate("jwt")
   @response(204, {
     description: "Companies DELETE success",
   })
   async deleteMany(
-    @param.query.string("filter") filterStr: string
+    @param.query.string("filter") filterStr: string,
+    @inject(SecurityBindings.USER) currentUser: UserProfile,
   ): Promise<void> {
     let filter;
     try {
       filter = JSON.parse(filterStr);
-    } catch (error) {
+    } catch {
       throw new HttpErrors.BadRequest('Invalid filter format.');
     }
 
     const ids = filter?.where?.id?.inq;
-    if (!ids || ids.length === 0) {
+    if (!ids?.length) {
       throw new HttpErrors.BadRequest('No IDs provided for deletion.');
     }
 
-    await this.companyRepository.deleteAll({
-      id: { inq: ids },
-    });
+    const companiesToDelete = await this.companyRepository.find({ where: { id: { inq: ids } } });
+    await this.companyRepository.deleteAll({ id: { inq: ids } });
+
+    const userAgentHeader = this.request.headers['user-agent'] || 'unknown';
+    const agent = useragent.parse(userAgentHeader);
+    const deviceInfo = {
+      device: agent.device.toString(),
+      os: agent.os.toString(),
+    };
+
+    for (const company of companiesToDelete) {
+      await this.logService.logCompanyDelete(
+        currentUser.person_name || 'unknown',
+        company.id || 'unknown',
+        this.request.ip || 'unknown',
+        currentUser.id || 'unknown',
+        deviceInfo
+      );
+    }
   }
 
   validateCompany(

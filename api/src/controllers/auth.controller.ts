@@ -191,18 +191,6 @@ export class AuthController {
     });
 
     if (lastSession) await this.appUsersSessionRepository.updateById(lastSession.id, { logout: new Date().toISOString() })
-
-    const userAgentHeader = this.request.headers['user-agent'] || 'unknown';
-    const agent = useragent.parse(userAgentHeader);
-    const deviceInfo = {
-      device: agent.device.toString(),
-      os: agent.os.toString(),
-    };
-
-    await this.logService.logLoginSuccess(currentUserProfile.name || 'unknown', this.request.ip || 'unknown', {
-      device: deviceInfo.device,
-      os: deviceInfo.os,
-    }, currentUserProfile[securityId]);
   }
 
   @get('/auth/me', {
