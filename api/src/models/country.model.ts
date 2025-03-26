@@ -15,8 +15,8 @@ export class Country extends Entity {
     required: true,
     postgresql: {
       columnName: "id",
-      dataType: "char",
-      dataLength: 2,
+      dataType: "varchar",
+      dataLength: 6,
     },
   })
   id?: string;
