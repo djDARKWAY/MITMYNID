@@ -201,7 +201,9 @@ export class UserController {
     allowedRoles: ["ADMIN"],
     voters: [basicAuthorization],
   })
-  async find(@param.filter(User) filter?: Filter<User>): Promise<User[]> {
+  async find(
+    @param.filter(User) filter?: Filter<User>
+  ): Promise<User[]> {
     const user = this.user;
 
     if (!filter) {
@@ -215,6 +217,22 @@ export class UserController {
           //@ts-ignore
           ilike: `%${filter?.where.person_name}%`,
         },
+      };
+    }
+
+    if (filter?.where && filter?.where.hasOwnProperty("role")) {
+      const whereWithRole = filter.where as { role?: string } & Where<User>;
+      const roleId = whereWithRole.role;
+      delete whereWithRole.role;
+
+      const userRoles = await this.userRoleRepository.find({
+        where: { role_id: roleId },
+      });
+
+      const userIds = userRoles.map((ur) => ur.app_users_id);
+      filter.where = {
+        ...filter.where,
+        id: { inq: userIds },
       };
     }
 

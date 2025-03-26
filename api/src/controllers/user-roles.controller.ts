@@ -54,25 +54,6 @@ export class UserRolesController {
     return this.userRoleRepository.find(filter);
   }
 
-  /*@patch('/user-roles')
-  @response(200, {
-    description: 'UserRole PATCH success count',
-    content: {'application/json': {schema: CountSchema}},
-  })
-  async updateAll(
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(UserRole, {partial: true}),
-        },
-      },
-    })
-    userRole: UserRole,
-    @param.where(UserRole) where?: Where<UserRole>,
-  ): Promise<Count> {
-    return this.userRoleRepository.updateAll(userRole, where);
-  } */
-
   @get("/user-roles/{user_id}")
   @response(200, {
     description: "UserRole model instance",
