@@ -34,6 +34,8 @@ import { SecurityBindings, securityId, UserProfile } from '@loopback/security';
 import { uploadImage } from './specs/files-manager.specs';
 import { user_postgres_errors } from '../error-handling/users.error-handling';
 import { EmailService } from '../services/email.service';
+import * as fs from 'fs';
+import * as path from 'path';
 
 export class UserController {
   constructor(
@@ -391,28 +393,34 @@ export class UserController {
             }
           }
 
-          if (
-            user.photo &&
-            typeof user.photo !== "string" &&
-            user.photo.src &&
-            user.photo.src.search("files/users/") === -1
-          ) {
-            const path = "./public/files/users/";
+          if (user.photo) {
+            const photoPath = path.join('./public/files/users/', typeof accessUser.photo === 'string' ? accessUser.photo : '');
 
-            await uploadImage(user.photo.data, path, user.photo.name).then(
-              async (value) => {
-                //.slice para retirar ./public/ do caminho
-                user.photo = value.slice(9);
+            if (typeof user.photo === "object" && 'data' in user.photo && 'name' in user.photo) {
+              const uploadPath = "./public/files/users/";
+              await uploadImage(user.photo.data, uploadPath, user.photo.name).then(
+                async (value) => {
+                  user.photo = value.slice(9);
+                  await this.userRepository.updateById(id, { photo: user.photo });
 
+                  // Remove old photo if it exists and is different from the new one
+                  if (accessUser.photo && fs.existsSync(photoPath)) {
+                    fs.unlinkSync(photoPath);
+                  }
+                }
+              );
+            } else if (typeof user.photo === "string") {
+              if (user.photo === accessUser.photo) {
+                delete user.photo;
+              } else {
                 await this.userRepository.updateById(id, { photo: user.photo });
+
+                // Remove old photo if it exists and is different from the new one
+                if (accessUser.photo && fs.existsSync(photoPath)) {
+                  fs.unlinkSync(photoPath);
+                }
               }
-            );
-          } else if (
-            accessUser.photo &&
-            user.photo !== undefined &&
-            accessUser.photo !== user.photo
-          ) {
-            await this.userRepository.updateById(id, { photo: null });
+            }
           }
 
           if (user.prefs_util) {

@@ -67,6 +67,12 @@ export const UsersEdit = () => {
 
     if (data.tempRoles) delete data.tempRoles;
 
+    // Se a foto vier como string (valor atual) mantenha o campo omitindo alteração
+    if (data.photo && typeof data.photo === "string") {
+      // O campo 'photo' será o mesmo que o backend já possui, então remova-o para não sobrescrever
+      delete data.photo;
+    }
+
     return data
   };
 
