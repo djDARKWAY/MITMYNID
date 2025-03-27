@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import CustomEmptyPage from "../../components/general/CustomEmptyPage";
 import CustomPagination, { perPageDefault } from "../../components/general/CustomPagination";
 import { CompaniesFilters } from "./CompaniesFilter";
+import { Delete } from "@mui/icons-material";
+import CustomConfirmButtonToolTip from "../../components/general/CustomConfirmButtonToolTip";
+
 const FLAG_BASE_URL = import.meta.env.REACT_APP_FLAG_BASE_URL || "http://127.0.0.1:13090/files/flags/";
 
 const CompanyCard = ({ record }: { record?: { id: number | string; name: string; city: string; zip_code: string; country?: { name: string, flag_url?: string } } }) => {
@@ -13,19 +16,10 @@ const CompanyCard = ({ record }: { record?: { id: number | string; name: string;
 
     return (
         <Paper elevation={3} sx={{ height: "100%", position: "relative", overflow: "hidden" }}>
-            <Card
-                sx={{ 
-                    textDecoration: "none", 
-                    padding: "4px 4px", 
-                    height: "100%", 
-                    display: "flex", 
-                    flexDirection: "column", 
-                    justifyContent: "center",
-                    position: "relative"
-                }}
-                component={Link}
-                to={`/companies/${record.id}/show`}
-            >
+            <div style={{ position: "absolute", top: "4px", right: "4px", zIndex: 2 }}>
+                <CustomConfirmButtonToolTip label={"ra.action.delete"} color="error" icon={<Delete />} id={String(record.id)} resource={"companies"} />
+            </div>
+            <Card sx={{ textDecoration: "none", padding: "4px 4px", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", position: "relative" }} component={Link} to={`/companies/${record.id}/show`}>
                 <CardContent sx={{ color: "#ffffff" }}>
                     <Typography variant="h6" sx={{ marginBottom: "8px", fontWeight: "bold" }}>
                         {record.name}
@@ -44,8 +38,8 @@ const CompanyCard = ({ record }: { record?: { id: number | string; name: string;
                     position: "absolute",
                     bottom: 0,
                     right: 0,
-                    width: "53px",
-                    height: "40px",
+                    width: "69px", // 130% of 53px
+                    height: "52px", // 130% of 40px
                     backgroundImage: `url(${FLAG_BASE_URL}${record.country.flag_url})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
