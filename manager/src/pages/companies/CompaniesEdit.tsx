@@ -1,12 +1,14 @@
-import { Edit, TabbedForm, ReferenceInput, SelectInput, TextInput } from "react-admin";
-import { Typography, Divider, Box } from "@mui/material";
-import { Home, ContactMail, Language, Person } from "@mui/icons-material";
+import { Edit, TabbedForm, ReferenceInput, SelectInput, TextInput, Toolbar, SaveButton } from "react-admin";
+import { Typography, Divider, Box, Button } from "@mui/material";
+import { Home, ContactMail, Language, Person, DoDisturb } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 
-const FLAG_BASE_URL = import.meta.env.REACT_APP_FLAG_BASE_URL || "http://127.0.0.1:13090/files/flags/";
+const FLAG_BASE_URL = import.meta.env.REACT_APP_FLAG_BASE_URL;
 
 export const CompaniesEdit = () => (
     <Edit>
-        <TabbedForm>
+        <TabbedForm toolbar={<CustomToolbar />}>
+            {/* Identificação */}
             <TabbedForm.Tab label="Identificação">
                 <Box display="flex" alignItems="center">
                     <Person />
@@ -15,7 +17,8 @@ export const CompaniesEdit = () => (
                 <Divider sx={{ mb: 3 }} />
                 <TextInput source="name" label="show.companies.name" fullWidth />
             </TabbedForm.Tab>
-            
+
+            {/* Localização */}
             <TabbedForm.Tab label="Localização">
                 <Box display="flex" alignItems="center">
                     <Home />
@@ -35,6 +38,7 @@ export const CompaniesEdit = () => (
                 <TextInput source="zip_code" label="show.companies.zip_code" fullWidth />
             </TabbedForm.Tab>
 
+            {/* Contactos */}
             <TabbedForm.Tab label="Contactos">
                 <Box display="flex" alignItems="center">
                     <ContactMail />
@@ -45,6 +49,8 @@ export const CompaniesEdit = () => (
                 <TextInput source="contact" label="show.companies.contact" fullWidth />
                 <TextInput source="phone" label="show.companies.phone" fullWidth />
             </TabbedForm.Tab>
+
+            {/* Website */}
             <TabbedForm.Tab label="Website">
                 <Box display="flex" alignItems="center">
                     <Language />
@@ -55,4 +61,11 @@ export const CompaniesEdit = () => (
             </TabbedForm.Tab>
         </TabbedForm>
     </Edit>
+);
+
+const CustomToolbar = () => (
+    <Toolbar>
+        <SaveButton />
+        <Button component={Link} to="/companies" startIcon={<DoDisturb />} color="primary" size="small" sx={{ ml: 2 }}>Cancelar</Button>
+    </Toolbar>
 );

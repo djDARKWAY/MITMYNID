@@ -1,6 +1,7 @@
-import { Edit, TabbedForm, ReferenceInput, SelectInput, TextInput, BooleanInput, useEditController } from "react-admin";
-import { Typography, Divider, Box } from "@mui/material";
-import { Person, Settings, Home } from "@mui/icons-material";
+import { Edit, TabbedForm, ReferenceInput, SelectInput, TextInput, BooleanInput, useEditController, Toolbar, SaveButton } from "react-admin";
+import { Typography, Divider, Box, Button } from "@mui/material";
+import { Person, Settings, Home, DoDisturb } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 
 export const AccessPointsEdit = () => {
     const controllerProps = useEditController();
@@ -12,7 +13,7 @@ export const AccessPointsEdit = () => {
 
     return (
         <Edit {...controllerProps} transform={sanitizeData}>
-            <TabbedForm>
+            <TabbedForm toolbar={<CustomToolbar />}>
                 {/* Identificação */}
                 <TabbedForm.Tab label="Identificação">
                     <Box display="flex" alignItems="center">
@@ -51,3 +52,10 @@ export const AccessPointsEdit = () => {
         </Edit>
     );
 };
+
+const CustomToolbar = () => (
+    <Toolbar>
+        <SaveButton />
+        <Button component={Link} to="/access-points" startIcon={<DoDisturb />} color="primary" size="small" sx={{ ml: 2 }}>Cancelar</Button>
+    </Toolbar>
+);
