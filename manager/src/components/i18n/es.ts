@@ -224,6 +224,8 @@ const spanishMessages: TranslationMessages = {
     companies: {
       name: "Nombre",
       country: "País",
+      district: "Distrito",
+      city: "Ciudad",
     },
     logs: {
       type: "Categoría",

@@ -89,6 +89,10 @@ export class CompanyController {
       const district = (filter.where as any).district;
       (filter.where as any).district = { ilike: `%${district}%` };
     }
+    if (filter?.where && (filter.where as any).city) {
+      const city = (filter.where as any).city;
+      (filter.where as any).city = { ilike: `%${city}%` };
+    }
     if (filter?.where && (filter.where as any).country) {
       const country = (filter.where as any).country;
       (filter.where as any).country_id = { like: `${country}` };

@@ -42,7 +42,7 @@ export const LogsList = () => {
                     linkType={"edit"}
                 />
             ) : (
-                <DatagridConfigurable rowClick="show" bulkActionButtons={false} >
+                <DatagridConfigurable rowClick={false} bulkActionButtons={false} >
                     <FunctionField
                         label="resources.logs.fields.category" 
                         render={record => {

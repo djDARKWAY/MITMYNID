@@ -107,7 +107,6 @@ export class AuthController {
 
     return { token: token };
   }
-
   @post('/man/auth/login', {
     responses: {
       '200': {
@@ -162,10 +161,22 @@ export class AuthController {
 
       return { token: token };
     } catch (err) {
-      await this.logService.logLoginFailure(credentials.username, ip as string, err.message, {
-        device: deviceInfo.device,
-        os: deviceInfo.os,
-      });
+      if (err.code === 'USER_NOT_FOUND') {
+        await this.logService.logLoginFailure(credentials.username, ip as string, 'User not found', {
+          device: deviceInfo.device,
+          os: deviceInfo.os,
+        });
+      } else if (err.code === 'INVALID_PASSWORD') {
+        await this.logService.logLoginFailure(credentials.username, ip as string, 'Invalid password', {
+          device: deviceInfo.device,
+          os: deviceInfo.os,
+        });
+      } else {
+        await this.logService.logLoginFailure(credentials.username, ip as string, err.message, {
+          device: deviceInfo.device,
+          os: deviceInfo.os,
+        });
+      }
       throw err;
     }
   }

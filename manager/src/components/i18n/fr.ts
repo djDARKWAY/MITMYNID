@@ -225,6 +225,8 @@ const frenchMessages: TranslationMessages = {
     companies: {
       name: "Nom",
       country: "Pays",
+      district: "District",
+      city: "Ville",
     },
     logs: {
       type: "Catégorie",

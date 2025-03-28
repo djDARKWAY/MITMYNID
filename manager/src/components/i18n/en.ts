@@ -216,6 +216,8 @@ const englishMessages: TranslationMessages = {
     companies: {
       name: "Name",
       country: "Country",
+      district: "District",
+      city: "City",
     },
     logs: {
       type: "Category",
