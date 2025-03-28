@@ -25,6 +25,7 @@ export const CompaniesFilters = (permissions: string[]) => {
         <TextInput key="name" source="name" size="small" label="pos.companies.name" fullWidth alwaysOn resettable />,
         <TextInput key="district" source="district" size="small" label="pos.companies.district" fullWidth alwaysOn resettable />,
         <TextInput key="city" source="city" size="small" label="pos.companies.city" fullWidth alwaysOn resettable />,
+        <TextInput key="zip_code" source="zip_code" size="small" label="pos.companies.zip_code" fullWidth alwaysOn resettable />,
         <SelectInput
             key="country"
             source="country"

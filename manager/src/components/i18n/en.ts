@@ -218,6 +218,7 @@ const englishMessages: TranslationMessages = {
       country: "Country",
       district: "District",
       city: "City",
+      zip_code: "Postal code",
     },
     logs: {
       type: "Category",

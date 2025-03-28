@@ -226,6 +226,7 @@ const portugueseMessages: TranslationMessages = {
       country: "País",
       district: "Distrito",
       city: "Cidade",
+      zip_code: "Código Postal",
     },
     logs:{
       type: "Categoria",

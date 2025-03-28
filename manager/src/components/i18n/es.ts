@@ -1,3 +1,4 @@
+import { zip } from "lodash";
 import { TranslationMessages } from "react-admin";
 
 const spanishMessages: TranslationMessages = {
@@ -226,6 +227,7 @@ const spanishMessages: TranslationMessages = {
       country: "País",
       district: "Distrito",
       city: "Ciudad",
+      zip_code: "Código postal",
     },
     logs: {
       type: "Categoría",

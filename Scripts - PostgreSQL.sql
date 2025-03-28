@@ -32,7 +32,7 @@ CREATE TABLE network.company (
   country_id CHAR(2) NOT NULL,                                    -- [FK] País
   zip_code VARCHAR(20) NOT NULL,                                  -- Código postal
   email TEXT,                                                     -- Email da entidade
-  contact TEXT,                                                   -- Contacto da entidade
+  contact TEXT,                                                   -- Nome da pessoa responsável
   phone TEXT,                                                     -- Contacto da pessoa responsável
   website TEXT,                                                   -- Endereço Web
   created_date TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,   -- Timestamp da criação

@@ -227,6 +227,7 @@ const frenchMessages: TranslationMessages = {
       country: "Pays",
       district: "District",
       city: "Ville",
+      zip_code: "Code postal",
     },
     logs: {
       type: "Catégorie",
