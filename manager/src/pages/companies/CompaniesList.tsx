@@ -7,7 +7,7 @@ import { CompaniesFilters } from "./CompaniesFilter";
 import { Delete } from "@mui/icons-material";
 import CustomConfirmButtonToolTip from "../../components/general/CustomConfirmButtonToolTip";
 
-const FLAG_BASE_URL = import.meta.env.REACT_APP_FLAG_BASE_URL || "http://127.0.0.1:13090/files/flags/";
+const FLAG_BASE_URL = import.meta.env.VITE_FLAG_BASE_URL;
 
 const CompanyCard = ({ record }: { record?: { id: number | string; name: string; city: string; zip_code: string; country?: { name: string, flag_url?: string } } }) => {
     if (!record) return null;
@@ -38,8 +38,8 @@ const CompanyCard = ({ record }: { record?: { id: number | string; name: string;
                     position: "absolute",
                     bottom: 0,
                     right: 0,
-                    width: "69px", // 130% of 53px
-                    height: "52px", // 130% of 40px
+                    width: "69px",
+                    height: "52px",
                     backgroundImage: `url(${FLAG_BASE_URL}${record.country.flag_url})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",

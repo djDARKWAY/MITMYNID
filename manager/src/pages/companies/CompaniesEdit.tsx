@@ -3,7 +3,7 @@ import { Typography, Divider, Box, Button } from "@mui/material";
 import { Home, ContactMail, Language, Person, DoDisturb } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
-const FLAG_BASE_URL = import.meta.env.REACT_APP_FLAG_BASE_URL;
+const FLAG_BASE_URL = import.meta.env.VITE_FLAG_BASE_URL;
 
 export const CompaniesEdit = () => (
     <Edit>

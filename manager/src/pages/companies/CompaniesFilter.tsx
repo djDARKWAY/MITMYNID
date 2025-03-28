@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { TextInput, SelectInput } from "react-admin";
 import { fetchUtils } from "react-admin";
 
-const FLAG_BASE_URL = import.meta.env.REACT_APP_FLAG_BASE_URL || "http://127.0.0.1:13090/files/flags/";
+const FLAG_BASE_URL = import.meta.env.VITE_FLAG_BASE_URL;
 
 export const CompaniesFilters = (permissions: string[]) => {
     const [countries, setCountries] = useState<{ id: string; name: string; flag_url: string }[]>([]);
