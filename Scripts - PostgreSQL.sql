@@ -28,6 +28,7 @@ CREATE TABLE network.company (
   name VARCHAR(255) NOT NULL,                                     -- Nome completo da entidade
   address VARCHAR(255) NOT NULL,                                  -- Rua ou avenida
   city VARCHAR(100) NOT NULL,                                     -- Cidade
+  district VARCHAR(100) NOT NULL,                                 -- Distrito/estado
   country_id CHAR(2) NOT NULL,                                    -- [FK] País
   zip_code VARCHAR(20) NOT NULL,                                  -- Código postal
   email TEXT,                                                     -- Email da entidade
@@ -41,11 +42,11 @@ CREATE TABLE network.company (
   CONSTRAINT fk_company_user
     FOREIGN KEY (last_modified_user_id)
     REFERENCES auth.app_users (id)
-    ON DELETE SET NULL                                            -- Se o utilizador for eliminado retorna NULL
+    ON DELETE SET NULL,                                           -- Se o utilizador for eliminado retorna NULL
   CONSTRAINT fk_company_country
     FOREIGN KEY (country_id)
     REFERENCES network.country(id)
-    ON DELETE SET NULL;                                           -- Se o país for eliminado retorna NULL
+    ON DELETE SET NULL                                            -- Se o país for eliminado retorna NULL
 );
 
 -- Criação da tabela "accesspoint"

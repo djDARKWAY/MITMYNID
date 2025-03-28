@@ -22,6 +22,7 @@ export const CompaniesShow = () => (
             <Divider sx={{ mb: 1 }} />
             <TextField source="address" label="show.companies.address" />
             <TextField source="city" label="show.companies.city" />
+            <TextField source="district" label="show.companies.district" />
             <ReferenceField source="country_id" reference="countries" label="show.companies.country">
                 <TextField source="name" />
             </ReferenceField>

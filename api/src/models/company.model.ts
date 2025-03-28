@@ -66,6 +66,18 @@ export class Company extends Entity {
 
   @property({
     type: "string",
+    required: true,
+    postgresql: {
+      columnName: "district",
+      dataType: "varchar",
+      dataLength: 100,
+      nullable: "NO",
+    },
+  })
+  district: string;
+
+  @property({
+    type: "string",
     postgresql: {
       columnName: "email",
       dataType: "text",

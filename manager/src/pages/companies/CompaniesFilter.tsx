@@ -23,6 +23,7 @@ export const CompaniesFilters = (permissions: string[]) => {
 
     const filters = [
         <TextInput key="name" source="name" size="small" label="pos.companies.name" fullWidth alwaysOn resettable />,
+        <TextInput key="district" source="district" size="small" label="pos.companies.district" fullWidth resettable />,
         <SelectInput
             key="country"
             source="country"

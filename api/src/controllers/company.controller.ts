@@ -85,6 +85,10 @@ export class CompanyController {
       const name = (filter.where as any).name;
       (filter.where as any).name = { ilike: `%${name}%` };
     }
+    if (filter?.where && (filter.where as any).district) {
+      const district = (filter.where as any).district;
+      (filter.where as any).district = { ilike: `%${district}%` };
+    }
     if (filter?.where && (filter.where as any).country) {
       const country = (filter.where as any).country;
       (filter.where as any).country_id = { like: `${country}` };
@@ -102,6 +106,7 @@ export class CompanyController {
         id: true,
         name: true,
         city: true,
+        district: true,
         country_id: true,
         zip_code: true,
       },
@@ -269,6 +274,10 @@ export class CompanyController {
       city: [
         { condition: !company.city, message: "A cidade é obrigatória!" },
         { condition: company.city.length > 100, message: "A cidade não pode ter mais de 100 caracteres!" }
+      ],
+      district: [
+        { condition: !company.district, message: "O distrito é obrigatório!" },
+        { condition: company.district?.length > 100, message: "O distrito não pode ter mais de 100 caracteres!" }
       ],
       zip_code: [
         { condition: !company.zip_code, message: "O código postal é obrigatório!" },

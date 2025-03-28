@@ -9,10 +9,10 @@ import CustomConfirmButtonToolTip from "../../components/general/CustomConfirmBu
 
 const FLAG_BASE_URL = import.meta.env.VITE_FLAG_BASE_URL;
 
-const CompanyCard = ({ record }: { record?: { id: number | string; name: string; city: string; zip_code: string; country?: { name: string, flag_url?: string } } }) => {
+const CompanyCard = ({ record }: { record?: { id: number | string; name: string; city: string; district?: string; zip_code: string; country?: { name: string, flag_url?: string } } }) => {
     if (!record) return null;
 
-    const location = record.country ? `${record.city}, ${record.country.name}` : record.city;
+    const location = `${record.city}${record.district ? `, ${record.district}` : ''}`;
 
     return (
         <Paper elevation={3} sx={{ height: "100%", position: "relative", overflow: "hidden" }}>

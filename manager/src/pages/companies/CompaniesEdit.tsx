@@ -35,6 +35,7 @@ export const CompaniesEdit = () => (
                     </Box>
                     <TextInput source="city" label="show.companies.city" sx={{ width: "50%" }} />
                 </Box>
+                <TextInput source="district" label="show.companies.district" fullWidth />
                 <TextInput source="zip_code" label="show.companies.zip_code" fullWidth />
             </TabbedForm.Tab>
 
