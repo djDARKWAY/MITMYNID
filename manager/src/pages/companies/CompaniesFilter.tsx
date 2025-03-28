@@ -26,12 +26,7 @@ export const CompaniesFilters = (permissions: string[]) => {
         <TextInput key="district" source="district" size="small" label="pos.companies.district" fullWidth alwaysOn resettable />,
         <TextInput key="city" source="city" size="small" label="pos.companies.city" fullWidth alwaysOn resettable />,
         <TextInput key="zip_code" source="zip_code" size="small" label="pos.companies.zip_code" fullWidth alwaysOn resettable />,
-        <SelectInput
-            key="country"
-            source="country"
-            label="pos.companies.country"
-            choices={countries}
-            optionText={(choice) => (
+        <SelectInput key="country" source="country" label="pos.companies.country" choices={countries} optionText={(choice) => (
                 <span>
                     <img
                         src={`${FLAG_BASE_URL}${choice.flag_url || "xx.svg"}`}
@@ -40,11 +35,8 @@ export const CompaniesFilters = (permissions: string[]) => {
                         style={{ width: "20px", marginRight: "10px", verticalAlign: "middle" }}
                     />
                     {choice.name}
-                </span>
-            )}
-            optionValue="id"
-            fullWidth
-            resettable
+                </span> )}
+            optionValue="id" fullWidth alwaysOn resettable
         />
     ];
 
