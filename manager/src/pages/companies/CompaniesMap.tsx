@@ -4,12 +4,14 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { url } from '../../App';
 import { useNavigate } from "react-router-dom";
+import { TextField, Button as MuiButton } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 const FlyIntroduction: React.FC = () => {
     const map = useMap();
 
     useEffect(() => {
-        map.flyToBounds([[42.154311, -9.526570], [36.96125, -6.189159]], { duration: 1.5 });
+        map.flyToBounds([[42.154311, -9.526570], [36.96125, -6.189159]], { duration: 0.1 });
     }, [map]);
 
     return null;
@@ -18,7 +20,9 @@ const FlyIntroduction: React.FC = () => {
 const CompaniesMap: React.FC = () => {
     const [companies, setCompanies] = useState<any[]>([]);
     const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
+    const [filters, setFilters] = useState({ name: ""});
     const navigate = useNavigate();
+    const theme = useTheme();
 
     useEffect(() => {
         const fetchCompanies = async () => {
@@ -42,6 +46,14 @@ const CompaniesMap: React.FC = () => {
         }
     }, []);
 
+    const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFilters((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const filteredCompanies = companies.filter((c) => (!filters.name || c.name.toLowerCase().includes(filters.name.toLowerCase()))
+    );
+
     return (
         <div style={{ height: "calc(100vh - 120px)", width: "100%", position: "relative" }}>
             <button
@@ -49,6 +61,36 @@ const CompaniesMap: React.FC = () => {
                 style={{ position: "absolute", top: "10px", right: "10px", zIndex: 1000, padding: "10px 15px", backgroundColor: "#5384ED", color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer", boxShadow: "0 2px 5px rgba(0, 0, 0, 0.2)" }}>
                     Voltar
             </button>
+            <div
+                style={{
+                    position: "absolute",
+                    top: "10px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    zIndex: 1000,
+                    backgroundColor: theme.palette.background.paper,
+                    color: theme.palette.text.primary,
+                    borderRadius: "10px",
+                    boxShadow: "0 2px 5px rgba(0, 0, 0, 0.4)",
+                    width: "300px",
+                }}
+            >
+                <TextField
+                    label="Armazém"
+                    name="name"
+                    value={filters.name}
+                    onChange={handleFilterChange}
+                    fullWidth
+                    size="small"
+                    InputProps={{
+                        style: { color: theme.palette.text.primary },
+                    }}
+                    InputLabelProps={{
+                        style: { color: theme.palette.text.secondary },
+                    }}
+                />
+            </div>
+
             <MapContainer 
                 center={[39.5, -8.0]} 
                 zoom={3} 
@@ -70,10 +112,9 @@ const CompaniesMap: React.FC = () => {
                             html: `<div style="width: 20px; height: 20px; background-color: #5384ED; border: 2px solid #ffffff; border-radius: 50%; box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);"></div>`,
                             iconSize: [25, 25],
                         })}
-                    >
-                    </Marker>
+                    />
                 )}
-                {companies.filter(c => c.lat && c.lon).map(c => (
+                {filteredCompanies.filter(c => c.lat && c.lon).map(c => (
                     <Marker
                         key={c.id}
                         position={[c.lat, c.lon]}
@@ -85,9 +126,7 @@ const CompaniesMap: React.FC = () => {
                         <Popup>
                             <h3>{c.name}</h3>
                             <p><strong>Location:</strong> {c.city}, {c.district}</p>
-                            <p><strong>Country:</strong> {c.country_id}</p>
                             <p><strong>Zip Code:</strong> {c.zip_code}</p>
-                            {c.phone && <p><strong>Phone:</strong> {c.phone}</p>}
                         </Popup>
                     </Marker>
                 ))}
