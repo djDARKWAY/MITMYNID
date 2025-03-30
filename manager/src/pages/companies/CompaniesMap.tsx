@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { url } from '../../App';
 import { useNavigate } from "react-router-dom";
-import { TextField, Button as MuiButton } from "@mui/material";
+import { TextField } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 const FlyIntroduction: React.FC = () => {
     const map = useMap();
 
     useEffect(() => {
-        map.flyToBounds([[42.154311, -9.526570], [36.96125, -6.189159]], { duration: 0.1 });
+        map.flyToBounds([[43.154311, -10.526570], [35.96125, -5.189159]], { duration: 1 });
     }, [map]);
 
     return null;
@@ -20,7 +20,9 @@ const FlyIntroduction: React.FC = () => {
 const CompaniesMap: React.FC = () => {
     const [companies, setCompanies] = useState<any[]>([]);
     const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
-    const [filters, setFilters] = useState({ name: ""});
+    const [filters, setFilters] = useState({ name: "" });
+    const [userIcon, setUserIcon] = useState<L.DivIcon | null>(null);
+    const [warehouseIcon, setWarehouseIcon] = useState<L.Icon | null>(null);
     const navigate = useNavigate();
     const theme = useTheme();
 
@@ -31,7 +33,7 @@ const CompaniesMap: React.FC = () => {
                 const data = await res.json();
                 setCompanies(data);
             } catch (error) {
-                console.error("Error fetching companies:", error);
+                console.error("Erro ao buscar armazéns:", error);
             }
         };
         fetchCompanies();
@@ -39,11 +41,27 @@ const CompaniesMap: React.FC = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 ({ coords: { latitude, longitude } }) => setUserLocation([latitude, longitude]),
-                (error) => console.error("Error getting user location:", error)
+                (error) => console.error("Erro ao obter localização do usuário:", error)
             );
         } else {
-            console.warn("Geolocation is not supported by this browser.");
+            console.warn("Geolocalização não é suportada pelo navegador.");
         }
+    }, []);
+
+    useEffect(() => {
+        const userIconInstance = new L.DivIcon({
+            className: "google-marker",
+            html: `<div style="width: 20px; height: 20px; background-color: #5384ED; border: 2px solid #ffffff; border-radius: 50%; box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); cursor: default;"></div>`,
+            iconSize: [25, 25],
+        });
+        setUserIcon(userIconInstance);
+
+        const warehouseIconInstance = new L.Icon({
+            iconUrl: '/src/assets/map/warehouse.png',
+            iconSize: [25, 25],
+            iconAnchor: [12.5, 25],
+        });
+        setWarehouseIcon(warehouseIconInstance);
     }, []);
 
     const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,16 +69,25 @@ const CompaniesMap: React.FC = () => {
         setFilters((prev) => ({ ...prev, [name]: value }));
     };
 
-    const filteredCompanies = companies.filter((c) => (!filters.name || c.name.toLowerCase().includes(filters.name.toLowerCase()))
+    const filteredCompanies = useMemo(() => 
+        companies.filter((c) => (!filters.name || c.name.toLowerCase().includes(filters.name.toLowerCase()))),
+        [companies, filters.name]
     );
 
     return (
         <div style={{ height: "calc(100vh - 120px)", width: "100%", position: "relative" }}>
             <button
                 onClick={() => navigate("/companies")}
-                style={{ position: "absolute", top: "10px", right: "10px", zIndex: 1000, padding: "10px 15px", backgroundColor: "#5384ED", color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer", boxShadow: "0 2px 5px rgba(0, 0, 0, 0.2)" }}>
-                    Voltar
+                style={{
+                    position: "absolute", top: "10px", right: "10px", zIndex: 1000, 
+                    padding: "10px 15px", backgroundColor: "#5384ED", color: "#fff", 
+                    border: "none", borderRadius: "5px", cursor: "pointer", 
+                    boxShadow: "0 2px 5px rgba(0, 0, 0, 0.2)"
+                }}
+            >
+                Voltar
             </button>
+
             <div
                 style={{
                     position: "absolute",
@@ -104,31 +131,19 @@ const CompaniesMap: React.FC = () => {
             >
                 <FlyIntroduction />
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                {userLocation && (
-                    <Marker
-                        position={userLocation}
-                        icon={new L.DivIcon({
-                            className: "custom-marker",
-                            html: `<div style="width: 20px; height: 20px; background-color: #5384ED; border: 2px solid #ffffff; border-radius: 50%; box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);"></div>`,
-                            iconSize: [25, 25],
-                        })}
-                    />
-                )}
-                {filteredCompanies.filter(c => c.lat && c.lon).map(c => (
-                    <Marker
-                        key={c.id}
-                        position={[c.lat, c.lon]}
-                        icon={new L.Icon({
-                            iconUrl: '/src/assets/map/warehouse.png',
-                            iconSize: [25, 25],
-                            iconAnchor: [12.5, 25] })}
-                    >
-                        <Popup>
-                            <h3>{c.name}</h3>
-                            <p><strong>Location:</strong> {c.city}, {c.district}</p>
-                            <p><strong>Zip Code:</strong> {c.zip_code}</p>
-                        </Popup>
-                    </Marker>
+
+                {/* Localização do utilizador */}
+                {userLocation && userIcon && <Marker position={userLocation} icon={userIcon} />}
+                {/* Localização dos armazéns */}
+                {filteredCompanies.filter(c => c.lat && c.lon).map(c => (warehouseIcon && (
+                        <Marker key={c.id} position={[c.lat, c.lon]} icon={warehouseIcon}>
+                            <Popup>
+                                <h3>{c.name}</h3>
+                                <p style={{ margin: "0.5em 0" }}><strong>Localização:</strong> {c.city}, {c.district}</p>
+                                <p style={{ margin: "0.5em 0" }}><strong>Código Postal:</strong> {c.zip_code}</p>
+                            </Popup>
+                        </Marker>
+                    )
                 ))}
             </MapContainer>
         </div>
