@@ -2,7 +2,11 @@ import { Entity, model, property, belongsTo } from "@loopback/repository";
 import { User } from "./user.model";
 import { Country } from "./country.model";
 
-@model()
+@model({
+  settings: {
+    postgresql: { table: 'company' },
+  },
+})
 export class Company extends Entity {
   @property({
     type: "number",
@@ -87,24 +91,24 @@ export class Company extends Entity {
   email?: string;
 
   @property({
-    type: "number",
+    type: "string",
     postgresql: {
       columnName: "contact",
-      dataType: "integer",
+      dataType: "text",
       nullable: "YES",
     },
   })
-  contact?: number;
+  contact?: string;
 
   @property({
-    type: "number",
+    type: "string",
     postgresql: {
       columnName: "phone",
-      dataType: "integer",
+      dataType: "text",
       nullable: "YES",
     },
   })
-  phone?: number;
+  phone?: string;
 
   @property({
     type: "string",
@@ -139,6 +143,22 @@ export class Company extends Entity {
     },
   })
   last_modified: string;
+
+  @property({
+    type: 'number',
+    postgresql: {
+      columnName: 'lat',
+    },
+  })
+  lat?: number;
+
+  @property({
+    type: 'number',
+    postgresql: {
+      columnName: 'lon',
+    },
+  })
+  lon?: number;
 
   @belongsTo(() => Country, { name: 'country', keyFrom: 'country_id', keyTo: 'id' })
   country_id: string;

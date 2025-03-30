@@ -117,6 +117,8 @@ export class CompanyController {
         district: true,
         country_id: true,
         zip_code: true,
+        lat: true,
+        lon: true,
       },
     });
   }
@@ -301,5 +303,7 @@ export class CompanyController {
     if (company.contact) validate(!Number.isInteger(company.contact), "contact", "O contacto deve ser um número inteiro!");
     if (company.phone) validate(!Number.isInteger(company.phone), "phone", "O telefone do responsável deve ser um número inteiro!");
     if (company.website) validate(!/^(https?:\/\/)?[^\s$.?#].[^\s]*$/.test(company.website), "website", "O website deve ser uma URL válida!");
+    if (company.lat) validate(company.lat < -90 || company.lat > 90, "lat", "A latitude deve estar entre -90 e 90!");
+    if (company.lon) validate(company.lon < -180 || company.lon > 180, "lon", "A longitude deve estar entre -180 e 180!");  
   }
 }

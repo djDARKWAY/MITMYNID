@@ -38,6 +38,8 @@ CREATE TABLE network.company (
   created_date TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,   -- Timestamp da criação
   last_modified TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,  -- Timestamp do último update
   last_modified_user_id UUID,                                     -- [FK] Referência para o utilizador
+  lat DOUBLE PRECISION,                                           -- Latitude
+  lon DOUBLE PRECISION,                                           -- Longitude
   
   CONSTRAINT fk_company_user
     FOREIGN KEY (last_modified_user_id)

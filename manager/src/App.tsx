@@ -25,6 +25,7 @@ import { LogsList } from './pages/logs/LogsList';
 import { logs } from './pages/logs';
 import StatusTest from './pages/status/StatusTest';
 import StatusTestv2 from './pages/status/StatusTestv2';
+import CompaniesMap from './pages/companies/CompaniesMap';
 
 const httpClient = (url: string, options = {}) => {
   //@ts-ignore
@@ -84,6 +85,7 @@ const App = () => {
             <Route path="/certificates" element={<CertificatesList />} />
             <Route path="/access-points" element={<AccessPointsList />} />
             <Route path="/companies" element={<CompaniesList />} />
+            <Route path="/companies-map" element={<CompaniesMap />} />
             <Route path="/logs" element={<LogsList />} />
 
             <Route path="/status-test" element={<StatusTest />} />
