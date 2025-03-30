@@ -465,6 +465,7 @@ const portugueseMessages: TranslationMessages = {
       name: "Nome",
       address: "Morada",
       city: "Cidade",
+      district: "Distrito",
       country: "País",
       zip_code: "Código postal",
       email: "Email",
@@ -474,6 +475,9 @@ const portugueseMessages: TranslationMessages = {
       created_date: "Data de criação",
       last_modified: "Última modificação",
       last_modified_user: "Modificado por",
+      location: "Localização",
+      contacts: "Contactos",
+      logs: "Registos",
     },
   },
 };

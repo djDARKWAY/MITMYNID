@@ -468,6 +468,7 @@ const frenchMessages: TranslationMessages = {
       name: "Nom",
       address: "Adresse",
       city: "Ville",
+      district: "District",
       country: "Pays",
       zip_code: "Code postal",
       email: "Email",
@@ -477,6 +478,9 @@ const frenchMessages: TranslationMessages = {
       created_date: "Date de création",
       last_modified: "Dernière modification",
       last_modified_user: "Modifié par",
+      location: "Localisation",
+      contacts: "Contacts",
+      logs: "Journaux",
     },
   },
 };
