@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import AddIcon from "@mui/icons-material/Add";
+
+import { TopToolbar, ListButton } from "react-admin";
 import { List, useListContext, usePermissions, useDataProvider } from "react-admin";
-import { Card, CardContent, Typography, Grid, Paper, useTheme, Checkbox, Button, Box } from "@mui/material";
+import { Card, CardContent, Typography, Grid, Paper, useTheme, Checkbox, Button } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import CustomEmptyPage from "../../components/general/CustomEmptyPage";
 import CustomPagination, { perPageDefault } from "../../components/general/CustomPagination";
@@ -83,7 +86,7 @@ const CompaniesCardList = () => {
 
     return (
         <>
-            <Grid container spacing={2} sx={{ padding: '0px 20px 20px 20px' }}>
+            <Grid container spacing={2} sx={{ padding: '20px' }}>
                 {data?.map(record => (
                     <Grid item key={record.id} xs={12} sm={6} md={4} lg={3}>
                         <CompanyCard 
@@ -108,7 +111,7 @@ export const CompaniesList = () => {
     const navigate = useNavigate();
 
     return (
-        <List
+<List
             resource="companies"
             filters={CompaniesFilters(permissions)}
             queryOptions={{ refetchOnWindowFocus: false }}
@@ -118,21 +121,23 @@ export const CompaniesList = () => {
             exporter={false}
             title="resources.companies.name"
             sx={{ paddingLeft: "10px" }}
-        >
-            <div 
-                className="RaList-actions css-1t6jtrl-RaListToolbar-root" 
-                style={{ display: "flex", justifyContent: "center", margin: "10px 0" }}
-            >
-                <Button 
-                    variant="text" 
-                    color="primary" 
-                    onClick={() => navigate("/companies-map")}
-                    sx={{ textTransform: "none" }}
-                >
-                    Ver Mapa de Armazéns
-                </Button>
-            </div>
+            actions={
+                <TopToolbar>
+                    {/* Botão "Criar" padrão do React Admin */}
+                    <ListButton label="Criar" icon={<AddIcon />} />
 
+                    {/* Botão "Ver Mapa" com o mesmo estilo */}
+                    <Button 
+                        variant="contained"
+                        color="primary"
+                        onClick={() => navigate("/companies-map")}
+                        sx={{ textTransform: "none", marginLeft: "10px" }}
+                    >
+                        Ver Mapa
+                    </Button>
+                </TopToolbar>
+            }
+        >
             <CompaniesCardList />
         </List>
     );
