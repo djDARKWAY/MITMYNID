@@ -31,7 +31,7 @@ export const AccessPointsList = () => {
                     linkType={"edit"}
                 />
             ) : (
-                <Datagrid rowClick={false}>
+                <Datagrid rowClick={"show"}>
                     <ReferenceField source="company_id" reference="companies" label="resources.accessPoints.fields.company_id" link={false}>
                         <TextField source="name" />
                     </ReferenceField>
@@ -41,22 +41,24 @@ export const AccessPointsList = () => {
                     <FunctionField source="is_active" label="resources.accessPoints.fields.is_active" render={record => record.is_active ? '🟢' : '🔴'} />
                     <WithRecord render={(record) => (
                         <div style={{ display: 'flex', gap: '4px', justifyContent: 'flex-end' }}>
-                            <CustomButtonToolTip
-                                icon={<Edit />}
-                                label={"ra.action.edit"}
-                                action={"redirect"}
-                                id={record.id}
-                                resource={"access-points"}
-                                sx={commonListCSS}
-                            />
-                            <CustomConfirmButtonToolTip
-                                sx={commonListCSS}
-                                label={"ra.action.delete"}
-                                color="error"
-                                icon={<Delete />}
-                                id={record.id}
-                                resource={"access-points"}
-                            />
+                            <span onClick={(event) => event.stopPropagation()}>
+                                <CustomButtonToolTip
+                                    id={record.id}
+                                    resource={"access-points"}
+                                    action={"redirect"}
+                                    label={"ra.action.edit"}
+                                    icon={<Edit />}
+                                    sx={commonListCSS}
+                                />
+                                <CustomConfirmButtonToolTip
+                                    id={record.id}
+                                    resource={"access-points"}
+                                    label={"ra.action.delete"}
+                                    icon={<Delete />}
+                                    color="error"
+                                    sx={commonListCSS}
+                                />
+                            </span>
                         </div>
                     )} />
                 </Datagrid>

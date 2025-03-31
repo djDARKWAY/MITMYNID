@@ -135,7 +135,8 @@ const CompaniesMap: React.FC = () => {
                 {/* Localização do utilizador */}
                 {userLocation && userIcon && <Marker position={userLocation} icon={userIcon} />}
                 {/* Localização dos armazéns */}
-                {filteredCompanies.filter(c => c.lat && c.lon).map(c => (warehouseIcon && (
+                {filteredCompanies.filter(c => c.lat && c.lon).map(c => (
+                    warehouseIcon && (
                         <Marker key={c.id} position={[c.lat, c.lon]} icon={warehouseIcon}>
                             <Popup>
                                 <h3>{c.name}</h3>

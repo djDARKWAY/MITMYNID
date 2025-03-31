@@ -99,7 +99,7 @@ const CompanyMap = () => {
 
 export const CompaniesShow = () => (
     <Show>
-        <Paper elevation={3} sx={{ padding: 2, borderRadius: 1 }}>
+        <Paper elevation={3} sx={{ padding: 2, borderRadius: 1, backgroundColor: "background.paper"}}>
             <Grid container spacing={2}>
                 <Grid item xs={12} md={6}>
                     {/* Identificação */}

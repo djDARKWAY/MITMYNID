@@ -40,22 +40,24 @@ export const CertificatesList = () => {
                     <FunctionField source="is_active" label="resources.certificates.fields.is_active" render={record => record.is_active ? '🟢' : '🔴'} />
                     <WithRecord render={(record) => (
                         <div style={{ display: 'flex', gap: '4px', justifyContent: 'flex-end' }}>
-                            <CustomButtonToolTip
-                                icon={<Edit />}
-                                label={"ra.action.edit"}
-                                action={"redirect"}
-                                id={record.id}
-                                resource={"certificates"}
-                                sx={commonListCSS}
-                            />
-                            <CustomConfirmButtonToolTip
-                                sx={commonListCSS}
-                                label={"ra.action.delete"}
-                                color="error"
-                                icon={<Delete />}
-                                id={record.id}
-                                resource={"certificates"}
-                            />
+                            <span onClick={(event) => event.stopPropagation()}>
+                                <CustomButtonToolTip
+                                    id={record.id}
+                                    resource={"certificates"}
+                                    action={"redirect"}
+                                    label={"ra.action.edit"}
+                                    icon={<Edit />}
+                                    sx={commonListCSS}
+                                />
+                                <CustomConfirmButtonToolTip
+                                    id={record.id}
+                                    resource={"certificates"}
+                                    label={"ra.action.delete"}
+                                    icon={<Delete />}
+                                    color="error"
+                                    sx={commonListCSS}
+                                />
+                            </span>
                         </div>
                     )} />
                 </Datagrid>
