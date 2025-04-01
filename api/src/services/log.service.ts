@@ -7,6 +7,18 @@ export class LogService {
     private logRepository: LogRepository,
   ) {}
 
+  /* Lista de logs
+    - Login bem sucedido
+    - Login falhado
+    - Logout
+    - Certificado atualizado
+    - Certificado eliminado
+    - Armazém atualizado
+    - Armazém eliminado
+    - Ponto de acesso atualizado
+    - Ponto de acesso eliminado
+  */
+  
   // Métodos relacionados a Login
   async logLoginSuccess(userId: number | string, ip: string, deviceInfo: { device: string; os: string }, userUuid: string) {
     await this.logRepository.create({
@@ -23,6 +35,15 @@ export class LogService {
       message: `Falha de login para o utilizador '${userId}'. Motivo: ${reason}`,
       timestamp: new Date().toISOString(),
       metadata: { ip, device: deviceInfo.device, os: deviceInfo.os, timestamp: new Date().toISOString() },
+    });
+  }
+
+  async logLogout(userId: number | string, ip: string, deviceInfo: { device: string; os: string }, userUuid: string) {
+    await this.logRepository.create({
+      type_id: 5,
+      message: `O utilizador '${userId}' realizou logout com sucesso`,
+      timestamp: new Date().toISOString(),
+      metadata: { ip, userUuid, device: deviceInfo.device, os: deviceInfo.os, timestamp: new Date().toISOString() },
     });
   }
 

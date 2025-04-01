@@ -180,11 +180,11 @@ export class AuthController {
       throw err;
     }
   }
-
+  
   @get('/auth/logout', {
     responses: {
       '200': {
-        description: 'Logoust user',
+        description: 'Logout user',
       },
     },
   })
@@ -192,7 +192,19 @@ export class AuthController {
   async logout(
     @inject(SecurityBindings.USER) currentUserProfile: UserProfile,
   ): Promise<void> {
+    const ip = this.request.ip;
+    const userAgentHeader = this.request.headers['user-agent'] || 'unknown';
+    const agent = useragent.parse(userAgentHeader);
+    const deviceInfo = {
+      device: agent.device.toString(),
+      os: agent.os.toString(),
+    };
 
+    const user = await this.userRepository.findById(currentUserProfile[securityId]);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
 
     const lastSession = await this.appUsersSessionRepository.findOne({
       order: ['login DESC'],
@@ -201,7 +213,10 @@ export class AuthController {
       }
     });
 
-    if (lastSession) await this.appUsersSessionRepository.updateById(lastSession.id, { logout: new Date().toISOString() })
+    if (lastSession) {
+      await this.appUsersSessionRepository.updateById(lastSession.id, { logout: new Date().toISOString() });
+      await this.logService.logLogout(user.person_name ?? 'Administrador', ip ?? 'unknown', deviceInfo, currentUserProfile[securityId]);
+    }
   }
 
   @get('/auth/me', {
