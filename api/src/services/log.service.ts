@@ -17,6 +17,9 @@ export class LogService {
     - Armazém eliminado
     - Ponto de acesso atualizado
     - Ponto de acesso eliminado
+    - Utilizador adicionado
+    - Utilizador editado
+    - Utilizador eliminado
   */
   
   // Métodos relacionados a Login
@@ -99,6 +102,34 @@ export class LogService {
     await this.logRepository.create({
       type_id: 1,
       message: `O utilizador '${userId}' apagou o ponto de acesso com o ID '${accessPointId}'`,
+      timestamp: new Date().toISOString(),
+      metadata: { ip, userUuid, device: deviceInfo.device, os: deviceInfo.os, timestamp: new Date().toISOString() },
+    });
+  }
+
+  // Métodos relacionados a User
+  async logUserAdd(adminId: string, userId: number | string, ip: string, userUuid: string, deviceInfo: { device: string; os: string }) {
+    await this.logRepository.create({
+      type_id: 1,
+      message: `O administrador '${adminId}' adicionou o utilizador com o ID '${userId}'`,
+      timestamp: new Date().toISOString(),
+      metadata: { ip, userUuid, device: deviceInfo.device, os: deviceInfo.os, timestamp: new Date().toISOString() },
+    });
+  }
+
+  async logUserEdit(adminId: string, userId: number | string, ip: string, userUuid: string, deviceInfo: { device: string; os: string }) {
+    await this.logRepository.create({
+      type_id: 1,
+      message: `O administrador '${adminId}' editou o utilizador com o ID '${userId}'`,
+      timestamp: new Date().toISOString(),
+      metadata: { ip, userUuid, device: deviceInfo.device, os: deviceInfo.os, timestamp: new Date().toISOString() },
+    });
+  }
+
+  async logUserDelete(adminId: string, userId: number | string, ip: string, userUuid: string, deviceInfo: { device: string; os: string }) {
+    await this.logRepository.create({
+      type_id: 1,
+      message: `O administrador '${adminId}' apagou o utilizador com o ID '${userId}'`,
       timestamp: new Date().toISOString(),
       metadata: { ip, userUuid, device: deviceInfo.device, os: deviceInfo.os, timestamp: new Date().toISOString() },
     });

@@ -36,6 +36,7 @@ import { user_postgres_errors } from '../error-handling/users.error-handling';
 import { EmailService } from '../services/email.service';
 import * as fs from 'fs';
 import * as path from 'path';
+import { LogService } from '../services/log.service';
 
 export class UserController {
   constructor(
@@ -50,6 +51,7 @@ export class UserController {
     @inject(SecurityBindings.USER, { optional: true }) public user: UserProfile,
     @inject(EmailServiceBindings.EMAIL_SERVICE) public emailService: EmailService,
     @repository(AppUsersSessionRepository) public appUsersSessionRepository: AppUsersSessionRepository,
+    @inject('services.LogService') private logService: LogService,
   ) {}
 
   async count(@param.where(User) where?: Where<User>): Promise<Count> {
@@ -125,6 +127,10 @@ export class UserController {
                   });
                 }
               }
+              await this.logService.logUserAdd(this.user.person_name, user.id, this.response.req?.ip ?? 'unknown', this.user.person_name, {
+                device: this.response.req?.headers['user-agent'] ?? 'unknown',
+                os: 'unknown',
+              });
               return user;
             });
           return savedUser;
@@ -150,7 +156,10 @@ export class UserController {
               });
             }
           }
-
+          await this.logService.logUserAdd(this.user.person_name, user.id, this.response.req?.ip ?? 'unknown', this.user.person_name, {
+            device: this.response.req?.headers['user-agent'] ?? 'unknown',
+            os: 'unknown',
+          });
           return user;
         });
 
@@ -430,6 +439,10 @@ export class UserController {
                 console.log("ERROR:", err);
               });
           }
+          await this.logService.logUserEdit(this.user.person_name, id, this.response.req?.ip ?? 'unknown', this.user.person_name, {
+            device: this.response.req?.headers['user-agent'] ?? 'unknown',
+            os: 'unknown',
+          });
         });
 
       return this.userRepository.findById(id);
@@ -495,10 +508,18 @@ export class UserController {
         .status(422)
         .send({ message: "Erro a eliminar utilizador" });
     } else {
-      await this.userRepository.deleteById(id);
-      await this.prefsUserRepository.deleteById(id);
-      await this.appUsersSessionRepository.deleteAll({ app_users_id: id });
-      await this.userRoleRepository.deleteAll({ app_users_id: id });
+      try {
+        await this.userRepository.deleteById(id);
+        await this.prefsUserRepository.deleteById(id);
+        await this.appUsersSessionRepository.deleteAll({ app_users_id: id });
+        await this.userRoleRepository.deleteAll({ app_users_id: id });
+        await this.logService.logUserDelete(this.user.person_name, id, this.response.req?.ip ?? 'unknown', this.user.person_name, {
+          device: this.response.req?.headers['user-agent'] ?? 'unknown',
+          os: 'unknown',
+        });
+      } catch (err) {
+        return this.response.status(422).send({ message: "Erro a eliminar utilizador" });
+      }
     }
   }
 
