@@ -87,7 +87,7 @@ export const CertificatesShow = () => (
                 <Grid item xs={12} md={6} sx={{ height: "100%" }}>
                     {/* Conteúdo */}
                     <Section title="show.certificates.content" icon={<FeedOutlined />}>
-                        <Box sx={{ height: 529, flexDirection: "column", overflow: "auto", p: 1 }}>
+                        <Box sx={{ height: 529, flexDirection: "column", overflow: "auto"}}>
                             <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}> Dados </Typography>
                             <Card variant="outlined" sx={{ p: 1, bgcolor: "InfoBackground" }}>
                                 <TextField 

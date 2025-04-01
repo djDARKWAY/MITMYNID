@@ -1,17 +1,45 @@
-import { Show, SimpleShowLayout, TextField, DateField, BooleanField, ReferenceField, useRecordContext } from "react-admin";
-import { Card, Typography, Divider, Button, Box } from "@mui/material";
-import Person from '@mui/icons-material/Person';
-import SettingsIcon from '@mui/icons-material/Settings';
-import { AccessTimeFilled, CardMembership } from "@mui/icons-material";
+import { Show, TextField, DateField, BooleanField, ReferenceField, useTranslate, useRecordContext } from "react-admin";
+import { Typography, Divider, Box, Card, CardContent, Grid, Paper, Stack } from "@mui/material";
+import { Person, Settings as SettingsIcon, AccessTimeFilled, CardMembership } from "@mui/icons-material";
+import { ReactNode } from "react";
 
-const JsonField = ({ source }: { source: string }) => {
+const Section = ({ title, icon, children }: { title: string; icon: ReactNode; children: ReactNode }) => {
+    const translate = useTranslate();
+    return (
+        <Card variant="outlined" sx={{ mb: 3 }}>
+            <CardContent>
+                    {icon}
+                    <Typography variant="h6" sx={{ ml: 1, fontWeight: "bold" }}>
+                        {translate(title)}
+                    </Typography>
+                </Box>
+                <Divider sx={{ mb: 1 }} />
+                <Stack>{children}</Stack>
+            </CardContent>
+        </Card>
+    );
+};
+
+const FieldTitleLabel = ({ label, children }: { label: string; children: ReactNode }) => {
+    const translate = useTranslate();
+    return (
+        <Box sx={{ mb: 1 }}>
+            <Typography variant="body2" sx={{ fontWeight: "bold", color: "gray" }}>
+                {translate(label)}
+            </Typography>
+            {children}
+        </Box>
+    );
+};
+
+const XmlField = ({ source }: { source: string }) => {
     const record = useRecordContext();
     if (!record || !record[source]) return null;
 
     return (
-        <Card variant="outlined" sx={{ my: 1, p: 1, bgcolor: "InfoBackground" }}>
-            <Typography variant="body2" sx={{ whiteSpace: "pre-wrap", fontFamily: "monospace" }}>
-                {JSON.stringify(record[source], null, 2)}
+        <Card variant="outlined" sx={{ my: 1, p: 1, bgcolor: "InfoBackground", maxWidth: "100%", overflowX: "auto" }}>
+            <Typography variant="body2" sx={{ whiteSpace: "pre-wrap", fontFamily: "monospace", wordBreak: "break-word" }}>
+                {record[source]}
             </Typography>
         </Card>
     );
@@ -19,59 +47,73 @@ const JsonField = ({ source }: { source: string }) => {
 
 export const AccessPointsShow = () => (
     <Show>
-        <SimpleShowLayout>
-            {/* Identificação */}
-            <Box display="flex" alignItems="center">
-                <Person />
-                <Typography variant="h6" sx={{ ml: 1 }}> Identificação </Typography>
-            </Box>
-            <Divider sx={{ mb: 1 }} />
-            <TextField source="id" label="ID" />
-            <TextField source="location_description" label="show.accessPoints.location_description" />
-            <TextField source="ip_address" label="show.accessPoints.ip_address" />
+        <Paper elevation={3} sx={{ padding: 2, borderRadius: 1, backgroundColor: "background.paper" }}>
+            <Grid container spacing={2.5}>
+                <Grid item xs={12} md={6}>
+                    {/* Identificação */}
+                    <Section title="show.accessPoints.identification" icon={<Person />}>
+                        <FieldTitleLabel label="ID">
+                            <TextField source="id" />
+                        </FieldTitleLabel>
+                        <FieldTitleLabel label="show.accessPoints.location_description">
+                            <TextField source="location_description" />
+                        </FieldTitleLabel>
+                        <FieldTitleLabel label="show.accessPoints.ip_address">
+                            <TextField source="ip_address" />
+                        </FieldTitleLabel>
+                        <FieldTitleLabel label="show.accessPoints.is_active">
+                            <BooleanField source="is_active" />
+                        </FieldTitleLabel>
+                    </Section>
 
-            {/* Configuração Técnica */}
-            <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
-                <SettingsIcon />
-                <Typography variant="h6" sx={{ ml: 1 }}> Configuração </Typography>
-            </Box>
-            <Divider sx={{ mb: 1 }} />
-            <TextField source="ap_software" label="show.accessPoints.software" />
-            <TextField source="software_version" label="show.accessPoints.software_version" />
-            <BooleanField source="is_active" label="show.accessPoints.is_active" />
-            <Typography variant="subtitle2" sx={{ mt: 1, fontWeight: 'bold' }}>PMode</Typography>
-            <Card variant="outlined" sx={{ p: 1, bgcolor: "InfoBackground", maxHeight: "300px", overflow: "auto" }}>
-                <TextField source="pmode" label="PMode XML" sx={{ 
-                    whiteSpace: "pre-wrap", 
-                    fontFamily: "monospace",
-                    '& .RaTextField-input': { display: 'block' } 
-                }} />
-            </Card>
+                    {/* Certificado */}
+                    <Section title="show.accessPoints.certificates" icon={<CardMembership />}>
+                        <FieldTitleLabel label="show.accessPoints.certificates">
+                            <ReferenceField source="certificate_id" reference="certificates">
+                                <TextField source="name" />
+                            </ReferenceField>
+                        </FieldTitleLabel>
+                        <FieldTitleLabel label="show.accessPoints.company">
+                            <ReferenceField source="company_id" reference="companies">
+                                <TextField source="name" />
+                            </ReferenceField>
+                        </FieldTitleLabel>
+                    </Section>
+                </Grid>
 
-            {/* Certificado */}
-            <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
-                <CardMembership />
-                <Typography variant="h6" sx={{ ml: 1 }}> Certificado </Typography>
-            </Box>
-            <Divider sx={{ mb: 1 }} />
-            <ReferenceField source="certificate_id" reference="certificates" label="show.accessPoints.certificates">
-                <TextField source="name" />
-            </ReferenceField>
-            <ReferenceField source="company_id" reference="companies" label="show.accessPoints.company">
-                <TextField source="name" />
-            </ReferenceField>
+                <Grid item xs={12} md={6}>
+                    {/* Configuração Técnica */}
+                    <Section title="show.accessPoints.configuration" icon={<SettingsIcon />}>
+                        <Box sx={{ height: 425, flexDirection: "column", overflow: "auto"}}>
+                            <FieldTitleLabel label="show.accessPoints.software">
+                                <TextField source="ap_software" /> (v. <TextField source="software_version" />)
+                            </FieldTitleLabel>
+                            <FieldTitleLabel label="PMode">
+                                <Card variant="outlined" sx={{ p: 1, bgcolor: "InfoBackground", overflow: "auto" }}>
+                                    <XmlField source="pmode" />
+                                </Card>
+                            </FieldTitleLabel>
+                        </Box>
+                    </Section>
+                </Grid>
 
-            {/* Última Modificação */}
-            <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
-                <AccessTimeFilled />
-                <Typography variant="h6" sx={{ ml: 1 }}> Logs </Typography>
-            </Box>
-            <Divider sx={{ mb: 1 }} />
-            <DateField source="created_date" label="show.accessPoints.created_date" showTime />
-            <DateField source="last_modified" label="show.accessPoints.last_modified" showTime />
-            <ReferenceField source="last_modified_user_id" reference="users" label="show.accessPoints.last_modified_user">
-                <TextField source="username" />
-            </ReferenceField>
-        </SimpleShowLayout>
+                {/* Logs */}
+                <Grid item xs={12} sx={{ marginBottom: "-20px", marginTop: "-20px" }}>
+                    <Section title="show.accessPoints.logs" icon={<AccessTimeFilled />}>
+                        <FieldTitleLabel label="show.accessPoints.created_date">
+                            <DateField source="created_date" showTime />
+                        </FieldTitleLabel>
+                        <FieldTitleLabel label="show.accessPoints.last_modified">
+                            <DateField source="last_modified" showTime />
+                        </FieldTitleLabel>
+                        <FieldTitleLabel label="show.accessPoints.last_modified_user">
+                            <ReferenceField source="last_modified_user_id" reference="users">
+                                <TextField source="username" />
+                            </ReferenceField>
+                        </FieldTitleLabel>
+                    </Section>
+                </Grid>
+            </Grid>
+        </Paper>
     </Show>
 );
