@@ -462,6 +462,10 @@ const frenchMessages: TranslationMessages = {
       certificate_text: "Texte",
       certificate_data: "Données",
       modified_by: "Modifié par",
+      content: "Contenu",
+      last_modified: "Dernière modification",
+      logs: "Journaux",
+      details: "Détails",
     },
     companies: {
       identification: "Identification",

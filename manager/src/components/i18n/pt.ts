@@ -1,6 +1,7 @@
 import { TranslationMessages } from "react-admin";
 import { logs } from "../../pages/logs";
 import { time } from "console";
+import { last } from "lodash";
 
 const portugueseMessages: TranslationMessages = {
   ra: {
@@ -459,6 +460,10 @@ const portugueseMessages: TranslationMessages = {
       certificate_text: "Texto",
       certificate_data: "Dados",
       modified_by: "Modificado por",
+      details: "Detalhes",
+      logs: "Registos",
+      content: "Conteúdo",
+      last_modified: "Última modificação",
     },
     companies: {
       identification: "Identificação",

@@ -461,6 +461,10 @@ const spanishMessages: TranslationMessages = {
       certificate_text: "Texto",
       certificate_data: "Datos",
       modified_by: "Modificado por",
+      details: "Detalles",
+      logs: "Registros",
+      content: "Contenido",
+      last_modified: "Última modificación",
     },
     companies: {
       identification: "Identificación",

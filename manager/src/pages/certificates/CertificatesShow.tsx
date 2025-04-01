@@ -1,75 +1,125 @@
-import { Show, SimpleShowLayout, TextField, DateField, BooleanField, ReferenceField, useRecordContext, useRedirect } from "react-admin";
-import { Card, Typography, Divider, Box } from "@mui/material";
+import { Show, TextField, DateField, BooleanField, ReferenceField, useTranslate, useRecordContext } from "react-admin";
+import { Typography, Divider, Box, Card, CardContent, Grid, Paper, Stack } from "@mui/material";
 import { FeedOutlined, AccessTimeFilled, CardMembership, CalendarToday } from "@mui/icons-material";
+import { ReactNode } from "react";
+
+const Section = ({ title, icon, children }: { title: string; icon: ReactNode; children: ReactNode }) => {
+    const translate = useTranslate();
+    return (
+        <Card variant="outlined" sx={{ mb: 3 }}>
+            <CardContent>
+                <Box display="flex" alignItems="center" sx={{ mb: 1 }}>
+                    {icon}
+                    <Typography variant="h6" sx={{ ml: 1, fontWeight: "bold" }}>
+                        {translate(title)}
+                    </Typography>
+                </Box>
+                <Divider sx={{ mb: 1 }} />
+                <Stack>{children}</Stack>
+            </CardContent>
+        </Card>
+    );
+};
+
+const FieldTitleLabel = ({ label, children }: { label: string; children: ReactNode }) => {
+    const translate = useTranslate();
+    return (
+        <Box sx={{ mb: 1 }}>
+            <Typography variant="body2" sx={{ fontWeight: "bold", color: "gray" }}>
+                {translate(label)}
+            </Typography>
+            {children}
+        </Box>
+    );
+};
 
 const JsonField = ({ source }: { source: string }) => {
     const record = useRecordContext();
     if (!record || !record[source]) return null;
 
     return (
-        <Card variant="outlined" sx={{ my: 1, p: 1, bgcolor: "InfoBackground" }}>
-            <Typography variant="body2" sx={{ whiteSpace: "pre-wrap", fontFamily: "monospace" }}>
+        <Card variant="outlined" sx={{ my: 1, p: 1, bgcolor: "InfoBackground", maxWidth: "100%", overflowX: "auto" }}>
+            <Typography variant="body2" sx={{ whiteSpace: "pre-wrap", fontFamily: "monospace", wordBreak: "break-word" }}>
                 {JSON.stringify(record[source], null, 2)}
             </Typography>
         </Card>
     );
 };
 
-export const CertificatesShow = () => {
-    const record = useRecordContext();
+export const CertificatesShow = () => (
+    <Show>
+        <Paper elevation={3} sx={{ padding: 2, borderRadius: 1, backgroundColor: "background.paper" }}>
+            <Grid container spacing={2.5}>
+                <Grid item xs={12} md={6}>
+                    {/* Identificação */}
+                    <Section title="show.certificates.identification" icon={<CardMembership />}>
+                        <FieldTitleLabel label="ID">
+                            <TextField source="id" />
+                        </FieldTitleLabel>
+                        <FieldTitleLabel label="show.certificates.name">
+                            <TextField source="name" />
+                        </FieldTitleLabel>
+                        <FieldTitleLabel label="show.certificates.file_path">
+                            <TextField source="file_path" />
+                        </FieldTitleLabel>
+                    </Section>
 
-    return (
-        <Show>
-            <SimpleShowLayout>
-                {/* Identificação */}
-                <Box display="flex" alignItems="center">
-                    <CardMembership />
-                    <Typography variant="h6" sx={{ ml: 1 }}> Certificado </Typography>
-                </Box>
-                <Divider sx={{ mb: 1 }} />
-                <TextField source="id" label="ID" />
-                <TextField source="name" label="show.certificates.name" />
-                <TextField source="file_path" label="show.certificates.file_path" />
+                    {/* Detalhes */}
+                    <Section title="show.certificates.details" icon={<CalendarToday />}>
+                        <FieldTitleLabel label="show.certificates.issuer_name">
+                            <TextField source="issuer_name" />
+                        </FieldTitleLabel>
+                        <FieldTitleLabel label="show.certificates.issuer_url">
+                            <TextField source="issuer_url" />
+                        </FieldTitleLabel>
+                        <FieldTitleLabel label="show.certificates.issue_date">
+                            <DateField source="issue_date" />
+                        </FieldTitleLabel>
+                        <FieldTitleLabel label="show.certificates.expiration_date">
+                            <DateField source="expiration_date" />
+                        </FieldTitleLabel>
+                        <FieldTitleLabel label="show.certificates.is_active">
+                            <BooleanField source="is_active" />
+                        </FieldTitleLabel>
+                    </Section>
+                </Grid>
 
-                {/* Detalhes do certificado */}
-                <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
-                    <CalendarToday />
-                    <Typography variant="h6" sx={{ ml: 1 }}> Detalhes </Typography>
-                </Box>
-                <Divider sx={{ mb: 1 }} />
-                <TextField source="issuer_name" label="show.certificates.issuer_name" />
-                <TextField source="issuer_url" label="show.certificates.issuer_url" />
-                <DateField source="issue_date" label="show.certificates.issue_date" />
-                <DateField source="expiration_date" label="show.certificates.expiration_date" />
-                <BooleanField source="is_active" label="show.certificates.is_active" />
+                <Grid item xs={12} md={6} sx={{ height: "100%" }}>
+                    {/* Conteúdo */}
+                    <Section title="show.certificates.content" icon={<FeedOutlined />}>
+                        <Box sx={{ height: 529, flexDirection: "column", overflow: "auto", p: 1 }}>
+                            <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}> Dados </Typography>
+                            <Card variant="outlined" sx={{ p: 1, bgcolor: "InfoBackground" }}>
+                                <TextField 
+                                    source="certificate_text" 
+                                    label="show.certificates.certificate_text" 
+                                    sx={{
+                                        whiteSpace: "pre-wrap",
+                                        wordBreak: "break-word",
+                                        fontFamily: "monospace",
+                                        maxWidth: "100%",
+                                    }} 
+                                />
+                            </Card>
+                            <JsonField source="certificate_data" />
+                        </Box>
+                    </Section>
+                </Grid>
 
-                {/* Seção do Certificado */}
-                <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
-                    <FeedOutlined />
-                    <Typography variant="h6" sx={{ ml: 1 }}>Conteúdo</Typography>
-                </Box>
-                <Divider sx={{ mb: 1 }} />
-                <Typography variant="subtitle2" sx={{ mt: 1, fontWeight: 'bold' }}> Dados </Typography>
-                <Card variant="outlined" sx={{ p: 1, bgcolor: "InfoBackground", maxHeight: "300px", overflow: "auto" }}>
-                    <TextField source="certificate_text" label="show.certificates.certificate_text" sx={{ 
-                        whiteSpace: "pre-wrap", 
-                        fontFamily: "monospace",
-                        '& .RaTextField-input': { display: 'block' } 
-                    }} />
-                </Card>
-                <JsonField source="certificate_data" />
-
-                {/* Última Modificação */}
-                <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
-                    <AccessTimeFilled />
-                    <Typography variant="h6" sx={{ ml: 1 }}> Logs </Typography>
-                </Box>
-                <Divider sx={{ mb: 1 }} />
-                <DateField source="last_modified" label="Última Modificação" showTime />
-                <ReferenceField source="last_modified_user_id" reference="users" label="show.certificates.modified_by">
-                    <TextField source="username" />
-                </ReferenceField>
-            </SimpleShowLayout>
-        </Show>
-    );
-};
+                {/* Logs */}
+                <Grid item xs={12} sx={{ marginBottom: "-20px", marginTop: "-20px" }}>
+                    <Section title="show.certificates.logs" icon={<AccessTimeFilled />}>
+                        <FieldTitleLabel label="show.certificates.last_modified">
+                            <DateField source="last_modified" showTime />
+                        </FieldTitleLabel>
+                        <FieldTitleLabel label="show.certificates.modified_by">
+                            <ReferenceField source="last_modified_user_id" reference="users">
+                                <TextField source="username" />
+                            </ReferenceField>
+                        </FieldTitleLabel>
+                    </Section>
+                </Grid>
+            </Grid>
+        </Paper>
+    </Show>
+);

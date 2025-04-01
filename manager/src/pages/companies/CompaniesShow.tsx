@@ -2,7 +2,7 @@ import { Show, TextField, DateField, ReferenceField, useTranslate, useRecordCont
 import { Typography, Divider, Box, Card, CardContent, Grid, Paper, Stack } from "@mui/material";
 import { Home, ContactMail, AccessTimeFilled, Person, Map } from "@mui/icons-material";
 import { ReactNode, useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -149,7 +149,7 @@ export const CompaniesShow = () => (
                 </Grid>
 
                 {/* Mapa */}
-                <Grid item xs={12} md={6} sx={{ height: "100%" }}>
+                <Grid item xs={12} md={6}>
                     <Section title="Mapa" icon={<Map />}>
                         <CompanyMap />
                     </Section>

@@ -451,6 +451,10 @@ const englishMessages: TranslationMessages = {
       certificate_text: "Text",
       certificate_data: "Data",
       modified_by: "Modified by",
+      details: "Details",
+      logs: "Logs",
+      content: "Content",
+      last_modified: "Last Modified",
     },
     companies: {
       identification: "Identification",
