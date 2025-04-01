@@ -449,6 +449,9 @@ const frenchMessages: TranslationMessages = {
       created_date: "Date de création",
       last_modified: "Dernière modification",
       last_modified_user: "Modifié par",
+      logs: "Registos",
+      configuration: "Configuração technique",
+      identification: "Identification",
     },
     certificates: {
       identification: "Identification",

@@ -448,6 +448,9 @@ const spanishMessages: TranslationMessages = {
       created_date: "Fecha de creación",
       last_modified: "Última modificación",
       last_modified_user: "Modificado por",
+      logs: "Registros",
+      configuration: "Configuración técnica",
+      identification: "Identificación",
     },
     certificates: {
       identification: "Identificación",

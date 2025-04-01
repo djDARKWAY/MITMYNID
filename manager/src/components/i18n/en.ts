@@ -438,6 +438,9 @@ const englishMessages: TranslationMessages = {
       created_date: "Creation date",
       last_modified: "Last modified",
       last_modified_user: "Modified by",
+      logs: "Logs",
+      configuration: "Technical Configuration",
+      identification: "Identification",
     },
     certificates: {
       identification: "Identification",

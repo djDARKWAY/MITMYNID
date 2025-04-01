@@ -8,6 +8,7 @@ const Section = ({ title, icon, children }: { title: string; icon: ReactNode; ch
     return (
         <Card variant="outlined" sx={{ mb: 3 }}>
             <CardContent>
+                <Box display="flex" alignItems="center" sx={{ mb: 1 }}>
                     {icon}
                     <Typography variant="h6" sx={{ ml: 1, fontWeight: "bold" }}>
                         {translate(title)}
