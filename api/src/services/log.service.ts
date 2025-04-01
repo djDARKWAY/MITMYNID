@@ -81,7 +81,7 @@ export class LogService {
 
   async logCompanyDelete(userId: string, companyId: number | string, ip: string, userUuid: string, deviceInfo: { device: string; os: string }) {
     await this.logRepository.create({
-      type_id: 1,
+      type_id: 3,
       message: `O utilizador '${userId}' apagou o armazém com o ID '${companyId}'`,
       timestamp: new Date().toISOString(),
       metadata: { ip, userUuid, device: deviceInfo.device, os: deviceInfo.os, timestamp: new Date().toISOString() },
@@ -100,7 +100,7 @@ export class LogService {
 
   async logAccessPointDelete(userId: string, accessPointId: number | string, ip: string, userUuid: string, deviceInfo: { device: string; os: string }) {
     await this.logRepository.create({
-      type_id: 1,
+      type_id: 3,
       message: `O utilizador '${userId}' apagou o ponto de acesso com o ID '${accessPointId}'`,
       timestamp: new Date().toISOString(),
       metadata: { ip, userUuid, device: deviceInfo.device, os: deviceInfo.os, timestamp: new Date().toISOString() },
@@ -128,7 +128,7 @@ export class LogService {
 
   async logUserDelete(adminId: string, userId: number | string, ip: string, userUuid: string, deviceInfo: { device: string; os: string }) {
     await this.logRepository.create({
-      type_id: 1,
+      type_id: 3,
       message: `O administrador '${adminId}' apagou o utilizador com o ID '${userId}'`,
       timestamp: new Date().toISOString(),
       metadata: { ip, userUuid, device: deviceInfo.device, os: deviceInfo.os, timestamp: new Date().toISOString() },

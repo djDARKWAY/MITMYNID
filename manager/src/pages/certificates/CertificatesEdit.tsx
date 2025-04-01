@@ -24,10 +24,17 @@ export const CertificatesEdit = () => (
                         <Typography variant="h6" sx={{ ml: 1 }}>Detalhes</Typography>
                     </Box>
                     <Divider sx={{ mb: 3 }} />
-                    <Box display="flex" justifyContent="space-between"></Box>
                     <TextInput source="issuer_url" label="show.certificates.issuer_url" fullWidth />
-                    <DateInput source="issue_date" label="show.certificates.issue_date" fullWidth />
-                    <DateInput source="expiration_date" label="show.certificates.expiration_date" fullWidth />
+                    <Box display="flex" gap={2} sx={{ width: "100%" }}>
+                        <DateInput source="issue_date" label="show.certificates.issue_date" fullWidth />
+                        <DateInput source="expiration_date" label="show.certificates.expiration_date" fullWidth />
+                    </Box>
+                </TabbedForm.Tab>
+
+                {/* Conteúdo */}
+                <TabbedForm.Tab label="Conteúdo">
+                    <TextInput source="certificate_text" label="show.certificates.certificate_text" fullWidth multiline />
+                    <TextInput source="certificate_data" label="show.certificates.certificate_data" fullWidth multiline />
                 </TabbedForm.Tab>
             </TabbedForm>
         </Edit>

@@ -44,8 +44,10 @@ export const AccessPointsEdit = () => {
                         <Typography variant="h6" sx={{ ml: 1 }}>Configuração</Typography>
                     </Box>
                     <Divider sx={{ mb: 3 }} />
-                    <TextInput source="ap_software" label="show.accessPoints.software" fullWidth />
-                    <TextInput source="software_version" label="show.accessPoints.software_version" fullWidth />
+                    <Box display="flex" gap={2} sx={{ width: "100%" }}>
+                        <TextInput source="ap_softwa</Box>re" label="show.accessPoints.software" fullWidth />
+                        <TextInput source="software_version" label="show.accessPoints.software_version" fullWidth sx={{ width: "25%" }} />
+                    </Box>
                     <BooleanInput source="is_active" label="show.accessPoints.is_active" />
                 </TabbedForm.Tab>
             </TabbedForm>
