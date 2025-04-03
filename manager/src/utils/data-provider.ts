@@ -61,8 +61,6 @@ const lb4Provider = (
       }),
     });
 
-    console.log('getList result:', result);
-
     return {
       data: result.json
     };
@@ -178,23 +176,6 @@ const lb4Provider = (
     };
   },
   create: async (resource, params) => {
-
-    if(params.data.photo && params.data.photo.rawFile && params.data.photo.rawFile.name){
-      params.data.photo = {
-        data : await verifyFile(params.data.photo),
-        name : params.data.photo.rawFile.name
-      };
-
-    }
-
-    if(params.data.imagem && params.data.imagem.rawFile && params.data.imagem.rawFile.name){
-      params.data.imagem = {
-        data : await verifyFile(params.data.imagem),
-        name : params.data.imagem.rawFile.name,
-      };
-
-    }
-
     const result = await httpClient(`${apiUrl}/${resource}`, {
       method: "POST",
       body: JSON.stringify(params.data),
@@ -203,7 +184,11 @@ const lb4Provider = (
         Authorization: `Bearer ${localStorage.getItem('token') ? localStorage.getItem('token') : ''}`
       }),
     });
-
+  
+    if (!result.json) {
+      throw new Error('Invalid response from server');
+    }
+  
     return {
       data: result.json,
     };

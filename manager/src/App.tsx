@@ -7,7 +7,7 @@ import { users } from './pages/users';
 import { authProvider } from './utils/authProvider';
 import SignIn from './components/layout/login';
 import { i18nProvider } from './components/i18n';
-import { Route } from 'react-router-dom';
+import { Route, BrowserRouter, Routes } from 'react-router-dom';
 import Configuration from './pages/configuration/Configuration';
 import themes from './components/layout/themes';
 import Profile from './pages/configuration/Profile';
@@ -26,12 +26,16 @@ import { logs } from './pages/logs';
 import StatusTest from './pages/status/StatusTest';
 import StatusTestv2 from './pages/status/StatusTestv2';
 import CompaniesMap from './pages/companies/CompaniesMap';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const httpClient = (url: string, options = {}) => {
-  //@ts-ignore
-  //options.headers = new Headers({ Accept: "application/json", Authorization: `Bearer ${localStorage.getItem('token') ? localStorage.getItem('token') : ''}` });
-
-  return fetchUtils.fetchJson(url, options);
+  return fetchUtils.fetchJson(url, options)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      throw error;
+    });
 };
 
 const aggregate = (resource: any) => {
@@ -50,52 +54,57 @@ const aggregate = (resource: any) => {
 
 export let url = import.meta.env.VITE_REST_API ? import.meta.env.VITE_REST_API : 'http://127.0.0.1:13001/';
 const dataProvider = lb4Provider(url, aggregate, httpClient);
+const queryClient = new QueryClient();
 
 const App = () => {
   return (
-    <Admin
-      lightTheme={themes['light']}
-      darkTheme={themes['dark']}
-      defaultTheme='light'
-      layout={MyLayout}
-      authProvider={authProvider}
-      loginPage={SignIn}
-      dashboard={Dashboard}
-      dataProvider={dataProvider}
-      i18nProvider={i18nProvider}
-      disableTelemetry
-      requireAuth
-    >
-      {(permissions?: string[]) => {
-        return [
-          <Resource name="users" {...users(permissions)} recordRepresentation={(record) => record.person_name} />,
-          <Resource name="validateUsers" {...validateUsers(permissions)} recordRepresentation={(record) => record.person_name} />,
-          <Resource name="roles" {...roles(permissions)} />,
-          <Resource name="user-roles" />,
-          <Resource name="certificates" {...certificates(permissions)} />,
-          <Resource name="access-points" {...accessPoints(permissions)} />,
-          <Resource name="companies" {...companies(permissions)} />,
-          <Resource name="logs" {...logs(permissions)} />,
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/register" element={<Register />} />
+          <Route path="/*" element={
+            <Admin
+              lightTheme={themes['light']}
+              darkTheme={themes['dark']}
+              defaultTheme='light'
+              layout={MyLayout}
+              authProvider={authProvider}
+              loginPage={SignIn}
+              dashboard={Dashboard}
+              dataProvider={dataProvider}
+              i18nProvider={i18nProvider}
+              disableTelemetry
+              requireAuth
+            >
+              {(permissions?: string[]) => [
+                <Resource name="users" {...users(permissions)} recordRepresentation={(record) => record.person_name} />,
+                <Resource name="validateUsers" {...validateUsers(permissions)} recordRepresentation={(record) => record.person_name} />,
+                <Resource name="roles" {...roles(permissions)} />,
+                <Resource name="user-roles" />,
+                <Resource name="certificates" {...certificates(permissions)} />,
+                <Resource name="access-points" {...accessPoints(permissions)} />,
+                <Resource name="companies" {...companies(permissions)} />,
+                <Resource name="logs" {...logs(permissions)} />,
 
-          <CustomRoutes>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/configuration" element={<Configuration />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/certificates" element={<CertificatesList />} />
-            <Route path="/access-points" element={<AccessPointsList />} />
-            <Route path="/companies" element={<CompaniesList />} />
-            <Route path="/companies-map" element={<CompaniesMap />} />
-            <Route path="/logs" element={<LogsList />} />
-
-            <Route path="/status-test" element={<StatusTest />} />
-            <Route path="/status-testv2" element={<StatusTestv2 />} />
-
-            <Route path="/unauthorized" key={"/unauthorized"} element={<Unauthorized />} />
-          </CustomRoutes>,
-        ]
-      }}
-    </Admin>
+                <CustomRoutes>
+                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/configuration" element={<Configuration />} />
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/certificates" element={<CertificatesList />} />
+                  <Route path="/access-points" element={<AccessPointsList />} />
+                  <Route path="/companies" element={<CompaniesList />} />
+                  <Route path="/companies-map" element={<CompaniesMap />} />
+                  <Route path="/logs" element={<LogsList />} />
+                  <Route path="/status-test" element={<StatusTest />} />
+                  <Route path="/status-testv2" element={<StatusTestv2 />} />
+                  <Route path="/unauthorized" key={"/unauthorized"} element={<Unauthorized />} />
+                </CustomRoutes>,
+              ]}
+            </Admin>
+          } />
+        </Routes>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }
 

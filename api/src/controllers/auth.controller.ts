@@ -62,7 +62,6 @@ export class AuthController {
     @requestBody(CredentialsLoginRequestBody) credentials: Credentials,
   ): Promise<{ token: string } | { authenticator: string } | void> {
 
-    // ensure the user exists, and the password is correct
     const user = await this.authService.verifyCredentials(credentials);
 
     if (!credentials.id || !credentials.code) {
@@ -72,7 +71,8 @@ export class AuthController {
 
       const authenticator = await this.appUsersAuthenticatorRepository.create({ app_users_id: user.id, code: gen_auth.code, expires: gen_auth.expires })
 
-      this.emailService.sendMailAuthenticator('pt-pt', user.email, user.person_name, gen_auth.code);
+      // Temporarily disable email sending
+      // this.emailService.sendMailAuthenticator('pt-pt', user.email, user.person_name, gen_auth.code);
 
       return { authenticator: authenticator.id }
     }
@@ -237,7 +237,7 @@ export class AuthController {
   ): Promise<User> {
     return this.userRepository.findById(currentUserProfile[securityId], { include: [{ relation: 'prefs_util' }] });
   }
-
+  
   @post('/auth/register', {
     responses: {
       '200': {
@@ -297,10 +297,11 @@ export class AuthController {
         type: 1,
       });
 
-      this.emailService.sendMailRegister('pt-pt', credentials.email, credentials.person_name, encryptedString);
-
+      // Temporarily disable email sending
+      // this.emailService.sendMailRegister('pt-pt', credentials.email, credentials.person_name, encryptedString);
     });
 
+    return this.response.status(201).send({ message: 'Utilizador registado com sucesso' });
   }
 
   @post('/auth/forgotPass/request', {
@@ -336,10 +337,8 @@ export class AuthController {
       type: 2,
     });
 
-    this.emailService.sendMailForgotPassword('pt-pt', body.email, userDetails.person_name, encryptedString);
-
-
-
+    // Temporarily disable email sending
+    // this.emailService.sendMailForgotPassword('pt-pt', body.email, userDetails.person_name, encryptedString);
   }
 
   @post('/auth/delete/request', {
@@ -367,7 +366,8 @@ export class AuthController {
       const encryptedString = encodeURIComponent(randomBytes(64).toString('base64url'));
 
       this.pedidosRemocaoRepository.create({ email_cliente: user.email, motivo: body.motive, ip_cliente: this.request.ip, code: encryptedString })
-      this.emailService.sendMailDelete('pt-pt', user.email, user.person_name, encryptedString);
+      // Temporarily disable email sending
+      // this.emailService.sendMailDelete('pt-pt', user.email, user.person_name, encryptedString);
 
       return this.response.status(200).send({ message: 'OK' })
 
@@ -399,7 +399,6 @@ export class AuthController {
           active: true
         }
       });
-      // console.log(findKey)
 
       if (!findKey) return this.response.status(422).send({ message: 'Utilizador inválido. Contacte a entidade' });
 

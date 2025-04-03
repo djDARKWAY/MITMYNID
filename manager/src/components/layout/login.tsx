@@ -77,11 +77,11 @@ export default function SignIn() {
                   {translate('ra.auth.forgot')}
                 </Link>
               </Grid>
-              {/* <Grid item xs sx={{ display: 'flex', justifyContent: 'end' }}>
-                <Link href="/#/register">
+              <Grid item xs sx={{ display: 'flex', justifyContent: 'end' }}>
+                <Link href="/register">
                   {translate('ra.auth.sign_up')}
                 </Link>
-              </Grid> */}
+              </Grid>
             </Grid>
           </Box>
         </Box>
