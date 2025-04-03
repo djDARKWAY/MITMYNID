@@ -34,7 +34,7 @@ export class LogService {
 
   async logLoginFailure(userId: string, ip: string, reason: string, deviceInfo: { device: string; os: string }) {
     await this.logRepository.create({
-      type_id: 5,
+      type_id: 3,
       message: `Falha de login para o utilizador '${userId}'. Motivo: ${reason}`,
       timestamp: new Date().toISOString(),
       metadata: { ip, device: deviceInfo.device, os: deviceInfo.os, timestamp: new Date().toISOString() },

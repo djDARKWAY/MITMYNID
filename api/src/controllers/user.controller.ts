@@ -222,6 +222,16 @@ export class UserController {
       };
     }
 
+    if (filter?.where && filter?.where.hasOwnProperty("username")) {
+      filter.where = {
+        ...filter.where,
+        username: {
+          //@ts-ignore
+          ilike: `%${filter?.where.username}%`,
+        },
+      };
+    }
+
     if (filter?.where && filter?.where.hasOwnProperty("role")) {
       const whereWithRole = filter.where as { role?: string } & Where<User>;
       const roleId = whereWithRole.role;

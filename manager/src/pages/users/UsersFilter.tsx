@@ -30,6 +30,7 @@ export const userFilters = (permissions: string[]) => {
 
     let filters = [
         <TextInput source="person_name" size="small" label={'pos.labels.search'} fullWidth alwaysOn resettable={true} />,
+        <TextInput source="username" size="small" label={'Username'} fullWidth alwaysOn resettable={true} />,
     ];
 
     switch (true) {
