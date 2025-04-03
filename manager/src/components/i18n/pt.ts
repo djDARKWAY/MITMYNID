@@ -499,6 +499,7 @@ const portugueseMessages: TranslationMessages = {
       location: "Localização",
       contacts: "Contactos",
       logs: "Registos",
+      map: "Mapa",
     },
   },
 };

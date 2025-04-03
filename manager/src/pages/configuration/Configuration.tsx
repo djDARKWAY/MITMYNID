@@ -26,8 +26,8 @@ const Configuration = () => {
                 <Button
                     variant="contained"
                     sx={{margin: '1em'}}
-                    color={locale === 'en' ? 'primary' : 'secondary'}
-                    onClick={() => {setLocale('en')}}
+                    color={locale === 'en-us' ? 'primary' : 'secondary'}
+                    onClick={() => {setLocale('en-us')}}
                 >
                     en
                 </Button>

@@ -488,6 +488,7 @@ const englishMessages: TranslationMessages = {
       location: "Location",
       contacts: "Contacts",
       logs: "Logs",
+      map: "Map",
     },
   },
 };

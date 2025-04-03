@@ -501,6 +501,7 @@ const frenchMessages: TranslationMessages = {
       location: "Localisation",
       contacts: "Contacts",
       logs: "Journaux",
+      map: "Carte",
     },
   },
 };

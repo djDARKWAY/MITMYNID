@@ -7,6 +7,22 @@ import { useNavigate } from "react-router-dom";
 import { TextField } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
+const useDebounce = <T,>(value: T, delay: number): T => {
+    const [debouncedValue, setDebouncedValue] = useState(value);
+
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedValue(value);
+        }, delay);
+
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [value, delay]);
+
+    return debouncedValue;
+};
+
 const FlyIntroduction: React.FC = () => {
     const map = useMap();
 
@@ -20,7 +36,8 @@ const FlyIntroduction: React.FC = () => {
 const CompaniesMap: React.FC = () => {
     const [companies, setCompanies] = useState<any[]>([]);
     const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
-    const [filters, setFilters] = useState({ name: "" });
+    const [searchTerm, setSearchTerm] = useState("");
+    const debouncedSearchTerm = useDebounce(searchTerm, 300);
     const [userIcon, setUserIcon] = useState<L.DivIcon | null>(null);
     const [warehouseIcon, setWarehouseIcon] = useState<L.Icon | null>(null);
     const navigate = useNavigate();
@@ -65,13 +82,14 @@ const CompaniesMap: React.FC = () => {
     }, []);
 
     const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFilters((prev) => ({ ...prev, [name]: value }));
+        setSearchTerm(e.target.value);
     };
 
     const filteredCompanies = useMemo(() => 
-        companies.filter((c) => (!filters.name || c.name.toLowerCase().includes(filters.name.toLowerCase()))),
-        [companies, filters.name]
+        companies.filter((c) => 
+            !debouncedSearchTerm || c.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+        ),
+        [companies, debouncedSearchTerm]
     );
 
     return (
@@ -105,7 +123,7 @@ const CompaniesMap: React.FC = () => {
                 <TextField
                     label="Armazém"
                     name="name"
-                    value={filters.name}
+                    value={searchTerm}
                     onChange={handleFilterChange}
                     fullWidth
                     size="small"

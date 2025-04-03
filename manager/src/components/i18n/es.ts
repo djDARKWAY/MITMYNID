@@ -1,4 +1,4 @@
-import { zip } from "lodash";
+import { map, zip } from "lodash";
 import { TranslationMessages } from "react-admin";
 
 const spanishMessages: TranslationMessages = {
@@ -498,6 +498,7 @@ const spanishMessages: TranslationMessages = {
       location: "Localización",
       contacts: "Contactos",
       logs: "Registros",
+      map: "Mapa",
     },
   },
 };

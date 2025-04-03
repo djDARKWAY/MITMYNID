@@ -23,6 +23,12 @@ export default function Register() {
 
   console.log(translate("resources.users.fields.name"));
 
+  const sanitizeInput = (input: FormDataEntryValue | null): string => {
+    if (!input) return "";
+    const stringValue = input.toString();
+    return stringValue.replace(/<[^>]*>?/gm, '').trim();
+  };
+
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
@@ -34,11 +40,11 @@ export default function Register() {
       }
 
       const data = {
-        username: formData.get("username"),
-        password: formData.get("password"),
-        person_name: formData.get("person_name"),
-        email: formData.get("email"),
-        nif: formData.get("nif"),
+        username: sanitizeInput(formData.get("username")),
+        password: sanitizeInput(formData.get("password")),
+        person_name: sanitizeInput(formData.get("person_name")),
+        email: sanitizeInput(formData.get("email")),
+        nif: sanitizeInput(formData.get("nif")),
       };
 
       try {
@@ -54,7 +60,7 @@ export default function Register() {
           notify("ra.notification.register_user", { type: "success" });
           setTimeout(() => navigate("/login"), 2000);
         } else {
-          notify(responseData.message || "ra.notification.error_register_user", { type: "error" });
+          notify(responseData.message || responseData.error?.message || "ra.notification.error_register_user", { type: "error" });
         }
       } catch (error) {
         notify("ra.notification.error_register_user", { type: "error" });

@@ -10,10 +10,7 @@ const darkTheme = {
       contrastText: "#fff",
     },
     secondary: {
-      //light: '#f3e5f5',
       main: "#fff",
-      //dark: '#ab47bc',
-      contrastText: "#000",
     },
     customElements: {
       actions: {
@@ -21,6 +18,7 @@ const darkTheme = {
       },
     },
     background: {
+      default: "#212b36",
       paper: "#212b36",
     },
     mode: "dark" as "dark",
@@ -44,7 +42,7 @@ const darkTheme = {
     borderRight: "1.5px dotted rgb(81, 84, 93, 0.7)",
   },
   typography: {
-    fontFamily: "Public Sans,sans-serif",
+    fontFamily: "Public Sans, sans-serif",
   },
   components: {
     MuiMenuItem: {
@@ -82,7 +80,7 @@ const darkTheme = {
           },
           "&.RaMenuItemLink-active": {
             background: "rgb(0, 179, 230, 0.7)",
-            color: "white ",
+            color: "white",
             "&.close": {
               color: "transparent",
             },
@@ -114,7 +112,6 @@ const darkTheme = {
         },
       },
     },
-    //campos em RaList usados para mudar a cor do texto quando nao encontra items
     RaList: {
       styleOverrides: {
         root: {
@@ -147,14 +144,8 @@ const darkTheme = {
               textTransform: "uppercase",
             },
           },
-          "& .MuiTableBody-root .MuiTableRow-root .MuiTableCell-root": {
-            //padding: '10px',
-            /*'&:hover':{
-                            backgroundColor: 'rgb(81, 84, 93, 0.05)',
-                        }*/
-          },
+          "& .MuiTableBody-root .MuiTableRow-root .MuiTableRow-root": {},
           "& .MuiTableBody-root .MuiTableRow-root": {
-            //padding: '10px',
             "&:nth-of-type(even)": {
               backgroundColor: "rgb(81, 84, 93, 0.12)",
             },
@@ -162,7 +153,6 @@ const darkTheme = {
               backgroundColor: "rgb(81, 84, 93, 0.35)",
             },
           },
-          // hide last border
           "&:last-child td, &:last-child th": {
             border: 0,
           },
@@ -174,7 +164,7 @@ const darkTheme = {
         colorSecondary: {
           border: "none",
           color: "white",
-          background: "rgb(22, 28, 36)", //#fff
+          background: "rgb(22, 28, 36)",
           height: "80px",
           justifyContent: "center",
         },
@@ -205,16 +195,12 @@ const darkTheme = {
           },
         },
         underline: {
-          //retirar bottom border default
           "&:before": {
             borderBottom: "1px solid rgba(255, 133, 51, 0)",
           },
           "&:after": {
             borderBottom: `1px solid #00B3E6`,
           },
-          /*'&:hover:not($disabled):not($focused):not($error):before': {
-                        borderBottom: `2px solid red`
-                    } */
           "&:hover:before": {
             borderBottomColor: `rgba(255, 133, 51, 0) !important`,
           },
@@ -249,10 +235,6 @@ const darkTheme = {
       styleOverrides: {
         root: {
           "&:hover:active::after": {
-            // recreate a static ripple color
-            // use the currentColor to make it work both for outlined and contained buttons
-            // but to dim the background without dimming the text,
-            // put another element on top with a limited opacity
             content: '""',
             display: "block",
             width: "100%",
@@ -270,7 +252,6 @@ const darkTheme = {
   },
   props: {
     MuiButtonBase: {
-      // disable ripple for perf reasons
       disableRipple: true,
     },
     MuiList: {

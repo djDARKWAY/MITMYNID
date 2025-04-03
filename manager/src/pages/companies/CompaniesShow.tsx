@@ -5,8 +5,10 @@ import { ReactNode, useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import React from "react";
+import warehouseIconUrl from "/src/assets/map/warehouse.png";
 
-const Section = ({ title, icon, children }: { title: string; icon: ReactNode; children: ReactNode }) => {
+const Section = React.memo(({ title, icon, children }: { title: string; icon: ReactNode; children: ReactNode }) => {
     const translate = useTranslate();
     return (
         <Card variant="outlined" sx={{ mb: 3 }}>
@@ -22,7 +24,7 @@ const Section = ({ title, icon, children }: { title: string; icon: ReactNode; ch
             </CardContent>
         </Card>
     );
-};
+});
 
 const FieldTitleLabel = ({ label, children }: { label: string; children: ReactNode }) => {
     const translate = useTranslate();
@@ -40,15 +42,13 @@ const MapUpdater = ({ position, zoomLevel }: { position: [number, number] | null
     const map = useMap();
 
     useEffect(() => {
-        map.setZoom(zoomLevel);
-    }, [map, zoomLevel]);
-    
-    useEffect(() => {
         if (position) {
             map.setView(position, zoomLevel);
+        } else {
+            map.setZoom(zoomLevel);
         }
     }, [position, map, zoomLevel]);
-    
+
     return null;
 };
 
@@ -59,15 +59,22 @@ const CompanyMap = () => {
     const zoomLevel = 15;
     
     useEffect(() => {
-        if (record && record.lat && record.lon) {
-            console.log("lat:", record.lat, "lon:", record.lon);
-            setPosition([record.lat, record.lon]);
+        if (record && !isNaN(record.lat) && !isNaN(record.lon)) {
+            const lat = Number(record.lat);
+            const lon = Number(record.lon);
+            if (lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180) {
+                setPosition([lat, lon]);
+            } else {
+                console.warn("Latitude or longitude out of bounds:", { lat, lon });
+            }
+        } else {
+            console.warn("Invalid latitude or longitude in record:", record);
         }
     }, [record]);
     
     useEffect(() => {
         const warehouseIconInstance = new L.Icon({
-            iconUrl: "/src/assets/map/warehouse.png",
+            iconUrl: warehouseIconUrl,
             iconSize: [25, 25],
             iconAnchor: [12.5, 25],
         });
@@ -82,6 +89,9 @@ const CompanyMap = () => {
         <MapContainer 
             center={defaultPosition} 
             zoom={zoomLevel}
+            minZoom={3}
+            maxBounds={[[85, -180], [-85, 180]]}
+            maxBoundsViscosity={1}
             style={{ height: "710px", width: "100%" }}
             dragging={false}
             doubleClickZoom={false}
@@ -150,7 +160,7 @@ export const CompaniesShow = () => (
 
                 {/* Mapa */}
                 <Grid item xs={12} md={6}>
-                    <Section title="Mapa" icon={<Map />}>
+                    <Section title={useTranslate()("show.companies.map")} icon={<Map />}>
                         <CompanyMap />
                     </Section>
                 </Grid>
