@@ -586,7 +586,6 @@ export class UserController {
     filter?: FilterExcludingWhere<User>
   ): Promise<User | Response> {
     try {
-      //detalhes do utilizador que está a tentar aceder
       const accessUser = await this.userRepository.findById(id, filter);
 
       return accessUser;
@@ -623,5 +622,52 @@ export class UserController {
     );
 
     return;
+  }
+
+  @del("/validateUsers/{id}")
+  @authenticate("jwt")
+  @authorize({
+    allowedRoles: ["ADMIN"],
+    voters: [basicAuthorization],
+  })
+  @response(204, {
+    description: "ValidateUser DELETE success",
+  })
+  async deleteValidateById(
+    @param.path.string("id") id: string
+  ): Promise<void | Response> {
+    try {
+      await this.logService.logUserDelete(
+        this.user.person_name, 
+        id, 
+        this.response.req?.ip ?? 'unknown', 
+        this.user.person_name, 
+        {
+          device: this.response.req?.headers['user-agent'] ?? 'unknown',
+          os: 'unknown',
+        }
+      );
+      
+      const user = await this.userRepository.findOne({
+        where: { id, active: false }
+      });
+      
+      if (!user) {
+        return this.response
+          .status(404)
+          .send({ message: "Utilizador não encontrado ou já validado" });
+      }
+      
+      await this.prefsUserRepository.deleteAll({ id_utilizador: id });
+      await this.appUsersSessionRepository.deleteAll({ app_users_id: id });
+      await this.userRoleRepository.deleteAll({ app_users_id: id });
+      await this.userRepository.deleteById(id);
+      
+    } catch (err) {
+      console.error('Error deleting validate user:', err);
+      return this.response
+        .status(500)
+        .send({ message: "Erro a eliminar utilizador" });
+    }
   }
 }
