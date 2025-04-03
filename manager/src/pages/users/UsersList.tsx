@@ -44,7 +44,6 @@ export const UsersList = () => {
         <SimpleList 
             primaryText={record => record.person_name} 
             secondaryText={record => record.username} 
-            //tertiaryText={record => record.email}
             linkType={"edit"} /> 
             
         : 

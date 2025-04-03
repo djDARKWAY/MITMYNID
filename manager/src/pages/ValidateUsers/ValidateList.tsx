@@ -1,18 +1,25 @@
-import { Box } from "@mui/material";
-import { List, Datagrid, TextField, TextInput, useTranslate } from "react-admin";
+import { List, Datagrid, TextField, useTranslate } from "react-admin";
 import CustomEmptyPage from "../../components/general/CustomEmptyPage";
 import CustomPagination, { perPageDefault } from "../../components/general/CustomPagination";
 
 export const ValidateList = () => {
-
   const translate = useTranslate();
 
   return (
-    <List title="resources.utilizadores.validate" pagination={<CustomPagination />} perPage={perPageDefault} exporter={false} empty={<CustomEmptyPage />} sx={{ paddingLeft: '10px' }}>
-      <Datagrid rowClick="edit" bulkActionButtons={false}>
-        <TextField source="person_name" />
-        <TextField source="nif" />
-        <TextField source="email" />
+    <List 
+      title="resources.utilizadores.validate" 
+      pagination={<CustomPagination />} 
+      perPage={perPageDefault} 
+      exporter={false} 
+      empty={<CustomEmptyPage />} 
+      filter={{ active: false }}
+      sx={{ paddingLeft: '10px' }}
+    >
+      <Datagrid bulkActionButtons={false}>
+        <TextField source="person_name" label="resources.utilizadores.fields.nome" />
+        <TextField source="username" label="resources.utilizadores.fields.username" />
+        <TextField source="email" label="Email" />
+        <TextField source="nif" label="resources.utilizadores.fields.nif" />
       </Datagrid>
     </List>
   );

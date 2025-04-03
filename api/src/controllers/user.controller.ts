@@ -549,24 +549,11 @@ export class UserController {
       filter = {};
     }
 
-    if (filter?.where && filter?.where.hasOwnProperty("person_name")) {
-      filter.where = {
-        ...filter.where,
-        person_name: {
-          //@ts-ignore
-          ilike: `${filter?.where.person_name}%`,
-        },
-      };
-    }
-
     filter.where = {
-      id: {
-        neq: user[securityId],
-      },
-      deleted: false,
-      active: false,
-      validation_date: { neq: null },
       ...filter.where,
+      active: false,
+      deleted: false,
+      id: { neq: user[securityId] },
     };
 
     return this.userRepository.find(filter).then(async (users) => {
