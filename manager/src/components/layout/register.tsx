@@ -20,7 +20,6 @@ export default function Register() {
   const translate = useTranslate();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [skipConfirmPassword, setSkipConfirmPassword] = useState(false);
 
   console.log(translate("resources.users.fields.name"));
@@ -82,43 +81,25 @@ export default function Register() {
               <TextField name="nif" label={translate("resources.users.fields.nif")} fullWidth required margin="normal" size="small" />
             </Box>
             <Box display="flex" gap={2}>
+            <TextField
+              name="password"
+              label={translate("resources.users.fields.password")}
+              type={skipConfirmPassword ? "text" : "password"}
+              fullWidth
+              required
+              margin="normal"
+              size="small"
+            />
+              {!skipConfirmPassword && (
               <TextField
-                name="password"
-                label={translate("resources.users.fields.password")}
-                type={showPassword ? "text" : "password"}
+                name="confirm_password"
+                label={translate("resources.users.fields.confirm_password")}
+                type="password"
                 fullWidth
                 required
                 margin="normal"
                 size="small"
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton aria-label="toggle password visibility" onClick={() => setShowPassword(!showPassword)}>
-                        {showPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
               />
-              {!skipConfirmPassword && (
-                <TextField
-                  name="confirm_password"
-                  label={translate("resources.users.fields.confirm_password")}
-                  type={showConfirmPassword ? "text" : "password"}
-                  fullWidth
-                  required
-                  margin="normal"
-                  size="small"
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton aria-label="toggle confirm password visibility" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
-                          {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
               )}
             </Box>
             <FormControlLabel
