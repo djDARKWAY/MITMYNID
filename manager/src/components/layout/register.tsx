@@ -1,9 +1,8 @@
-import { Box, Button, TextField, Typography, CssBaseline, InputAdornment, IconButton, Checkbox, FormControlLabel } from "@mui/material";
+import { Box, Button, TextField, Typography, CssBaseline, InputAdornment, IconButton, Checkbox, FormControlLabel, Grid, Link } from "@mui/material";
 import { useNotify, useTranslate, Notification } from "react-admin";
 import { useNavigate } from "react-router-dom";
 import { useCallback, useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { url } from "../../App";
 import Copyright from "./Copyright";
 
@@ -70,7 +69,6 @@ export default function Register() {
       <Box sx={{ height: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "background.default" }}>
         <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", borderRadius: 2, width: "100%", maxWidth: 500 }}>
           <img src="MMN_H_RGB.svg" alt="logo" style={{ height: 70 }} />
-          <Typography component="h1" variant="h5" sx={{ mb: 2 }}>{translate("ra.auth.sign_up")}</Typography>
           <Box component="form" onSubmit={handleSubmit}>
             <Box display="flex" gap={2}>
               <TextField name="person_name" label={translate("resources.users.fields.name")} fullWidth required margin="normal" size="small" />
@@ -109,9 +107,14 @@ export default function Register() {
             <Button type="submit" fullWidth variant="contained" color="primary" sx={{ mt: 2, color: "#FFFFFF" }}>
               {translate("ra.auth.sign_up")}
             </Button>
+            <Grid item xs sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
+              <Link href="/login" sx={{ color: "#00B3E6" }}>
+              {translate("ra.auth.back_to_login")}
+              </Link>
+            </Grid>
           </Box>
         </Box>
-        <Box sx={{ position: "absolute", bottom: 32 }}>
+        <Box sx={{ position: "absolute", bottom: 46 }}>
           <Copyright />
         </Box>
         <Notification />

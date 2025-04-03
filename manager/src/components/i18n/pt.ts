@@ -165,6 +165,7 @@ const portugueseMessages: TranslationMessages = {
       forgot: "Recuperar palavra-passe",
       insert_code: "Inserir Código",
       alter_password: "Nova palavra-passe",
+      back_to_login: "Voltar para o login",
     },
     notification: {
       updated: "Item atualizado",
