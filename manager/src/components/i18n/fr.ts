@@ -308,6 +308,19 @@ const frenchMessages: TranslationMessages = {
         history: "Historique",
       },
     },
+    users: {
+      fields: {
+        fields: {
+          name: "Nom",
+          username: "Utilisateur",
+          email: "Email",
+          nif: "NIF",
+          password: "Mot de passe",
+          confirm_password: "Confirmer le mot de passe",
+          show_password: "Montrer le mot de passe",
+        },
+      },
+    },
     utilizadores: {
       name: "Utilisateurs",
       edit_title: "Modifier l'utilisateur",

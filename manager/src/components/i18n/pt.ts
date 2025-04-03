@@ -2,6 +2,7 @@ import { TranslationMessages } from "react-admin";
 import { logs } from "../../pages/logs";
 import { time } from "console";
 import { last } from "lodash";
+import { users } from "../../pages/users";
 
 const portugueseMessages: TranslationMessages = {
   ra: {
@@ -98,8 +99,8 @@ const portugueseMessages: TranslationMessages = {
         single_missing: "A referência não está disponível.",
       },
       password: {
-        toggle_visible: "Esconder a senha",
-        toggle_hidden: "Mostrar senha",
+        toggle_visible: "Esconder a palavra-passe",
+        toggle_hidden: "Mostrar palavra-passe",
       },
     },
     message: {
@@ -155,15 +156,15 @@ const portugueseMessages: TranslationMessages = {
       auth_check_error: "Por favor faça o login para continuar",
       user_menu: "Perfil",
       username: "Utilizador",
-      password: "Senha",
+      password: "Palavra-passe",
       sign_in: "Entrar",
       sign_in_error: "Erro na autenticação. Por favor volte a tentar.",
       sign_up: "Registar",
       logout: "Sair",
       remember_me: "Lembrar-se de mim",
-      forgot: "Recuperar senha",
+      forgot: "Recuperar palavra-passe",
       insert_code: "Inserir Código",
-      alter_password: "Nova Senha",
+      alter_password: "Nova palavra-passe",
     },
     notification: {
       updated: "Item atualizado",
@@ -308,6 +309,17 @@ const portugueseMessages: TranslationMessages = {
         history: "Histórico",
       }
     },
+    users: {
+      fields: {
+        name: "Nome",
+        username: "Utilizador",
+        email: "Email",
+        nif: "NIF",
+        password: "Palavra-passe",
+        confirm_password: "Confirmar palavra-passe",
+        show_password: "Mostrar palavra-passe",
+      },
+    },
     utilizadores: {
       name: "Utilizadores",
       edit_title: "Editar Utilizador",
@@ -324,13 +336,13 @@ const portugueseMessages: TranslationMessages = {
         cc: "Cartão de Cidadão",
         telefone: "Telefone",
         telemovel: "Telémovel",
-        password: "Senha",
+        password: "palavra-passe",
         foto: "Imagem",
         ativo: "Ativo",
         ult_acesso: "Último acesso",
         roles: "Perfis",
         username: "Utilizador",
-        confirm_password: "Confirmar senha",
+        confirm_password: "Confirmar palavra-passe",
         cod_postal: "Código postal",
         validation_date: "Data de Validação",
         tema_fav: "Tema",

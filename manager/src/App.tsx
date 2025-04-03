@@ -6,6 +6,7 @@ import { roles } from './pages/roles';
 import { users } from './pages/users';
 import { authProvider } from './utils/authProvider';
 import SignIn from './components/layout/login';
+import { I18nContextProvider } from "react-admin";
 import { i18nProvider } from './components/i18n';
 import { Route, BrowserRouter, Routes } from 'react-router-dom';
 import Configuration from './pages/configuration/Configuration';
@@ -61,7 +62,14 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
-          <Route path="/register" element={<Register />} />
+        <Route
+            path="/register"
+            element={
+              <I18nContextProvider value={i18nProvider}>
+                <Register />
+              </I18nContextProvider>
+            }
+          />
           <Route path="/*" element={
             <Admin
               lightTheme={themes['light']}

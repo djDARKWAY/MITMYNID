@@ -20,7 +20,7 @@ export class AuthService implements UserService<User, Credentials>{
 
     async verifyCredentials(credentials: Credentials): Promise<User>{
 
-        const invalidCredentialsError = 'Utilizador ou senha inválidos';
+        const invalidCredentialsError = 'Utilizador ou palavra-passe inválidos';
 
         credentials.username = credentials.username.toLowerCase();
 

@@ -67,7 +67,7 @@ const generateForgotPassEmail = (url: string, farewell: string, noreply: string,
                   </tr>
                   <tr>
                     <td style="padding-top: 30px;">
-                      Recuperar senha do utilizador <a href="${url}/#/newPass?request=${code}">aqui</a>.<br>
+                      Recuperar palavra-passe do utilizador <a href="${url}/#/newPass?request=${code}">aqui</a>.<br>
                       Recupera la contraseña de usuario <a href="${url}/#/newPass?request=${code}">aquí</a>.<br>
                       Recover user password <a href="${url}/#/newPass?request=${code}">here</a>.<br>
                       Récupérez le mot de passe utilisateur <a href="${url}/#/newPass?request=${code}">ici</a>. <br>

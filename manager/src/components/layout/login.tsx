@@ -26,7 +26,7 @@ export default function SignIn() {
       password: data.get('password'),
     })
       .catch((err) => {
-        notify('Utilizador ou senha inválidos', { type: 'warning' });
+        notify('Utilizador ou palavra-passe inválidos', { type: 'warning' });
       });
   };
 

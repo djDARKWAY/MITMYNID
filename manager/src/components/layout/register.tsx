@@ -1,79 +1,140 @@
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import { useNotify, useTranslate, Notification } from 'react-admin';
-import { useNavigate } from 'react-router-dom';
-import { useCallback } from 'react';
-import { url } from '../../App';
+import { Box, Button, TextField, Typography, CssBaseline, InputAdornment, IconButton, Checkbox, FormControlLabel } from "@mui/material";
+import { useNotify, useTranslate, Notification } from "react-admin";
+import { useNavigate } from "react-router-dom";
+import { useCallback, useState } from "react";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { url } from "../../App";
+import Copyright from "./Copyright";
+
+const theme = createTheme({
+  palette: {
+    background: { default: "#FCFCFE" },
+    customElements: { actions: { main: "#FCFCFE" } },
+    primary: { main: "#00B3E6" },
+  },
+});
 
 export default function Register() {
   const notify = useNotify();
   const translate = useTranslate();
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [skipConfirmPassword, setSkipConfirmPassword] = useState(false);
 
-  const handleSubmit = useCallback(async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  console.log(translate("resources.users.fields.name"));
 
-    const formData = new FormData(event.currentTarget);
+  const handleSubmit = useCallback(
+    async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
 
-    if (formData.get('password') !== formData.get('confirm_password'))
-      return notify(translate('userRegister.error.confirm_password'), { type: 'warning' });
+      const formData = new FormData(event.currentTarget);
 
-    const data = {
-      username: formData.get('username'),
-      password: formData.get('password'),
-      person_name: formData.get('person_name'),
-      email: formData.get('email'),
-      nif: formData.get('nif'),
-    };
-
-    try {
-      const response = await fetch(`${url}auth/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-
-      const responseData = await response.json();
-
-      if (response.ok) {
-        notify('ra.notification.register_user', { type: 'success' });
-        setTimeout(() => navigate('/login'), 2000);
-      } else {
-        notify(responseData.message || 'ra.notification.error_register_user', { type: 'error' });
+      if (!skipConfirmPassword && formData.get("password") !== formData.get("confirm_password")) {
+        return notify(translate("userRegister.error.confirm_password"), { type: "warning" });
       }
-    } catch (error) {
-      notify('ra.notification.error_register_user', { type: 'error' });
-    }
-  }, [notify, translate, navigate]);
+
+      const data = {
+        username: formData.get("username"),
+        password: formData.get("password"),
+        person_name: formData.get("person_name"),
+        email: formData.get("email"),
+        nif: formData.get("nif"),
+      };
+
+      try {
+        const response = await fetch(`${url}auth/register`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        const responseData = await response.json();
+
+        if (response.ok) {
+          notify("ra.notification.register_user", { type: "success" });
+          setTimeout(() => navigate("/login"), 2000);
+        } else {
+          notify(responseData.message || "ra.notification.error_register_user", { type: "error" });
+        }
+      } catch (error) {
+        notify("ra.notification.error_register_user", { type: "error" });
+      }
+    },
+    [notify, translate, navigate, skipConfirmPassword]
+  );
 
   return (
-    <Container component="div" maxWidth="md">
+    <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box sx={{ marginTop: '25%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Box component="form" onSubmit={handleSubmit} sx={{ pt: 4, width: '100%', display: 'flex', flexDirection: 'column', gap: '15px' }}>
-          <Box display={'flex'} gap={'1rem'}>
-            <TextField fullWidth name="person_name" label={translate('resources.utilizadores.fields.nome')} id="person_name" autoFocus required />
-            <TextField fullWidth name="username" label={translate('resources.utilizadores.fields.username')} id="username" autoComplete="username" required />
+      <Box sx={{ height: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: "background.default" }}>
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", borderRadius: 2, width: "100%", maxWidth: 500 }}>
+          <img src="MMN_H_RGB.svg" alt="logo" style={{ height: 70 }} />
+          <Typography component="h1" variant="h5" sx={{ mb: 2 }}>{translate("ra.auth.sign_up")}</Typography>
+          <Box component="form" onSubmit={handleSubmit}>
+            <Box display="flex" gap={2}>
+              <TextField name="person_name" label={translate("resources.users.fields.name")} fullWidth required margin="normal" size="small" />
+              <TextField name="username" label={translate("resources.users.fields.username")} fullWidth required margin="normal" size="small" />
+            </Box>
+            <Box display="flex" gap={2}>
+              <TextField name="email" label={translate("resources.users.fields.email")} type="email" fullWidth required margin="normal" size="small" />
+              <TextField name="nif" label={translate("resources.users.fields.nif")} fullWidth required margin="normal" size="small" />
+            </Box>
+            <Box display="flex" gap={2}>
+              <TextField
+                name="password"
+                label={translate("resources.users.fields.password")}
+                type={showPassword ? "text" : "password"}
+                fullWidth
+                required
+                margin="normal"
+                size="small"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton aria-label="toggle password visibility" onClick={() => setShowPassword(!showPassword)}>
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              {!skipConfirmPassword && (
+                <TextField
+                  name="confirm_password"
+                  label={translate("resources.users.fields.confirm_password")}
+                  type={showConfirmPassword ? "text" : "password"}
+                  fullWidth
+                  required
+                  margin="normal"
+                  size="small"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton aria-label="toggle confirm password visibility" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                          {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              )}
+            </Box>
+            <FormControlLabel
+              control={<Checkbox checked={skipConfirmPassword} onChange={(e) => setSkipConfirmPassword(e.target.checked)} />}
+              label={translate("resources.users.fields.show_password")}
+            />
+            <Button type="submit" fullWidth variant="contained" color="primary" sx={{ mt: 2, color: "#FFFFFF" }}>
+              {translate("ra.auth.sign_up")}
+            </Button>
           </Box>
-          <Box display={'flex'} gap={'1rem'}>
-            <TextField fullWidth name='email' label={translate('resources.utilizadores.fields.email')} id='email' type={'email'} required />
-            <TextField fullWidth name='nif' label={translate('resources.utilizadores.fields.nif')} id='nif' required />
-          </Box>
-          <Box display={'flex'} gap={'1rem'}>
-            <TextField fullWidth name="password" label={translate('resources.utilizadores.fields.password')} type="password" id="password" autoComplete="new-password" required />
-            <TextField fullWidth name="confirm_password" label={translate('resources.utilizadores.fields.confirm_password')} type="password" id="confirm_password" autoComplete="new-password" required />
-          </Box>
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            {translate('ra.auth.sign_up')}
-          </Button>
         </Box>
+        <Box sx={{ position: "absolute", bottom: 32 }}>
+          <Copyright />
+        </Box>
+        <Notification />
       </Box>
-      <Notification />
-    </Container>
+    </ThemeProvider>
   );
 }

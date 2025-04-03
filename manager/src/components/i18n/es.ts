@@ -308,6 +308,17 @@ const spanishMessages: TranslationMessages = {
         history: "Histórico",
       },
     },
+    users: {
+      fields: {
+        name: "Nombre",
+        username: "Usuario",
+        email: "Correo electrónico",
+        nif: "NIF",
+        password: "Contraseña",
+        confirm_password: "Confirmar contraseña",
+        show_password: "Mostrar contraseña",
+      },
+    },
     utilizadores: {
       name: "Usuarios",
       edit_title: "Editar usuario",

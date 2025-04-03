@@ -299,6 +299,17 @@ const englishMessages: TranslationMessages = {
         history: "History",
       },
     },
+    users: {
+      fields: {
+        name: "Name",
+        username: "Username",
+        email: "Email",
+        nif: "NIF",
+        password: "Password",
+        confirm_password: "Confirm Password",
+        show_password: "Show Password",
+      },
+    },
     utilizadores: {
       name: "Users",
       edit_title: "Edit User",
