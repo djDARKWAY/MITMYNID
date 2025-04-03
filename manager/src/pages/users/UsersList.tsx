@@ -14,32 +14,30 @@ import CustomConfirmButtonToolTip from "../../components/general/CustomConfirmBu
 import { responsiveListFilter } from "../../components/general/customCSS";
 
 export const UsersList = () => {
-
     const {permissions, isLoading} = usePermissions();
-
     const theme = useTheme();
-
     const isSmall = useMediaQuery(theme.breakpoints.down('lg'));
 
     return !isLoading ? (
     <List  
-    queryOptions={{ 
-        refetchOnWindowFocus: false,
-        meta: {
-            include: [
-                {
-                    relation: 'roles'
-                }
-            ]
-        }
-    }} 
-    pagination={<CustomPagination/>} 
-    perPage={perPageDefault} 
-    filters={userFilters(permissions)} 
-    empty={<CustomEmptyPage/>}  
-    exporter={false} 
-    title="resources.utilizadores.name" 
-    sx={{paddingLeft: '10px', ...responsiveListFilter}}
+        queryOptions={{ 
+            refetchOnWindowFocus: false,
+            meta: {
+                include: [
+                    {
+                        relation: 'roles'
+                    }
+                ]
+            }
+        }} 
+        pagination={<CustomPagination/>} 
+        perPage={perPageDefault} 
+        filters={userFilters(permissions)} 
+        filter={{ active: true }}
+        empty={<CustomEmptyPage/>}  
+        exporter={false} 
+        title="resources.utilizadores.name" 
+        sx={{paddingLeft: '10px', ...responsiveListFilter}}
     >
         {isSmall 
         ? 
