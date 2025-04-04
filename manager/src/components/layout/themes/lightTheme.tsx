@@ -39,7 +39,7 @@ const lightTheme = {
     width: 250,
     closedWidth: 87,
     background: "#fcfcfe",
-    borderRight: "1.5px dotted rgb(145, 158, 171, 0.7)",
+    borderRight: "1.5px dotted rgb(22222, 158, 171, 0.7)",
   },
   typography: {
     fontFamily: "Public Sans, sans-serif",
@@ -137,8 +137,8 @@ const lightTheme = {
           paddingTop: "10px",
           "& .MuiTableHead-root .MuiTableCell-root": {
             padding: "12px",
-            background: "rgba(145, 158, 171, 0.3)",
-            color: "black",
+            background: "#D3D8DE",
+            color: "dark_gray",
             fontWeight: "600",
             "& span": {
               textTransform: "uppercase",
@@ -147,10 +147,13 @@ const lightTheme = {
           "& .MuiTableBody-root .MuiTableRow-root .MuiTableCell-root": {},
           "& .MuiTableBody-root .MuiTableRow-root": {
             "&:nth-of-type(even)": {
-              backgroundColor: "rgb(145, 158, 171, 0.12)",
+              backgroundColor: "#EFF2F5",
             },
+            "&:nth-of-type(odd)": {
+              backgroundColor: "#fcfcfe",
+            },            
             "&:hover": {
-              backgroundColor: "rgb(145, 158, 171, 0.35)",
+              backgroundColor: "#DDE2E7",
             },
           },
           "&:last-child td, &:last-child th": {
