@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 
-import { TopToolbar, ListButton } from "react-admin";
+import { TopToolbar, ListButton, FilterButton } from "react-admin";
 import { List, useListContext, usePermissions, useDataProvider } from "react-admin";
 import { Card, CardContent, Typography, Grid, Paper, useTheme, Checkbox, Button } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
@@ -111,7 +111,7 @@ export const CompaniesList = () => {
     const navigate = useNavigate();
 
     return (
-<List
+        <List
             resource="companies"
             filters={CompaniesFilters(permissions)}
             queryOptions={{ refetchOnWindowFocus: false }}
@@ -123,10 +123,8 @@ export const CompaniesList = () => {
             sx={{ paddingLeft: "10px" }}
             actions={
                 <TopToolbar>
-                    {/* Botão "Criar" padrão do React Admin */}
+                    <FilterButton />
                     <ListButton label="Criar" icon={<AddIcon />} />
-
-                    {/* Botão "Ver Mapa" com o mesmo estilo */}
                     <Button 
                         variant="contained"
                         color="primary"
