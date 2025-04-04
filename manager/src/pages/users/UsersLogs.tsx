@@ -1,6 +1,6 @@
 import { Datagrid, List, FunctionField, usePermissions, TextField, useTranslate, useDataProvider, useNotify, useRefresh } from "react-admin";
 import { Box, Typography, Tooltip, IconButton } from "@mui/material";
-import { LockOpen } from "@mui/icons-material";
+import { LockOpen, RestoreFromTrash } from "@mui/icons-material";
 import CustomEmptyPage from "../../components/general/CustomEmptyPage";
 import CustomPagination, { perPageDefault } from "../../components/general/CustomPagination";
 import { url } from "../../App";
@@ -24,6 +24,21 @@ const UsersLogs = () => {
             refresh();
         } catch (error) {
             notify("Erro ao desbloquear utilizador", { type: "error" });
+        }
+    };
+
+    const handleRecoverUser = async (id: number) => {
+        try {
+            await dataProvider.update("users", {
+                id,
+                data: { deleted: false },
+                previousData: { id },
+                meta: { method: 'PATCH', endpoint: `users/${id}/recover` },
+            });
+            notify("Utilizador restaurado com sucesso", { type: "success" });
+            refresh();
+        } catch (error) {
+            notify("Erro ao restaurar utilizador", { type: "error" });
         }
     };
 
@@ -137,6 +152,18 @@ const UsersLogs = () => {
                             )}
                         />
                         <TextField source="username" label={translate("resources.users.fields.username")} />
+                        <FunctionField
+                            label="Ações"
+                            render={(record) => (
+                                <Box sx={{ display: "flex", gap: "4px" }}>
+                                    <Tooltip title="Restaurar">
+                                        <IconButton onClick={() => handleRecoverUser(record.id)} size="small">
+                                            <RestoreFromTrash />
+                                        </IconButton>
+                                    </Tooltip>
+                                </Box>
+                            )}
+                        />
                     </Datagrid>
                 </List>
             </Box>
