@@ -659,12 +659,48 @@ export class UserController {
   })
   async validate(@param.path.string("id") id: string): Promise<void> {
     const user = await this.userRepository.findById(id);
-
-    await this.userRepository.updateById(id, { active: true });
+    const currentDate = new Date().toISOString();
+    
+    await this.userRepository.updateById(id, { 
+      active: true,
+      validation_date: currentDate 
+    });
+    
+    const userRole = await this.roleRepository.findOne({
+      where: { name: 'USER' }
+    });
+    
+    if (userRole) {
+      const existingRole = await this.userRoleRepository.findOne({
+        where: {
+          app_users_id: id,
+          role_id: userRole.id
+        }
+      });
+      
+      if (!existingRole) {
+        await this.userRoleRepository.create({
+          role_id: userRole.id,
+          app_users_id: id
+        });
+      }
+    }
+    
     this.emailService.sendMailRegisterActive(
       "pt-pt",
       user.email,
       user.person_name
+    );
+    
+    await this.logService.logUserEdit(
+      this.user.person_name,
+      id,
+      this.response.req?.ip ?? "unknown",
+      `User validated and assigned USER role`,
+      {
+        device: this.response.req?.headers["user-agent"] ?? "unknown",
+        os: "unknown",
+      }
     );
 
     return;
