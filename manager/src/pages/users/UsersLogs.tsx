@@ -1,14 +1,30 @@
-import { Datagrid, List, FunctionField, usePermissions, WithRecord, TextField, useTranslate } from "react-admin";
-import { Box, Typography } from "@mui/material";
-import { Edit, Restore, LockOpen } from "@mui/icons-material";
-import CustomButtonToolTip, { commonListCSS } from "../../components/general/CustomButtonToolTip";
+import { Datagrid, List, FunctionField, usePermissions, TextField, useTranslate, useDataProvider, useNotify, useRefresh } from "react-admin";
+import { Box, Typography, Tooltip, IconButton } from "@mui/material";
+import { LockOpen } from "@mui/icons-material";
 import CustomEmptyPage from "../../components/general/CustomEmptyPage";
-import { Users } from "../../utils/types";
 import { url } from "../../App";
 
 const UsersLogs = () => {
-    const { permissions, isLoading } = usePermissions();
+    const { isLoading } = usePermissions();
     const translate = useTranslate();
+    const dataProvider = useDataProvider();
+    const notify = useNotify();
+    const refresh = useRefresh();
+
+    const handleUnlockUser = async (id: number) => {
+        try {
+            await dataProvider.update("users", {
+                id,
+                data: { blocked: false },
+                previousData: { id },
+                meta: { method: 'PATCH', endpoint: `users/${id}/unlock` },
+            });
+            notify("Utilizador desbloqueado com sucesso", { type: "success" });
+            refresh();
+        } catch (error) {
+            notify("Erro ao desbloquear utilizador", { type: "error" });
+        }
+    };
 
     if (isLoading) return null;
 
@@ -35,7 +51,7 @@ const UsersLogs = () => {
                         <FunctionField
                             label={translate("resources.utilizadores.fields.nome")}
                             source="person_name"
-                            render={(record: Users) => (
+                            render={(record) => (
                                 <Box sx={{ display: "flex", gap: "10px", alignItems: "center" }}>
                                     <Box>
                                         {record.photo ? (
@@ -57,8 +73,18 @@ const UsersLogs = () => {
                             )}
                         />
                         <TextField source="username" label={translate("resources.users.fields.username")} />
-                        <Box sx={{ gap: "4px", float: "right" }}>
-                        </Box>
+                        <FunctionField
+                            label="Ações"
+                            render={(record) => (
+                                <Box sx={{ display: "flex", gap: "4px" }}>
+                                    <Tooltip title="Desbloquear">
+                                        <IconButton onClick={() => handleUnlockUser(record.id)} size="small">
+                                            <LockOpen />
+                                        </IconButton>
+                                    </Tooltip>
+                                </Box>
+                            )}
+                        />
                     </Datagrid>
                 </List>
             </Box>
@@ -84,7 +110,7 @@ const UsersLogs = () => {
                         <FunctionField
                             label={translate("resources.utilizadores.fields.nome")}
                             source="person_name"
-                            render={(record: Users) => (
+                            render={(record) => (
                                 <Box sx={{ display: "flex", gap: "10px", alignItems: "center" }}>
                                     <Box>
                                         {record.photo ? (
@@ -106,8 +132,6 @@ const UsersLogs = () => {
                             )}
                         />
                         <TextField source="username" label={translate("resources.users.fields.username")} />
-                        <Box sx={{ gap: "4px", float: "right" }}>
-                        </Box>
                     </Datagrid>
                 </List>
             </Box>

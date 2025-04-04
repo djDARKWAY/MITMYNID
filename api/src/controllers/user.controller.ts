@@ -680,4 +680,42 @@ export class UserController {
         .send({ message: "Erro a eliminar utilizador" });
     }
   }
+
+  @patch("/users/{id}/unlock")
+  @response(204, {
+    description: "User unlock success",
+  })
+  @authenticate("jwt")
+  @authorize({
+    allowedRoles: ["ADMIN"],
+    voters: [basicAuthorization],
+  })
+  async unlockUserById(
+    @param.path.string("id") id: string
+  ): Promise<void | Response> {
+    try {
+      const user = await this.userRepository.findById(id);
+      if (!user.blocked) {
+        return this.response
+          .status(400)
+          .send({ message: "User is not blocked" });
+      }
+
+      await this.userRepository.updateById(id, { blocked: false });
+      await this.logService.logUserEdit(
+        this.user.person_name,
+        id,
+        this.response.req?.ip ?? "unknown",
+        this.user.person_name,
+        {
+          device: this.response.req?.headers["user-agent"] ?? "unknown",
+          os: "unknown",
+        }
+      );
+    } catch (err) {
+      return this.response
+        .status(500)
+        .send({ message: "Error unlocking user" });
+    }
+  }
 }
