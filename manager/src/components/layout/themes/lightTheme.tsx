@@ -137,7 +137,7 @@ const lightTheme = {
           paddingTop: "10px",
           "& .MuiTableHead-root .MuiTableCell-root": {
             padding: "12px",
-            background: "rgba(145, 158, 171, 0.)",
+            background: "rgba(145, 158, 171, 0.3)",
             color: "black",
             fontWeight: "600",
             "& span": {

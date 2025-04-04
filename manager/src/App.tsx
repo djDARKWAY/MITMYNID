@@ -1,33 +1,44 @@
 import './App.css';
-import lb4Provider from './utils/data-provider';
 import { Admin, CustomRoutes, fetchUtils, Resource } from 'react-admin';
-import MyLayout from './components/layout';
-import { roles } from './pages/roles';
-import { users } from './pages/users';
-import { authProvider } from './utils/authProvider';
-import SignIn from './components/layout/login';
-import { I18nContextProvider } from "react-admin";
-import { i18nProvider } from './components/i18n';
 import { Route, BrowserRouter, Routes } from 'react-router-dom';
-import Configuration from './pages/configuration/Configuration';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { I18nContextProvider } from "react-admin";
+
+// Layout and Themes
+import MyLayout from './components/layout';
 import themes from './components/layout/themes';
+import SignIn from './components/layout/login';
+import Register from './components/layout/register';
+
+// Providers
+import lb4Provider from './utils/data-provider';
+import { authProvider } from './utils/authProvider';
+import { i18nProvider } from './components/i18n';
+
+// Pages
+import Dashboard from './pages/dashboard';
+import Configuration from './pages/configuration/Configuration';
 import Profile from './pages/configuration/Profile';
 import { Unauthorized } from './components/general/Unauthorized';
-import Dashboard from './pages/dashboard';
-import Register from './components/layout/register';
-import { validateUsers } from './pages/ValidateUsers';
-import { CertificatesList } from './pages/certificates/CertificatesList';
-import { certificates } from './pages/certificates';
-import { AccessPointsList } from './pages/accessPoints/AccessPointsList';
-import { accessPoints } from './pages/accessPoints';
-import { CompaniesList } from './pages/companies/CompaniesList';
-import { companies } from './pages/companies';
-import { LogsList } from './pages/logs/LogsList';
-import { logs } from './pages/logs';
 import StatusTest from './pages/status/StatusTest';
 import StatusTestv2 from './pages/status/StatusTestv2';
+
+// Resources
+import { roles } from './pages/roles';
+import { users } from './pages/users';
+import { validateUsers } from './pages/ValidateUsers';
+import { certificates } from './pages/certificates';
+import { accessPoints } from './pages/accessPoints';
+import { companies } from './pages/companies';
+import { logs } from './pages/logs';
+
+// Lists
+import { CertificatesList } from './pages/certificates/CertificatesList';
+import { AccessPointsList } from './pages/accessPoints/AccessPointsList';
+import { CompaniesList } from './pages/companies/CompaniesList';
+import { LogsList } from './pages/logs/LogsList';
 import CompaniesMap from './pages/companies/CompaniesMap';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import UsersLogs from './pages/users/UsersLogs';
 
 const httpClient = (url: string, options = {}) => {
   return fetchUtils.fetchJson(url, options)
@@ -40,16 +51,6 @@ const httpClient = (url: string, options = {}) => {
 };
 
 const aggregate = (resource: any) => {
-  // switch(resource){
-  //   case 'users':
-  //     return [
-  //       {
-  //         relation: "roles",
-  //       },
-  //     ];
-  //   default:
-  //     break;
-  // }
   return [];
 };
 
@@ -106,6 +107,7 @@ const App = () => {
                   <Route path="/status-test" element={<StatusTest />} />
                   <Route path="/status-testv2" element={<StatusTestv2 />} />
                   <Route path="/unauthorized" key={"/unauthorized"} element={<Unauthorized />} />
+                  <Route path="/users-logs" element={<UsersLogs />} />
                 </CustomRoutes>,
               ]}
             </Admin>

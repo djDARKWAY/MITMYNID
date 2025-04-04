@@ -300,6 +300,9 @@ const englishMessages: TranslationMessages = {
       },
     },
     users: {
+      name: "Users |||| %{smart_count} Users",
+      blocked_users: "Blocked Users",
+      deleted_users: "Deleted Users",
       fields: {
         name: "Name",
         username: "Username",
@@ -315,6 +318,7 @@ const englishMessages: TranslationMessages = {
       edit_title: "Edit User",
       create_title: "Create User",
       validate: "Validate users",
+      logs: "Restricted accounts",
       tabs: {
         prefs_util: "Preferences",
       },

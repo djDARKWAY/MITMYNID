@@ -311,6 +311,8 @@ const portugueseMessages: TranslationMessages = {
       }
     },
     users: {
+      blocked_users: "Utilizadores bloqueados",
+      deleted_users: "Utilizadores eliminados",
       fields: {
         name: "Nome",
         username: "Utilizador",
@@ -326,6 +328,7 @@ const portugueseMessages: TranslationMessages = {
       edit_title: "Editar Utilizador",
       create_title: "Criar Utilizador",
       validate: "Validar utilizadores",
+      logs: "Contas restritas",
       tabs: {
         prefs_util: "Preferências",
       },

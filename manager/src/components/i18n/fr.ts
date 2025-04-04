@@ -309,6 +309,8 @@ const frenchMessages: TranslationMessages = {
       },
     },
     users: {
+      blocked_users: "Utilisateurs bloqués",
+      deleted_users: "Utilisateurs supprimés",
       fields: {
         fields: {
           name: "Nom",
@@ -326,6 +328,7 @@ const frenchMessages: TranslationMessages = {
       edit_title: "Modifier l'utilisateur",
       create_title: "Créer un utilisateur",
       validate: "Valider les utilisateurs",
+      logs: "Comptes restreints",
       tabs: {
         prefs_util: "Préférences",
       },

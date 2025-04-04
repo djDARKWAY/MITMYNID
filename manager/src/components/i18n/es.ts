@@ -309,6 +309,8 @@ const spanishMessages: TranslationMessages = {
       },
     },
     users: {
+      blocked_users: "Utilizadores bloqueados",
+      deleted_users: "Utilizadores eliminados",
       fields: {
         name: "Nombre",
         username: "Usuario",
@@ -324,6 +326,7 @@ const spanishMessages: TranslationMessages = {
       edit_title: "Editar usuario",
       create_title: "Crear usuario",
       validate: "Validar usuarios",
+      logs: "Contas restritas",
       tabs: {
         prefs_util: "Preferencias",
       },

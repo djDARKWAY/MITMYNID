@@ -147,6 +147,15 @@ const MyMenu = ({ dense = false }: MenuProps) => {
             dense={dense}
           />
 
+          <MenuItemLink
+            to={{ pathname: "/users-logs" }}
+            className={"submenuItem " + (open ? "open" : "close")}
+            primaryText={translate(`resources.utilizadores.logs`)}
+            sx={{ color: !open ? "transparent" : "default" }}
+            leftIcon={<HistoryOutlined />}
+            dense={dense}
+          />
+
           {permissions.includes("ADMIN") && (
             <MenuItemLink
               to={{ pathname: "/roles" }}
