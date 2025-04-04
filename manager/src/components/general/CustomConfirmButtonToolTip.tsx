@@ -1,4 +1,3 @@
-//Este botão serve apenas para eliminar
 import { Confirm, IconButtonWithTooltip, useDataProvider, useNotify, useRefresh, useTranslate } from "react-admin";
 import { SxProps, Theme } from '@mui/system';
 import { useState } from "react";
@@ -21,7 +20,8 @@ const CustomConfirmButtonToolTip = (
     size,
     disabled,
     dialogueTitle,
-    dialogueContent
+    dialogueContent,
+    customAction
   }: {
     id: string,
     resource: string,
@@ -32,33 +32,39 @@ const CustomConfirmButtonToolTip = (
     size?: "small" | "medium" | "large",
     disabled?: boolean | undefined,
     dialogueTitle?: string,
-    dialogueContent?: string
+    dialogueContent?: string,
+    customAction?: () => Promise<void> // Added this prop
   }
 ) => {
-
+  
   const translate = useTranslate();
   const [open, setOpen] = useState<boolean>(false);
   const dataProvider = useDataProvider();
   const refresh = useRefresh();
   const notify = useNotify();
-
+  
   const handleDialogOpen = (e: any) => { e.stopPropagation(); setOpen(true) };
-
+  
   const handleDialogClose = () => setOpen(false);
-
+  
   const onConfirm = async () => {
-
-    dataProvider.delete(resource, { id: id }).then(() => {
-      notify('ra.notification.deleted', { type: 'info', messageArgs: { smart_count: 1 } });
+    try {
+      if (customAction) {
+        // Use the custom action if provided
+        await customAction();
+      } else {
+        // Default delete behavior
+        await dataProvider.delete(resource, { id: id });
+        notify('ra.notification.deleted', { type: 'info', messageArgs: { smart_count: 1 } });
+      }
       refresh();
-    }).catch(() => {
+    } catch (error) {
       notify('ra.notification.deleted_error', { type: 'error' });
-    });
-
+    }
+    
     setOpen(false);
-    //handleDialogClose();
   }
-
+  
   return (
     <>
       <IconButtonWithTooltip
@@ -79,7 +85,6 @@ const CustomConfirmButtonToolTip = (
         onClose={handleDialogClose}
       />
     </>
-
   )
 }
 

@@ -1,4 +1,4 @@
-import { List, Datagrid, usePermissions, TextField, ArrayField, BooleanField, Loading, SimpleList, WithRecord, FunctionField } from "react-admin";
+import { List, Datagrid, usePermissions, TextField, ArrayField, BooleanField, Loading, SimpleList, WithRecord, FunctionField, useDataProvider } from "react-admin";
 import { userFilters } from "./UsersFilter";
 import { Box, useTheme, Typography } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -12,11 +12,28 @@ import { Edit, Delete } from '@mui/icons-material';
 import CustomButtonToolTip, { commonListCSS } from "../../components/general/CustomButtonToolTip";
 import CustomConfirmButtonToolTip from "../../components/general/CustomConfirmButtonToolTip";
 import { responsiveListFilter } from "../../components/general/customCSS";
+import { useNotify } from 'react-admin';
 
 export const UsersList = () => {
     const {permissions, isLoading} = usePermissions();
     const theme = useTheme();
     const isSmall = useMediaQuery(theme.breakpoints.down('lg'));
+    const dataProvider = useDataProvider();
+    const notify = useNotify();
+
+    const handleSoftDelete = async (id: string) => {
+        try {
+            await dataProvider.update('users', { 
+                id: `${id}/soft-delete`, 
+                data: {}, 
+                previousData: { id } 
+            });
+            notify('User deleted successfully', { type: 'success' });
+        } catch (error) {
+            console.error('Error in soft delete:', error);
+            notify('Error deleting user', { type: 'error' });
+        }
+    };
 
     return !isLoading ? (
     <List  
@@ -92,8 +109,9 @@ export const UsersList = () => {
                             color="error"
                             icon={<Delete />} 
                             id={record.id} 
-                            disabled={record.active ? false : true}
+                            disabled={!record.active}
                             resource={"users"}
+                            customAction={() => handleSoftDelete(record.id)}
                             />
                         </>
                     )

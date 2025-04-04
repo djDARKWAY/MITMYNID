@@ -3,7 +3,6 @@ import { authorize } from '@loopback/authorization';
 import { inject, intercept } from '@loopback/core';
 import {
   Count,
-  CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
@@ -15,7 +14,6 @@ import {
   get,
   getModelSchemaRef,
   patch,
-  put,
   del,
   requestBody,
   response,
@@ -519,14 +517,52 @@ export class UserController {
         .send({ message: "Erro a eliminar utilizador" });
     } else {
       try {
-        await this.userRepository.deleteById(id);
-        await this.prefsUserRepository.deleteById(id);
-        await this.appUsersSessionRepository.deleteAll({ app_users_id: id });
-        await this.userRoleRepository.deleteAll({ app_users_id: id });
+        await this.userRepository.updateById(id, { deleted: true });
+        
         await this.logService.logUserDelete(this.user.person_name, id, this.response.req?.ip ?? 'unknown', this.user.person_name, {
           device: this.response.req?.headers['user-agent'] ?? 'unknown',
           os: 'unknown',
         });
+      } catch (err) {
+        return this.response.status(422).send({ message: "Erro a eliminar utilizador" });
+      }
+    }
+  }
+
+  @patch("/users/{id}/soft-delete")
+  @authenticate("jwt")
+  @authorize({
+    allowedRoles: ["ADMIN"],
+    voters: [basicAuthorization],
+  })
+  @response(204, {
+    description: "User soft delete success",
+  })
+  async softDeleteById(
+    @param.path.string("id") id: string
+  ): Promise<void | Response> {
+    if (this.user[securityId] === id) {
+      return this.response
+        .status(422)
+        .send({ message: "Não é possível eliminar o seu próprio utilizador" });
+    } else if (!this.user.roles.includes("ADMIN")) {
+      return this.response
+        .status(422)
+        .send({ message: "Não tem permissões para eliminar utilizadores" });
+    } else {
+      try {
+        await this.userRepository.updateById(id, { deleted: true });
+        
+        await this.logService.logUserDelete(
+          this.user.person_name, 
+          id, 
+          this.response.req?.ip ?? 'unknown', 
+          this.user.person_name, 
+          {
+            device: this.response.req?.headers['user-agent'] ?? 'unknown',
+            os: 'unknown',
+          }
+        );
       } catch (err) {
         return this.response.status(422).send({ message: "Erro a eliminar utilizador" });
       }
@@ -716,6 +752,44 @@ export class UserController {
       return this.response
         .status(500)
         .send({ message: "Error unlocking user" });
+    }
+  }
+
+  @patch("/users/{id}/recover")
+  @response(204, {
+    description: "User recover success",
+  })
+  @authenticate("jwt")
+  @authorize({
+    allowedRoles: ["ADMIN"],
+    voters: [basicAuthorization],
+  })
+  async recoverUserById(
+    @param.path.string("id") id: string
+  ): Promise<void | Response> {
+    try {
+      const user = await this.userRepository.findById(id);
+      if (!user.deleted) {
+        return this.response
+          .status(400)
+          .send({ message: "User is not marked as deleted" });
+      }
+
+      await this.userRepository.updateById(id, { deleted: false });
+      await this.logService.logUserEdit(
+        this.user.person_name,
+        id,
+        this.response.req?.ip ?? "unknown",
+        this.user.person_name,
+        {
+          device: this.response.req?.headers["user-agent"] ?? "unknown",
+          os: "unknown",
+        }
+      );
+    } catch (err) {
+      return this.response
+        .status(500)
+        .send({ message: "Error recovering user" });
     }
   }
 }
