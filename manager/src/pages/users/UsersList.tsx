@@ -33,7 +33,7 @@ export const UsersList = () => {
         pagination={<CustomPagination/>} 
         perPage={perPageDefault} 
         filters={userFilters(permissions)} 
-        filter={{ active: true }}
+        filter={{ active: true, blocked: false }}
         empty={<CustomEmptyPage/>}  
         exporter={false} 
         title="resources.utilizadores.name" 

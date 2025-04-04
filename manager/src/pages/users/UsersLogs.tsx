@@ -2,6 +2,7 @@ import { Datagrid, List, FunctionField, usePermissions, TextField, useTranslate,
 import { Box, Typography, Tooltip, IconButton } from "@mui/material";
 import { LockOpen } from "@mui/icons-material";
 import CustomEmptyPage from "../../components/general/CustomEmptyPage";
+import CustomPagination, { perPageDefault } from "../../components/general/CustomPagination";
 import { url } from "../../App";
 
 const UsersLogs = () => {
@@ -45,6 +46,8 @@ const UsersLogs = () => {
                     filter={{ blocked: true }}
                     empty={<CustomEmptyPage />}
                     exporter={false}
+                    pagination={<CustomPagination/>} 
+                    perPage={perPageDefault} 
                     title={translate("resources.users.blocked_users")}
                 >
                     <Datagrid bulkActionButtons={false} rowClick={false}>
@@ -104,6 +107,8 @@ const UsersLogs = () => {
                     filter={{ deleted: true }}
                     empty={<CustomEmptyPage />}
                     exporter={false}
+                    pagination={<CustomPagination/>} 
+                    perPage={perPageDefault} 
                     title={translate("resources.users.deleted_users")}
                 >
                     <Datagrid bulkActionButtons={false} rowClick={false}>
