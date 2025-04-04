@@ -11,9 +11,8 @@ const theme = createTheme({
   palette: {
     background: { default: "#FCFCFE" },
     customElements: { actions: { main: "#FCFCFE" } },
-    primary: { main: "#00B3E6" },
   },
-});
+})
 
 export default function Register() {
   const notify = useNotify();
@@ -22,6 +21,7 @@ export default function Register() {
   const [skipConfirmPassword, setSkipConfirmPassword] = useState(false);
   const [password, setPassword] = useState("");
   const [passwordStrength, setPasswordStrength] = useState(0);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const sanitizeInput = (input: string | null | undefined): string => {
     if (!input) return "";
@@ -39,14 +39,61 @@ export default function Register() {
     return labels[passwordStrength];
   };
 
+  const validateFields = (data: { [key: string]: string }): boolean => {
+    const newErrors: { [key: string]: string } = {};
+    
+    const validate = (condition: boolean, field: string, message: string) => {
+      if (condition) newErrors[field] = message;
+    };
+
+    // Mandatory fields validation
+    const rules: { [key: string]: { condition: boolean; message: string }[] } = {
+      username: [
+        { condition: !data.username, message: "O nome de utilizador é obrigatório!" },
+        { condition: data.username?.length < 3, message: "O nome de utilizador deve ter pelo menos 3 caracteres!" },
+        { condition: data.username?.length > 50, message: "O nome de utilizador é muito longo!" },
+        { condition: !/^[a-zA-Z0-9_.-]+$/.test(data.username || ''), message: "O nome de utilizador só pode conter letras, números, pontos, hífens e underscores!" },
+      ],
+      password: [
+        { condition: !data.password, message: "A password é obrigatória!" },
+        { condition: data.password?.length < 8, message: "A password deve ter pelo menos 8 caracteres!" },
+        { condition: !/[A-Z]/.test(data.password || ''), message: "A password deve conter pelo menos uma letra maiúscula!" },
+        { condition: !/[a-z]/.test(data.password || ''), message: "A password deve conter pelo menos uma letra minúscula!" },
+        { condition: !/[0-9]/.test(data.password || ''), message: "A password deve conter pelo menos um número!" },
+        { condition: !/[!@#$%^&*(),.?":{}|<>]/.test(data.password || ''), message: "A password deve conter pelo menos um caractere especial!" },
+      ],
+      person_name: [
+        { condition: !data.person_name, message: "O nome é obrigatório!" },
+        { condition: data.person_name?.length < 2, message: "O nome deve ter pelo menos 2 caracteres!" },
+        { condition: data.person_name?.length > 100, message: "O nome é muito longo!" },
+      ],
+      email: [
+        { condition: !data.email, message: "O email é obrigatório!" },
+        { condition: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email || ''), message: "O formato do email é inválido!" },
+      ],
+      nif: [
+        { condition: !data.nif, message: "O NIF é obrigatório!" },
+        { condition: !/^\d{9}$/.test(data.nif || ''), message: "O NIF deve conter exatamente 9 dígitos!" },
+      ],
+    };
+
+    Object.entries(rules).forEach(([field, validations]) => {
+      for (const { condition, message } of validations) {
+        if (condition) {
+          validate(true, field, message);
+          break;
+        }
+      }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
       event.preventDefault();
       const formData = new FormData(event.currentTarget);
-
-      if (!skipConfirmPassword && formData.get("password") !== formData.get("confirm_password")) {
-        return notify(translate("userRegister.error.confirm_password"), { type: "warning" });
-      }
 
       const data = {
         username: sanitizeInput(formData.get("username") as string),
@@ -55,6 +102,12 @@ export default function Register() {
         email: sanitizeInput(formData.get("email") as string),
         nif: sanitizeInput(formData.get("nif") as string),
       };
+
+      if (!validateFields(data)) return;
+
+      if (!skipConfirmPassword && formData.get("password") !== formData.get("confirm_password")) {
+        return notify(translate("userRegister.error.confirm_password"), { type: "warning" });
+      }
 
       try {
         const response = await fetch(`${url}auth/register`, {
@@ -72,6 +125,7 @@ export default function Register() {
           notify(responseData.message || responseData.error?.message || "ra.notification.error_register_user", { type: "error" });
         }
       } catch (error) {
+        console.log("Registration error:", error);
         notify("ra.notification.error_register_user", { type: "error" });
       }
     },
@@ -142,6 +196,13 @@ export default function Register() {
               </Link>
             </Grid>
           </Box>
+        </Box>
+        <Box sx={{ width: "100%", mb: 2 }}>
+          {Object.values(errors).map((error, index) => (
+            <Typography key={index} variant="body2" color="error" sx={{ textAlign: "center" }}>
+              {error}
+            </Typography>
+          ))}
         </Box>
         <Box sx={{ position: "absolute", bottom: 46 }}>
           <Copyright />

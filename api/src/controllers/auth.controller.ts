@@ -1,7 +1,7 @@
 import { authenticate, TokenService, UserService } from "@loopback/authentication";
 import { inject, intercept } from "@loopback/core";
 import { repository } from "@loopback/repository";
-import { post, requestBody, get, Response, Request, RestBindings, HttpErrors } from "@loopback/rest";
+import { post, requestBody, get, Response, Request, RestBindings } from "@loopback/rest";
 import { AuthServiceBindings, EmailServiceBindings, PasswordHasherBindings, TokenServiceBindings } from "../keys";
 import { PedidosRemocao, PrefsUtil, User } from "../models";
 import { UserRepository, UserRoleRepository, RoleRepository, Credentials, AppUsersSessionRepository, SignInCredentials, AppUsersRegisterRepository, PrefsUtilRepository, PedidosRemocaoRepository, AppUsersAuthenticatorRepository } from "../repositories";
@@ -254,7 +254,44 @@ export class AuthController {
     @requestBody(CredentialsPublicSignRequestBody) credentials: SignInCredentials,
   ): Promise<void | Response> {
 
-    this.validateRegistration(credentials);
+    // Mandatory fields validation
+    const rules: { [key: string]: { condition: boolean; message: string }[] } = {
+      username: [
+        { condition: !credentials.username, message: "O nome de utilizador é obrigatório!" },
+        { condition: credentials.username?.length < 3, message: "O nome de utilizador deve ter pelo menos 3 caracteres!" },
+        { condition: credentials.username?.length > 50, message: "O nome de utilizador é muito longo!" },
+        { condition: !/^[a-zA-Z0-9_.-]+$/.test(credentials.username || ''), message: "O nome de utilizador só pode conter letras, números, pontos, hífens e underscores!" },
+      ],
+      password: [
+        { condition: !credentials.password, message: "A password é obrigatória!" },
+        { condition: credentials.password?.length < 8, message: "A password deve ter pelo menos 8 caracteres!" },
+        { condition: !/[A-Z]/.test(credentials.password || ''), message: "A password deve conter pelo menos uma letra maiúscula!" },
+        { condition: !/[a-z]/.test(credentials.password || ''), message: "A password deve conter pelo menos uma letra minúscula!" },
+        { condition: !/[0-9]/.test(credentials.password || ''), message: "A password deve conter pelo menos um número!" },
+        { condition: !/[!@#$%^&*(),.?":{}|<>]/.test(credentials.password || ''), message: "A password deve conter pelo menos um caractere especial!" },
+      ],
+      person_name: [
+        { condition: !credentials.person_name, message: "O nome é obrigatório!" },
+        { condition: credentials.person_name?.length < 2, message: "O nome deve ter pelo menos 2 caracteres!" },
+        { condition: credentials.person_name?.length > 100, message: "O nome é muito longo!" },
+      ],
+      email: [
+        { condition: !credentials.email, message: "O email é obrigatório!" },
+        { condition: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(credentials.email || ''), message: "O formato do email é inválido!" },
+      ],
+      nif: [
+        { condition: !credentials.nif, message: "O NIF é obrigatório!" },
+        { condition: !/^\d{9}$/.test(credentials.nif || ''), message: "O NIF deve conter exatamente 9 dígitos!" },
+      ],
+    };
+
+    for (const [field, validations] of Object.entries(rules)) {
+      for (const { condition, message } of validations) {
+        if (condition) {
+          return this.response.status(422).send({ field, message });
+        }
+      }
+    }
 
     const userDetails = await this.userRepository.findOne({
       where: {
@@ -443,42 +480,5 @@ export class AuthController {
     }
 
     return this.response.status(422).send({ message: 'Utilizador inválido. Contacte a entidade' })
-  }
-
-  validateRegistration(credentials: SignInCredentials): void {
-    const validate = (condition: boolean, field: string, message: string) => {
-      if (condition) throw new HttpErrors.BadRequest(`Erro no campo "${field}": ${message}`);
-    };
-
-    // Mandatory fields validation
-    const rules: { [key: string]: { condition: boolean; message: string }[] } = {
-      username: [
-        { condition: !credentials.username, message: "O nome de utilizador é obrigatório!" },
-        { condition: credentials.username?.length < 3, message: "O nome de utilizador deve ter pelo menos 3 caracteres!" },
-        { condition: credentials.username?.length > 50, message: "O nome de utilizador é muito longo!" },
-        { condition: !/^[a-zA-Z0-9_.-]+$/.test(credentials.username || ''), message: "O nome de utilizador só pode conter letras, números, pontos, hífens e underscores!" },
-      ],
-      password: [
-        { condition: !credentials.password, message: "A password é obrigatória!" },
-        { condition: credentials.password?.length < 8, message: "A password deve ter pelo menos 8 caracteres!" },
-      ],
-      person_name: [
-        { condition: !credentials.person_name, message: "O nome é obrigatório!" },
-        { condition: credentials.person_name?.length < 2, message: "O nome deve ter pelo menos 2 caracteres!" },
-        { condition: credentials.person_name?.length > 100, message: "O nome é muito longo!" },
-      ],
-      email: [
-        { condition: !credentials.email, message: "O email é obrigatório!" },
-        { condition: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(credentials.email || ''), message: "O formato do email é inválido!" },
-      ],
-      nif: [
-        { condition: !credentials.nif, message: "O NIF é obrigatório!" },
-        { condition: !/^\d{9}$/.test(credentials.nif || ''), message: "O NIF deve conter exatamente 9 dígitos!" },
-      ],
-    };
-
-    Object.entries(rules).forEach(([field, validations]) => {
-      validations.forEach(({ condition, message }) => validate(condition, field, message));
-    });
   }
 }
