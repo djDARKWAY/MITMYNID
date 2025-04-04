@@ -165,7 +165,7 @@ const darkTheme = {
           border: "none",
           color: "white",
           background: "rgb(22, 28, 36)",
-          height: "80px",
+          height: "62px",
           justifyContent: "center",
         },
       },

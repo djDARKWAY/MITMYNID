@@ -165,7 +165,7 @@ const lightTheme = {
           border: "none",
           color: "black",
           background: "#fcfcfe",
-          height: "80px",
+          height: "62px",
           justifyContent: "center",
         },
       },
