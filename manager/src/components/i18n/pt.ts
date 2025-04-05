@@ -219,7 +219,7 @@ const portugueseMessages: TranslationMessages = {
       is_active: "Estado",
     },
     accessPoints: {
-      company_name: "Nome do armazém",
+      warehouse_name: "Nome do armazém",
       ip_address: "Endereço IP",
       ap_software: "Software",
       is_active: "Estado",
@@ -265,7 +265,7 @@ const portugueseMessages: TranslationMessages = {
       manage: "Gestão de acessos",
       name: "Ponto de Acesso",
       fields: {
-        company_id: "Armazém",
+        warehouse_id: "Armazém",
         location_description: "Localização",
         ip_address: "Endereço IP",
         ap_software: "Software",

@@ -208,7 +208,7 @@ const englishMessages: TranslationMessages = {
       is_active: "Status",
     },
     accessPoints: {
-      company_name: "Warehouse name",
+      warehouse_name: "Warehouse name",
       ip_address: "IP address",
       ap_software: "Software",
       is_active: "Status",
@@ -254,7 +254,7 @@ const englishMessages: TranslationMessages = {
       manage: "Access management",
       name: "Access Points",
       fields: {
-        company_id: "Warehouse",
+        warehouse_id: "Warehouse",
         location_description: "Location",
         ip_address: "IP address",
         ap_software: "Software",

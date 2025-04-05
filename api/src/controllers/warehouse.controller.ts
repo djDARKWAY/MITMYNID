@@ -31,7 +31,7 @@ import { authorize } from '@loopback/authorization';
 export class WarehouseController {
   constructor(
     @repository(WarehouseRepository)
-    public companyRepository: WarehouseRepository,
+    public warehouseRepository: WarehouseRepository,
     @inject(RestBindings.Http.REQUEST) private request: Request,
     @inject('services.LogService') private logService: LogService,
   ) {}
@@ -57,7 +57,7 @@ export class WarehouseController {
   ): Promise<Warehouse> {
     this.validateWarehouse(warehouse);
 
-    return this.companyRepository.create({
+    return this.warehouseRepository.create({
       ...warehouse,
       last_modified: new Date().toISOString(),
     });
@@ -102,11 +102,11 @@ export class WarehouseController {
       delete (filter.where as any).country;
     }
     
-    const countResult = await this.companyRepository.count((filter && filter.where) ? filter.where : {});
+    const countResult = await this.warehouseRepository.count((filter && filter.where) ? filter.where : {});
     response.setHeader("x-total-count", countResult.count);
     response.setHeader("Access-Control-Expose-Headers", "x-total-count");
 
-    return this.companyRepository.find({
+    return this.warehouseRepository.find({
       ...filter,
       include: [{ relation: "country" }],
       fields: {
@@ -136,7 +136,7 @@ export class WarehouseController {
     @param.filter(Warehouse, { exclude: "where" })
     filter?: FilterExcludingWhere<Warehouse>
   ): Promise<Warehouse> {
-    return this.companyRepository.findById(id, filter);
+    return this.warehouseRepository.findById(id, filter);
   }
 
   @get("/warehouses/count")
@@ -147,7 +147,7 @@ export class WarehouseController {
   async count(
     @param.where(Warehouse) where?: Where<Warehouse>
   ): Promise<{ count: number }> {
-    return this.companyRepository.count(where);
+    return this.warehouseRepository.count(where);
   }  
 
   // PATCH endpoint:
@@ -161,18 +161,18 @@ export class WarehouseController {
     @requestBody() warehouse: Partial<Warehouse>,
     @inject(SecurityBindings.USER) currentUser: UserProfile,
   ): Promise<void> {
-    const existingWarehouse = await this.companyRepository.findById(id);
+    const existingWarehouse = await this.warehouseRepository.findById(id);
     if (!existingWarehouse) {
       throw new HttpErrors.NotFound('Armazém não encontrado!');
     }
-    const { last_modified_user_id, ...companyData } = warehouse;
+    const { last_modified_user_id, ...warehouseData } = warehouse;
 
-    await this.companyRepository.updateById(id, {
-      ...companyData,
+    await this.warehouseRepository.updateById(id, {
+      ...warehouseData,
       last_modified: new Date().toISOString(),
     });
 
-    const updatedWarehouse = await this.companyRepository.findById(id);
+    const updatedWarehouse = await this.warehouseRepository.findById(id);
 
     const userAgentHeader = this.request.headers['user-agent'] || 'unknown';
     const agent = useragent.parse(userAgentHeader);
@@ -200,12 +200,12 @@ export class WarehouseController {
     @param.path.number("id") id: number,
     @inject(SecurityBindings.USER) currentUser: UserProfile,
   ): Promise<void> {
-    const existingWarehouse = await this.companyRepository.findById(id);
+    const existingWarehouse = await this.warehouseRepository.findById(id);
     if (!existingWarehouse) {
       throw new HttpErrors.NotFound('Armazém não encontrado!');
     }
 
-    await this.companyRepository.deleteById(id);
+    await this.warehouseRepository.deleteById(id);
 
     const userAgentHeader = this.request.headers['user-agent'] || 'unknown';
     const agent = useragent.parse(userAgentHeader);
@@ -244,8 +244,8 @@ export class WarehouseController {
       throw new HttpErrors.BadRequest('No IDs provided for deletion.');
     }
 
-    const companiesToDelete = await this.companyRepository.find({ where: { id: { inq: ids } } });
-    await this.companyRepository.deleteAll({ id: { inq: ids } });
+    const warehousesToDelete = await this.warehouseRepository.find({ where: { id: { inq: ids } } });
+    await this.warehouseRepository.deleteAll({ id: { inq: ids } });
 
     const userAgentHeader = this.request.headers['user-agent'] || 'unknown';
     const agent = useragent.parse(userAgentHeader);
@@ -254,7 +254,7 @@ export class WarehouseController {
       os: agent.os.toString(),
     };
 
-    for (const warehouse of companiesToDelete) {
+    for (const warehouse of warehousesToDelete) {
       await this.logService.logWarehouseDelete(
         currentUser.person_name || 'unknown',
         warehouse.id || 'unknown',

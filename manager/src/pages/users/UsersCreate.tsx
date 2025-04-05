@@ -112,7 +112,7 @@ export const UsersCreate = () => {
               <ReferenceArrayInput reference="roles" source="roles">
                 <SelectArrayInput optionValue="id" variant='standard' optionText="description" fullWidth label="resources.utilizadores.fields.roles" size="small" validate={required()} />
               </ReferenceArrayInput>
-              <ReferenceInput source="company_id" reference="warehouses">
+              <ReferenceInput source="warehouse_id" reference="warehouses">
                 <AutocompleteInput
                   size="small"
                   fullWidth

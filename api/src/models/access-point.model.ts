@@ -110,7 +110,7 @@ export class AccessPoint extends Entity {
   certificate_id?: number;
 
   @belongsTo(() => Warehouse, { name: "warehouse" })
-  company_id?: number;
+  warehouse_id?: number;
 
   @belongsTo(() => User, { name: "last_modified_user_id" })
   last_modified_user_id?: string;

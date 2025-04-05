@@ -92,8 +92,8 @@ export class UserController {
 
     const roles: string[] = (newUserRequest.roles || []).map(role => typeof role === 'string' ? role : role.id);
 
-    if (newUserRequest.company_id && typeof newUserRequest.company_id !== 'number') {
-      return this.response.status(400).send({ message: "Invalid company_id. It must be a number." });
+    if (newUserRequest.warehouse_id && typeof newUserRequest.warehouse_id !== 'number') {
+      return this.response.status(400).send({ message: "Invalid warehouse_id. It must be a number." });
     }
 
     try {

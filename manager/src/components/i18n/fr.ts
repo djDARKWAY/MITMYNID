@@ -217,7 +217,7 @@ const frenchMessages: TranslationMessages = {
       is_active: "État",
     },
     accessPoints: {
-      company_name: "Nom de l'entreprise",
+      warehouse_name: "Nom de l'entreprise",
       ip_address: "Adresse IP",
       ap_software: "Logiciel",
       is_active: "État",
@@ -263,7 +263,7 @@ const frenchMessages: TranslationMessages = {
       manage: "Gestion des accès",
       name: "Points d'accès",
       fields: {
-        company_id: "Entreprise",
+        warehouse_id: "Entreprise",
         location_description: "Localisation",
         ip_address: "Adresse IP",
         ap_software: "Logiciel",

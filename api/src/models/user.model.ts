@@ -285,7 +285,7 @@ export class User extends Entity {
     type: 'number',
     required: false,
   })
-  company_id?: number;
+  warehouse_id?: number;
 
   @hasMany(() => Role, {
     through: {

@@ -35,7 +35,7 @@ export class AccessPointController {
   constructor(
     @repository(AccessPointRepository)
     public accessPointRepository: AccessPointRepository,
-    @repository(WarehouseRepository) public companyRepository: WarehouseRepository,
+    @repository(WarehouseRepository) public warehouseRepository: WarehouseRepository,
     @inject(RestBindings.Http.REQUEST) private request: Request,
     @inject('services.LogService') private logService: LogService,
   ) {}
@@ -88,20 +88,20 @@ export class AccessPointController {
     @inject(RestBindings.Http.RESPONSE) response: Response,
     @param.filter(AccessPoint) filter?: Filter<AccessPoint>
   ): Promise<AccessPoint[]> {
-    if (filter?.where && (filter.where as any).company_name) {
-      const companyName = (filter.where as any).company_name;
+    if (filter?.where && (filter.where as any).warehouse_name) {
+      const warehouseName = (filter.where as any).warehouse_name;
 
-      const warehouses = await this.companyRepository.find({
+      const warehouses = await this.warehouseRepository.find({
         where: {
-          name: { ilike: `%${companyName}%` },
+          name: { ilike: `%${warehouseName}%` },
         },
       });
 
-      const companyIds = warehouses.map((warehouse) => warehouse.id);
+      const warehouseIds = warehouses.map((warehouse) => warehouse.id);
 
       filter.where = {
         ...filter.where,
-        company_id: { inq: companyIds },
+        warehouse_id: { inq: warehouseIds },
       };
     }
 
@@ -123,7 +123,7 @@ export class AccessPointController {
         ap_software: true,
         software_version: true,
         is_active: true,
-        company_id: true,
+        warehouse_id: true,
       },
     });
   }

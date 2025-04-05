@@ -59,16 +59,18 @@ const WarehouseMap = () => {
     const zoomLevel = 15;
     
     useEffect(() => {
-        if (record && !isNaN(record.lat) && !isNaN(record.lon)) {
-            const lat = Number(record.lat);
-            const lon = Number(record.lon);
-            if (lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180) {
-                setPosition([lat, lon]);
+        if (record && typeof record.lat !== "undefined" && typeof record.lon !== "undefined") {
+            if (!isNaN(record.lat) && !isNaN(record.lon)) {
+                const lat = Number(record.lat);
+                const lon = Number(record.lon);
+                if (lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180) {
+                    setPosition([lat, lon]);
+                } else {
+                    console.warn("Latitude or longitude out of bounds:", { lat, lon });
+                }
             } else {
-                console.warn("Latitude or longitude out of bounds:", { lat, lon });
+                console.warn("Invalid latitude or longitude in record:", record);
             }
-        } else {
-            console.warn("Invalid latitude or longitude in record:", record);
         }
     }, [record]);
     

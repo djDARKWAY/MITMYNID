@@ -101,5 +101,5 @@ export interface AccessPoint extends RaRecord {
   ip_address: string;
   ap_software: string;
   is_active: boolean;
-  company_id: string;
+  warehouse_id: string;
 }
