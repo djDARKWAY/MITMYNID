@@ -30,7 +30,7 @@ const FieldTitleLabel = ({ label, children }: { label: string; children: ReactNo
     const translate = useTranslate();
     return (
         <Box>
-            <Typography variant="body2" sx={{ fontWeight: "bold", color: "gray" }}>
+            <Typography variant="body2" sx={{ fontWeight: "bold", color: "gray", mt: 2 }}>
                 {translate(label)}
             </Typography>
             {children}
@@ -116,7 +116,7 @@ export const WarehousesShow = () => (
                 <Grid item xs={12} md={6}>
                     {/* Identificação */}
                     <Section title="show.warehouses.identification" icon={<Person />}>
-                        <TextField source="name" sx={{ fontSize: "1rem"}} />
+                        <TextField source="name" sx={{ fontSize: "1.08rem"}} />
                     </Section>
 
                     {/* Localização */}
@@ -124,7 +124,7 @@ export const WarehousesShow = () => (
                         <FieldTitleLabel label="show.warehouses.address">
                             <TextField source="address" />
                         </FieldTitleLabel>
-                        <Box display="flex" gap={2} flexWrap="wrap" sx={{ mt: 2 }}>
+                        <Box display="flex" gap={2} flexWrap="wrap">
                             <FieldTitleLabel label="show.warehouses.city">
                                 <TextField source="city" />
                             </FieldTitleLabel>
@@ -140,7 +140,7 @@ export const WarehousesShow = () => (
                                 <TextField source="zip_code" />
                             </FieldTitleLabel>
                         </Box>
-                        <Box display="flex" gap={2} mt={2}>
+                        <Box display="flex" gap={2}>
                             <FieldTitleLabel label="show.warehouses.latitude">
                                 <TextField source="lat" />
                             </FieldTitleLabel>

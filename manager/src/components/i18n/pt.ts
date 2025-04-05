@@ -503,6 +503,8 @@ const portugueseMessages: TranslationMessages = {
       contacts: "Contactos",
       logs: "Registos",
       map: "Mapa",
+      latitude: "Latitude",
+      longitude: "Longitude",
     },
     validateUsers: {
       person_name: "Nome da pessoa",

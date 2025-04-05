@@ -505,6 +505,8 @@ const frenchMessages: TranslationMessages = {
       contacts: "Contacts",
       logs: "Journaux",
       map: "Carte",
+      latitude: "Latitude",
+      longitude: "Longitude",
     },
     validateUsers: {
       person_name: "Nom de la personne",

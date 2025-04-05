@@ -493,6 +493,8 @@ const englishMessages: TranslationMessages = {
       contacts: "Contacts",
       logs: "Logs",
       map: "Map",
+      latitude: "Latitude",
+      longitude: "Longitude",
     },
     validateUsers: {
       person_name: "Person Name",
