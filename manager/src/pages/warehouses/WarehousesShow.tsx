@@ -52,7 +52,7 @@ const MapUpdater = ({ position, zoomLevel }: { position: [number, number] | null
     return null;
 };
 
-const CompanyMap = () => {
+const WarehouseMap = () => {
     const record = useRecordContext();
     const [position, setPosition] = useState<[number, number] | null>(null);
     const [markerIcon, setMarkerIcon] = useState<L.Icon | null>(null);
@@ -107,52 +107,52 @@ const CompanyMap = () => {
     );
 };
 
-export const CompaniesShow = () => (
+export const WarehousesShow = () => (
     <Show>
         <Paper elevation={3} sx={{ padding: 2, borderRadius: 1, backgroundColor: "background.paper"}}>
             <Grid container spacing={2}>
                 <Grid item xs={12} md={6}>
                     {/* Identificação */}
-                    <Section title="show.companies.identification" icon={<Person />}>
+                    <Section title="show.warehouses.identification" icon={<Person />}>
                         <FieldTitleLabel label="ID">
                             <TextField source="id" />
                         </FieldTitleLabel>
-                        <FieldTitleLabel label="show.companies.name">
+                        <FieldTitleLabel label="show.warehouses.name">
                             <TextField source="name" />
                         </FieldTitleLabel>
                     </Section>
                     {/* Localização */}
-                    <Section title="show.companies.location" icon={<Home />}>
-                        <FieldTitleLabel label="show.companies.address">
+                    <Section title="show.warehouses.location" icon={<Home />}>
+                        <FieldTitleLabel label="show.warehouses.address">
                             <TextField source="address" />
                         </FieldTitleLabel>
-                        <FieldTitleLabel label="show.companies.city">
+                        <FieldTitleLabel label="show.warehouses.city">
                             <TextField source="city" />
                         </FieldTitleLabel>
-                        <FieldTitleLabel label="show.companies.district">
+                        <FieldTitleLabel label="show.warehouses.district">
                             <TextField source="district" />
                         </FieldTitleLabel>
-                        <FieldTitleLabel label="show.companies.country">
+                        <FieldTitleLabel label="show.warehouses.country">
                             <ReferenceField source="country_id" reference="countries">
                                 <TextField source="name" />
                             </ReferenceField>
                         </FieldTitleLabel>
-                        <FieldTitleLabel label="show.companies.zip_code">
+                        <FieldTitleLabel label="show.warehouses.zip_code">
                             <TextField source="zip_code" />
                         </FieldTitleLabel>
                     </Section>
                     {/* Contactos */}
-                    <Section title="show.companies.contacts" icon={<ContactMail />}>
-                        <FieldTitleLabel label="show.companies.email">
+                    <Section title="show.warehouses.contacts" icon={<ContactMail />}>
+                        <FieldTitleLabel label="show.warehouses.email">
                             <TextField source="email" />
                         </FieldTitleLabel>
-                        <FieldTitleLabel label="show.companies.contact">
+                        <FieldTitleLabel label="show.warehouses.contact">
                             <TextField source="contact" />
                         </FieldTitleLabel>
-                        <FieldTitleLabel label="show.companies.phone">
+                        <FieldTitleLabel label="show.warehouses.phone">
                             <TextField source="phone" />
                         </FieldTitleLabel>
-                        <FieldTitleLabel label="show.companies.website">
+                        <FieldTitleLabel label="show.warehouses.website">
                             <TextField source="website" />
                         </FieldTitleLabel>
                     </Section>
@@ -160,21 +160,21 @@ export const CompaniesShow = () => (
 
                 {/* Mapa */}
                 <Grid item xs={12} md={6}>
-                    <Section title={useTranslate()("show.companies.map")} icon={<Map />}>
-                        <CompanyMap />
+                    <Section title={useTranslate()("show.warehouses.map")} icon={<Map />}>
+                        <WarehouseMap />
                     </Section>
                 </Grid>
 
                 {/* Logs */}
                 <Grid item xs={12} sx={{ marginBottom: "-20px", marginTop: "-20px" }}>
-                    <Section title="show.companies.logs" icon={<AccessTimeFilled />}>
-                        <FieldTitleLabel label="show.companies.created_date">
+                    <Section title="show.warehouses.logs" icon={<AccessTimeFilled />}>
+                        <FieldTitleLabel label="show.warehouses.created_date">
                             <DateField source="created_date" showTime />
                         </FieldTitleLabel>
-                        <FieldTitleLabel label="show.companies.last_modified">
+                        <FieldTitleLabel label="show.warehouses.last_modified">
                             <DateField source="last_modified" showTime />
                         </FieldTitleLabel>
-                        <FieldTitleLabel label="show.companies.last_modified_user">
+                        <FieldTitleLabel label="show.warehouses.last_modified_user">
                             <ReferenceField source="last_modified_user_id" reference="users">
                                 <TextField source="username" />
                             </ReferenceField>

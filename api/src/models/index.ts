@@ -8,7 +8,7 @@ export * from "./pedidos-remocao.model";
 export * from "./app-users-authenticator.model";
 export * from "./cookies-type.model";
 export * from "./certificate.model";
-export * from "./company.model";
+export * from "./warehouse.model";
 export * from "./access-point.model";
 export * from './country.model';
 export * from './log.model';

@@ -69,8 +69,8 @@ export class LogService {
     });
   }
 
-  // Métodos relacionados a Company
-  async logCompanyChange(userId: string, companyId: number | string, ip: string, userUuid: string, deviceInfo: { device: string; os: string }) {
+  // Métodos relacionados a Warehouse
+  async logWarehouseChange(userId: string, companyId: number | string, ip: string, userUuid: string, deviceInfo: { device: string; os: string }) {
     await this.logRepository.create({
       type_id: 1,
       message: `O utilizador '${userId}' atualizou o armazém com o ID '${companyId}'`,
@@ -79,7 +79,7 @@ export class LogService {
     });
   }
 
-  async logCompanyDelete(userId: string, companyId: number | string, ip: string, userUuid: string, deviceInfo: { device: string; os: string }) {
+  async logWarehouseDelete(userId: string, companyId: number | string, ip: string, userUuid: string, deviceInfo: { device: string; os: string }) {
     await this.logRepository.create({
       type_id: 3,
       message: `O utilizador '${userId}' apagou o armazém com o ID '${companyId}'`,

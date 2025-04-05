@@ -33,8 +33,8 @@ const FlyIntroduction: React.FC = () => {
     return null;
 };
 
-const CompaniesMap: React.FC = () => {
-    const [companies, setCompanies] = useState<any[]>([]);
+const WarehousesMap: React.FC = () => {
+    const [warehouses, setWarehouses] = useState<any[]>([]);
     const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
     const [searchTerm, setSearchTerm] = useState("");
     const debouncedSearchTerm = useDebounce(searchTerm, 300);
@@ -44,16 +44,16 @@ const CompaniesMap: React.FC = () => {
     const theme = useTheme();
 
     useEffect(() => {
-        const fetchCompanies = async () => {
+        const fetchWarehouses = async () => {
             try {
-                const res = await fetch(`${url}/companies`);
+                const res = await fetch(`${url}/warehouses`);
                 const data = await res.json();
-                setCompanies(data);
+                setWarehouses(data);
             } catch (error) {
                 console.error("Erro ao buscar armazéns:", error);
             }
         };
-        fetchCompanies();
+        fetchWarehouses();
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -85,17 +85,17 @@ const CompaniesMap: React.FC = () => {
         setSearchTerm(e.target.value);
     };
 
-    const filteredCompanies = useMemo(() => 
-        companies.filter((c) => 
+    const filteredWarehouses = useMemo(() => 
+        warehouses.filter((c) => 
             !debouncedSearchTerm || c.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
         ),
-        [companies, debouncedSearchTerm]
+        [warehouses, debouncedSearchTerm]
     );
 
     return (
         <div style={{ height: "calc(100vh - 120px)", width: "100%", position: "relative" }}>
             <button
-                onClick={() => navigate("/companies")}
+                onClick={() => navigate("/warehouses")}
                 style={{
                     position: "absolute", top: "10px", right: "10px", zIndex: 1000, 
                     padding: "10px 15px", backgroundColor: "#5384ED", color: "#fff", 
@@ -153,7 +153,7 @@ const CompaniesMap: React.FC = () => {
                 {/* Localização do utilizador */}
                 {userLocation && userIcon && <Marker position={userLocation} icon={userIcon} />}
                 {/* Localização dos armazéns */}
-                {filteredCompanies.filter(c => c.lat && c.lon).map(c => (
+                {filteredWarehouses.filter(c => c.lat && c.lon).map(c => (
                     warehouseIcon && (
                         <Marker key={c.id} position={[c.lat, c.lon]} icon={warehouseIcon}>
                             <Popup>
@@ -169,4 +169,4 @@ const CompaniesMap: React.FC = () => {
     );
 };
 
-export default CompaniesMap;
+export default WarehousesMap;

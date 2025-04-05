@@ -1,6 +1,6 @@
 import { Entity, model, property, belongsTo } from "@loopback/repository";
 import { Certificate } from "./certificate.model";
-import { Company } from "./company.model";
+import { Warehouse } from "./warehouse.model";
 import { User } from "./user.model";
 
 @model()
@@ -109,7 +109,7 @@ export class AccessPoint extends Entity {
   @belongsTo(() => Certificate, { name: "certificate" })
   certificate_id?: number;
 
-  @belongsTo(() => Company, { name: "company" })
+  @belongsTo(() => Warehouse, { name: "warehouse" })
   company_id?: number;
 
   @belongsTo(() => User, { name: "last_modified_user_id" })

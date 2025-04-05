@@ -32,7 +32,7 @@ export const AccessPointsList = () => {
                 />
             ) : (
                 <Datagrid rowClick={"show"}>
-                    <ReferenceField source="company_id" reference="companies" label="resources.accessPoints.fields.company_id" link={false}>
+                    <ReferenceField source="company_id" reference="warehouses" label="resources.accessPoints.fields.company_id" link={false}>
                         <TextField source="name" />
                     </ReferenceField>
                     <TextField source="location_description" label="resources.accessPoints.fields.location_description" />

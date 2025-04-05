@@ -208,12 +208,12 @@ const englishMessages: TranslationMessages = {
       is_active: "Status",
     },
     accessPoints: {
-      company_name: "Company name",
+      company_name: "Warehouse name",
       ip_address: "IP address",
       ap_software: "Software",
       is_active: "Status",
     },
-    companies: {
+    warehouses: {
       name: "Name",
       country: "Country",
       district: "District",
@@ -234,7 +234,7 @@ const englishMessages: TranslationMessages = {
       config: "Configuration",
       security: "Security",
       accessPoints: "Access Points",
-      companies: "Companies",
+      warehouses: "Warehouses",
       certificates: "Certificates",
       monitoring: "Monitoring",
       language: "Language",
@@ -254,7 +254,7 @@ const englishMessages: TranslationMessages = {
       manage: "Access management",
       name: "Access Points",
       fields: {
-        company_id: "Company",
+        company_id: "Warehouse",
         location_description: "Location",
         ip_address: "IP address",
         ap_software: "Software",
@@ -275,7 +275,7 @@ const englishMessages: TranslationMessages = {
         is_active: "Status",
       },
     },
-    companies: {
+    warehouses: {
       manage: "Warehouse panel",
       name: "Warehouse",
       list: "Warehouse",
@@ -449,7 +449,7 @@ const englishMessages: TranslationMessages = {
       permissions: "Permissions",
       is_active: "Active",
       certificates: "Certificate",
-      company: "Company",
+      warehouse: "Warehouse",
       created_date: "Creation date",
       last_modified: "Last modified",
       last_modified_user: "Modified by",
@@ -474,7 +474,7 @@ const englishMessages: TranslationMessages = {
       content: "Content",
       last_modified: "Last Modified",
     },
-    companies: {
+    warehouses: {
       identification: "Identification",
       name: "Name",
       address: "Address",

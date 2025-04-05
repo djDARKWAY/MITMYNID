@@ -6,13 +6,13 @@ import { Card, CardContent, Typography, Grid, Paper, useTheme, Checkbox, Button 
 import { Link, useNavigate } from "react-router-dom";
 import CustomEmptyPage from "../../components/general/CustomEmptyPage";
 import CustomPagination, { perPageDefault } from "../../components/general/CustomPagination";
-import { CompaniesFilters } from "./CompaniesFilter";
+import { WarehousesFilters } from "./WarehousesFilter";
 import { Delete } from "@mui/icons-material";
 import CustomConfirmButtonToolTip from "../../components/general/CustomConfirmButtonToolTip";
 
 const FLAG_BASE_URL = import.meta.env.VITE_FLAG_BASE_URL;
 
-const CompanyCard = ({ record, selected, onToggle }: { 
+const WarehouseCard = ({ record, selected, onToggle }: { 
     record?: { id: number | string; name: string; city: string; district?: string; zip_code: string; country?: { name: string; flag_url?: string } }; 
     selected: boolean; 
     onToggle: (id: number | string) => void;
@@ -27,9 +27,9 @@ const CompanyCard = ({ record, selected, onToggle }: {
                 <Checkbox 
                   checked={selected} 
                   onChange={() => onToggle(record.id)} />
-                <CustomConfirmButtonToolTip label={"ra.action.delete"} color="error" icon={<Delete />} id={String(record.id)} resource={"companies"} />
+                <CustomConfirmButtonToolTip label={"ra.action.delete"} color="error" icon={<Delete />} id={String(record.id)} resource={"warehouses"} />
             </div>
-            <Card sx={{ textDecoration: "none", padding: "4px 4px", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", position: "relative" }} component={Link} to={`/companies/${record.id}/show`}>
+            <Card sx={{ textDecoration: "none", padding: "4px 4px", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", position: "relative" }} component={Link} to={`/warehouses/${record.id}/show`}>
                 <CardContent sx={{ color: "#ffffff" }}>
                     <Typography variant="h6" sx={{ marginBottom: "8px", fontWeight: "bold" }}>
                         {record.name}
@@ -63,7 +63,7 @@ const CompanyCard = ({ record, selected, onToggle }: {
     );
 };
 
-const CompaniesCardList = () => {
+const WarehousesCardList = () => {
     const { data } = useListContext<{ id: number | string; name: string; city: string; zip_code: string; country?: { name: string } }>();
     const dataProvider = useDataProvider();
     const [selectedIds, setSelectedIds] = useState<(number | string)[]>([]);
@@ -75,7 +75,7 @@ const CompaniesCardList = () => {
     const handleBulkDelete = async () => {
         if(window.confirm("Tem certeza que deseja eliminar os registos selecionados?")){
             try {
-                await dataProvider.deleteMany("companies", { ids: selectedIds });
+                await dataProvider.deleteMany("warehouses", { ids: selectedIds });
                 setSelectedIds([]);
             } catch (error) {
                 console.error("Erro ao eliminar em massa:", error);
@@ -88,7 +88,7 @@ const CompaniesCardList = () => {
             <Grid container spacing={2} sx={{ padding: '20px' }}>
                 {data?.map(record => (
                     <Grid item key={record.id} xs={12} sm={6} md={4} lg={3}>
-                        <CompanyCard 
+                        <WarehouseCard 
                           record={record} 
                           selected={selectedIds.includes(record.id)} 
                           onToggle={handleToggle} />
@@ -104,21 +104,21 @@ const CompaniesCardList = () => {
     );
 };
 
-export const CompaniesList = () => {
+export const WarehousesList = () => {
     const { permissions } = usePermissions();
     const theme = useTheme();
     const navigate = useNavigate();
 
     return (
         <List
-            resource="companies"
-            filters={CompaniesFilters(permissions)}
+            resource="warehouses"
+            filters={WarehousesFilters(permissions)}
             queryOptions={{ refetchOnWindowFocus: false }}
             pagination={<CustomPagination />}
             perPage={perPageDefault}
             empty={<CustomEmptyPage />}
             exporter={false}
-            title="resources.companies.name"
+            title="resources.warehouses.name"
             sx={{ paddingLeft: "10px" }}
             actions={
                 <TopToolbar>
@@ -127,7 +127,7 @@ export const CompaniesList = () => {
                     <Button 
                         variant="contained"
                         color="primary"
-                        onClick={() => navigate("/companies-map")}
+                        onClick={() => navigate("/warehouses-map")}
                         sx={{ textTransform: "none", marginLeft: "10px" }}
                     >
                         Ver Mapa
@@ -135,7 +135,7 @@ export const CompaniesList = () => {
                 </TopToolbar>
             }
         >
-            <CompaniesCardList />
+            <WarehousesCardList />
         </List>
     );
 };

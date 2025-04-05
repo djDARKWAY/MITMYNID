@@ -6,7 +6,7 @@ export * from './app-users-session.controller';
 export * from './app-users-authenticator-user.controller';
 export * from './cookies-type.controller';
 export * from './certificate.controller';
-export * from './company.controller';
+export * from './warehouse.controller';
 export * from './access-point.controller';
 export * from './country.controller';
 export * from './log.controller';

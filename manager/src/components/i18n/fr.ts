@@ -222,7 +222,7 @@ const frenchMessages: TranslationMessages = {
       ap_software: "Logiciel",
       is_active: "État",
     },
-    companies: {
+    warehouses: {
       name: "Nom",
       country: "Pays",
       district: "District",
@@ -243,7 +243,7 @@ const frenchMessages: TranslationMessages = {
       config: "Configuration",
       security: "Sécurité",
       accessPoints: "Points d'accès",
-      companies: "Entreprises",
+      warehouses: "Entreprises",
       certificates: "Certificats",
       monitoring: "Surveillance",
       language: "Langue",
@@ -284,7 +284,7 @@ const frenchMessages: TranslationMessages = {
         is_active: "État",
       },
     },
-    companies: {
+    warehouses: {
       manage: "Gestion des entrepôts",
       name: "Entrepôts",
       list: "Entreprises",
@@ -461,7 +461,7 @@ const frenchMessages: TranslationMessages = {
       permissions: "Permissions",
       is_active: "Actif",
       certificates: "Certificat",
-      company: "Entreprise",
+      warehouse: "Entreprise",
       created_date: "Date de création",
       last_modified: "Dernière modification",
       last_modified_user: "Modifié par",
@@ -486,7 +486,7 @@ const frenchMessages: TranslationMessages = {
       logs: "Journaux",
       details: "Détails",
     },
-    companies: {
+    warehouses: {
       identification: "Identification",
       name: "Nom",
       address: "Adresse",

@@ -74,8 +74,8 @@ export const AccessPointsShow = () => (
                                 <TextField source="name" />
                             </ReferenceField>
                         </FieldTitleLabel>
-                        <FieldTitleLabel label="show.accessPoints.company">
-                            <ReferenceField source="company_id" reference="companies">
+                        <FieldTitleLabel label="show.accessPoints.warehouse">
+                            <ReferenceField source="company_id" reference="warehouses">
                                 <TextField source="name" />
                             </ReferenceField>
                         </FieldTitleLabel>

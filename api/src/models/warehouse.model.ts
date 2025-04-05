@@ -4,10 +4,10 @@ import { Country } from "./country.model";
 
 @model({
   settings: {
-    postgresql: { table: 'company' },
+    postgresql: { table: 'warehouse' },
   },
 })
-export class Company extends Entity {
+export class Warehouse extends Entity {
   @property({
     type: "number",
     id: true,
@@ -166,14 +166,14 @@ export class Company extends Entity {
   @belongsTo(() => User, {name: "last_modified_user_id", keyFrom: 'last_modified_user_id', keyTo: 'id'})
   last_modified_user_id?: string;
 
-  constructor(data?: Partial<Company>) {
+  constructor(data?: Partial<Warehouse>) {
     super(data);
   }
 }
 
-export interface CompanyRelations {
+export interface WarehouseRelations {
   country?: Country;
   last_modified_user_id?: User;
 }
 
-export type CompanyWithRelations = Company & CompanyRelations;
+export type WarehouseWithRelations = Warehouse & WarehouseRelations;

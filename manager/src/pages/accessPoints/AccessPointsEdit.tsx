@@ -32,7 +32,7 @@ export const AccessPointsEdit = () => {
                         <Typography variant="h6" sx={{ ml: 1 }}>Localização</Typography>
                     </Box>
                     <Divider sx={{ mb: 3 }} />
-                    <ReferenceInput source="company_id" reference="companies" label="show.accessPoints.company">
+                    <ReferenceInput source="company_id" reference="warehouses" label="show.accessPoints.warehouse">
                         <SelectInput optionText="name" fullWidth />
                     </ReferenceInput>
                 </TabbedForm.Tab>

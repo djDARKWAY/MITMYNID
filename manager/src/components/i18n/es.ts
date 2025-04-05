@@ -222,7 +222,7 @@ const spanishMessages: TranslationMessages = {
       ap_software: "Software",
       is_active: "Estado",
     },
-    companies: {
+    warehouses: {
       name: "Nombre",
       country: "País",
       district: "Distrito",
@@ -243,7 +243,7 @@ const spanishMessages: TranslationMessages = {
       config: "Configuración",
       security: "Seguridad",
       accessPoints: "Puntos de acceso",
-      companies: "Almacéns",
+      warehouses: "Almacéns",
       certificates: "Certificados",
       monitoring: "Monitoreo",
       language: "Idioma",
@@ -284,7 +284,7 @@ const spanishMessages: TranslationMessages = {
         is_active: "Estado",
       },
     },
-    companies: {
+    warehouses: {
       manage: "Gestionar almacéns",
       name: "Aalmacén",
       list: "Almacenes",
@@ -458,7 +458,7 @@ const spanishMessages: TranslationMessages = {
       permissions: "Permisos",
       is_active: "Activo",
       certificates: "Certificado",
-      company: "Almacén",
+      warehouse: "Almacén",
       created_date: "Fecha de creación",
       last_modified: "Última modificación",
       last_modified_user: "Modificado por",
@@ -483,7 +483,7 @@ const spanishMessages: TranslationMessages = {
       content: "Contenido",
       last_modified: "Última modificación",
     },
-    companies: {
+    warehouses: {
       identification: "Identificación",
       name: "Nombre",
       address: "Dirección",

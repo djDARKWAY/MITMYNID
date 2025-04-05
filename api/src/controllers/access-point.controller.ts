@@ -21,7 +21,7 @@ import {
 } from "@loopback/rest";
 import { AccessPoint } from "../models";
 import { AccessPointRepository } from "../repositories";
-import { CompanyRepository } from "../repositories";
+import { WarehouseRepository } from "../repositories";
 import { XMLValidator } from "fast-xml-parser";
 import { inject } from "@loopback/core";
 import { LogService } from "../services/log.service";
@@ -35,7 +35,7 @@ export class AccessPointController {
   constructor(
     @repository(AccessPointRepository)
     public accessPointRepository: AccessPointRepository,
-    @repository(CompanyRepository) public companyRepository: CompanyRepository,
+    @repository(WarehouseRepository) public companyRepository: WarehouseRepository,
     @inject(RestBindings.Http.REQUEST) private request: Request,
     @inject('services.LogService') private logService: LogService,
   ) {}
@@ -91,13 +91,13 @@ export class AccessPointController {
     if (filter?.where && (filter.where as any).company_name) {
       const companyName = (filter.where as any).company_name;
 
-      const companies = await this.companyRepository.find({
+      const warehouses = await this.companyRepository.find({
         where: {
           name: { ilike: `%${companyName}%` },
         },
       });
 
-      const companyIds = companies.map((company) => company.id);
+      const companyIds = warehouses.map((warehouse) => warehouse.id);
 
       filter.where = {
         ...filter.where,

@@ -233,14 +233,14 @@ const MyMenu = ({ dense = false }: MenuProps) => {
         <SubMenu
           handleToggle={() => handleToggle("menuArmazens")}
           isOpen={state.menuArmazens}
-          name="pos.menu.companies"
+          name="pos.menu.warehouses"
           icon={<WarehouseRounded />}
           dense={dense}
         >
           <MenuItemLink
-            to={{ pathname: "/companies" }}
+            to={{ pathname: "/warehouses" }}
             className={"submenuItem " + (open ? "open" : "close")}
-            primaryText={translate(`resources.companies.manage`)}
+            primaryText={translate(`resources.warehouses.manage`)}
             sx={{ color: !open ? "transparent" : "default" }}
             leftIcon={<ManageAccountsRounded />}
             dense={dense}

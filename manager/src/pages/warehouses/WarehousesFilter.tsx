@@ -4,7 +4,7 @@ import { fetchUtils } from "react-admin";
 
 const FLAG_BASE_URL = import.meta.env.VITE_FLAG_BASE_URL;
 
-export const CompaniesFilters = (permissions: string[]) => {
+export const WarehousesFilters = (permissions: string[]) => {
     const [countries, setCountries] = useState<{ id: string; name: string; flag_url: string }[]>([]);
 
     useEffect(() => {
@@ -22,11 +22,11 @@ export const CompaniesFilters = (permissions: string[]) => {
     }, []);
 
     const filters = [
-        <TextInput key="name" source="name" size="small" label="pos.companies.name" fullWidth alwaysOn resettable />,
-        <TextInput key="district" source="district" size="small" label="pos.companies.district" fullWidth resettable />,
-        <TextInput key="city" source="city" size="small" label="pos.companies.city" fullWidth alwaysOn resettable />,
-        <TextInput key="zip_code" source="zip_code" size="small" label="pos.companies.zip_code" fullWidth alwaysOn resettable />,
-        <SelectInput key="country" source="country" label="pos.companies.country" choices={countries} optionText={(choice) => (
+        <TextInput key="name" source="name" size="small" label="pos.warehouses.name" fullWidth alwaysOn resettable />,
+        <TextInput key="district" source="district" size="small" label="pos.warehouses.district" fullWidth resettable />,
+        <TextInput key="city" source="city" size="small" label="pos.warehouses.city" fullWidth alwaysOn resettable />,
+        <TextInput key="zip_code" source="zip_code" size="small" label="pos.warehouses.zip_code" fullWidth alwaysOn resettable />,
+        <SelectInput key="country" source="country" label="pos.warehouses.country" choices={countries} optionText={(choice) => (
                 <span>
                     <img
                         src={`${FLAG_BASE_URL}${choice.flag_url || "xx.svg"}`}

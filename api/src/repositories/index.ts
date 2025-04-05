@@ -9,7 +9,7 @@ export * from './app-users-authenticator.repository';
 export * from './cookies-type.repository';
 export * from './access-point.repository';
 export * from './certificate.repository';
-export * from './company.repository';
+export * from './warehouse.repository';
 export * from './country.repository';
 export * from './log.repository';
 export * from './log-type.repository';

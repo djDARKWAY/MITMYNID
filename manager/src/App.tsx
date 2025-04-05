@@ -29,15 +29,15 @@ import { users } from './pages/users';
 import { validateUsers } from './pages/ValidateUsers';
 import { certificates } from './pages/certificates';
 import { accessPoints } from './pages/accessPoints';
-import { companies } from './pages/companies';
+import { warehouses } from './pages/warehouses';
 import { logs } from './pages/logs';
 
 // Lists
 import { CertificatesList } from './pages/certificates/CertificatesList';
 import { AccessPointsList } from './pages/accessPoints/AccessPointsList';
-import { CompaniesList } from './pages/companies/CompaniesList';
+import { WarehousesList } from './pages/warehouses/WarehousesList';
 import { LogsList } from './pages/logs/LogsList';
-import CompaniesMap from './pages/companies/CompaniesMap';
+import WarehousesMap from './pages/warehouses/WarehousesMap';
 import UsersLogs from './pages/users/UsersLogs';
 
 const httpClient = (url: string, options = {}) => {
@@ -92,7 +92,7 @@ const App = () => {
                 <Resource name="user-roles" />,
                 <Resource name="certificates" {...certificates(permissions)} />,
                 <Resource name="access-points" {...accessPoints(permissions)} />,
-                <Resource name="companies" {...companies(permissions)} />,
+                <Resource name="warehouses" {...warehouses(permissions)} />,
                 <Resource name="logs" {...logs(permissions)} />,
 
                 <CustomRoutes>
@@ -101,8 +101,8 @@ const App = () => {
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/certificates" element={<CertificatesList />} />
                   <Route path="/access-points" element={<AccessPointsList />} />
-                  <Route path="/companies" element={<CompaniesList />} />
-                  <Route path="/companies-map" element={<CompaniesMap />} />
+                  <Route path="/warehouses" element={<WarehousesList />} />
+                  <Route path="/warehouses-map" element={<WarehousesMap />} />
                   <Route path="/logs" element={<LogsList />} />
                   <Route path="/status-test" element={<StatusTest />} />
                   <Route path="/status-testv2" element={<StatusTestv2 />} />
