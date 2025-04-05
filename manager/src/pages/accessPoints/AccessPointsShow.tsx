@@ -53,9 +53,6 @@ export const AccessPointsShow = () => (
                 <Grid item xs={12} md={6}>
                     {/* Identificação */}
                     <Section title="show.accessPoints.identification" icon={<Person />}>
-                        <FieldTitleLabel label="ID">
-                            <TextField source="id" />
-                        </FieldTitleLabel>
                         <FieldTitleLabel label="show.accessPoints.location_description">
                             <TextField source="location_description" />
                         </FieldTitleLabel>
@@ -85,12 +82,12 @@ export const AccessPointsShow = () => (
                 <Grid item xs={12} md={6}>
                     {/* Configuração Técnica */}
                     <Section title="show.accessPoints.configuration" icon={<SettingsIcon />}>
-                        <Box sx={{ height: 425, flexDirection: "column", overflow: "auto"}}>
+                        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                             <FieldTitleLabel label="show.accessPoints.software">
                                 <TextField source="ap_software" /> (v. <TextField source="software_version" />)
                             </FieldTitleLabel>
                             <FieldTitleLabel label="PMode">
-                                <Card variant="outlined" sx={{ p: 1, bgcolor: "InfoBackground", overflow: "auto" }}>
+                                <Card variant="outlined" sx={{ p: 1, bgcolor: "InfoBackground", maxHeight: 277, overflow: "auto" }}>
                                     <XmlField source="pmode" />
                                 </Card>
                             </FieldTitleLabel>
@@ -101,17 +98,19 @@ export const AccessPointsShow = () => (
                 {/* Logs */}
                 <Grid item xs={12} sx={{ marginBottom: "-20px", marginTop: "-20px" }}>
                     <Section title="show.accessPoints.logs" icon={<AccessTimeFilled />}>
-                        <FieldTitleLabel label="show.accessPoints.created_date">
-                            <DateField source="created_date" showTime />
-                        </FieldTitleLabel>
-                        <FieldTitleLabel label="show.accessPoints.last_modified">
-                            <DateField source="last_modified" showTime />
-                        </FieldTitleLabel>
-                        <FieldTitleLabel label="show.accessPoints.last_modified_user">
-                            <ReferenceField source="last_modified_user_id" reference="users">
-                                <TextField source="username" />
-                            </ReferenceField>
-                        </FieldTitleLabel>
+                        <Box display="flex" gap={2} flexWrap="wrap">
+                            <FieldTitleLabel label="show.accessPoints.created_date">
+                                <DateField source="created_date" showTime />
+                            </FieldTitleLabel>
+                            <FieldTitleLabel label="show.accessPoints.last_modified">
+                                <DateField source="last_modified" showTime />
+                            </FieldTitleLabel>
+                            <FieldTitleLabel label="show.accessPoints.last_modified_user">
+                                <ReferenceField source="last_modified_user_id" reference="users">
+                                    <TextField source="username" />
+                                </ReferenceField>
+                            </FieldTitleLabel>
+                        </Box>
                     </Section>
                 </Grid>
             </Grid>

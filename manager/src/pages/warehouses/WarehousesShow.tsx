@@ -94,7 +94,7 @@ const WarehouseMap = () => {
             minZoom={3}
             maxBounds={[[85, -180], [-85, 180]]}
             maxBoundsViscosity={1}
-            style={{ height: "710px", width: "100%" }}
+            style={{ height: "540px", width: "100%" }}
             dragging={false}
             doubleClickZoom={false}
             scrollWheelZoom={false}
@@ -116,43 +116,50 @@ export const WarehousesShow = () => (
                 <Grid item xs={12} md={6}>
                     {/* Identificação */}
                     <Section title="show.warehouses.identification" icon={<Person />}>
-                        <FieldTitleLabel label="ID">
-                            <TextField source="id" />
-                        </FieldTitleLabel>
-                        <FieldTitleLabel label="show.warehouses.name">
-                            <TextField source="name" />
-                        </FieldTitleLabel>
+                        <TextField source="name" sx={{ fontSize: "1rem"}} />
                     </Section>
+
                     {/* Localização */}
                     <Section title="show.warehouses.location" icon={<Home />}>
                         <FieldTitleLabel label="show.warehouses.address">
                             <TextField source="address" />
                         </FieldTitleLabel>
-                        <FieldTitleLabel label="show.warehouses.city">
-                            <TextField source="city" />
-                        </FieldTitleLabel>
-                        <FieldTitleLabel label="show.warehouses.district">
-                            <TextField source="district" />
-                        </FieldTitleLabel>
-                        <FieldTitleLabel label="show.warehouses.country">
-                            <ReferenceField source="country_id" reference="countries">
-                                <TextField source="name" />
-                            </ReferenceField>
-                        </FieldTitleLabel>
-                        <FieldTitleLabel label="show.warehouses.zip_code">
-                            <TextField source="zip_code" />
-                        </FieldTitleLabel>
+                        <Box display="flex" gap={2} flexWrap="wrap" sx={{ mt: 2 }}>
+                            <FieldTitleLabel label="show.warehouses.city">
+                                <TextField source="city" />
+                            </FieldTitleLabel>
+                            <FieldTitleLabel label="show.warehouses.district">
+                                <TextField source="district" />
+                            </FieldTitleLabel>
+                            <FieldTitleLabel label="show.warehouses.country">
+                                <ReferenceField source="country_id" reference="countries">
+                                    <TextField source="name" />
+                                </ReferenceField>
+                            </FieldTitleLabel>
+                            <FieldTitleLabel label="show.warehouses.zip_code">
+                                <TextField source="zip_code" />
+                            </FieldTitleLabel>
+                        </Box>
+                        <Box display="flex" gap={2} mt={2}>
+                            <FieldTitleLabel label="show.warehouses.latitude">
+                                <TextField source="lat" />
+                            </FieldTitleLabel>
+                            <FieldTitleLabel label="show.warehouses.longitude">
+                                <TextField source="lon" />
+                            </FieldTitleLabel>
+                        </Box>
                     </Section>
+
                     {/* Contactos */}
                     <Section title="show.warehouses.contacts" icon={<ContactMail />}>
                         <FieldTitleLabel label="show.warehouses.email">
                             <TextField source="email" />
                         </FieldTitleLabel>
                         <FieldTitleLabel label="show.warehouses.contact">
-                            <TextField source="contact" />
-                        </FieldTitleLabel>
-                        <FieldTitleLabel label="show.warehouses.phone">
-                            <TextField source="phone" />
+                            <Box display="flex" gap={2}>
+                                <TextField source="contact" />
+                                <TextField source="phone" />
+                            </Box>
                         </FieldTitleLabel>
                         <FieldTitleLabel label="show.warehouses.website">
                             <TextField source="website" />
@@ -170,17 +177,19 @@ export const WarehousesShow = () => (
                 {/* Logs */}
                 <Grid item xs={12} sx={{ marginBottom: "-20px", marginTop: "-20px" }}>
                     <Section title="show.warehouses.logs" icon={<AccessTimeFilled />}>
-                        <FieldTitleLabel label="show.warehouses.created_date">
-                            <DateField source="created_date" showTime />
-                        </FieldTitleLabel>
-                        <FieldTitleLabel label="show.warehouses.last_modified">
-                            <DateField source="last_modified" showTime />
-                        </FieldTitleLabel>
-                        <FieldTitleLabel label="show.warehouses.last_modified_user">
-                            <ReferenceField source="last_modified_user_id" reference="users">
-                                <TextField source="username" />
-                            </ReferenceField>
-                        </FieldTitleLabel>
+                        <Box display="flex" gap={2} flexWrap="wrap">
+                            <FieldTitleLabel label="show.warehouses.created_date">
+                                <DateField source="created_date" showTime />
+                            </FieldTitleLabel>
+                            <FieldTitleLabel label="show.warehouses.last_modified">
+                                <DateField source="last_modified" showTime />
+                            </FieldTitleLabel>
+                            <FieldTitleLabel label="show.warehouses.last_modified_user">
+                                <ReferenceField source="last_modified_user_id" reference="users">
+                                    <TextField source="username" />
+                                </ReferenceField>
+                            </FieldTitleLabel>
+                        </Box>
                     </Section>
                 </Grid>
             </Grid>

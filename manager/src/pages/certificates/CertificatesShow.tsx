@@ -53,9 +53,6 @@ export const CertificatesShow = () => (
                 <Grid item xs={12} md={6}>
                     {/* Identificação */}
                     <Section title="show.certificates.identification" icon={<CardMembership />}>
-                        <FieldTitleLabel label="ID">
-                            <TextField source="id" />
-                        </FieldTitleLabel>
                         <FieldTitleLabel label="show.certificates.name">
                             <TextField source="name" />
                         </FieldTitleLabel>
@@ -72,12 +69,14 @@ export const CertificatesShow = () => (
                         <FieldTitleLabel label="show.certificates.issuer_url">
                             <TextField source="issuer_url" />
                         </FieldTitleLabel>
-                        <FieldTitleLabel label="show.certificates.issue_date">
-                            <DateField source="issue_date" />
-                        </FieldTitleLabel>
-                        <FieldTitleLabel label="show.certificates.expiration_date">
-                            <DateField source="expiration_date" />
-                        </FieldTitleLabel>
+                        <Box display="flex" gap={2}>
+                            <FieldTitleLabel label="show.certificates.issue_date">
+                                <DateField source="issue_date" />
+                            </FieldTitleLabel>
+                            <FieldTitleLabel label="show.certificates.expiration_date">
+                                <DateField source="expiration_date" />
+                            </FieldTitleLabel>
+                        </Box>
                         <FieldTitleLabel label="show.certificates.is_active">
                             <BooleanField source="is_active" />
                         </FieldTitleLabel>
@@ -87,7 +86,7 @@ export const CertificatesShow = () => (
                 <Grid item xs={12} md={6} sx={{ height: "100%" }}>
                     {/* Conteúdo */}
                     <Section title="show.certificates.content" icon={<FeedOutlined />}>
-                        <Box sx={{ height: 529, flexDirection: "column", overflow: "auto"}}>
+                        <Box sx={{ height: 425, flexDirection: "column", overflow: "auto"}}>
                             <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}> Dados </Typography>
                             <Card variant="outlined" sx={{ p: 1, bgcolor: "InfoBackground" }}>
                                 <TextField 
@@ -108,15 +107,20 @@ export const CertificatesShow = () => (
 
                 {/* Logs */}
                 <Grid item xs={12} sx={{ marginBottom: "-20px", marginTop: "-20px" }}>
-                    <Section title="show.certificates.logs" icon={<AccessTimeFilled />}>
-                        <FieldTitleLabel label="show.certificates.last_modified">
-                            <DateField source="last_modified" showTime />
-                        </FieldTitleLabel>
-                        <FieldTitleLabel label="show.certificates.modified_by">
-                            <ReferenceField source="last_modified_user_id" reference="users">
-                                <TextField source="username" />
-                            </ReferenceField>
-                        </FieldTitleLabel>
+                    <Section title="show.warehouses.logs" icon={<AccessTimeFilled />}>
+                        <Box display="flex" gap={2} flexWrap="wrap">
+                            <FieldTitleLabel label="show.warehouses.created_date">
+                                <DateField source="issue_date" showTime />
+                            </FieldTitleLabel>
+                            <FieldTitleLabel label="show.warehouses.last_modified">
+                                <DateField source="last_modified" showTime />
+                            </FieldTitleLabel>
+                            <FieldTitleLabel label="show.warehouses.last_modified_user">
+                                <ReferenceField source="last_modified_user_id" reference="users">
+                                    <TextField source="username" />
+                                </ReferenceField>
+                            </FieldTitleLabel>
+                        </Box>
                     </Section>
                 </Grid>
             </Grid>
