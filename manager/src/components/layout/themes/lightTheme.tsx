@@ -39,7 +39,7 @@ const lightTheme = {
     width: 250,
     closedWidth: 87,
     background: "#fcfcfe",
-    borderRight: "1.5px dotted rgb(22222, 158, 171, 0.7)",
+    borderRight: "1.5px dotted rgb(158, 158, 171, 0.5)",
   },
   typography: {
     fontFamily: "Public Sans, sans-serif",

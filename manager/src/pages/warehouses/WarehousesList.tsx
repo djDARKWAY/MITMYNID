@@ -12,10 +12,11 @@ import CustomConfirmButtonToolTip from "../../components/general/CustomConfirmBu
 
 const FLAG_BASE_URL = import.meta.env.VITE_FLAG_BASE_URL;
 
-const WarehouseCard = ({ record, selected, onToggle }: { 
+const WarehouseCard = ({ record, selected, onToggle, showCheckboxes }: { 
     record?: { id: number | string; name: string; city: string; district?: string; zip_code: string; country?: { name: string; flag_url?: string } }; 
     selected: boolean; 
     onToggle: (id: number | string) => void;
+    showCheckboxes: boolean;
 }) => {
     if (!record) return null;
 
@@ -24,9 +25,11 @@ const WarehouseCard = ({ record, selected, onToggle }: {
     return (
         <Paper elevation={3} sx={{ height: "100%", position: "relative", overflow: "hidden" }}>
             <div style={{ position: "absolute", top: "4px", right: "4px", zIndex: 2, display: "flex", gap: "4px" }}>
-                <Checkbox 
-                  checked={selected} 
-                  onChange={() => onToggle(record.id)} />
+                {showCheckboxes && (
+                    <Checkbox 
+                      checked={selected} 
+                      onChange={() => onToggle(record.id)} />
+                )}
                 <CustomConfirmButtonToolTip label={"ra.action.delete"} color="error" icon={<Delete />} id={String(record.id)} resource={"warehouses"} />
             </div>
             <Card sx={{ textDecoration: "none", padding: "4px 4px", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", position: "relative" }} component={Link} to={`/warehouses/${record.id}/show`}>
@@ -63,7 +66,7 @@ const WarehouseCard = ({ record, selected, onToggle }: {
     );
 };
 
-const WarehousesCardList = () => {
+const WarehousesCardList = ({ showCheckboxes, setShowCheckboxes }: { showCheckboxes: boolean; setShowCheckboxes: (value: boolean) => void }) => {
     const { data } = useListContext<{ id: number | string; name: string; city: string; zip_code: string; country?: { name: string } }>();
     const dataProvider = useDataProvider();
     const [selectedIds, setSelectedIds] = useState<(number | string)[]>([]);
@@ -91,11 +94,12 @@ const WarehousesCardList = () => {
                         <WarehouseCard 
                           record={record} 
                           selected={selectedIds.includes(record.id)} 
-                          onToggle={handleToggle} />
+                          onToggle={handleToggle} 
+                          showCheckboxes={showCheckboxes} />
                     </Grid>
                 ))}
             </Grid>
-            {selectedIds.length > 0 && (
+            {showCheckboxes && selectedIds.length > 0 && (
                 <Button variant="contained" color="error" sx={{ margin: "20px" }} onClick={handleBulkDelete}>
                     Delete Selected
                 </Button>
@@ -108,6 +112,7 @@ export const WarehousesList = () => {
     const { permissions } = usePermissions();
     const theme = useTheme();
     const navigate = useNavigate();
+    const [showCheckboxes, setShowCheckboxes] = useState(false);
 
     return (
         <List
@@ -125,6 +130,18 @@ export const WarehousesList = () => {
                     <FilterButton />
                     <ListButton label="Criar" icon={<AddIcon />} />
                     <Button 
+                        onClick={() => setShowCheckboxes(!showCheckboxes)}
+                        sx={{ 
+                            textTransform: "none", 
+                            marginLeft: "10px", 
+                            color: theme.palette.primary.main, 
+                            backgroundColor: "transparent", 
+                            "&:hover": { backgroundColor: "transparent" } 
+                        }}
+                    >
+                        {showCheckboxes ? "Desativar seleção múltipla" : "Ativar seleção múltipla"}
+                    </Button>
+                    <Button 
                         variant="contained"
                         color="primary"
                         onClick={() => navigate("/warehouses-map")}
@@ -135,7 +152,7 @@ export const WarehousesList = () => {
                 </TopToolbar>
             }
         >
-            <WarehousesCardList />
+            <WarehousesCardList showCheckboxes={showCheckboxes} setShowCheckboxes={setShowCheckboxes} />
         </List>
     );
 };
