@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { url } from '../../App';
@@ -23,6 +23,17 @@ const useDebounce = <T,>(value: T, delay: number): T => {
     return debouncedValue;
 };
 
+const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+};
+
 const FlyIntroduction: React.FC = () => {
     const map = useMap();
 
@@ -37,6 +48,9 @@ const WarehousesMap: React.FC = () => {
     const [warehouses, setWarehouses] = useState<any[]>([]);
     const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
     const [searchTerm, setSearchTerm] = useState("");
+    const [distanceFilter, setDistanceFilter] = useState<number | null>(null);
+    const [selectedWarehouse, setSelectedWarehouse] = useState<any | null>(null); // Armazém selecionado
+    const [lineCoordinates, setLineCoordinates] = useState<[number, number][]>([]); // Coordenadas para a linha
     const debouncedSearchTerm = useDebounce(searchTerm, 300);
     const [userIcon, setUserIcon] = useState<L.DivIcon | null>(null);
     const [warehouseIcon, setWarehouseIcon] = useState<L.Icon | null>(null);
@@ -85,12 +99,32 @@ const WarehousesMap: React.FC = () => {
         setSearchTerm(e.target.value);
     };
 
-    const filteredWarehouses = useMemo(() => 
-        warehouses.filter((c) => 
-            !debouncedSearchTerm || c.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
-        ),
-        [warehouses, debouncedSearchTerm]
-    );
+    const handleDistanceFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setDistanceFilter(value ? parseFloat(value) : null);
+    };
+
+    const filteredWarehouses = useMemo(() => {
+        return warehouses.filter((c) => {
+            if (!c.lat || !c.lon) return false;
+    
+            const distance = userLocation
+                ? calculateDistance(userLocation[0], userLocation[1], c.lat, c.lon)
+                : Infinity;
+            const matchesSearch = !debouncedSearchTerm || c.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase());
+            const matchesDistance = distanceFilter === null || distance <= distanceFilter;
+
+            return matchesSearch && matchesDistance;
+        });
+    }, [warehouses, debouncedSearchTerm, userLocation, distanceFilter]);
+
+    const handleMarkerClick = (warehouse: any) => {
+        if (userLocation) {
+            const distance = calculateDistance(userLocation[0], userLocation[1], warehouse.lat, warehouse.lon);
+            setSelectedWarehouse({ ...warehouse, distance });
+            setLineCoordinates([userLocation, [warehouse.lat, warehouse.lon]]);
+        }
+    };
 
     return (
         <div style={{ height: "calc(100vh - 120px)", width: "100%", position: "relative" }}>
@@ -117,7 +151,12 @@ const WarehousesMap: React.FC = () => {
                     color: theme.palette.text.primary,
                     borderRadius: "10px",
                     boxShadow: "0 2px 5px rgba(0, 0, 0, 0.4)",
-                    width: "300px",
+                    width: "auto",
+                    padding: "5px",
+                    gap: "5px",
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center"
                 }}
             >
                 <TextField
@@ -133,6 +172,22 @@ const WarehousesMap: React.FC = () => {
                     InputLabelProps={{
                         style: { color: theme.palette.text.secondary },
                     }}
+                />
+                <TextField
+                    label="Km"
+                    value={distanceFilter !== null ? distanceFilter : ""}
+                    onChange={handleDistanceFilterChange}
+                    size="small"
+                    inputProps={{
+                        maxLength: 5,
+                    }}
+                    InputProps={{
+                        style: { color: theme.palette.text.primary },
+                    }}
+                    InputLabelProps={{
+                        style: { color: theme.palette.text.secondary },
+                    }}
+                    style={{ width: "120px" }}
                 />
             </div>
 
@@ -152,14 +207,25 @@ const WarehousesMap: React.FC = () => {
 
                 {/* Localização do utilizador */}
                 {userLocation && userIcon && <Marker position={userLocation} icon={userIcon} />}
+                
+                {/* Desenhando a linha */}
+                {lineCoordinates.length === 2 && (
+                    <Polyline positions={lineCoordinates} color="blue" weight={3} />
+                )}
+
                 {/* Localização dos armazéns */}
                 {filteredWarehouses.filter(c => c.lat && c.lon).map(c => (
                     warehouseIcon && (
-                        <Marker key={c.id} position={[c.lat, c.lon]} icon={warehouseIcon}>
+                        <Marker key={c.id} position={[c.lat, c.lon]} icon={warehouseIcon} eventHandlers={{
+                            click: () => handleMarkerClick(c)
+                        }}>
                             <Popup>
                                 <h3>{c.name}</h3>
                                 <p style={{ margin: "0.5em 0" }}><strong>Localização:</strong> {c.city}, {c.district}</p>
                                 <p style={{ margin: "0.5em 0" }}><strong>Código Postal:</strong> {c.zip_code}</p>
+                                {selectedWarehouse && selectedWarehouse.id === c.id && userLocation && (
+                                    <p><strong>Distância:</strong> {selectedWarehouse.distance.toFixed(2)} km</p>
+                                )}
                             </Popup>
                         </Marker>
                     )

@@ -76,7 +76,7 @@ export const UsersList = () => {
                         <img src="default-user.svg" style={{width: '40px'}} alt="user icon"/>
                         }
                     </Box>
-                    <Box sx={{marginTop: '-6px'}}>
+                    <Box sx={{display: 'flex', flexDirection: 'column'}}>
                         <Typography component={"span"} fontSize="14px">{record.person_name}</Typography>
                     </Box>
                 </Box>
@@ -90,7 +90,6 @@ export const UsersList = () => {
                 label="resources.utilizadores.fields.validation_date" 
                 render={(record : Users) => record.validation_date ? `${adjustDateWithoutTime(record.validation_date)}` : null}
             />
-            {permissions.includes('ADMIN') &&  <BooleanField source="active" label="resources.utilizadores.fields.ativo" /> }
             <Box sx={{gap: '4px', float: 'right'}}>
                 <WithRecord render={(record : Users) => {
                     return( 

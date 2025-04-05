@@ -94,7 +94,7 @@ const WarehouseMap = () => {
             minZoom={3}
             maxBounds={[[85, -180], [-85, 180]]}
             maxBoundsViscosity={1}
-            style={{ height: "540px", width: "100%" }}
+            style={{ height: "607px", width: "100%" }}
             dragging={false}
             doubleClickZoom={false}
             scrollWheelZoom={false}

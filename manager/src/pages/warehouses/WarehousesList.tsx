@@ -127,8 +127,6 @@ export const WarehousesList = () => {
             sx={{ paddingLeft: "10px" }}
             actions={
                 <TopToolbar>
-                    <FilterButton />
-                    <ListButton label="Criar" icon={<AddIcon />} />
                     <Button 
                         onClick={() => setShowCheckboxes(!showCheckboxes)}
                         sx={{ 
@@ -141,6 +139,8 @@ export const WarehousesList = () => {
                     >
                         {showCheckboxes ? "Desativar seleção múltipla" : "Ativar seleção múltipla"}
                     </Button>
+                    <FilterButton />
+                    <ListButton label="Criar" icon={<AddIcon />} />
                     <Button 
                         variant="contained"
                         color="primary"
