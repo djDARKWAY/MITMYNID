@@ -494,6 +494,12 @@ const englishMessages: TranslationMessages = {
       logs: "Logs",
       map: "Map",
     },
+    validateUsers: {
+      person_name: "Person Name",
+      nif: "Tax Identification Number",
+      email: "Email",
+      validation_date: "Validation Date",
+    },
   },
 };
 

@@ -504,6 +504,12 @@ const portugueseMessages: TranslationMessages = {
       logs: "Registos",
       map: "Mapa",
     },
+    validateUsers: {
+      person_name: "Nome da pessoa",
+      nif: "NIF",
+      email: "Email",
+      validation_date: "Data de Validação",
+    },
   },
 };
 

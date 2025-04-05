@@ -503,6 +503,12 @@ const spanishMessages: TranslationMessages = {
       logs: "Registros",
       map: "Mapa",
     },
+    validateUsers: {
+      person_name: "Nombre de la persona",
+      nif: "NIF",
+      email: "Correo electrónico",
+      validation_date: "Fecha de validación",
+    },
   },
 };
 

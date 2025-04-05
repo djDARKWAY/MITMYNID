@@ -506,6 +506,12 @@ const frenchMessages: TranslationMessages = {
       logs: "Journaux",
       map: "Carte",
     },
+    validateUsers: {
+      person_name: "Nom de la personne",
+      nif: "NIF",
+      email: "Email",
+      validation_date: "Date de validation",
+    },
   },
 };
 
