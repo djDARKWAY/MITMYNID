@@ -11,13 +11,8 @@ const useDebounce = <T,>(value: T, delay: number): T => {
     const [debouncedValue, setDebouncedValue] = useState(value);
 
     useEffect(() => {
-        const handler = setTimeout(() => {
-            setDebouncedValue(value);
-        }, delay);
-
-        return () => {
-            clearTimeout(handler);
-        };
+        const handler = setTimeout(() => setDebouncedValue(value), delay);
+        return () => clearTimeout(handler);
     }, [value, delay]);
 
     return debouncedValue;
@@ -44,55 +39,60 @@ const FlyIntroduction: React.FC = () => {
     return null;
 };
 
+const MapEvents: React.FC<{
+    setLineCoordinates: React.Dispatch<React.SetStateAction<[number, number][]>>;
+    setSelectedWarehouse: React.Dispatch<React.SetStateAction<any | null>>;
+}> = ({ setLineCoordinates, setSelectedWarehouse }) => {
+    useMap().on('popupclose', () => {
+        setLineCoordinates([]);
+        setSelectedWarehouse(null);
+    });
+    return null;
+};
+
 const WarehousesMap: React.FC = () => {
     const [warehouses, setWarehouses] = useState<any[]>([]);
     const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [distanceFilter, setDistanceFilter] = useState<number | null>(null);
-    const [selectedWarehouse, setSelectedWarehouse] = useState<any | null>(null); // Armazém selecionado
-    const [lineCoordinates, setLineCoordinates] = useState<[number, number][]>([]); // Coordenadas para a linha
+    const [selectedWarehouse, setSelectedWarehouse] = useState<any | null>(null);
+    const [lineCoordinates, setLineCoordinates] = useState<[number, number][]>([]);
     const debouncedSearchTerm = useDebounce(searchTerm, 300);
     const [userIcon, setUserIcon] = useState<L.DivIcon | null>(null);
     const [warehouseIcon, setWarehouseIcon] = useState<L.Icon | null>(null);
     const navigate = useNavigate();
     const theme = useTheme();
+    const [popupOpenState, setPopupOpenState] = useState<{[key: string]: boolean}>({});
 
     useEffect(() => {
         const fetchWarehouses = async () => {
             try {
                 const res = await fetch(`${url}/warehouses`);
-                const data = await res.json();
-                setWarehouses(data);
+                setWarehouses(await res.json());
             } catch (error) {
                 console.error("Erro ao buscar armazéns:", error);
             }
         };
-        fetchWarehouses();
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                ({ coords: { latitude, longitude } }) => setUserLocation([latitude, longitude]),
-                (error) => console.error("Erro ao obter localização do usuário:", error)
-            );
-        } else {
-            console.warn("Geolocalização não é suportada pelo navegador.");
-        }
+        fetchWarehouses();
+        navigator.geolocation?.getCurrentPosition(
+            ({ coords: { latitude, longitude } }) => setUserLocation([latitude, longitude]),
+            (error) => console.error("Erro ao obter localização do usuário:", error)
+        );
     }, []);
 
     useEffect(() => {
-        const userIconInstance = new L.DivIcon({
+        setUserIcon(new L.DivIcon({
             className: "google-marker",
-            html: `<div style="width: 20px; height: 20px; background-color: #5384ED; border: 2px solid #ffffff; border-radius: 50%; box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); cursor: default;"></div>`,
+            html: `<div style="width: 20px; height: 20px; background-color: #5384ED; border: 2px solid #fff; border-radius: 50%; box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);"></div>`,
             iconSize: [25, 25],
-        });
-        setUserIcon(userIconInstance);
+        }));
 
-        const warehouseIconInstance = new L.Icon({
+        setWarehouseIcon(new L.Icon({
             iconUrl: '/src/assets/map/warehouse.png',
             iconSize: [25, 25],
             iconAnchor: [12.5, 25],
-        });
-        setWarehouseIcon(warehouseIconInstance);
+        }));
     }, []);
 
     const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,9 +122,31 @@ const WarehousesMap: React.FC = () => {
         if (userLocation) {
             const distance = calculateDistance(userLocation[0], userLocation[1], warehouse.lat, warehouse.lon);
             setSelectedWarehouse({ ...warehouse, distance });
-            setLineCoordinates([userLocation, [warehouse.lat, warehouse.lon]]);
+            setLineCoordinates([]);            
+            setPopupOpenState({});
         }
     };
+
+    useEffect(() => {
+        if (selectedWarehouse && userLocation) {
+            const start = userLocation;
+            const end = [selectedWarehouse.lat, selectedWarehouse.lon] as [number, number];
+            const steps = 20;
+            const latStep = (end[0] - start[0]) / steps;
+            const lonStep = (end[1] - start[1]) / steps;
+
+            let currentStep = 0;
+            const interval = setInterval(() => {
+                setLineCoordinates([start, [start[0] + latStep * currentStep, start[1] + lonStep * currentStep]]);
+                if (++currentStep > steps) {
+                    clearInterval(interval);
+                    setPopupOpenState((prev) => ({ ...prev, [selectedWarehouse.id]: true }));
+                }
+            }, 8);
+
+            return () => clearInterval(interval);
+        }
+    }, [selectedWarehouse, userLocation]);
 
     return (
         <div style={{ height: "calc(100vh - 120px)", width: "100%", position: "relative" }}>
@@ -203,6 +225,7 @@ const WarehousesMap: React.FC = () => {
                 zoomDelta={1}
             >
                 <FlyIntroduction />
+                <MapEvents setLineCoordinates={setLineCoordinates} setSelectedWarehouse={setSelectedWarehouse} />
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
                 {/* Localização do utilizador */}
@@ -210,7 +233,7 @@ const WarehousesMap: React.FC = () => {
                 
                 {/* Desenhando a linha */}
                 {lineCoordinates.length === 2 && (
-                    <Polyline positions={lineCoordinates} color="blue" weight={3} />
+                    <Polyline positions={lineCoordinates} color="#5384ED" weight={5} />
                 )}
 
                 {/* Localização dos armazéns */}
@@ -224,7 +247,7 @@ const WarehousesMap: React.FC = () => {
                                 <p style={{ margin: "0.5em 0" }}><strong>Localização:</strong> {c.city}, {c.district}</p>
                                 <p style={{ margin: "0.5em 0" }}><strong>Código Postal:</strong> {c.zip_code}</p>
                                 {selectedWarehouse && selectedWarehouse.id === c.id && userLocation && (
-                                    <p><strong>Distância:</strong> {selectedWarehouse.distance.toFixed(2)} km</p>
+                                    <p><strong>Distância:</strong> {Math.round(selectedWarehouse.distance)} km</p>
                                 )}
                             </Popup>
                         </Marker>
