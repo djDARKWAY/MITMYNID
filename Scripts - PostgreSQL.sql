@@ -1,19 +1,20 @@
 -- Criação do schema "network"
 CREATE SCHEMA network;
 
--- Criação da tabela "certificate"
+-- Alteração da tabela "certificate"
 CREATE TABLE network.certificate (
   id SERIAL PRIMARY KEY,                                          -- [PK] Identificador único
   name VARCHAR(255) NOT NULL,                                     -- Nome do certificado
-  file_path TEXT NOT NULL,                                        -- Caminho para o certificado
-  certificate_text TEXT,                                          -- Certificado em formato de texto    
-  issue_date DATE NOT NULL,                                       -- Data de emissão
+  srv_cert TEXT,                                                  -- Certificado do Servidor (.crt, .cer, .pem)
+  int_cert TEXT,                                                  -- Certificado Intermediário (.crt, .pem, .ca-bundle)
+  priv_key TEXT,                                                  -- Chave Privada (.key)
+  file_path TEXT,                                                 -- Caminho para o certificado
   issuer_url TEXT,                                                -- URL da entidade emissora
   issuer_name TEXT,                                               -- Entidade emissora
-  certificate_data TEXT,                                          -- Dados para gerir certificados
+  issue_date DATE NOT NULL,                                       -- Data de emissão ou criação
   expiration_date DATE NOT NULL,                                  -- Data de validade ou expiração
-  last_modified TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,  -- Data e hora da última atualização
   is_active BOOLEAN NOT NULL DEFAULT false,                       -- Estado de expiração (expirado/não-expirado)
+  last_modified TIMESTAMP WITH TIME ZONE DEFAULT NOW(),           -- Data e hora da última atualização
   last_modified_user_id UUID,                                     -- [FK] Referência para o utilizador
   
   CONSTRAINT fk_certificate_user
@@ -27,10 +28,12 @@ CREATE TABLE network.warehouse (
   id SERIAL PRIMARY KEY,                                          -- [PK] Identificador único
   name VARCHAR(255) NOT NULL,                                     -- Nome completo da entidade
   address VARCHAR(255) NOT NULL,                                  -- Rua ou avenida
-  city VARCHAR(100) NOT NULL,                                     -- Cidade
-  district VARCHAR(100) NOT NULL,                                 -- Distrito/estado
+  city VARCHAR(100) NOT NULL,                                     -- Cidade ou município
+  district VARCHAR(100) NOT NULL,                                 -- Distrito ou região
   country_id CHAR(2) NOT NULL,                                    -- [FK] País
   zip_code VARCHAR(20) NOT NULL,                                  -- Código postal
+  lat DOUBLE PRECISION,                                           -- Latitude
+  lon DOUBLE PRECISION,                                           -- Longitude
   email TEXT,                                                     -- Email da entidade
   contact TEXT,                                                   -- Nome da pessoa responsável
   phone TEXT,                                                     -- Contacto da pessoa responsável
@@ -38,8 +41,6 @@ CREATE TABLE network.warehouse (
   created_date TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,   -- Timestamp da criação
   last_modified TIMESTAMP WITH TIME ZONE DEFAULT NOW(),           -- Timestamp do último update
   last_modified_user_id UUID,                                     -- [FK] Referência para o utilizador
-  lat DOUBLE PRECISION,                                           -- Latitude
-  lon DOUBLE PRECISION,                                           -- Longitude
   
   CONSTRAINT fk_warehouse_user
     FOREIGN KEY (last_modified_user_id)
@@ -60,10 +61,10 @@ CREATE TABLE network.accesspoint (
   ap_software TEXT,                                               -- Software utilizado
   software_version TEXT,	                                        -- Versão do software
   created_date TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,   -- Timestamp da criação
-  last_modified TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,  -- Timestamp do último update
   is_active BOOLEAN NOT NULL DEFAULT true,                        -- Estado de ativação (ativo/inativo)
   certificate_id INTEGER,                                         -- [FK] Referência para o certificado
   warehouse_id INTEGER,                                           -- [FK] Referência para a entidade
+  last_modified TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,  -- Timestamp do último update
   last_modified_user_id UUID,                                     -- [FK] Referência para o utilizador
   
   CONSTRAINT fk_certificate
@@ -142,6 +143,3 @@ CREATE TABLE status.log (
     REFERENCES status.log_type (id)
     ON DELETE CASCADE                                             -- Se o tipo de log for eliminado, os logs associados também serão
 );
-
-ALTER TABLE network.warehouse
-ALTER COLUMN last_modified DROP NOT NULL;

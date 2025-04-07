@@ -84,14 +84,13 @@ const WarehousesMap: React.FC = () => {
     useEffect(() => {
         setUserIcon(new L.DivIcon({
             className: "google-marker",
-            html: `<div style="width: 20px; height: 20px; background-color: #5384ED; border: 2px solid #fff; border-radius: 50%; box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);"></div>`,
-            iconSize: [25, 25],
+            html: `<div style="width: 15px; height: 15px; background-color: #5384ED; border: 2px solid #fff; border-radius: 50%; box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);"></div>`,
         }));
 
         setWarehouseIcon(new L.Icon({
             iconUrl: '/src/assets/map/warehouse.png',
-            iconSize: [25, 25],
-            iconAnchor: [12.5, 25],
+            iconSize: [20, 20],
+            iconAnchor: [10, 20],
         }));
     }, []);
 
@@ -233,7 +232,7 @@ const WarehousesMap: React.FC = () => {
                 
                 {/* Desenhando a linha */}
                 {lineCoordinates.length === 2 && (
-                    <Polyline positions={lineCoordinates} color="#5384ED" weight={5} />
+                    <Polyline positions={lineCoordinates} color="#5384ED" weight={3} />
                 )}
 
                 {/* Localização dos entidades */}
