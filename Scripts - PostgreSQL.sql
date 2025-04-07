@@ -22,8 +22,8 @@ CREATE TABLE network.certificate (
     ON DELETE SET NULL                                            -- Se o utilizador for eliminado retorna NULL
 );
 
--- Criação da tabela "company"
-CREATE TABLE network.company (
+-- Criação da tabela "warehouse"
+CREATE TABLE network.warehouse (
   id SERIAL PRIMARY KEY,                                          -- [PK] Identificador único
   name VARCHAR(255) NOT NULL,                                     -- Nome completo da entidade
   address VARCHAR(255) NOT NULL,                                  -- Rua ou avenida
@@ -41,11 +41,11 @@ CREATE TABLE network.company (
   lat DOUBLE PRECISION,                                           -- Latitude
   lon DOUBLE PRECISION,                                           -- Longitude
   
-  CONSTRAINT fk_company_user
+  CONSTRAINT fk_warehouse_user
     FOREIGN KEY (last_modified_user_id)
     REFERENCES auth.app_users (id)
     ON DELETE SET NULL,                                           -- Se o utilizador for eliminado retorna NULL
-  CONSTRAINT fk_company_country
+  CONSTRAINT fk_warehouse_country
     FOREIGN KEY (country_id)
     REFERENCES network.country(id)
     ON DELETE SET NULL                                            -- Se o país for eliminado retorna NULL
@@ -63,16 +63,16 @@ CREATE TABLE network.accesspoint (
   last_modified TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,  -- Timestamp do último update
   is_active BOOLEAN NOT NULL DEFAULT true,                        -- Estado de ativação (ativo/inativo)
   certificate_id INTEGER,                                         -- [FK] Referência para o certificado
-  company_id INTEGER,                                             -- [FK] Referência para a entidade
+  warehouse_id INTEGER,                                           -- [FK] Referência para a entidade
   last_modified_user_id UUID,                                     -- [FK] Referência para o utilizador
   
   CONSTRAINT fk_certificate
     FOREIGN KEY (certificate_id)
     REFERENCES network.certificate (id)
     ON DELETE SET NULL,                                           -- Se o certificado for eliminado retorna NULL
-  CONSTRAINT fk_company
-    FOREIGN KEY (company_id)
-    REFERENCES network.company (id)
+  CONSTRAINT fk_warehouse
+    FOREIGN KEY (warehouse_id)
+    REFERENCES network.warehouse (id)
     ON DELETE CASCADE,                                            -- Se a entidade for eliminada, AP será eliminado
   CONSTRAINT fk_access_point_user
     FOREIGN KEY (last_modified_user_id)
@@ -105,18 +105,18 @@ BEFORE UPDATE OR INSERT ON network.certificate
 FOR EACH ROW
 EXECUTE FUNCTION update_certificate_status();
 
--- Criação dos índices para as tabelas "certificate", "company" e "accessPoint"
+-- Criação dos índices para as tabelas "certificate", "warehouse" e "accessPoint"
 CREATE INDEX idx_accessPoint_ip ON network.accessPoint(ip_address);
-CREATE INDEX idx_accessPoint_company ON network.accessPoint(company_id);
+CREATE INDEX idx_accessPoint_warehouse ON network.accessPoint(warehouse_id);
 CREATE INDEX idx_accessPoint_certificate ON network.accessPoint(certificate_id);
-CREATE INDEX idx_company_name ON network.company(name);
+CREATE INDEX idx_warehouse_name ON network.warehouse(name);
 CREATE INDEX idx_certificate_name ON network.certificate(name);
 CREATE INDEX idx_certificate_file_path ON network.certificate(file_path);
 
--- Reniciar a sequência para as tabelas "certificate", "company" e "accessPoint"
+-- Reniciar a sequência para as tabelas "certificate", "warehouse" e "accessPoint"
 SELECT setval('network.accesspoint_idaccesspoint_seq', 1, false);
 SELECT setval('network.certificate_idcertificate_seq', 1, false);
-SELECT setval('network.company_idcompany_seq', 1, false);
+SELECT setval('network.warehouse_idwarehouse_seq', 1, false);
 
 -- //////////////////////////////////////////////////////////////////////
 
