@@ -134,15 +134,14 @@ export class Warehouse extends Entity {
 
   @property({
     type: "date",
-    required: true,
     postgresql: {
       columnName: "last_modified",
       dataType: "timestamp with time zone",
-      nullable: "NO",
+      nullable: "YES",
       default: "NOW()",
     },
   })
-  last_modified: string;
+  last_modified?: string;
 
   @property({
     type: 'number',

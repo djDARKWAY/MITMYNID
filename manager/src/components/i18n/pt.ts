@@ -1,8 +1,4 @@
 import { TranslationMessages } from "react-admin";
-import { logs } from "../../pages/logs";
-import { time } from "console";
-import { last } from "lodash";
-import { users } from "../../pages/users";
 
 const portugueseMessages: TranslationMessages = {
   ra: {
@@ -245,7 +241,7 @@ const portugueseMessages: TranslationMessages = {
       config: "Configuração",
       security: "Segurança",
       accessPoints: "Pontos de Acesso",
-      warehouses: "Armazéns",
+      warehouses: "Entidades",
       certificates: "Certificados",
       monitoring: "Monitorização",
       language: "Idioma",
@@ -265,7 +261,7 @@ const portugueseMessages: TranslationMessages = {
       manage: "Gestão de acessos",
       name: "Ponto de Acesso",
       fields: {
-        warehouse_id: "Armazém",
+        warehouse_id: "Entidade",
         location_description: "Localização",
         ip_address: "Endereço IP",
         ap_software: "Software",
@@ -287,9 +283,9 @@ const portugueseMessages: TranslationMessages = {
       },
     },
     warehouses: {
-      manage: "Painel de armazéns",
-      name: "Armazém",
-      list: "Armazéns",
+      manage: "Painel de entidades",
+      name: "Entidade",
+      list: "Entidades",
       fields: {
         name: "Nome",
         zip_code: "Código Postal",
@@ -376,9 +372,9 @@ const portugueseMessages: TranslationMessages = {
       },
     },
     armazem: {
-      name: "Armazém/Parque |||| Armazéns/Parques",
+      name: "Entidade/Parque |||| Entidades/Parques",
       edit: {
-        title: "Armazém",
+        title: "Entidade",
       },
       fields: {
         designacao: "Designação",
@@ -446,7 +442,7 @@ const portugueseMessages: TranslationMessages = {
         linha_3: "Linha 3",
         pessoa_contacto: "Pessoa de contacto",
         imagem: "Imagem",
-        url_empresa: "URL Armazém",
+        url_empresa: "URL Entidade",
       },
     },
   },
@@ -459,7 +455,7 @@ const portugueseMessages: TranslationMessages = {
       permissions: "Permissões",
       is_active: "Ativo",
       certificates: "Certificado",
-      warehouse: "Armazém",
+      warehouse: "Entidade",
       created_date: "Data de criação",
       last_modified: "Última modificação",
       last_modified_user: "Modificado por",

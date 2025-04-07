@@ -36,7 +36,7 @@ CREATE TABLE network.warehouse (
   phone TEXT,                                                     -- Contacto da pessoa responsável
   website TEXT,                                                   -- Endereço Web
   created_date TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,   -- Timestamp da criação
-  last_modified TIMESTAMP WITH TIME ZONE DEFAULT NOW() NOT NULL,  -- Timestamp do último update
+  last_modified TIMESTAMP WITH TIME ZONE DEFAULT NOW(),           -- Timestamp do último update
   last_modified_user_id UUID,                                     -- [FK] Referência para o utilizador
   lat DOUBLE PRECISION,                                           -- Latitude
   lon DOUBLE PRECISION,                                           -- Longitude
@@ -142,3 +142,6 @@ CREATE TABLE status.log (
     REFERENCES status.log_type (id)
     ON DELETE CASCADE                                             -- Se o tipo de log for eliminado, os logs associados também serão
 );
+
+ALTER TABLE network.warehouse
+ALTER COLUMN last_modified DROP NOT NULL;

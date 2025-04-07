@@ -122,160 +122,161 @@ const MyMenu = ({ dense = false }: MenuProps) => {
       {permissions.includes("ADMIN") && <Divider />}
 
       {permissions.includes("ADMIN") && (
-        <SubMenu
-          handleToggle={() => handleToggle("menuSeguranca")}
-          isOpen={state.menuSeguranca}
-          name="pos.menu.security"
-          icon={<SecurityRounded />}
-          dense={dense}
-        >
-          <MenuItemLink
-            to={{ pathname: "/users" }}
-            className={"submenuItem " + (open ? "open" : "close")}
-            primaryText={translate(`resources.utilizadores.name`)}
-            sx={{ color: !open ? "transparent" : "default" }}
-            leftIcon={<PeopleAltRounded />}
-            dense={dense}
-          />
+  <SubMenu
+    handleToggle={() => handleToggle("menuArmazens")}
+    isOpen={state.menuArmazens}
+    name="pos.menu.warehouses"
+    icon={<WarehouseRounded />}
+    dense={dense}
+  >
+    <MenuItemLink
+      to={{ pathname: "/warehouses" }}
+      className={"submenuItem " + (open ? "open" : "close")}
+      primaryText={translate(`resources.warehouses.manage`)}
+      sx={{ color: !open ? "transparent" : "default" }}
+      leftIcon={<ManageAccountsRounded />}
+      dense={dense}
+    />
+  </SubMenu>
+)}
 
-          <MenuItemLink
-            to={{ pathname: "/validateUsers" }}
-            className={"submenuItem " + (open ? "open" : "close")}
-            primaryText={translate(`resources.utilizadores.validate`)}
-            sx={{ color: !open ? "transparent" : "default" }}
-            leftIcon={<HowToRegRounded />}
-            dense={dense}
-          />
+{permissions.includes("ADMIN") && (
+  <SubMenu
+    handleToggle={() => handleToggle("menuCertificados")}
+    isOpen={state.menuCertificados}
+    name="pos.menu.certificates"
+    icon={<CardMembershipRounded />}
+    dense={dense}
+  >
+    <MenuItemLink
+      to={{ pathname: "/certificates" }}
+      className={"submenuItem " + (open ? "open" : "close")}
+      primaryText={translate(`resources.certificates.list`)}
+      sx={{ color: !open ? "transparent" : "default" }}
+      leftIcon={<ViewCarousel />}
+      dense={dense}
+    />
 
-          <MenuItemLink
-            to={{ pathname: "/users-logs" }}
-            className={"submenuItem " + (open ? "open" : "close")}
-            primaryText={translate(`resources.utilizadores.logs`)}
-            sx={{ color: !open ? "transparent" : "default" }}
-            leftIcon={<HistoryOutlined />}
-            dense={dense}
-          />
+    {permissions.includes("ADMIN") && (
+      <MenuItemLink
+        to={{ pathname: "/." }}
+        className={"submenuItem " + (open ? "open" : "close")}
+        primaryText={translate(`resources.certificates.validations`)}
+        sx={{ color: !open ? "transparent" : "default" }}
+        leftIcon={<CreditScoreRounded />}
+        dense={dense}
+      />
+    )}
+  </SubMenu>
+)}
 
-          {permissions.includes("ADMIN") && (
-            <MenuItemLink
-              to={{ pathname: "/roles" }}
-              className={"submenuItem " + (open ? "open" : "close")}
-              primaryText={translate("resources.role.name")}
-              sx={{ color: !open ? "transparent" : "default" }}
-              leftIcon={<Key />}
-              dense={dense}
-            />
-          )}
-        </SubMenu>
-      )}
+{permissions.includes("ADMIN") && (
+  <SubMenu
+    handleToggle={() => handleToggle("menuAccessPoint")}
+    isOpen={state.menuAccessPoint}
+    name="pos.menu.accessPoints"
+    icon={<CellTowerRounded />}
+    dense={dense}
+  >
+    <MenuItemLink
+      to={{ pathname: "/access-points" }}
+      className={"submenuItem " + (open ? "open" : "close")}
+      primaryText={translate(`resources.accessPoints.list`)}
+      sx={{ color: !open ? "transparent" : "default" }}
+      leftIcon={<HubRounded />}
+      dense={dense}
+    />
 
-      {permissions.includes("ADMIN") && (
-        <SubMenu
-          handleToggle={() => handleToggle("menuAccessPoint")}
-          isOpen={state.menuAccessPoint}
-          name="pos.menu.accessPoints"
-          icon={<CellTowerRounded />}
-          dense={dense}
-        >
-          <MenuItemLink
-            to={{ pathname: "/access-points" }}
-            className={"submenuItem " + (open ? "open" : "close")}
-            primaryText={translate(`resources.accessPoints.list`)}
-            sx={{ color: !open ? "transparent" : "default" }}
-            leftIcon={<HubRounded />}
-            dense={dense}
-          />
+    {permissions.includes("ADMIN") && (
+      <MenuItemLink
+        to={{ pathname: "/." }}
+        className={"submenuItem " + (open ? "open" : "close")}
+        primaryText={translate("resources.accessPoints.manage")}
+        sx={{ color: !open ? "transparent" : "default" }}
+        leftIcon={<SignalWifi4BarLock />}
+        dense={dense}
+      />
+    )}
+  </SubMenu>
+)}
 
-          {permissions.includes("ADMIN") && (
-            <MenuItemLink
-              to={{ pathname: "/." }}
-              className={"submenuItem " + (open ? "open" : "close")}
-              primaryText={translate("resources.accessPoints.manage")}
-              sx={{ color: !open ? "transparent" : "default" }}
-              leftIcon={<SignalWifi4BarLock />}
-              dense={dense}
-            />
-          )}
-        </SubMenu>
-      )}
+{permissions.includes("ADMIN") && (
+  <SubMenu
+    handleToggle={() => handleToggle("menuMonitorizacao")}
+    isOpen={state.menuMonitorizacao}
+    name="pos.menu.monitoring"
+    icon={<Visibility />}
+    dense={dense}
+  >
+    <MenuItemLink
+      to={{ pathname: "/." }}
+      className={"submenuItem " + (open ? "open" : "close")}
+      primaryText={translate(`resources.monitoring.status`)}
+      sx={{ color: !open ? "transparent" : "default" }}
+      leftIcon={<WifiTetheringErrorRounded />}
+      dense={dense}
+    />
+    {permissions.includes("ADMIN") && (
+      <MenuItemLink
+        to={{ pathname: "/logs" }}
+        className={"submenuItem " + (open ? "open" : "close")}
+        primaryText={translate(`resources.monitoring.logs`)}
+        sx={{ color: !open ? "transparent" : "default" }}
+        leftIcon={<HistoryOutlined />}
+        dense={dense}
+      />
+    )}
+  </SubMenu>
+)}
 
-      {permissions.includes("ADMIN") && (
-        <SubMenu
-          handleToggle={() => handleToggle("menuCertificados")}
-          isOpen={state.menuCertificados}
-          name="pos.menu.certificates"
-          icon={<CardMembershipRounded />}
-          dense={dense}
-        >
-          <MenuItemLink
-            to={{ pathname: "/certificates" }}
-            className={"submenuItem " + (open ? "open" : "close")}
-            primaryText={translate(`resources.certificates.list`)}
-            sx={{ color: !open ? "transparent" : "default" }}
-            leftIcon={<ViewCarousel />}
-            dense={dense}
-          />
+{permissions.includes("ADMIN") && (
+  <SubMenu
+    handleToggle={() => handleToggle("menuSeguranca")}
+    isOpen={state.menuSeguranca}
+    name="pos.menu.security"
+    icon={<SecurityRounded />}
+    dense={dense}
+  >
+    <MenuItemLink
+      to={{ pathname: "/users" }}
+      className={"submenuItem " + (open ? "open" : "close")}
+      primaryText={translate(`resources.utilizadores.name`)}
+      sx={{ color: !open ? "transparent" : "default" }}
+      leftIcon={<PeopleAltRounded />}
+      dense={dense}
+    />
 
-          {permissions.includes("ADMIN") && (
-            <MenuItemLink
-              to={{ pathname: "/." }}
-              className={"submenuItem " + (open ? "open" : "close")}
-              primaryText={translate(`resources.certificates.validations`)}
-              sx={{ color: !open ? "transparent" : "default" }}
-              leftIcon={<CreditScoreRounded />}
-              dense={dense}
-            />
-          )}
-        </SubMenu>
-      )}
+    <MenuItemLink
+      to={{ pathname: "/validateUsers" }}
+      className={"submenuItem " + (open ? "open" : "close")}
+      primaryText={translate(`resources.utilizadores.validate`)}
+      sx={{ color: !open ? "transparent" : "default" }}
+      leftIcon={<HowToRegRounded />}
+      dense={dense}
+    />
 
-      {permissions.includes("ADMIN") && (
-        <SubMenu
-          handleToggle={() => handleToggle("menuArmazens")}
-          isOpen={state.menuArmazens}
-          name="pos.menu.warehouses"
-          icon={<WarehouseRounded />}
-          dense={dense}
-        >
-          <MenuItemLink
-            to={{ pathname: "/warehouses" }}
-            className={"submenuItem " + (open ? "open" : "close")}
-            primaryText={translate(`resources.warehouses.manage`)}
-            sx={{ color: !open ? "transparent" : "default" }}
-            leftIcon={<ManageAccountsRounded />}
-            dense={dense}
-          />
-        </SubMenu>
-      )}
+    <MenuItemLink
+      to={{ pathname: "/users-logs" }}
+      className={"submenuItem " + (open ? "open" : "close")}
+      primaryText={translate(`resources.utilizadores.logs`)}
+      sx={{ color: !open ? "transparent" : "default" }}
+      leftIcon={<HistoryOutlined />}
+      dense={dense}
+    />
 
-      {permissions.includes("ADMIN") && (
-        <SubMenu
-          handleToggle={() => handleToggle("menuMonitorizacao")}
-          isOpen={state.menuMonitorizacao}
-          name="pos.menu.monitoring"
-          icon={<Visibility />}
-          dense={dense}
-        >
-          <MenuItemLink
-            to={{ pathname: "/." }}
-            className={"submenuItem " + (open ? "open" : "close")}
-            primaryText={translate(`resources.monitoring.status`)}
-            sx={{ color: !open ? "transparent" : "default" }}
-            leftIcon={<WifiTetheringErrorRounded />}
-            dense={dense}
-          />
-          {permissions.includes("ADMIN") && (
-            <MenuItemLink
-              to={{ pathname: "/logs" }}
-              className={"submenuItem " + (open ? "open" : "close")}
-              primaryText={translate(`resources.monitoring.logs`)}
-              sx={{ color: !open ? "transparent" : "default" }}
-              leftIcon={<HistoryOutlined />}
-              dense={dense}
-            />
-          )}
-        </SubMenu>
-      )}
+    {permissions.includes("ADMIN") && (
+      <MenuItemLink
+        to={{ pathname: "/roles" }}
+        className={"submenuItem " + (open ? "open" : "close")}
+        primaryText={translate("resources.role.name")}
+        sx={{ color: !open ? "transparent" : "default" }}
+        leftIcon={<Key />}
+        dense={dense}
+      />
+    )}
+  </SubMenu>
+)}
+
     </Box>
   ) : null;
 };

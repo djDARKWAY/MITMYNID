@@ -1,6 +1,6 @@
 import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
-import { TopToolbar, ListButton, FilterButton } from "react-admin";
+import { TopToolbar, CreateButton, FilterButton } from "react-admin";
 import { List, useListContext, usePermissions, useDataProvider } from "react-admin";
 import { Card, CardContent, Typography, Grid, Paper, useTheme, Checkbox, Button } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
@@ -140,7 +140,7 @@ export const WarehousesList = () => {
                         {showCheckboxes ? "Desativar seleção múltipla" : "Ativar seleção múltipla"}
                     </Button>
                     <FilterButton />
-                    <ListButton label="Criar" icon={<AddIcon />} />
+                    <CreateButton label="Criar" icon={<AddIcon />} />
                     <Button 
                         variant="contained"
                         color="primary"

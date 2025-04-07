@@ -70,7 +70,7 @@ const WarehousesMap: React.FC = () => {
                 const res = await fetch(`${url}/warehouses`);
                 setWarehouses(await res.json());
             } catch (error) {
-                console.error("Erro ao buscar armazéns:", error);
+                console.error("Erro ao procurar entidades:", error);
             }
         };
 
@@ -182,7 +182,7 @@ const WarehousesMap: React.FC = () => {
                 }}
             >
                 <TextField
-                    label="Armazém"
+                    label="Entidade"
                     name="name"
                     value={searchTerm}
                     onChange={handleFilterChange}
@@ -236,7 +236,7 @@ const WarehousesMap: React.FC = () => {
                     <Polyline positions={lineCoordinates} color="#5384ED" weight={5} />
                 )}
 
-                {/* Localização dos armazéns */}
+                {/* Localização dos entidades */}
                 {filteredWarehouses.filter(c => c.lat && c.lon).map(c => (
                     warehouseIcon && (
                         <Marker key={c.id} position={[c.lat, c.lon]} icon={warehouseIcon} eventHandlers={{

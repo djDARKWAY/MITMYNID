@@ -48,17 +48,18 @@ export class WarehouseController {
         "application/json": {
           schema: getModelSchemaRef(Warehouse, {
             title: "NewWarehouse",
-            exclude: ["id"],
+            exclude: ["id", "created_date", "last_modified", "last_modified_user_id"],
           }),
         },
       },
     })
-    warehouse: Omit<Warehouse, "id" | "last_modified" | "last_modified_user_id">
+    warehouse: Omit<Warehouse, "id" | "created_date" | "last_modified" | "last_modified_user_id">
   ): Promise<Warehouse> {
     this.validateWarehouse(warehouse);
 
     return this.warehouseRepository.create({
       ...warehouse,
+      created_date: new Date().toISOString(),
       last_modified: new Date().toISOString(),
     });
   }
@@ -163,7 +164,7 @@ export class WarehouseController {
   ): Promise<void> {
     const existingWarehouse = await this.warehouseRepository.findById(id);
     if (!existingWarehouse) {
-      throw new HttpErrors.NotFound('Armazém não encontrado!');
+      throw new HttpErrors.NotFound('Entidade não encontrado!');
     }
     const { last_modified_user_id, ...warehouseData } = warehouse;
 
@@ -202,7 +203,7 @@ export class WarehouseController {
   ): Promise<void> {
     const existingWarehouse = await this.warehouseRepository.findById(id);
     if (!existingWarehouse) {
-      throw new HttpErrors.NotFound('Armazém não encontrado!');
+      throw new HttpErrors.NotFound('Entidade não encontrado!');
     }
 
     await this.warehouseRepository.deleteById(id);

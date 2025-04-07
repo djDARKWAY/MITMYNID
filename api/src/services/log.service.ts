@@ -13,8 +13,8 @@ export class LogService {
     - Logout
     - Certificado atualizado
     - Certificado eliminado
-    - Armazém atualizado
-    - Armazém eliminado
+    - Entidade atualizado
+    - Entidade eliminado
     - Ponto de acesso atualizado
     - Ponto de acesso eliminado
     - Utilizador adicionado

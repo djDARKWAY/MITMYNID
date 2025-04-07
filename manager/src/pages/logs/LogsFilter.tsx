@@ -18,7 +18,7 @@ export const LogsFilters = (permissions: string[]) => {
                     setLogTypes([]);
                 }
             } catch (error) {
-                console.error("Erro ao buscar os log types:", error);
+                console.error("Erro ao procurar os log types:", error);
                 setLogTypes([]);
             }
         };
