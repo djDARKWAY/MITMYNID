@@ -50,7 +50,7 @@ export const CertificatesShow = () => (
     <Show>
         <Paper elevation={3} sx={{ padding: 2, borderRadius: 1, backgroundColor: "background.paper" }}>
             <Grid container spacing={2.5}>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={4}>
                     {/* Identificação */}
                     <Section title="show.certificates.identification" icon={<CardMembership />}>
                         <FieldTitleLabel label="show.certificates.name">
@@ -83,24 +83,42 @@ export const CertificatesShow = () => (
                     </Section>
                 </Grid>
 
-                <Grid item xs={12} md={6} sx={{ height: "100%" }}>
+                <Grid item xs={12} md={8} sx={{ height: "100%" }}>
                     {/* Conteúdo */}
                     <Section title="show.certificates.content" icon={<FeedOutlined />}>
-                        <Box sx={{ height: 425, flexDirection: "column", overflow: "auto"}}>
-                            <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}> Dados </Typography>
+                        <Box sx={{ height: 425, flexDirection: "column", overflow: "auto" }}>
                             <Card variant="outlined" sx={{ p: 1, bgcolor: "InfoBackground" }}>
-                                <TextField 
-                                    source="certificate_text" 
-                                    label="show.certificates.certificate_text" 
-                                    sx={{
-                                        whiteSpace: "pre-wrap",
-                                        wordBreak: "break-word",
-                                        fontFamily: "monospace",
-                                        maxWidth: "100%",
-                                    }} 
-                                />
+                                <Box display="flex" gap={2} flexWrap="wrap" sx={{ mt: 1 }}>
+                                    <Box sx={{ flex: 1 }}>
+                                        <Typography variant="body2" sx={{ fontWeight: "bold", color: "gray", mb: 1 }}>
+                                            {useTranslate()("show.certificates.srv_cert")}
+                                        </Typography>
+                                        <TextField 
+                                            source="srv_cert" 
+                                            sx={{
+                                                whiteSpace: "pre-wrap",
+                                                wordBreak: "break-word",
+                                                fontFamily: "monospace",
+                                                maxWidth: "100%",
+                                            }} 
+                                        />
+                                    </Box>
+                                    <Box sx={{ flex: 1 }}>
+                                        <Typography variant="body2" sx={{ fontWeight: "bold", color: "gray", mb: 1 }}>
+                                            {useTranslate()("show.certificates.int_cert")}
+                                        </Typography>
+                                        <TextField 
+                                            source="int_cert" 
+                                            sx={{
+                                                whiteSpace: "pre-wrap",
+                                                wordBreak: "break-word",
+                                                fontFamily: "monospace",
+                                                maxWidth: "100%",
+                                            }} 
+                                        />
+                                    </Box>
+                                </Box>
                             </Card>
-                            <JsonField source="certificate_data" />
                         </Box>
                     </Section>
                 </Grid>

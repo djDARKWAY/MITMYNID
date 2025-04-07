@@ -55,7 +55,7 @@ export class CertificateController {
           schema: getModelSchemaRef(Certificate, {
             title: "NewCertificate",
             exclude: ["id"],
-            optional: ["last_modified", "last_modified_user_id"],
+            optional: ["last_modified", "last_modified_user_id", "srv_cert", "int_cert", "priv_key"],
           }),
         },
       },
@@ -325,8 +325,8 @@ export class CertificateController {
       ],
       file_path: [
         { condition: !certificate.file_path, message: "O caminho do ficheiro é obrigatório!" },
-        { condition: !certificate.file_path.startsWith("/"), message: "O caminho do ficheiro deve começar por '/'!" },
-        { condition: !/\.(pem|crt|key|jks)$/.test(certificate.file_path), message: "O ficheiro deve ser um ficheiro de certificado válido!" }
+        { condition: !(certificate.file_path?.startsWith("/") ?? false), message: "O caminho do ficheiro deve começar por '/'!" },
+        { condition: !/\.(pem|crt|key|jks)$/.test(certificate.file_path || ''), message: "O ficheiro deve ser um ficheiro de certificado válido!" }
       ],
       dates: [
         { condition: !certificate.issue_date || isNaN(Date.parse(certificate.issue_date)), message: "A data de emissão é obrigatória e deve ser válida!" },

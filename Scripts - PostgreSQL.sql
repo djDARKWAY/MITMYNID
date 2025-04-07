@@ -1,7 +1,7 @@
 -- Criação do schema "network"
 CREATE SCHEMA network;
 
--- Alteração da tabela "certificate"
+-- Criação da tabela "certificate"
 CREATE TABLE network.certificate (
   id SERIAL PRIMARY KEY,                                          -- [PK] Identificador único
   name VARCHAR(255) NOT NULL,                                     -- Nome do certificado

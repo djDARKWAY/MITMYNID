@@ -479,6 +479,8 @@ const portugueseMessages: TranslationMessages = {
       logs: "Registos",
       content: "Conteúdo",
       last_modified: "Última modificação",
+      srv_cert: "Certificado do Servidor (SC)",
+      int_cert: "Certificado Intermediário (CA)",
     },
     warehouses: {
       identification: "Identificação",

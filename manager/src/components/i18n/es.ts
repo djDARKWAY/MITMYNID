@@ -482,6 +482,8 @@ const spanishMessages: TranslationMessages = {
       logs: "Registros",
       content: "Contenido",
       last_modified: "Última modificación",
+      srv_cert: "Certificado del Servidor (SC)",
+      int_cert: "Certificado Intermedio (CA)",
     },
     warehouses: {
       identification: "Identificación",

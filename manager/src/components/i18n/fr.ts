@@ -485,6 +485,8 @@ const frenchMessages: TranslationMessages = {
       last_modified: "Dernière modification",
       logs: "Journaux",
       details: "Détails",
+      srv_cert: "Certificado du Serveur (SC)",
+      int_cert: "Certificado Intermédiaire (CA)",
     },
     warehouses: {
       identification: "Identification",

@@ -13,7 +13,7 @@ export class Certificate extends Entity {
       nullable: "NO",
     },
   })
-  id?: number;
+  id: number;
 
   @property({
     type: "string",
@@ -29,35 +29,44 @@ export class Certificate extends Entity {
 
   @property({
     type: "string",
-    required: true,
     postgresql: {
-      columnName: "file_path",
-      dataType: "text",
-      nullable: "NO",
-    },
-  })
-  file_path: string;
-
-  @property({
-    type: "string",
-    postgresql: {
-      columnName: "certificate_text",
+      columnName: "srv_cert",
       dataType: "text",
       nullable: "YES",
     },
   })
-  certificate_text?: string;
+  srv_cert?: string;
 
   @property({
-    type: "date",
-    required: true,
+    type: "string",
     postgresql: {
-      columnName: "issue_date",
-      dataType: "date",
-      nullable: "NO",
+      columnName: "int_cert",
+      dataType: "text",
+      nullable: "YES",
     },
   })
-  issue_date: string;
+  int_cert?: string;
+
+  @property({
+    type: "string",
+    postgresql: {
+      columnName: "priv_key",
+      dataType: "text",
+      nullable: "YES",
+    },
+  })
+  priv_key?: string;
+
+  @property({
+    type: "string",
+    required: true,
+    postgresql: {
+      columnName: "file_path",
+      dataType: "text",
+      nullable: "YES",
+    },
+  })
+  file_path?: string;
 
   @property({
     type: "string",
@@ -80,14 +89,15 @@ export class Certificate extends Entity {
   issuer_name?: string;
 
   @property({
-    type: "string",
+    type: "date",
+    required: true,
     postgresql: {
-      columnName: "certificate_data",
-      dataType: "text",
-      nullable: "YES",
+      columnName: "issue_date",
+      dataType: "date",
+      nullable: "NO",
     },
   })
-  certificate_data?: string;
+  issue_date: string;
 
   @property({
     type: "date",
@@ -101,18 +111,6 @@ export class Certificate extends Entity {
   expiration_date: string;
 
   @property({
-    type: "date",
-    required: true,
-    postgresql: {
-      columnName: "last_modified",
-      dataType: "timestamp with time zone",
-      nullable: "NO",
-      default: "NOW()",
-    },
-  })
-  last_modified: string;
-
-  @property({
     type: "boolean",
     required: true,
     postgresql: {
@@ -124,8 +122,20 @@ export class Certificate extends Entity {
   })
   is_active: boolean;
 
+  @property({
+    type: "date",
+    required: true,
+    postgresql: {
+      columnName: "last_modified",
+      dataType: "timestamp with time zone",
+      nullable: "NO",
+      default: "NOW()",
+    },
+  })
+  last_modified: string;
+
   @belongsTo(() => User, { name: "last_modified_user_id" })
-  last_modified_user_id?: number;
+  last_modified_user_id?: string;
 
   constructor(data?: Partial<Certificate>) {
     super(data);

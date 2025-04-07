@@ -473,6 +473,8 @@ const englishMessages: TranslationMessages = {
       logs: "Logs",
       content: "Content",
       last_modified: "Last Modified",
+      srv_cert: "Server Certificate (SC)",
+      int_cert: "Intermediate Certificate (CA)",
     },
     warehouses: {
       identification: "Identification",
