@@ -25,7 +25,7 @@ export const WarehousesFilters = (permissions: string[]) => {
         <TextInput key="name" source="name" size="small" label="pos.warehouses.name" fullWidth alwaysOn resettable />,
         <TextInput key="district" source="district" size="small" label="pos.warehouses.district" fullWidth resettable />,
         <TextInput key="city" source="city" size="small" label="pos.warehouses.city" fullWidth alwaysOn resettable />,
-        <TextInput key="zip_code" source="zip_code" size="small" label="pos.warehouses.zip_code" fullWidth alwaysOn resettable />,
+        <TextInput key="zip_code" source="zip_code" size="small" label="pos.warehouses.zip_code" fullWidth resettable />,
         <SelectInput key="country" source="country" label="pos.warehouses.country" choices={countries} optionText={(choice) => (
                 <span>
                     <img
