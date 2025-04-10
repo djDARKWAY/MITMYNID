@@ -2,7 +2,7 @@ import { useGetList } from "react-admin";
 import { Card, CardContent, Typography, Box, Grid, CircularProgress } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useState } from "react";
-import { CellTower, CheckCircle, Cancel } from '@mui/icons-material';
+import { CellTower, CheckCircle, Cancel, Hub } from '@mui/icons-material';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
@@ -83,16 +83,16 @@ const AccessPointsStats = () => {
                         return ` ${label}: ${(raw / total * 100).toFixed(2)}%`;
                     },
                 },
-                backgroundColor: 'rgba(0, 0, 0, 0.7)',
                 bodyFont: { size: 12 },
             },
             legend: {
                 position: 'bottom' as const,
-                labels: { boxWidth: 12, padding: 20 },
+                labels: { boxWidth: 12, padding: 20, color: theme.palette.text.primary },
             },
             title: {
                 display: true,
                 font: { size: 16, weight: 700 },
+                color: theme.palette.text.primary,
             },
         },
         animation: { animateRotate: true, animateScale: true },
@@ -100,16 +100,31 @@ const AccessPointsStats = () => {
     };
 
     return (
-        <>
+        <Box
+            sx={{
+                borderRadius: 2,
+                p: 2,
+                backgroundColor: "rgba(255, 255, 255, 0.1)",
+                boxShadow: 3,
+                borderTop: "5px solid #5384ED"
+            }}
+        >
+            <Box display="flex" alignItems="center" gap={1} mb={1}>
+                <CellTower color="primary" sx={{ color: "#5384ED"}} />
+                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                    Pontos de Acesso
+                </Typography>
+            </Box>
+
             <Grid container spacing={1}>
                 <Grid item xs={12} md={8.5}>
                     <Grid container spacing={1}>
                         <Grid item xs={12} md={4}>
                             <StatCard
-                                icon={<CellTower color="primary" fontSize="large" />}
+                                icon={<Hub color="primary" fontSize="large" sx={{ color: "#5384ED"}} />}
                                 title="Total"
                                 value={<Typography variant="subtitle1">{total}</Typography>}
-                                color="#1976d2"
+                                color="#5384ED"
                                 onClick={() => setFilter('all')}
                             />
                         </Grid>
@@ -136,11 +151,11 @@ const AccessPointsStats = () => {
                             <Box
                                 sx={{
                                     p: 2,
-                                    height: 186,
+                                    height: 185,
                                     overflowY: 'auto',
                                     border: `1px solid ${theme.palette.divider}`,
                                     borderRadius: '8px',
-                                    backgroundColor: theme.palette.background.default
+                                    backgroundColor: theme.palette.background.paper
                                 }}
                             >
                                 {filteredData.length > 0 ? (
@@ -174,7 +189,7 @@ const AccessPointsStats = () => {
                     </Card>
                 </Grid>
             </Grid>
-        </>
+        </Box>
     );
 };
 

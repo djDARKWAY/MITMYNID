@@ -77,7 +77,7 @@ const WarehousesMap: React.FC = () => {
         fetchWarehouses();
         navigator.geolocation?.getCurrentPosition(
             ({ coords: { latitude, longitude } }) => setUserLocation([latitude, longitude]),
-            (error) => console.error("Erro ao obter localização do usuário:", error)
+            (error) => console.error("Erro ao obter localização do utilizador:", error)
         );
     }, []);
 
