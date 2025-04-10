@@ -121,7 +121,7 @@ export class AccessPoint extends Entity {
 }
 
 export interface AccessPointRelations {
-  // describe navigational properties here
+  warehouse?: Warehouse; // Add warehouse relation
 }
 
 export type AccessPointWithRelations = AccessPoint & AccessPointRelations;

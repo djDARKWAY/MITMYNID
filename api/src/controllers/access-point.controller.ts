@@ -116,6 +116,7 @@ export class AccessPointController {
 
     return this.accessPointRepository.find({
       ...filter,
+      include: [{ relation: "warehouse" }],
       fields: {
         id: true,
         location_description: true,

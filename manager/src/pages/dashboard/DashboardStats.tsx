@@ -113,8 +113,9 @@ const DashboardStats = () => {
                                 borderBottom={`1px solid ${theme.palette.divider}`}
                                 py={0.8}
                             >
-                                <Typography variant="body2">{ap.location_description}</Typography>
-                                <Typography variant="body2">{ap.is_active ? '🟢' : '🔴'}</Typography>
+                                <Typography variant="body2" sx={{ flex: 1 }}>{ap.warehouse?.name || '-'}</Typography>
+                                <Typography variant="body2" color="text.secondary" sx={{ flex: 1, textAlign: 'left' }}>{ap.ip_address || '-'}</Typography>
+                                <Typography variant="body2" sx={{ flex: 1, textAlign: 'right' }}>{ap.is_active ? '🟢' : '🔴'}</Typography>
                             </Box>
                         ))
                     ) : (
