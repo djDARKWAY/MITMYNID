@@ -11,16 +11,19 @@ const StatCard = ({ icon, title, value, color, onClick }: { icon: React.ReactNod
     <Card
         onClick={onClick}
         sx={{
-          border: `1px solid ${theme.palette.divider}`,
-          borderLeft: `5px solid ${color || theme.palette.primary.main}`,
-          cursor: "pointer",
-          "&:hover": {
-            boxShadow: theme.shadows[4],
-            backgroundColor: theme.palette.action.hover,
+            height: 70,
+            display: "flex",
+            alignItems: "center",
+            border: `1px solid ${theme.palette.divider}`,
+            borderLeft: `5px solid ${color || theme.palette.primary.main}`,
+            cursor: "pointer",
+            "&:hover": {
+                boxShadow: theme.shadows[2],
+                backgroundColor: theme.palette.action.hover,
           },
         }}
     >
-        <CardContent>
+        <CardContent sx={{ height: "125%" }}>
             <Box display="flex" alignItems="center" gap={2}>
                 {icon}
                 <Box>
@@ -117,12 +120,6 @@ const DashboardStats = () => {
                     ) : (
                         <Typography variant="body2">Nenhum access point encontrado.</Typography>
                     )}
-                </Box>
-
-                <Box display="flex" justifyContent="flex-end" mt={1}>
-                    <Button variant="text" size="small" onClick={() => redirect('/access-points')}>
-                        Ver mais
-                    </Button>
                 </Box>
             </Box>
         </>
