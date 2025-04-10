@@ -30,7 +30,7 @@ const StatCard = ({ icon, title, value, color, onClick }: { icon: React.ReactNod
     );
 };
 
-const DashboardStats = () => {
+const AccessPointsStats = () => {
     const { data, isLoading, isError } = useGetList("access-points");
     const [filter, setFilter] = useState<'all' | 'active' | 'inactive'>('all');
     const theme = useTheme();
@@ -78,44 +78,24 @@ const DashboardStats = () => {
         plugins: {
             tooltip: {
                 callbacks: {
-                    label: function (tooltipItem: any) {
-                        let totalValue = 0;
-                        chartData.datasets[0].data.forEach((value: number) => {
-                            totalValue += value;
-                        });
-                        let percentage = (tooltipItem.raw / totalValue) * 100;
-                        return ` ${tooltipItem.label}: ${percentage.toFixed(2)}%`;
+                    label: ({ raw, label }: any) => {
+                        const total = chartData.datasets[0].data.reduce((sum, val) => sum + val, 0);
+                        return ` ${label}: ${(raw / total * 100).toFixed(2)}%`;
                     },
                 },
                 backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                titleFont: {
-                    weight: 'bold' as const,
-                    size: 14,
-                },
-                bodyFont: {
-                    size: 12,
-                },
+                bodyFont: { size: 12 },
             },
             legend: {
                 position: 'bottom' as const,
-                labels: {
-                    fontColor: '#666',
-                    boxWidth: 12,
-                    padding: 20,
-                },
+                labels: { boxWidth: 12, padding: 20 },
             },
             title: {
                 display: true,
-                text: 'Access Points Status',
-                fontSize: 16,
-                fontColor: '#333',
-                fontStyle: 'bold',
+                font: { size: 16, weight: 700 },
             },
         },
-        animation: {
-            animateRotate: true,
-            animateScale: true,
-        },
+        animation: { animateRotate: true, animateScale: true },
         cutout: '70%',
     };
 
@@ -156,7 +136,7 @@ const DashboardStats = () => {
                             <Box
                                 sx={{
                                     p: 2,
-                                    maxHeight: 186,
+                                    height: 186,
                                     overflowY: 'auto',
                                     border: `1px solid ${theme.palette.divider}`,
                                     borderRadius: '8px',
@@ -198,4 +178,4 @@ const DashboardStats = () => {
     );
 };
 
-export default DashboardStats;
+export default AccessPointsStats;
