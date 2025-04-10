@@ -1,5 +1,6 @@
 import { Title, useAuthenticated, usePermissions } from 'react-admin';
-import { Box} from "@mui/material";
+import { Box } from "@mui/material";
+import DashboardStats from './DashboardStats';
 
 const Dashboard = () => {
 
@@ -7,12 +8,12 @@ const Dashboard = () => {
     usePermissions();
 
     return (
-    <Box sx={{marginTop: '10px'}}>
-        <Title title="ra.page.dashboard" />
-        <Box>
-            Painel de controlo
+        <Box sx={{ marginTop: '10px' }}>
+            <Title title="ra.page.dashboard" />
+            <Box sx={{ marginTop: '20px' }}>
+                <DashboardStats />
+            </Box>
         </Box>
-    </Box>
     );
 };
 
