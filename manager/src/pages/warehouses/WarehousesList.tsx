@@ -2,7 +2,7 @@ import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import { TopToolbar, CreateButton, FilterButton } from "react-admin";
 import { List, useListContext, usePermissions, useDataProvider } from "react-admin";
-import { Card, CardContent, Typography, Grid, Paper, useTheme, Checkbox, Button } from "@mui/material";
+import { Card, CardContent, Typography, Grid, Paper, useTheme, Checkbox, Button, Box } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import CustomEmptyPage from "../../components/general/CustomEmptyPage";
 import CustomPagination, { perPageDefault } from "../../components/general/CustomPagination";
@@ -66,14 +66,43 @@ const WarehouseCard = ({ record, selected, onToggle, showCheckboxes }: {
     );
 };
 
-const WarehousesCardList = ({ showCheckboxes, setShowCheckboxes }: { showCheckboxes: boolean; setShowCheckboxes: (value: boolean) => void }) => {
+const WarehousesCardList = ({ 
+    showCheckboxes, 
+    selectedIds, 
+    setSelectedIds 
+}: { 
+    showCheckboxes: boolean; 
+    selectedIds: (number | string)[];
+    setSelectedIds: React.Dispatch<React.SetStateAction<(number | string)[]>>;
+}) => {
     const { data } = useListContext<{ id: number | string; name: string; city: string; zip_code: string; country?: { name: string } }>();
-    const dataProvider = useDataProvider();
-    const [selectedIds, setSelectedIds] = useState<(number | string)[]>([]);
 
     const handleToggle = (id: number | string) => {
-        setSelectedIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+        setSelectedIds((prev: (number | string)[]) => prev.includes(id) ? prev.filter((x: number | string) => x !== id) : [...prev, id]);
     };
+
+    return (
+        <Grid container spacing={2} sx={{ padding: '20px' }}>
+            {data?.map(record => (
+                <Grid item key={record.id} xs={12} sm={6} md={4} lg={3}>
+                    <WarehouseCard 
+                      record={record} 
+                      selected={selectedIds.includes(record.id)} 
+                      onToggle={handleToggle} 
+                      showCheckboxes={showCheckboxes} />
+                </Grid>
+            ))}
+        </Grid>
+    );
+};
+
+export const WarehousesList = () => {
+    const { permissions } = usePermissions();
+    const theme = useTheme();
+    const navigate = useNavigate();
+    const dataProvider = useDataProvider();
+    const [showCheckboxes, setShowCheckboxes] = useState(false);
+    const [selectedIds, setSelectedIds] = useState<(number | string)[]>([]);
 
     const handleBulkDelete = async () => {
         if(window.confirm("Tem certeza que deseja eliminar os registos selecionados?")){
@@ -87,72 +116,78 @@ const WarehousesCardList = ({ showCheckboxes, setShowCheckboxes }: { showCheckbo
     };
 
     return (
-        <>
-            <Grid container spacing={2} sx={{ padding: '20px' }}>
-                {data?.map(record => (
-                    <Grid item key={record.id} xs={12} sm={6} md={4} lg={3}>
-                        <WarehouseCard 
-                          record={record} 
-                          selected={selectedIds.includes(record.id)} 
-                          onToggle={handleToggle} 
-                          showCheckboxes={showCheckboxes} />
-                    </Grid>
-                ))}
-            </Grid>
+        <Box sx={{ position: 'relative', minHeight: '100%' }}>
+            <List
+                resource="warehouses"
+                filters={WarehousesFilters(permissions)}
+                queryOptions={{ refetchOnWindowFocus: false }}
+                pagination={<CustomPagination />}
+                perPage={perPageDefault}
+                empty={<CustomEmptyPage />}
+                exporter={false}
+                title="resources.warehouses.name"
+                sx={{ paddingLeft: "10px", paddingBottom: showCheckboxes && selectedIds.length > 0 ? '70px' : '0' }}
+                actions={
+                    <TopToolbar>
+                        <Button 
+                            onClick={() => {
+                                setShowCheckboxes(!showCheckboxes);
+                                if (showCheckboxes) setSelectedIds([]);
+                            }}
+                            sx={{ 
+                                textTransform: "none", 
+                                marginLeft: "10px", 
+                                color: theme.palette.primary.main, 
+                                backgroundColor: "transparent", 
+                                "&:hover": { backgroundColor: "transparent" } 
+                            }}
+                        >
+                            {showCheckboxes ? "Desativar seleção múltipla" : "Ativar seleção múltipla"}
+                        </Button>
+                        <FilterButton />
+                        <CreateButton label="Criar" icon={<AddIcon />} />
+                        <Button 
+                            variant="contained"
+                            color="primary"
+                            onClick={() => navigate("/warehouses-map")}
+                            sx={{ textTransform: "none", marginLeft: "10px" }}
+                        >
+                            Ver Mapa
+                        </Button>
+                    </TopToolbar>
+                }
+            >
+                <WarehousesCardList 
+                    showCheckboxes={showCheckboxes} 
+                    selectedIds={selectedIds}
+                    setSelectedIds={setSelectedIds}
+                />
+            </List>
+            
             {showCheckboxes && selectedIds.length > 0 && (
-                <Button variant="contained" color="error" sx={{ margin: "20px" }} onClick={handleBulkDelete}>
-                    Delete Selected
-                </Button>
+                <Box 
+                    sx={{ 
+                        position: 'fixed', 
+                        bottom: 0, 
+                        left: 0, 
+                        right: 0, 
+                        padding: '16px', 
+                        backgroundColor: theme.palette.background.paper,
+                        boxShadow: '0px -2px 4px rgba(0,0,0,0.1)',
+                        zIndex: 1000,
+                        display: 'flex',
+                        justifyContent: 'center'
+                    }}
+                >
+                    <Button 
+                        variant="contained" 
+                        color="error" 
+                        onClick={handleBulkDelete}
+                    >
+                        Delete Selected ({selectedIds.length})
+                    </Button>
+                </Box>
             )}
-        </>
-    );
-};
-
-export const WarehousesList = () => {
-    const { permissions } = usePermissions();
-    const theme = useTheme();
-    const navigate = useNavigate();
-    const [showCheckboxes, setShowCheckboxes] = useState(false);
-
-    return (
-        <List
-            resource="warehouses"
-            filters={WarehousesFilters(permissions)}
-            queryOptions={{ refetchOnWindowFocus: false }}
-            pagination={<CustomPagination />}
-            perPage={perPageDefault}
-            empty={<CustomEmptyPage />}
-            exporter={false}
-            title="resources.warehouses.name"
-            sx={{ paddingLeft: "10px" }}
-            actions={
-                <TopToolbar>
-                    <Button 
-                        onClick={() => setShowCheckboxes(!showCheckboxes)}
-                        sx={{ 
-                            textTransform: "none", 
-                            marginLeft: "10px", 
-                            color: theme.palette.primary.main, 
-                            backgroundColor: "transparent", 
-                            "&:hover": { backgroundColor: "transparent" } 
-                        }}
-                    >
-                        {showCheckboxes ? "Desativar seleção múltipla" : "Ativar seleção múltipla"}
-                    </Button>
-                    <FilterButton />
-                    <CreateButton label="Criar" icon={<AddIcon />} />
-                    <Button 
-                        variant="contained"
-                        color="primary"
-                        onClick={() => navigate("/warehouses-map")}
-                        sx={{ textTransform: "none", marginLeft: "10px" }}
-                    >
-                        Ver Mapa
-                    </Button>
-                </TopToolbar>
-            }
-        >
-            <WarehousesCardList showCheckboxes={showCheckboxes} setShowCheckboxes={setShowCheckboxes} />
-        </List>
+        </Box>
     );
 };
