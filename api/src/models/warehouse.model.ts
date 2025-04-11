@@ -162,7 +162,13 @@ export class Warehouse extends Entity {
   @belongsTo(() => Country, { name: 'country', keyFrom: 'country_id', keyTo: 'id' })
   country_id: string;
 
-  @belongsTo(() => User, {name: "last_modified_user_id", keyFrom: 'last_modified_user_id', keyTo: 'id'})
+  @property({
+    type: 'string',
+    postgresql: {
+      columnName: 'last_modified_user_id',
+      dataType: "uuid",
+    },
+  })
   last_modified_user_id?: string;
 
   constructor(data?: Partial<Warehouse>) {

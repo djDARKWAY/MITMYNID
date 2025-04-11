@@ -134,7 +134,13 @@ export class Certificate extends Entity {
   })
   last_modified: string;
 
-  @belongsTo(() => User, { name: "last_modified_user_id" })
+  @property({
+    type: "string",
+    postgresql: {
+      columnName: "last_modified_user_id",
+      dataType: "uuid",
+    },
+  })
   last_modified_user_id?: string;
 
   constructor(data?: Partial<Certificate>) {
@@ -143,7 +149,7 @@ export class Certificate extends Entity {
 }
 
 export interface CertificateRelations {
-  // describe navigational properties here
+  last_modified_user_id?: User;
 }
 
 export type CertificateWithRelations = Certificate & CertificateRelations;

@@ -112,7 +112,13 @@ export class AccessPoint extends Entity {
   @belongsTo(() => Warehouse, { name: "warehouse" })
   warehouse_id?: number;
 
-  @belongsTo(() => User, { name: "last_modified_user_id" })
+  @property({
+    type: 'string',
+    postgresql: {
+      columnName: 'last_modified_user_id',
+      dataType: "uuid",
+    },
+  })
   last_modified_user_id?: string;
 
   constructor(data?: Partial<AccessPoint>) {
@@ -121,7 +127,8 @@ export class AccessPoint extends Entity {
 }
 
 export interface AccessPointRelations {
-  warehouse?: Warehouse; // Add warehouse relation
+  warehouse?: Warehouse;
+  last_modified_user_id?: User;
 }
 
 export type AccessPointWithRelations = AccessPoint & AccessPointRelations;

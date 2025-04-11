@@ -217,6 +217,7 @@ export class CertificateController {
     await this.certificateRepository.updateById(id, {
       ...certificateData,
       last_modified: new Date().toISOString(),
+      last_modified_user_id: currentUser?.id,
     });
 
     const updatedCertificate = await this.certificateRepository.findById(id);

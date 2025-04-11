@@ -196,14 +196,7 @@ export class AccessPointController {
   })
   async updateById(
     @param.path.number("id") id: number,
-    @requestBody({
-      content: {
-        "application/json": {
-          schema: getModelSchemaRef(AccessPoint, { partial: true }),
-        },
-      },
-    })
-    accessPoint: Partial<AccessPoint>,
+    @requestBody() accessPoint: Partial<AccessPoint>,
     @inject(SecurityBindings.USER) currentUser: UserProfile
   ): Promise<void> {
     const existingAccessPoint = await this.accessPointRepository.findById(id);
@@ -211,29 +204,35 @@ export class AccessPointController {
       throw new HttpErrors.NotFound("AP não encontrado!");
     }
 
-    const { last_modified_user_id, pmode, ...accessPointData } = accessPoint;
+    const { pmode, last_modified_user_id, ...accessPointData } = accessPoint;
 
-    await this.accessPointRepository.updateById(id, {
-      ...accessPointData,
-      last_modified: new Date().toISOString(),
-    });
+    try {
+      await this.accessPointRepository.updateById(id, {
+        ...accessPointData,
+        last_modified: new Date().toISOString(),
+        last_modified_user_id: currentUser?.id,
+      });
+      
+      const updatedAccessPoint = await this.accessPointRepository.findById(id);
 
-    const updatedAccessPoint = await this.accessPointRepository.findById(id);
+      const userAgentHeader = this.request.headers["user-agent"] || "unknown";
+      const agent = useragent.parse(userAgentHeader);
+      const deviceInfo = {
+        device: agent.device.toString(),
+        os: agent.os.toString(),
+      };
 
-    const userAgentHeader = this.request.headers["user-agent"] || "unknown";
-    const agent = useragent.parse(userAgentHeader);
-    const deviceInfo = {
-      device: agent.device.toString(),
-      os: agent.os.toString(),
-    };
-
-    await this.logService.logAccessPointChange(
-      currentUser.person_name || "unknown",
-      updatedAccessPoint.id || "unknown",
-      this.request.ip || "unknown",
-      currentUser.id || "unknown",
-      deviceInfo
-    );
+      await this.logService.logAccessPointChange(
+        currentUser.person_name || "unknown",
+        updatedAccessPoint.id || "unknown",
+        this.request.ip || "unknown",
+        currentUser.id || "unknown",
+        deviceInfo
+      );
+    } catch (error) {
+      console.error('Error updating access point:', error);
+      throw error;
+    }
   }
 
   // DELETE endpoint:

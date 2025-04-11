@@ -38,6 +38,7 @@ export class WarehouseController {
 
   // POST endpoint:
   @post("/warehouses")
+  @authenticate("jwt")
   @response(200, {
     description: "Warehouse model instance",
     content: { "application/json": { schema: getModelSchemaRef(Warehouse) } },
@@ -53,7 +54,8 @@ export class WarehouseController {
         },
       },
     })
-    warehouse: Omit<Warehouse, "id" | "created_date" | "last_modified" | "last_modified_user_id">
+    warehouse: Omit<Warehouse, "id" | "created_date" | "last_modified" | "last_modified_user_id">,
+    @inject(SecurityBindings.USER) currentUser: UserProfile,
   ): Promise<Warehouse> {
     this.validateWarehouse(warehouse);
 
@@ -61,6 +63,7 @@ export class WarehouseController {
       ...warehouse,
       created_date: new Date().toISOString(),
       last_modified: new Date().toISOString(),
+      last_modified_user_id: currentUser.id,
     });
   }
 
@@ -167,28 +170,34 @@ export class WarehouseController {
       throw new HttpErrors.NotFound('Entidade não encontrado!');
     }
     const { last_modified_user_id, ...warehouseData } = warehouse;
+    
+    try {
+      await this.warehouseRepository.updateById(id, {
+        ...warehouseData,
+        last_modified: new Date().toISOString(),
+        last_modified_user_id: currentUser?.id,
+      });
+      
+      const updatedWarehouse = await this.warehouseRepository.findById(id);
 
-    await this.warehouseRepository.updateById(id, {
-      ...warehouseData,
-      last_modified: new Date().toISOString(),
-    });
+      const userAgentHeader = this.request.headers['user-agent'] || 'unknown';
+      const agent = useragent.parse(userAgentHeader);
+      const deviceInfo = {
+        device: agent.device.toString(),
+        os: agent.os.toString(),
+      };
 
-    const updatedWarehouse = await this.warehouseRepository.findById(id);
-
-    const userAgentHeader = this.request.headers['user-agent'] || 'unknown';
-    const agent = useragent.parse(userAgentHeader);
-    const deviceInfo = {
-      device: agent.device.toString(),
-      os: agent.os.toString(),
-    };
-
-    await this.logService.logWarehouseChange(
-      currentUser.person_name || 'unknown',
-      updatedWarehouse.id || 'unknown',
-      this.request.ip || 'unknown',
-      currentUser.id || 'unknown',
-      deviceInfo
-    );
+      await this.logService.logWarehouseChange(
+        currentUser.person_name || 'unknown',
+        updatedWarehouse.id || 'unknown',
+        this.request.ip || 'unknown',
+        currentUser.id || 'unknown',
+        deviceInfo
+      );
+    } catch (error) {
+      console.error('Error updating warehouse:', error);
+      throw error;
+    }
   }
 
   // DELETE endpoint:
