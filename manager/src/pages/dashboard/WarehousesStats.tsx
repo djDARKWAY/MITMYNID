@@ -46,7 +46,7 @@ const WarehousesStats = () => {
         countries: new Set(data.map(w => w.country?.name).filter(Boolean)).size,
         recent: [...data]
             .sort((a, b) => formatDate(b.last_modified || b.created_date).getTime() - formatDate(a.last_modified || a.created_date).getTime())
-            .slice(0, 6)
+            .slice(0, 4)
     };
 
     return (
@@ -67,9 +67,7 @@ const WarehousesStats = () => {
                 ))}
             </Grid>
 
-            <Divider sx={{ my: 2 }} />
-
-            <Typography variant="subtitle1" fontWeight={600} mb={1} sx={{ marginTop: "-1px" }}> Últimas atualizações: </Typography>
+            <Typography variant="subtitle1" fontWeight={600} mb={1} sx={{ marginTop: 1.25 }}> Últimas atualizações: </Typography>
             <Grid container spacing={1}>
                 {stats.recent.map((warehouse) => (
                     <Grid item xs={12} sm={6} md={6} key={warehouse.id}>

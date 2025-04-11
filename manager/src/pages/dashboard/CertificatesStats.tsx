@@ -13,11 +13,10 @@ const StatCard = ({ icon, title, value, color, onClick, isSelected }: { icon: Re
             borderLeft: `5px solid ${color || theme.palette.primary.main}`,
             cursor: "pointer", "&:hover": { boxShadow: theme.shadows[2], backgroundColor: theme.palette.action.hover }
         }}>
-            <CardContent sx={{ height: "140%" }}>
-                <Box display="flex" alignItems="center" gap={2}>
+            <CardContent sx={{ height: "110%" }}>
+                <Box display="flex" alignItems="center" gap={1}>
                     {icon}
                     <Box>
-                        <Typography variant="subtitle2" color="text.secondary">{title}</Typography>
                         <Typography variant="h6">{value}</Typography>
                     </Box>
                 </Box>
@@ -67,12 +66,12 @@ const CertificatesStats = () => {
 
             <Grid container spacing={1}>
                 {[
-                    { icon: <CardMembership sx={{ color: "#00B3E6" }} fontSize="large" />, title: "Total", value: stats.total, color: "#00B3E6", filterKey: null },
-                    { icon: <CheckCircle color="success" fontSize="large" />, title: "Ativos", value: stats.active, color: "#2e7d32", filterKey: "active" },
-                    { icon: <Cancel color="error" fontSize="large" />, title: "Expirados", value: stats.expired, color: "#d32f2f", filterKey: "expired" },
-                    { icon: <Warning color="warning" fontSize="large" />, title: "A expirar", value: stats.expiring, color: "#ff9800", filterKey: "expiring" }
+                    { icon: <CardMembership sx={{ color: "#00B3E6" }} fontSize="medium" />, title: "Total", value: stats.total, color: "#00B3E6", filterKey: null },
+                    { icon: <CheckCircle color="success" fontSize="medium" />, title: "Ativos", value: stats.active, color: "#2e7d32", filterKey: "active" },
+                    { icon: <Cancel color="error" fontSize="medium" />, title: "Expirados", value: stats.expired, color: "#d32f2f", filterKey: "expired" },
+                    { icon: <Warning color="warning" fontSize="medium" />, title: "A expirar", value: stats.expiring, color: "#ff9800", filterKey: "expiring" }
                 ].map((stat, index) => (
-                    <Grid item xs={6} key={index}>
+                    <Grid item xs={3} key={index}>
                         <StatCard
                             {...stat}
                             onClick={() => setFilter(stat.filterKey)}
