@@ -33,8 +33,9 @@ export const CertificatesEdit = () => (
 
                 {/* Conteúdo */}
                 <TabbedForm.Tab label="Conteúdo">
-                    <TextInput source="certificate_text" label="show.certificates.certificate_text" fullWidth multiline />
-                    <TextInput source="certificate_data" label="show.certificates.certificate_data" fullWidth multiline />
+                    <TextInput source="srv_cert" label="show.certificates.srv_cert" fullWidth multiline />
+                    <TextInput source="int_cert" label="show.certificates.int_cert" fullWidth multiline />
+                    <TextInput source="priv_key" label="show.certificates.priv_key" fullWidth multiline />
                 </TabbedForm.Tab>
             </TabbedForm>
         </Edit>
