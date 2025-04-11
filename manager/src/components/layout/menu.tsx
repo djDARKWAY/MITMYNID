@@ -46,6 +46,9 @@ const MyMenu = ({ dense = false }: MenuProps) => {
   const [resource] = useStore("resource.name");
   const [open] = useSidebarState();
 
+  const [logoBigError, setLogoBigError] = useState(false);
+  const [logoSmallError, setLogoSmallError] = useState(false);
+
   const [state, setState] = useState({
     menuSeguranca: resource === "menuSeguranca" ? true : false,
     menuAccessPoint: resource === "menuAccessPoint" ? true : false,
@@ -55,6 +58,10 @@ const MyMenu = ({ dense = false }: MenuProps) => {
     menuArmazens: resource === "menuArmazens" ? true : false,
   });
 
+  const handleImageError = (setError: React.Dispatch<React.SetStateAction<boolean>>) => {
+    setError(true);
+  };
+
   const handleToggle = (menu: MenuName) => {
     setState((state) => ({ ...state, [menu]: !state[menu] }));
   };
@@ -62,8 +69,7 @@ const MyMenu = ({ dense = false }: MenuProps) => {
   return !isLoading ? (
     <Box
       sx={{
-        width: (theme) =>
-          open ? theme.sidebar.width : theme.sidebar.closedWidth,
+        width: (theme) => (open ? theme.sidebar.width : theme.sidebar.closedWidth),
         marginTop: 1,
         marginBottom: 1,
         transition: (theme) =>
@@ -77,14 +83,19 @@ const MyMenu = ({ dense = false }: MenuProps) => {
         <Link to={"/"}>
           {open ? (
             <Box sx={{ padding: "0px 13px 0px 13px" }}>
-              {logoBigImg.current ? (
+              {!logoBigError ? (
                 <img
                   src={logoBigImg.current}
                   alt="logo"
                   style={{ maxWidth: "220px" }}
+                  onError={() => handleImageError(setLogoBigError)}
                 />
               ) : (
-                <></>
+                <img
+                  src="manager/public/MMN_H_RGB.svg"
+                  alt="logo fallback"
+                  style={{ maxWidth: "220px" }}
+                />
               )}
             </Box>
           ) : (
@@ -95,14 +106,19 @@ const MyMenu = ({ dense = false }: MenuProps) => {
                 justifyContent: "center",
               }}
             >
-              {logoSmallImg.current ? (
+              {!logoSmallError ? (
                 <img
                   src={logoSmallImg.current}
                   alt="logo"
                   style={{ width: "70%", height: "100%", marginLeft: "6px" }}
+                  onError={() => handleImageError(setLogoSmallError)}
                 />
               ) : (
-                <></>
+                <img
+                  src="manager/public/MMN_V_RGB.svg"
+                  alt="logo fallback"
+                  style={{ width: "70%", height: "100%", marginLeft: "6px" }}
+                />
               )}
             </Box>
           )}
