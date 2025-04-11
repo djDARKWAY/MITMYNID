@@ -20,51 +20,49 @@ const CustomButtonToolTip = (
         resource,
         size,
         disabled,
-        color
-    }:{
+        color,
+        customAction
+    }: {
         label: string,
         sx?: SxProps<Theme>,
         icon?: React.ReactElement<any, string | React.JSXElementConstructor<any>>,
-        action: 'show' | 'edit' | 'list' | 'redirect',
+        action: 'show' | 'edit' | 'list' | 'redirect' | 'custom',
         id: string,
         resource: string,
         size?: "small" | "medium" | "large",
         disabled?: boolean | undefined,
-        color?: "inherit" | "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning"
+        color?: "inherit" | "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning",
+        customAction?: () => void // Add customAction as an optional property
     }
 ) => {
 
     const navigate = useNavigate();
     const translate = useTranslate();
     
-    async function redirectTo(){
-
-        if(action==='list'){
-
+    async function redirectTo() {
+        if (action === 'custom' && customAction) {
+            customAction(); // Call the custom action if provided
+        } else if (action === 'list') {
             navigate(`/${resource}/list`);
-            
-        }
-        else if(action==='redirect') {
+        } else if (action === 'redirect') {
             navigate(`/${resource}/${id}`);
-        } 
-        else {
+        } else {
             navigate(`/${resource}/${id}/${action}`);
         }
-
     }
 
-    return(
+    return (
         <IconButtonWithTooltip 
-        color={color ? color : "primary"}
-        size={size ? size : 'medium'} 
-        sx={sx ? sx : {}} 
-        label={translate(label)} 
-        onClick={() => redirectTo()}
-        disabled={disabled ? disabled : false}
+            color={color ? color : "primary"}
+            size={size ? size : 'medium'} 
+            sx={sx ? sx : {}} 
+            label={translate(label)} 
+            onClick={() => redirectTo()}
+            disabled={disabled ? disabled : false}
         >
             {icon ? icon : null}
         </IconButtonWithTooltip>
-    )
+    );
 }
 
 export default CustomButtonToolTip;

@@ -478,23 +478,6 @@ export class UserController {
     }
   }
 
-  /*
-  @put('/users/{id}')
-  @response(204, {
-    description: 'PUT User model instance',
-    content: {
-      'application/json': {
-        schema: getModelSchemaRef(User, {includeRelations: true, partial: true}),
-      },
-    },
-  })
-  async replaceById(
-    @param.path.string('id') id: string,
-    @requestBody({}) user: User,
-  ): Promise<void> {
-    await this.userRepository.updateById(id, _.omit(user, ['roles']));
-  } */
-
   @del("/users/{id}")
   @authenticate("jwt")
   @authorize({
@@ -510,21 +493,24 @@ export class UserController {
     if (this.user[securityId] === id) {
       return this.response
         .status(422)
-        .send({ message: "Erro a eliminar utilizador" });
+        .send({ message: "Não é possível eliminar o seu próprio utilizador" });
     } else if (!this.user.roles.includes("ADMIN")) {
       return this.response
         .status(422)
-        .send({ message: "Erro a eliminar utilizador" });
+        .send({ message: "Não tem permissões para eliminar utilizadores" });
     } else {
       try {
-        await this.userRepository.updateById(id, { deleted: true });
-        
+        await this.prefsUserRepository.deleteAll({ id_utilizador: id });
+        await this.appUsersSessionRepository.deleteAll({ app_users_id: id });
+        await this.userRoleRepository.deleteAll({ app_users_id: id });
+        await this.userRepository.deleteById(id);
+
         await this.logService.logUserDelete(this.user.person_name, id, this.response.req?.ip ?? 'unknown', this.user.person_name, {
           device: this.response.req?.headers['user-agent'] ?? 'unknown',
           os: 'unknown',
         });
       } catch (err) {
-        return this.response.status(422).send({ message: "Erro a eliminar utilizador" });
+        return this.response.status(500).send({ message: "Erro a eliminar utilizador" });
       }
     }
   }
