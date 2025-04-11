@@ -118,9 +118,9 @@ const AccessPointsStats = () => {
             <Grid container spacing={1}>
                 <Grid item xs={12} md={8.5}>
                     <Grid container spacing={1}>
-                        <Grid item xs={12} md={4}><StatCard icon={<Hub color="primary" fontSize="large" sx={{ color: "#00B3E6"}} />} title="Total" value={<Typography variant="subtitle1">{total}</Typography>} color="#00B3E6" onClick={() => setFilter('all')} /></Grid>
-                        <Grid item xs={12} md={4}><StatCard icon={<CheckCircle color="success" fontSize="large" />} title="Active" value={<Typography variant="subtitle1">{active}</Typography>} color="#2e7d32" onClick={() => setFilter('active')} /></Grid>
-                        <Grid item xs={12} md={4}><StatCard icon={<Cancel color="error" fontSize="large" />} title="Inactive" value={<Typography variant="subtitle1">{inactive}</Typography>} color="#d32f2f" onClick={() => setFilter('inactive')} /></Grid>
+                        <Grid item xs={12} md={4}><StatCard icon={<Hub color="primary" fontSize="large" sx={{ color: "#00B3E6"}} />} title="Total" value={<Typography variant="h6">{total}</Typography>} color="#00B3E6" onClick={() => setFilter('all')} /></Grid>
+                        <Grid item xs={12} md={4}><StatCard icon={<CheckCircle color="success" fontSize="large" />} title="Active" value={<Typography variant="h6">{active}</Typography>} color="#2e7d32" onClick={() => setFilter('active')} /></Grid>
+                        <Grid item xs={12} md={4}><StatCard icon={<Cancel color="error" fontSize="large" />} title="Inactive" value={<Typography variant="h6">{inactive}</Typography>} color="#d32f2f" onClick={() => setFilter('inactive')} /></Grid>
 
                         <Grid item xs={12}>
                             <Box

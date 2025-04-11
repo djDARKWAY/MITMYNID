@@ -9,18 +9,17 @@ const StatCard = ({ icon, title, value, color }: { icon: React.ReactNode, title:
     const theme = useTheme();
     return (
         <Card sx={{
-            height: 60,
-            display: "flex",
-            alignItems: "center",
+            height: 60, display: "flex", alignItems: "center",
             border: `1px solid ${theme.palette.divider}`,
             borderLeft: `5px solid ${color || theme.palette.primary.main}`,
+            cursor: "pointer", "&:hover": { boxShadow: theme.shadows[2], backgroundColor: theme.palette.action.hover }
         }}>
-            <CardContent sx={{ height: "100%", width: "100%", p: 1.5, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                <Box display="flex" alignItems="center" justifyContent="flex-start" gap={2}>
+            <CardContent sx={{ height: "140%" }}>
+                <Box display="flex" alignItems="center" gap={2}>
                     {icon}
-                    <Box display="flex" flexDirection="row" alignItems="center" gap={1} sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                        <Typography variant="subtitle2" color="text.secondary" sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{title}:</Typography>
-                        <Typography variant="h6" sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</Typography>
+                    <Box>
+                        <Typography variant="subtitle2" color="text.secondary">{title}</Typography>
+                        <Typography variant="h6">{value}</Typography>
                     </Box>
                 </Box>
             </CardContent>
