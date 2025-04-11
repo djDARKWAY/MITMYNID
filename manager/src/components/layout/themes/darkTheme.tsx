@@ -207,6 +207,20 @@ const darkTheme = {
         },
       },
     },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          marginBottom: "5px",
+        },
+      },
+    },
+    MuiSelect: {
+      styleOverrides: {
+        root: {
+          marginTop: "-5px",
+        },
+      },
+    },
     MuiPaper: {
       styleOverrides: {
         elevation1: {

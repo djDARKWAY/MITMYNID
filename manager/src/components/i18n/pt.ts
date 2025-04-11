@@ -511,8 +511,8 @@ const portugueseMessages: TranslationMessages = {
       validation_date: "Data de Validação",
     },
     dashboard: {
-      warehouses_title: "Armazéns",
-      warehouses_total: "Armazéns",
+      warehouses_title: "Entidades",
+      warehouses_total: "Entidades",
       countries: "Países",
       recent_updates: "Atualizações Recentes",
       error_loading_statistics: "Erro ao carregar estatísticas.",
