@@ -51,23 +51,22 @@ const AccessPointsStats = () => {
                 label: 'Access Points',
                 data: [active, inactive],
                 backgroundColor: [
-                    'rgba(46, 125, 50, 0.6)',
+                    'rgba(102, 187, 106, 0.6)',
                     'rgba(211, 47, 47, 0.6)',
                 ],
                 borderColor: [
-                    'rgba(46, 125, 50, 1)',
+                    'rgba(102, 187, 106, 1)',
                     'rgba(211, 47, 47, 1)',
                 ],
                 hoverBackgroundColor: [
-                    'rgba(46, 125, 50, 0.9)',
-                    'rgba(211, 47, 47, 0.9)',
-                ],
-                hoverBorderColor: [
-                    'rgba(46, 125, 50, 1)',
+                    'rgba(102, 187, 106, 1)',
                     'rgba(211, 47, 47, 1)',
                 ],
-                borderWidth: 1,
-                hoverBorderWidth: 3,
+                hoverBorderColor: [
+                    'rgba(102, 187, 106, 1)',
+                    'rgba(211, 47, 47, 1)',
+                ],
+                borderWidth: 2,
             },
         ],
     };
@@ -121,10 +120,10 @@ const AccessPointsStats = () => {
                     <Grid container spacing={1}>
                         <Grid item xs={12} md={4}>
                             <StatCard
-                                icon={<Hub color="primary" fontSize="large" sx={{ color: "#5384ED"}} />}
+                                icon={<Hub color="primary" fontSize="large" sx={{ color: "#00B3E6"}} />}
                                 title="Total"
                                 value={<Typography variant="subtitle1">{total}</Typography>}
-                                color="#5384ED"
+                                color="#00B3E6"
                                 onClick={() => setFilter('all')}
                             />
                         </Grid>
