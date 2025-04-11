@@ -18,7 +18,7 @@ const StatCard = ({ icon, title, value, color }: { icon: React.ReactNode, title:
                 <Box display="flex" alignItems="center" gap={2}>
                     {icon}
                     <Box>
-                        <Typography variant="subtitle2" color="text.secondary">{title}</Typography>
+                        <Typography variant="subtitle2" color="text.secondary" sx={{ marginBottom: "-4px" }}>{title}</Typography>
                         <Typography variant="h6">{value}</Typography>
                     </Box>
                 </Box>

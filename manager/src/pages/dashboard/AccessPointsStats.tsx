@@ -8,20 +8,20 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const StatCard = ({ icon, title, value, color, onClick }: { icon: React.ReactNode, title: string, value: any, color?: string, onClick: () => void }) => {
+const StatCard = ({ icon, title, value, color, onClick }: { icon: React.ReactNode, title: string, value: any, color?: string, onClick?: () => void }) => {
     const theme = useTheme();
     return (
         <Card onClick={onClick} sx={{
             height: 60, display: "flex", alignItems: "center",
             border: `1px solid ${theme.palette.divider}`,
             borderLeft: `5px solid ${color || theme.palette.primary.main}`,
-            cursor: "pointer", "&:hover": { boxShadow: theme.shadows[2], backgroundColor: theme.palette.action.hover }
+            cursor: onClick ? "pointer" : "default", "&:hover": onClick ? { boxShadow: theme.shadows[2], backgroundColor: theme.palette.action.hover } : undefined
         }}>
             <CardContent sx={{ height: "140%" }}>
                 <Box display="flex" alignItems="center" gap={2}>
                     {icon}
                     <Box>
-                        <Typography variant="subtitle2" color="text.secondary">{title}</Typography>
+                        <Typography variant="subtitle2" color="text.secondary" sx={{ marginBottom: "-4px" }}>{title}</Typography>
                         <Typography variant="h6">{value}</Typography>
                     </Box>
                 </Box>
@@ -94,8 +94,28 @@ const AccessPointsStats = () => {
                 color: theme.palette.text.primary,
             },
         },
-        animation: { animateRotate: true, animateScale: true },
+        animation: { 
+            animateRotate: true, 
+            animateScale: true, 
+            duration: 500
+        },
         cutout: '70%',
+        onHover: (event: any, elements: any[]) => {
+            const chart = event.chart;
+            if (elements.length) {
+                const index = elements[0].index;
+                chart.data.datasets[0].backgroundColor = chart.data.datasets[0].backgroundColor.map((color: string, i: number) =>
+                    i === index ? color : color.replace(/[\d.]+\)$/g, '0.2)')
+                );
+                chart.update();
+            } else {
+                chart.data.datasets[0].backgroundColor = [
+                    'rgba(102, 187, 106, 0.6)',
+                    'rgba(211, 47, 47, 0.6)',
+                ];
+                chart.update();
+            }
+        },
     };
 
     return (

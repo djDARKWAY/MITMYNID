@@ -4,6 +4,7 @@ import AccessPointsStats from "./AccessPointsStats";
 import CertificatesStats from "./CertificatesStats";
 import WarehousesStats from "./WarehousesStats";
 import LogsStats from "./LogsStats";
+import DomibusStats from "./DomibusStats";
 
 const Dashboard = () => {
   useAuthenticated();
@@ -12,9 +13,11 @@ const Dashboard = () => {
   return (
     <Box sx={{ marginTop: "10px" }}>
       <Title title="ra.page.dashboard" />
-
-      <AccessPointsStats />
-
+      
+      <DomibusStats />
+      <Box sx={{ marginTop: 2 }}>
+        <AccessPointsStats />
+      </Box>
       <Box sx={{ display: "flex", gap: 2, marginTop: 2 }}>
         <Box sx={{ flex: 1 }}>
           <CertificatesStats />
