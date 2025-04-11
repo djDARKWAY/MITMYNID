@@ -1,14 +1,15 @@
-import { useGetList } from "react-admin";
+import { useGetList, useTranslate } from "react-admin";
 import { Box, Typography, CircularProgress } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { ListAlt } from "@mui/icons-material";
 
 const LogsStats = () => {
     const theme = useTheme();
+    const translate = useTranslate();
     const { data, isLoading, isError } = useGetList("logs", { pagination: { page: 1, perPage: 5 }, sort: { field: "timestamp", order: "DESC" } });
 
     if (isLoading) return <CircularProgress />;
-    if (isError || !data) return <Typography color="error">Erro ao carregar os logs.</Typography>;
+    if (isError || !data) return <Typography color="error">{translate('show.dashboard.error_loading_logs')}</Typography>;
 
     const getBackgroundColor = (logType: string) => {
         switch (logType) {
@@ -26,7 +27,9 @@ const LogsStats = () => {
         <Box sx={{ borderRadius: 2, p: 2, backgroundColor: "rgba(255, 255, 255, 0.1)", boxShadow: 3, borderTop: "5px solid #5384ED" }}>
             <Box display="flex" alignItems="center" gap={1} mb={1}>
                 <ListAlt color="primary" sx={{ color: "#5384ED" }} />
-                <Typography variant="h6" sx={{ fontWeight: 700 }}>Logs</Typography>
+                <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                    {translate('show.dashboard.logs_title')}
+                </Typography>
             </Box>
 
             <Box sx={{ p: 2, height: 145, border: `1px solid ${theme.palette.divider}`, borderRadius: "8px", backgroundColor: theme.palette.background.paper }}>
@@ -45,10 +48,10 @@ const LogsStats = () => {
                                     display: "flex",
                                     alignItems: "center",
                                     justifyContent: "center",
-                                    width: "72px",
+                                    width: "100px",
                                     height: "23px",
                                     borderRadius: "8px",
-                                    backgroundColor: getBackgroundColor(log.type?.type || "Desconhecido"),
+                                    backgroundColor: getBackgroundColor(log.type?.type || "UNKNOWN"),
                                     color: "#fff",
                                     fontWeight: "bold",
                                     fontSize: "0.7rem",
@@ -56,7 +59,7 @@ const LogsStats = () => {
                                     mr: 1,
                                 }}
                             >
-                                {log.type?.type || "Desconhecido"}
+                                {translate(`show.dashboard.log_type.${log.type?.type?.toLowerCase() || "unknown"}`)}
                             </Box>
                             <Typography variant="body2" sx={{ flex: 3, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                                 {log.message || "-"}
@@ -74,7 +77,7 @@ const LogsStats = () => {
                         </Box>
                     ))
                 ) : (
-                    <Typography variant="body2">Nenhum log encontrado.</Typography>
+                    <Typography variant="body2">{translate('show.dashboard.no_logs_found')}</Typography>
                 )}
             </Box>
         </Box>

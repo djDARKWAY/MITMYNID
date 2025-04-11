@@ -227,7 +227,7 @@ const portugueseMessages: TranslationMessages = {
       city: "Cidade",
       zip_code: "Código Postal",
     },
-    logs:{
+    logs: {
       type: "Categoria",
       timestamp: "Data/hora",
     },
@@ -297,14 +297,14 @@ const portugueseMessages: TranslationMessages = {
       status: "Estado da rede",
       logs: "Registo de atividades ",
     },
-    logs : {
+    logs: {
       name: "Logs",
       fields: {
         category: "Categoria",
         message: "Mensagem",
         timestamp: "Data/hora",
         history: "Histórico",
-      }
+      },
     },
     users: {
       blocked_users: "Utilizadores bloqueados",
@@ -509,6 +509,42 @@ const portugueseMessages: TranslationMessages = {
       nif: "NIF",
       email: "Email",
       validation_date: "Data de Validação",
+    },
+    dashboard: {
+      warehouses_title: "Armazéns",
+      warehouses_total: "Armazéns",
+      countries: "Países",
+      recent_updates: "Atualizações Recentes",
+      error_loading_statistics: "Erro ao carregar estatísticas.",
+      logs_title: "Registos",
+      error_loading_logs: "Erro ao carregar registos.",
+      no_logs_found: "Nenhum registo encontrado.",
+      log_type: {
+        info: "Informação",
+        error: "Erro",
+        warning: "Aviso",
+        debug: "Depuração",
+        security: "Segurança",
+        audit: "Auditoria",
+        unknown: "Desconhecido",
+      },
+      status_title: "Estado do Domibus",
+      status_normal: "Normal",
+      status_warning: "Aviso",
+      status_critical: "Crítico",
+      error_network_response: "Erro na resposta da rede.",
+      error_request_failed: "Pedido falhou.",
+      certificates_title: "Certificados",
+      certificates_total: "Total de Certificados",
+      status_active: "Ativo",
+      status_expired: "Expirado",
+      status_expiring: "A Expirar Brevemente",
+      certificates_no_found: "Nenhum certificado encontrado.",
+      access_points_title: "Pontos de Acesso",
+      access_points_total: "Pontos de Acesso",
+      access_points: "Pontos de Acesso",
+      access_points_no_found: "Nenhum ponto de acesso encontrado.",
+      status_inactive: "Inativo",
     },
   },
 };

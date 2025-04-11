@@ -1,4 +1,4 @@
-import { useGetList } from "react-admin";
+import { useGetList, useTranslate } from "react-admin";
 import { Card, CardContent, Typography, Box, Grid, CircularProgress } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useState } from "react";
@@ -20,9 +20,9 @@ const StatCard = ({ icon, title, value, color, onClick }: { icon: React.ReactNod
             <CardContent sx={{ height: "140%" }}>
                 <Box display="flex" alignItems="center" gap={2}>
                     {icon}
-                    <Box>
-                        <Typography variant="subtitle2" color="text.secondary" sx={{ marginBottom: "-4px" }}>{title}</Typography>
-                        <Typography variant="h6">{value}</Typography>
+                    <Box sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }} title={title}>
+                        <Typography variant="subtitle2" color="text.secondary" sx={{ marginBottom: "-4px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{title}</Typography>
+                        <Typography variant="h6" sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</Typography>
                     </Box>
                 </Box>
             </CardContent>
@@ -34,9 +34,10 @@ const AccessPointsStats = () => {
     const { data, isLoading, isError } = useGetList("access-points");
     const [filter, setFilter] = useState<'all' | 'active' | 'inactive'>('all');
     const theme = useTheme();
+    const translate = useTranslate();
 
     if (isLoading) return <CircularProgress />;
-    if (isError || !data) return <Typography color="error">Error loading statistics.</Typography>;
+    if (isError || !data) return <Typography color="error">{translate('show.dashboard.error_loading_statistics')}</Typography>;
 
     const total = data.length;
     const active = data.filter(ap => ap.is_active).length;
@@ -45,10 +46,10 @@ const AccessPointsStats = () => {
     const filteredData = filter === 'all' ? data : data.filter(ap => (filter === 'active' ? ap.is_active : !ap.is_active));
 
     const chartData = {
-        labels: ['Active', 'Inactive'],
+        labels: [translate('show.dashboard.status_active'), translate('show.dashboard.status_inactive')],
         datasets: [
             {
-                label: 'Access Points',
+                label: translate('show.dashboard.access_points'),
                 data: [active, inactive],
                 backgroundColor: [
                     'rgba(102, 187, 106, 0.6)',
@@ -100,22 +101,6 @@ const AccessPointsStats = () => {
             duration: 500
         },
         cutout: '70%',
-        onHover: (event: any, elements: any[]) => {
-            const chart = event.chart;
-            if (elements.length) {
-                const index = elements[0].index;
-                chart.data.datasets[0].backgroundColor = chart.data.datasets[0].backgroundColor.map((color: string, i: number) =>
-                    i === index ? color : color.replace(/[\d.]+\)$/g, '0.2)')
-                );
-                chart.update();
-            } else {
-                chart.data.datasets[0].backgroundColor = [
-                    'rgba(102, 187, 106, 0.6)',
-                    'rgba(211, 47, 47, 0.6)',
-                ];
-                chart.update();
-            }
-        },
     };
 
     return (
@@ -131,16 +116,16 @@ const AccessPointsStats = () => {
             <Box display="flex" alignItems="center" gap={1} mb={1}>
                 <CellTower color="primary" sx={{ color: "#5384ED"}} />
                 <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                    Pontos de Acesso
+                    {translate('show.dashboard.access_points_title')}
                 </Typography>
             </Box>
 
             <Grid container spacing={1}>
                 <Grid item xs={12} md={8.5}>
                     <Grid container spacing={1}>
-                        <Grid item xs={12} md={4}><StatCard icon={<Hub color="primary" fontSize="large" sx={{ color: "#00B3E6"}} />} title="Total" value={<Typography variant="h6">{total}</Typography>} color="#00B3E6" onClick={() => setFilter('all')} /></Grid>
-                        <Grid item xs={12} md={4}><StatCard icon={<CheckCircle color="success" fontSize="large" />} title="Active" value={<Typography variant="h6">{active}</Typography>} color="#2e7d32" onClick={() => setFilter('active')} /></Grid>
-                        <Grid item xs={12} md={4}><StatCard icon={<Cancel color="error" fontSize="large" />} title="Inactive" value={<Typography variant="h6">{inactive}</Typography>} color="#d32f2f" onClick={() => setFilter('inactive')} /></Grid>
+                        <Grid item xs={12} md={4}><StatCard icon={<Hub color="primary" fontSize="large" sx={{ color: "#00B3E6"}} />} title={translate('show.dashboard.access_points_total')} value={<Typography variant="h6">{total}</Typography>} color="#00B3E6" onClick={() => setFilter('all')} /></Grid>
+                        <Grid item xs={12} md={4}><StatCard icon={<CheckCircle color="success" fontSize="large" />} title={translate('show.dashboard.status_active')} value={<Typography variant="h6">{active}</Typography>} color="#2e7d32" onClick={() => setFilter('active')} /></Grid>
+                        <Grid item xs={12} md={4}><StatCard icon={<Cancel color="error" fontSize="large" />} title={translate('show.dashboard.status_inactive')} value={<Typography variant="h6">{inactive}</Typography>} color="#d32f2f" onClick={() => setFilter('inactive')} /></Grid>
 
                         <Grid item xs={12}>
                             <Box
@@ -169,7 +154,7 @@ const AccessPointsStats = () => {
                                         </Box>
                                     ))
                                 ) : (
-                                    <Typography variant="body2">No Access Points found.</Typography>
+                                    <Typography variant="body2">{translate('show.dashboard.access_points_no_found')}</Typography>
                                 )}
                             </Box>
                         </Grid>

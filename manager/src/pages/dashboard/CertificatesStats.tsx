@@ -1,5 +1,5 @@
-import { useGetList } from "react-admin";
-import { Box, Grid, Typography, CardContent, Card, CircularProgress, Divider } from "@mui/material";
+import { useGetList, useTranslate } from "react-admin";
+import { Box, Grid, Typography, CardContent, Card, CircularProgress } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { CheckCircle, Warning, Cancel, CardMembership } from '@mui/icons-material';
 import { useState } from "react";
@@ -27,11 +27,12 @@ const StatCard = ({ icon, title, value, color, onClick, isSelected }: { icon: Re
 
 const CertificatesStats = () => {
     const theme = useTheme();
+    const translate = useTranslate();
     const { data, isLoading, isError } = useGetList("certificates");
     const [filter, setFilter] = useState<string | null>(null);
 
     if (isLoading) return <CircularProgress />;
-    if (isError || !data) return <Typography color="error">Erro ao carregar os dados.</Typography>;
+    if (isError || !data) return <Typography color="error">{translate('show.dashboard.error_loading_statistics')}</Typography>;
 
     const stats = {
         total: data.length,
@@ -61,15 +62,15 @@ const CertificatesStats = () => {
         <Box sx={{ borderRadius: 2, p: 2, backgroundColor: "rgba(255, 255, 255, 0.1)", boxShadow: 3, borderTop: "5px solid #5384ED" }}>
             <Box display="flex" alignItems="center" gap={1} mb={1}>
                 <CardMembership color="primary" sx={{ color: "#5384ED" }} />
-                <Typography variant="h6" sx={{ fontWeight: 700 }}>Certificados</Typography>
+                <Typography variant="h6" sx={{ fontWeight: 700 }}>{translate('show.dashboard.certificates_title')}</Typography>
             </Box>
 
             <Grid container spacing={1}>
                 {[
-                    { icon: <CardMembership sx={{ color: "#00B3E6" }} fontSize="medium" />, title: "Total", value: stats.total, color: "#00B3E6", filterKey: null },
-                    { icon: <CheckCircle color="success" fontSize="medium" />, title: "Ativos", value: stats.active, color: "#2e7d32", filterKey: "active" },
-                    { icon: <Cancel color="error" fontSize="medium" />, title: "Expirados", value: stats.expired, color: "#d32f2f", filterKey: "expired" },
-                    { icon: <Warning color="warning" fontSize="medium" />, title: "A expirar", value: stats.expiring, color: "#ff9800", filterKey: "expiring" }
+                    { icon: <CardMembership sx={{ color: "#00B3E6" }} fontSize="medium" />, title: translate('show.dashboard.certificates_total'), value: stats.total, color: "#00B3E6", filterKey: null },
+                    { icon: <CheckCircle color="success" fontSize="medium" />, title: translate('show.dashboard.status_active'), value: stats.active, color: "#2e7d32", filterKey: "active" },
+                    { icon: <Cancel color="error" fontSize="medium" />, title: translate('show.dashboard.status_expired'), value: stats.expired, color: "#d32f2f", filterKey: "expired" },
+                    { icon: <Warning color="warning" fontSize="medium" />, title: translate('show.dashboard.status_expiring'), value: stats.expiring, color: "#ff9800", filterKey: "expiring" }
                 ].map((stat, index) => (
                     <Grid item xs={3} key={index}>
                         <StatCard
@@ -105,7 +106,7 @@ const CertificatesStats = () => {
                         );
                     })
                 ) : (
-                    <Typography variant="body2">No Certificates found.</Typography>
+                    <Typography variant="body2">{translate('show.dashboard.certificates_no_found')}</Typography>
                 )}
             </Box>
         </Box>

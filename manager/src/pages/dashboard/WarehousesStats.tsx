@@ -1,7 +1,7 @@
-import { useGetList } from "react-admin";
-import { Box, Grid, Typography, CardContent, Card, CircularProgress, Divider } from "@mui/material";
+import { useGetList, useTranslate } from "react-admin";
+import { Box, Grid, Typography, CardContent, Card, CircularProgress } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { Warehouse, LocationCity, Public, HomeWork } from "@mui/icons-material";
+import { Warehouse, LocationCity, Public } from "@mui/icons-material";
 
 const formatDate = (dateString?: string): Date => new Date(dateString || Date.now());
 
@@ -37,9 +37,10 @@ const RecentWarehouseCard = ({ warehouse }: { warehouse: any }) => (
 
 const WarehousesStats = () => {
     const { data, isLoading, isError } = useGetList("warehouses");
+    const translate = useTranslate();
 
     if (isLoading) return <CircularProgress />;
-    if (isError || !data) return <Typography color="error">Erro ao carregar os dados.</Typography>;
+    if (isError || !data) return <Typography color="error">{translate('show.dashboard.error_loading_statistics')}</Typography>;
 
     const stats = {
         total: data.length,
@@ -53,13 +54,13 @@ const WarehousesStats = () => {
         <Box sx={{ borderRadius: 2, p: 2, backgroundColor: "rgba(255, 255, 255, 0.1)", boxShadow: 3, borderTop: "5px solid #5384ED" }}>
             <Box display="flex" alignItems="center" gap={1} mb={1}>
                 <Warehouse color="primary" sx={{ color: "#5384ED" }} />
-                <Typography variant="h6" sx={{ fontWeight: 700 }}>Armazéns</Typography>
+                <Typography variant="h6" sx={{ fontWeight: 700 }}>{translate('show.dashboard.warehouses_title')}</Typography>
             </Box>
 
             <Grid container spacing={1}>
                 {[
-                    { icon: <LocationCity sx={{ color: "#00B3E6" }} fontSize="large" />, title: "Armazéns", value: stats.total, color: "#00B3E6" },
-                    { icon: <Public sx={{ color: "#FF9800" }} fontSize="large" />, title: "Países", value: stats.countries, color: "#FF9800" }
+                    { icon: <LocationCity sx={{ color: "#00B3E6" }} fontSize="large" />, title: translate('show.dashboard.warehouses_total'), value: stats.total, color: "#00B3E6" },
+                    { icon: <Public sx={{ color: "#FF9800" }} fontSize="large" />, title: translate('show.dashboard.countries'), value: stats.countries, color: "#FF9800" }
                 ].map((stat, index) => (
                     <Grid item xs={6} key={index}>
                         <StatCard {...stat} />
@@ -67,7 +68,7 @@ const WarehousesStats = () => {
                 ))}
             </Grid>
 
-            <Typography variant="subtitle1" fontWeight={600} mb={1} sx={{ marginTop: 1.25 }}> Últimas atualizações: </Typography>
+            <Typography variant="subtitle1" fontWeight={600} mb={1} sx={{ marginTop: 1.25 }}>{translate('show.dashboard.recent_updates')}</Typography>
             <Grid container spacing={1}>
                 {stats.recent.map((warehouse) => (
                     <Grid item xs={12} sm={6} md={6} key={warehouse.id}>

@@ -1,4 +1,4 @@
-import { List, DatagridConfigurable , TextField, FunctionField, SimpleList, usePermissions } from "react-admin";
+import { List, DatagridConfigurable , TextField, FunctionField, SimpleList, usePermissions, useTranslate } from "react-admin";
 import { useTheme } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CustomEmptyPage from "../../components/general/CustomEmptyPage";
@@ -7,6 +7,7 @@ import { LogsFilters } from "./LogsFilter";
 
 export const LogsList = () => {
     const { permissions } = usePermissions();
+    const translate = useTranslate();
     const isSmall = useMediaQuery(useTheme().breakpoints.down('lg'));
 
     const getBackgroundColor = (logType: string) => {
@@ -36,7 +37,7 @@ export const LogsList = () => {
         >
             {isSmall ? (
                 <SimpleList
-                    primaryText={record => record.type?.type || "Desconhecido"}
+                    primaryText={record => translate(`show.dashboard.log_type.${record.type?.type?.toLowerCase() || "unknown"}`)}
                     secondaryText={record => record.message}
                     tertiaryText={record => new Date(record.timestamp).toLocaleString()}
                     linkType={"edit"}
@@ -46,10 +47,13 @@ export const LogsList = () => {
                     <FunctionField
                         label="resources.logs.fields.category" 
                         render={record => {
-                            const logType = record.type?.type || "Desconhecido"; 
+                            const logType = record.type?.type?.toLowerCase() || "unknown"; 
+                            const translatedLogType = translate(`show.dashboard.log_type.${logType}`);
 
                             return (
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '72px', height: '23px', borderRadius: '8px', backgroundColor: getBackgroundColor(logType), color: '#fff', fontWeight: 'bold', fontSize: '0.7rem', textTransform: 'uppercase' }}>{logType}</div>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100px', height: '23px', borderRadius: '8px', backgroundColor: getBackgroundColor(logType.toUpperCase()), color: '#fff', fontWeight: 'bold', fontSize: '0.7rem', textTransform: 'uppercase' }}>
+                                    {translatedLogType}
+                                </div>
                             );
                         }}
                     />

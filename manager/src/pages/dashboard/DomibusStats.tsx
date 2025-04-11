@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import { Box, Typography, CircularProgress, Grid, Chip } from "@mui/material";
+import { Box, Typography, CircularProgress, Chip } from "@mui/material";
 import { WifiTetheringError } from "@mui/icons-material";
+import { useTranslate } from "react-admin";
 
 const DomibusStats = () => {
     const [services, setServices] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const translate = useTranslate();
 
     const fetchData = async () => {
         try {
@@ -21,14 +23,14 @@ const DomibusStats = () => {
             });
 
             if (!response.ok) {
-                throw new Error("Erro na resposta da rede");
+                throw new Error(translate('show.dashboard.error_network_response'));
             }
 
             const data = await response.json();
             setServices(data.services || []);
             setError(null);
         } catch {
-            setError("Falha na requisição.");
+            setError(translate('show.dashboard.error_request_failed'));
         } finally {
             setIsLoading(false);
         }
@@ -63,27 +65,31 @@ const DomibusStats = () => {
     return (
         <Box
             sx={{
-            display: "flex", alignItems: "center", flexWrap: "wrap", gap: 2,
-            borderRadius: 2, p: 2, backgroundColor: "rgba(255, 255, 255, 0.1)",
-            boxShadow: 3, borderTop: "5px solid #5384ED"
+                display: "flex", alignItems: "center", flexWrap: "wrap", gap: 2,
+                borderRadius: 2, p: 2, backgroundColor: "rgba(255, 255, 255, 0.1)",
+                boxShadow: 3, borderTop: "5px solid #5384ED"
             }}
         >
             <Box display="flex" alignItems="center" gap={1}>
-            <WifiTetheringError sx={{ color: "#5384ED" }} />
-            <Typography variant="h6" fontWeight={700}>Estado</Typography>
+                <WifiTetheringError sx={{ color: "#5384ED" }} />
+                <Typography variant="h6" fontWeight={700}>
+                    {translate('show.dashboard.status_title')}
+                </Typography>
             </Box>
 
             <Box display="flex" alignItems="center" gap={1}>
-            <Chip label={overallStatus} color={getStatusColor(overallStatus)} />
+                <Chip label={translate(`show.dashboard.status_${overallStatus.toLowerCase()}`)} color={getStatusColor(overallStatus)} />
             </Box>
 
             <Box display="flex" ml="auto" gap={2}>
-            {services.map((service, index) => (
-                <Box key={index} display="flex" alignItems="center" gap={1}>
-                <Typography variant="subtitle1" fontWeight={600}>{service.name}:</Typography>
-                <Chip label={service.status} color={getStatusColor(service.status)} />
-                </Box>
-            ))}
+                {services.map((service, index) => (
+                    <Box key={index} display="flex" alignItems="center" gap={1}>
+                        <Typography variant="subtitle1" fontWeight={600}>
+                            {service.name}:
+                        </Typography>
+                        <Chip label={translate(`show.dashboard.status_${service.status.toLowerCase()}`)} color={getStatusColor(service.status)} />
+                    </Box>
+                ))}
             </Box>
         </Box>
     );
