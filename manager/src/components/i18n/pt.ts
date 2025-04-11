@@ -546,6 +546,15 @@ const portugueseMessages: TranslationMessages = {
       access_points_no_found: "Nenhum ponto de acesso encontrado.",
       status_inactive: "Inativo",
     },
+    users: {
+      name: "Nome",
+      username: "Utilizador",
+      role: "Perfil",
+      roles: {
+        user: "Utilizador",
+        admin: "Administrador",
+      }
+    },
   },
 };
 

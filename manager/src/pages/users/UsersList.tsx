@@ -1,4 +1,4 @@
-import { List, Datagrid, usePermissions, TextField, ArrayField, BooleanField, Loading, SimpleList, WithRecord, FunctionField, useDataProvider } from "react-admin";
+import { List, Datagrid, usePermissions, TextField, ArrayField, Loading, SimpleList, WithRecord, FunctionField, useDataProvider } from "react-admin";
 import { userFilters } from "./UsersFilter";
 import { Box, useTheme, Typography } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';

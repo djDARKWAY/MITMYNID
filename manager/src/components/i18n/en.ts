@@ -540,6 +540,15 @@ const englishMessages: TranslationMessages = {
       access_points_no_found: "No access points found.",
       status_inactive: "Inactive",
     },
+    users: {
+      name: "Name",
+      username: "Username",
+      role: "Role",
+      roles: {
+        user: "User",
+        admin: "Administrator",
+      },
+    },
   },
 };
 

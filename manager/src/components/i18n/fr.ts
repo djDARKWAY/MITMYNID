@@ -552,6 +552,15 @@ const frenchMessages: TranslationMessages = {
       access_points_no_found: "Aucun point d'accès trouvé.",
       status_inactive: "Inactif",
     },
+    users: {
+      name: "Nom",
+      username: "Utilisateur",
+      role: "Rôle",
+      roles: {
+        user: "Utilisateur",
+        admin: "Administrateur",
+      },
+    },
   },
 };
 

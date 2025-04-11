@@ -29,8 +29,8 @@ export const userFilters = (permissions: string[]) => {
     }, []);
 
     let filters = [
-        <TextInput source="person_name" size="small" label={'pos.labels.search'} fullWidth alwaysOn resettable={true} />,
-        <TextInput source="username" size="small" label={'Username'} fullWidth alwaysOn resettable={true} />,
+        <TextInput source="person_name" size="small" label={'show.users.name'} fullWidth alwaysOn resettable={true} />,
+        <TextInput source="username" size="small" label={'show.users.username'} fullWidth alwaysOn resettable={true} />,
     ];
 
     switch (true) {
@@ -38,8 +38,11 @@ export const userFilters = (permissions: string[]) => {
             filters.push(
                 <SelectInput
                     source="role"
-                    choices={roles.map(role => ({ id: role.id, name: role.name }))}
-                    label="Role"
+                    choices={roles.map(role => ({
+                        id: role.id,
+                        name: `show.users.roles.${role.name.toLowerCase()}`
+                    }))}
+                    label="show.users.role"
                     fullWidth
                 />
             );
