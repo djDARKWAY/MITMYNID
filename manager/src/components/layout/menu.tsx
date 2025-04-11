@@ -38,8 +38,8 @@ type MenuName =
   | "menuArmazens";
 
 const MyMenu = ({ dense = false }: MenuProps) => {
-  const logoBigImg = useRef<string>("MMN_H_RGB.svg");
-  const logoSmallImg = useRef<string>("MMN_V_RGB.svg");
+  const logoBigImg = useRef<string>(`${window.location.origin}/MMN_H_RGB.svg?cache=${Date.now()}`);
+  const logoSmallImg = useRef<string>(`${window.location.origin}/MMN_V_RGB.svg?cache=${Date.now()}`);
   const translate = useTranslate();
   const { permissions, isLoading } = usePermissions();
   //const { identity : profile, isLoading : isLoadingProfile } = useGetIdentity();
