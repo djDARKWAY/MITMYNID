@@ -242,12 +242,26 @@ const WarehousesMap: React.FC = () => {
                             click: () => handleMarkerClick(c)
                         }}>
                             <Popup>
-                                <h3>{c.name}</h3>
-                                <p style={{ margin: "0.5em 0" }}><strong>Localização:</strong> {c.city}, {c.district}</p>
-                                <p style={{ margin: "0.5em 0" }}><strong>Código Postal:</strong> {c.zip_code}</p>
-                                {selectedWarehouse && selectedWarehouse.id === c.id && userLocation && (
-                                    <p><strong>Distância:</strong> {Math.round(selectedWarehouse.distance)} km</p>
-                                )}
+                                <div style={{ fontFamily: 'Arial, sans-serif', color: '#2c3e50', maxWidth: '240px', lineHeight: 1.4 }}>
+                                    <h3 style={{ margin: '0 0 8px', fontSize: '16px', fontWeight: '600', borderBottom: '1px solid #e0e0e0', paddingBottom: '4px' }}>{c.name}</h3>
+                                    <p style={{ margin: '6px 0', fontSize: '14px' }}><strong>Localização:</strong> {c.city}, {c.district}</p>
+                                    <p style={{ margin: '6px 0', fontSize: '14px' }}><strong>Código Postal:</strong> {c.zip_code}</p>
+                                    {selectedWarehouse?.id === c.id && userLocation && (
+                                        <p style={{ margin: '6px 0', fontSize: '14px' }}><strong>Distância:</strong> {Math.round(selectedWarehouse.distance)} km</p>
+                                    )}
+                                    <button
+                                        onClick={() => navigate(`/warehouses/${c.id}/show`)}
+                                        style={{
+                                            marginTop: '10px', padding: '8px 12px', backgroundColor: '#5384ED', color: '#fff', border: 'none',
+                                            borderRadius: '4px', fontSize: '14px', fontWeight: '500', cursor: 'pointer', width: '100%',
+                                            transition: 'background-color 0.3s'
+                                        }}
+                                        onMouseOver={e => (e.currentTarget.style.backgroundColor = '#303f9f')}
+                                        onMouseOut={e => (e.currentTarget.style.backgroundColor = '#3f51b5')}
+                                    >
+                                        Ver detalhes
+                                    </button>
+                                </div>
                             </Popup>
                         </Marker>
                     )

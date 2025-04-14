@@ -20,11 +20,6 @@ export class LogService {
     - Utilizador adicionado
     - Utilizador editado
     - Utilizador eliminado
-    - Utilizador restaurado
-    - Conta desbloqueada
-    - Registo de utilizador aceite
-    - Registo de utilizador recusado
-    - Pedido de registo recebido
   */
   
   // Métodos relacionados a Login
@@ -137,64 +132,6 @@ export class LogService {
       message: `O administrador '${adminId}' apagou o utilizador com o ID '${userId}'`,
       timestamp: new Date().toISOString(),
       metadata: { ip, userUuid, device: deviceInfo.device, os: deviceInfo.os, timestamp: new Date().toISOString() },
-    });
-  }
-
-  // Métodos para novas funcionalidades
-  // 1. Logs para Reversão de Contas Eliminadas
-  async logUserRestore(adminId: string, userId: number | string, ip: string, userUuid: string, deviceInfo: { device: string; os: string }) {
-    try {
-      await this.logRepository.create({
-        type_id: 1,
-        message: `O administrador '${adminId}' restaurou a conta do utilizador com o ID '${userId}'`,
-        timestamp: new Date().toISOString(),
-        metadata: { ip, userUuid, device: deviceInfo.device, os: deviceInfo.os, timestamp: new Date().toISOString() },
-      });
-    } catch (err) {
-      console.error("Error creating log for user restore:", err);
-    }
-  }
-
-  // 2. Logs para Desbloqueio de Contas
-  async logUserUnlock(adminId: string, userId: number | string, ip: string, userUuid: string, deviceInfo: { device: string; os: string }) {
-    try {
-      await this.logRepository.create({
-        type_id: 1,
-        message: `O administrador '${adminId}' desbloqueou a conta do utilizador com o ID '${userId}'`,
-        timestamp: new Date().toISOString(),
-        metadata: { ip, userUuid, device: deviceInfo.device, os: deviceInfo.os, timestamp: new Date().toISOString() },
-      });
-    } catch (err) {
-      console.error("Error creating log for user unlock:", err);
-    }
-  }
-
-  // 3. Logs para Registo de Novas Contas
-  async logUserRegistrationApproval(adminId: string, userId: number | string, ip: string, userUuid: string, deviceInfo: { device: string; os: string }) {
-    await this.logRepository.create({
-      type_id: 1,
-      message: `O administrador '${adminId}' aceitou o registo do utilizador com o ID '${userId}'`,
-      timestamp: new Date().toISOString(),
-      metadata: { ip, userUuid, device: deviceInfo.device, os: deviceInfo.os, timestamp: new Date().toISOString() },
-    });
-  }
-
-  async logUserRegistrationRejection(adminId: string, userId: number | string, ip: string, userUuid: string, deviceInfo: { device: string; os: string }) {
-    await this.logRepository.create({
-      type_id: 3,
-      message: `O administrador '${adminId}' recusou o registo do utilizador com o ID '${userId}'`,
-      timestamp: new Date().toISOString(),
-      metadata: { ip, userUuid, device: deviceInfo.device, os: deviceInfo.os, timestamp: new Date().toISOString() },
-    });
-  }
-
-  // 4. Logs para pedido de registo de contas
-  async logUserRegistrationRequest(username: string, email: string, ip: string, deviceInfo: { device: string; os: string }) {
-    await this.logRepository.create({
-      type_id: 2,
-      message: `Novo pedido de registo para o utilizador '${username}' com email '${email}'`,
-      timestamp: new Date().toISOString(),
-      metadata: { ip, device: deviceInfo.device, os: deviceInfo.os, timestamp: new Date().toISOString() },
     });
   }
 }

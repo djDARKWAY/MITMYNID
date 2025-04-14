@@ -98,7 +98,7 @@ const AccessPointsStats = () => {
         animation: { 
             animateRotate: true, 
             animateScale: true, 
-            duration: 500
+            duration: 750
         },
         cutout: '70%',
     };
