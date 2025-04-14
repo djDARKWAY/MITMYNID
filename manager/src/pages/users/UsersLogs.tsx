@@ -1,6 +1,6 @@
 import { Datagrid, List, FunctionField, usePermissions, TextField, useTranslate, useDataProvider, useNotify, useRefresh } from "react-admin";
 import { Box, Typography, Tooltip, IconButton } from "@mui/material";
-import { LockOpen, RestoreFromTrash, History } from "@mui/icons-material";
+import { LockOpen, Delete, History } from "@mui/icons-material";
 import CustomEmptyPage from "../../components/general/CustomEmptyPage";
 import CustomPagination, { perPageDefault } from "../../components/general/CustomPagination";
 import CustomButtonToolTip, { commonListCSS } from "../../components/general/CustomButtonToolTip";
@@ -14,52 +14,21 @@ const UsersLogs = () => {
     const notify = useNotify();
     const refresh = useRefresh();
 
-    const handleUnlockUser = async (id: number) => {
+    const handleCustomAction = async (id: number, endpoint: string, successMessage: string, errorMessage: string) => {
         try {
-            await dataProvider.update("users", {
+            await dataProvider.customAction("users", {
                 id,
-                data: { blocked: false },
-                previousData: { id },
-                meta: { method: 'PATCH', endpoint: `users/${id}/unlock` },
+                meta: { method: 'PATCH', endpoint },
             });
-            notify("Utilizador desbloqueado com sucesso", { type: "success" });
+            notify(successMessage, { type: "success" });
             refresh();
         } catch (error) {
-            notify("Erro ao desbloquear utilizador", { type: "error" });
-        }
-    };
-
-    const handleRecoverUser = async (id: number) => {
-        try {
-            await dataProvider.update("users", {
-                id,
-                data: { deleted: false },
-                previousData: { id },
-                meta: { method: 'PATCH', endpoint: `users/${id}/recover` },
-            });
-            notify("Utilizador restaurado com sucesso", { type: "success" });
-            refresh();
-        } catch (error) {
-            notify("Erro ao restaurar utilizador", { type: "error" });
+            notify(errorMessage, { type: "error" });
         }
     };
 
     if (isLoading) return null;
-
-    const handleDeleteUser = async (id: number) => {
-        try {
-            await dataProvider.delete("users", {
-                id,
-                meta: { method: 'DELETE', endpoint: `users/${id}/delete` },
-            });
-            notify("Utilizador eliminado permanentemente com sucesso", { type: "success" });
-            refresh();
-        } catch (error) {
-            notify("Erro ao eliminar utilizador permanentemente", { type: "error" });
-        }
-    };
-    
-
+  
     return (
         <Box display="flex" gap="20px" flexWrap="nowrap">
         {/* Blocked Users */}
@@ -132,7 +101,7 @@ const UsersLogs = () => {
                   >
                     <Tooltip title="Desbloquear">
                       <IconButton
-                        onClick={() => handleUnlockUser(record.id)}
+                        onClick={() => handleCustomAction(record.id, `users/${record.id}/unlock`, "Utilizador desbloqueado com sucesso", "Erro ao desbloquear utilizador")}
                         size="small"
                       >
                         <LockOpen />
@@ -215,7 +184,7 @@ const UsersLogs = () => {
                     <>
                       <Tooltip title="Restaurar">
                         <IconButton
-                          onClick={() => handleRecoverUser(record.id)}
+                          onClick={() => handleCustomAction(record.id, `users/${record.id}/recover`, "Utilizador restaurado com sucesso", "Erro ao restaurar utilizador")}
                           size="small"
                         >
                           <History />
@@ -224,11 +193,11 @@ const UsersLogs = () => {
                       <CustomConfirmButtonToolTip
                         sx={commonListCSS}
                         label={"Eliminar"}
-                        color="warning"
-                        icon={<RestoreFromTrash />}
+                        color="error"
+                        icon={<Delete />}
                         id={record.id}
                         resource={"users"}
-                        customAction={() => handleRecoverUser(record.id)}
+                        customAction={() => handleCustomAction(record.id, `users/${record.id}/recover`, "Utilizador restaurado com sucesso", "Erro ao restaurar utilizador")}
                       />
                     </>
                   </Box>

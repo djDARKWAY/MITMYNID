@@ -336,7 +336,7 @@ const portugueseMessages: TranslationMessages = {
         cc: "Cartão de Cidadão",
         telefone: "Telefone",
         telemovel: "Telémovel",
-        password: "palavra-passe",
+        password: "Palavra-passe",
         foto: "Imagem",
         ativo: "Ativo",
         ult_acesso: "Último acesso",

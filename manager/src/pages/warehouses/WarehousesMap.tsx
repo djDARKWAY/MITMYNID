@@ -88,7 +88,7 @@ const WarehousesMap: React.FC = () => {
         }));
 
         setWarehouseIcon(new L.Icon({
-            iconUrl: '/src/assets/map/warehouse.png',
+            iconUrl: import.meta.env.VITE_WAREHOUSE_URL,
             iconSize: [20, 20],
             iconAnchor: [10, 20],
         }));

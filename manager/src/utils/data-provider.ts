@@ -293,7 +293,29 @@ const lb4Provider = (
     return {
       data: params.ids,
     };
-  }
+  },
+  
+  // Custom action to handle specific requests
+  customAction: async (_resource: string, params: { id?: string; data?: object; meta?: { endpoint: string; method: string } }) => {
+    const { id, data, meta } = params;
+
+    if (!meta || !meta.endpoint || !meta.method) {
+      throw new Error("Meta information with 'endpoint' and 'method' is required for custom actions.");
+    }
+
+    const result = await httpClient(`${apiUrl}/${meta.endpoint}`, {
+      method: meta.method,
+      body: data ? JSON.stringify(data) : undefined,
+      headers: new Headers({
+        Accept: "application/json",
+        Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+      }),
+    });
+
+    return {
+      data: result.json || { id },
+    };
+  },
 });
 
 export default lb4Provider;
