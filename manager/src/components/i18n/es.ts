@@ -522,6 +522,8 @@ const spanishMessages: TranslationMessages = {
       logs_title: "Registros",
       error_loading_logs: "Error al cargar registros.",
       no_logs_found: "No se encontraron registros.",
+      status_offline: "OFFLINE",
+      status_connecting: "CONECTANDO",
       log_type: {
         info: "Información",
         error: "Error",

@@ -35,6 +35,9 @@ export interface DataProviderWithCustomMethods extends DataProvider {
     resource: string,
     params?: GetEveryParams
   ) => Promise<GetEveryResult<RecordType>>;
+
+  customAction: (resource: string, params: any) => Promise<any>;
+  fetchDomibus: (endpoint: string, options?: { method: string }) => Promise<any>;
 }
 
 export type imageData = {

@@ -519,6 +519,8 @@ const portugueseMessages: TranslationMessages = {
       logs_title: "Registos",
       error_loading_logs: "Erro ao carregar registos.",
       no_logs_found: "Nenhum registo encontrado.",
+      status_offline: "OFFLINE",
+      status_connecting: "A CONECTAR",
       log_type: {
         info: "Informação",
         error: "Erro",

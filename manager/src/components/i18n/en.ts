@@ -513,6 +513,8 @@ const englishMessages: TranslationMessages = {
       logs_title: "Logs",
       error_loading_logs: "Error loading logs.",
       no_logs_found: "No logs found.",
+      status_offline: "OFFLINE",
+      status_connecting: "CONNECTING",
       log_type: {
         info: "Information",
         error: "Error",

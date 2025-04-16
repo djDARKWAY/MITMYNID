@@ -39,7 +39,7 @@ const lb4Provider = (
   aggregate = (resource: string) => [] as object[],
   httpClient = fetchUtils.fetchJson
 ): DataProviderWithCustomMethods => ({
-  getEvery: async (resource : string, params : any) => {
+  getEvery: async (resource: string, params: any) => {
     const aggregator = aggregate(resource);
 
     const query = stringify({
@@ -295,7 +295,6 @@ const lb4Provider = (
     };
   },
   
-  // Custom action to handle specific requests
   customAction: async (_resource: string, params: { id?: string; data?: object; meta?: { endpoint: string; method: string } }) => {
     const { id, data, meta } = params;
 
@@ -303,7 +302,8 @@ const lb4Provider = (
       throw new Error("Meta information with 'endpoint' and 'method' is required for custom actions.");
     }
 
-    const result = await httpClient(`${apiUrl}/${meta.endpoint}`, {
+    const endpoint = apiUrl.endsWith('/') ? `${apiUrl}${meta.endpoint}` : `${apiUrl}/${meta.endpoint}`;
+    const result = await httpClient(endpoint, {
       method: meta.method,
       body: data ? JSON.stringify(data) : undefined,
       headers: new Headers({
@@ -315,6 +315,33 @@ const lb4Provider = (
     return {
       data: result.json || { id },
     };
+  },
+
+  fetchDomibus: async (endpoint: string, options: { method: string } = { method: 'GET' }) => {
+    const username = import.meta.env.VITE_AUTH_USERNAME;
+    const password = import.meta.env.VITE_AUTH_PASSWORD;
+    const domibusUrl = import.meta.env.VITE_DOMIBUS_API_URL;
+
+    const fullEndpoint = domibusUrl.endsWith('/') ? `${domibusUrl}${endpoint}` : `${domibusUrl}/${endpoint}`;
+    
+    try {
+      const response = await fetch(fullEndpoint, {
+        method: options.method,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Basic " + btoa(`${username}:${password}`)
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Network response was not ok: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching from Domibus:", error);
+      throw error;
+    }
   },
 });
 

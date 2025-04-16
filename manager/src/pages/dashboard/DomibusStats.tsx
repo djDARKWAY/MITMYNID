@@ -1,40 +1,14 @@
 import { useState, useEffect } from "react";
 import { Box, Typography, CircularProgress, Chip } from "@mui/material";
 import { WifiTetheringError } from "@mui/icons-material";
-import { useTranslate } from "react-admin";
+import { useTranslate, useDataProvider } from "react-admin";
 
 const DomibusStats = () => {
     const [services, setServices] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const translate = useTranslate();
-
-    const fetchData = async () => {
-        try {
-            const username = import.meta.env.VITE_AUTH_USERNAME;
-            const password = import.meta.env.VITE_AUTH_PASSWORD;
-
-            const response = await fetch(`http://192.168.1.64:8080/domibus/ext/monitoring/application/status`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Basic " + btoa(`${username}:${password}`)
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error(translate('show.dashboard.error_network_response'));
-            }
-
-            const data = await response.json();
-            setServices(data.services || []);
-            setError(null);
-        } catch {
-            setError(translate('show.dashboard.error_request_failed'));
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    const dataProvider = useDataProvider();
 
     const getStatusColor = (status: string) => {
         switch (status) {
@@ -44,23 +18,55 @@ const DomibusStats = () => {
                 return "warning";
             case "CRITICAL":
                 return "error";
+            case "OFFLINE":
+                return "default";
+            case "CONNECTING":
+                return "info";
             default:
                 return "default";
         }
     };
 
     useEffect(() => {
-        fetchData();
-    }, []);
+        const fetchDomibusData = async () => {
+            try {
+                const data = await dataProvider.fetchDomibus("domibus/ext/monitoring/application/status");
+                setServices(data.services || []);
+                setError(null);
+            } catch (error) {
+                setError(translate('show.dashboard.error_request_failed'));
+                setServices([]);
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
-    if (isLoading) return <CircularProgress />;
-    if (error) return <Typography color="error">{error}</Typography>;
+        fetchDomibusData();
+    }, [dataProvider, translate]);
 
-    const overallStatus = services.reduce((status, service) => {
-        if (service.status === "CRITICAL") return "CRITICAL";
-        if (service.status === "WARNING" && status !== "CRITICAL") return "WARNING";
-        return status;
-    }, "NORMAL");
+    const displayServices = isLoading ? 
+        [
+            { name: "Domibus", status: "CONNECTING" },
+            { name: "JMS", status: "CONNECTING" },
+            { name: "Database", status: "CONNECTING" }
+        ] : 
+        error ? 
+        [
+            { name: "Domibus", status: "OFFLINE" },
+            { name: "JMS", status: "OFFLINE" },
+            { name: "Database", status: "OFFLINE" }
+        ] : 
+        services;
+
+    const overallStatus = isLoading ? 
+        "CONNECTING" : 
+        error ? 
+        "OFFLINE" : 
+        displayServices.reduce((status, service) => {
+            if (service.status === "CRITICAL") return "CRITICAL";
+            if (service.status === "WARNING" && status !== "CRITICAL") return "WARNING";
+            return status;
+        }, "NORMAL");
 
     return (
         <Box
@@ -78,16 +84,28 @@ const DomibusStats = () => {
             </Box>
 
             <Box display="flex" alignItems="center" gap={1}>
-                <Chip label={translate(`show.dashboard.status_${overallStatus.toLowerCase()}`)} color={getStatusColor(overallStatus)} />
+                <Chip 
+                    label={translate(
+                        isLoading ? 'show.dashboard.status_connecting' : 
+                        error ? 'show.dashboard.status_offline' : 
+                        `show.dashboard.status_${overallStatus.toLowerCase()}`
+                    )} 
+                    color={getStatusColor(overallStatus)} 
+                    icon={isLoading ? <CircularProgress size={16} /> : undefined}
+                />
             </Box>
 
             <Box display="flex" ml="auto" gap={2}>
-                {services.map((service, index) => (
+                {displayServices.map((service, index) => (
                     <Box key={index} display="flex" alignItems="center" gap={1}>
                         <Typography variant="subtitle1" fontWeight={600}>
                             {service.name}:
                         </Typography>
-                        <Chip label={translate(`show.dashboard.status_${service.status.toLowerCase()}`)} color={getStatusColor(service.status)} />
+                        <Chip 
+                            label={translate(`show.dashboard.status_${service.status.toLowerCase()}`)} 
+                            color={getStatusColor(service.status)}
+                            icon={service.status === "CONNECTING" ? <CircularProgress size={16} /> : undefined}
+                        />
                     </Box>
                 ))}
             </Box>

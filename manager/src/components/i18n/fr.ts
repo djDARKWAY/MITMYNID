@@ -525,6 +525,8 @@ const frenchMessages: TranslationMessages = {
       logs_title: "Journaux",
       error_loading_logs: "Erreur lors du chargement des journaux.",
       no_logs_found: "Aucun journal trouvé.",
+      status_offline: "OFFLINE",
+      status_connecting: "CONNEXION EN COURS",
       log_type: {
         info: "Information",
         error: "Erreur",
