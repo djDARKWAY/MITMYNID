@@ -286,6 +286,7 @@ const frenchMessages: TranslationMessages = {
     },
     warehouses: {
       manage: "Gestion des entrepôts",
+      map: "Mapa géographique",
       name: "Entrepôts",
       list: "Entreprises",
       fields: {

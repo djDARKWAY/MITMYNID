@@ -286,6 +286,7 @@ const spanishMessages: TranslationMessages = {
     },
     warehouses: {
       manage: "Gestionar almacéns",
+      map: "Mapa geográfico",
       name: "Aalmacén",
       list: "Almacenes",
       fields: {

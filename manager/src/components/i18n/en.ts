@@ -277,6 +277,7 @@ const englishMessages: TranslationMessages = {
     },
     warehouses: {
       manage: "Warehouse panel",
+      map: "Geographic map",
       name: "Warehouse",
       list: "Warehouse",
       fields: {

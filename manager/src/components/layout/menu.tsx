@@ -16,6 +16,7 @@ import {
   SignalWifi4BarLock,
   WarehouseRounded,
   ManageAccountsRounded,
+  MapRounded
 } from "@mui/icons-material";
 import {
   useTranslate,
@@ -151,6 +152,14 @@ const MyMenu = ({ dense = false }: MenuProps) => {
       primaryText={translate(`resources.warehouses.manage`)}
       sx={{ color: !open ? "transparent" : "default" }}
       leftIcon={<ManageAccountsRounded />}
+      dense={dense}
+    />
+    <MenuItemLink
+      to={{ pathname: "/warehouses-map" }}
+      className={"submenuItem " + (open ? "open" : "close")}
+      primaryText={translate(`resources.warehouses.map`)}
+      sx={{ color: !open ? "transparent" : "default" }}
+      leftIcon={<MapRounded />}
       dense={dense}
     />
   </SubMenu>

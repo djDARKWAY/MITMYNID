@@ -284,6 +284,7 @@ const portugueseMessages: TranslationMessages = {
     },
     warehouses: {
       manage: "Painel de entidades",
+      map: "Mapa geográfico",
       name: "Entidade",
       list: "Entidades",
       fields: {

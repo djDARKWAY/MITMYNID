@@ -146,14 +146,6 @@ export const WarehousesList = () => {
                         </Button>
                         <FilterButton />
                         <CreateButton label="Criar" icon={<AddIcon />} />
-                        <Button 
-                            variant="contained"
-                            color="primary"
-                            onClick={() => navigate("/warehouses-map")}
-                            sx={{ textTransform: "none", marginLeft: "10px" }}
-                        >
-                            Ver Mapa
-                        </Button>
                     </TopToolbar>
                 }
             >

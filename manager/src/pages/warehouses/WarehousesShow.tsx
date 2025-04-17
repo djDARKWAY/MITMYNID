@@ -116,36 +116,36 @@ export const WarehousesShow = () => (
                 <Grid item xs={12} md={6}>
                     {/* Identificação */}
                     <Section title="show.warehouses.identification" icon={<Person />}>
-                        <TextField source="name" sx={{ fontSize: "1.08rem"}} />
+                        <TextField source="name" sx={{ fontSize: "1.08rem"}} emptyText="N/A" />
                     </Section>
 
                     {/* Localização */}
                     <Section title="show.warehouses.location" icon={<Home />}>
                         <FieldTitleLabel label="show.warehouses.address">
-                            <TextField source="address" />
+                            <TextField source="address" emptyText="N/A" />
                         </FieldTitleLabel>
                         <Box display="flex" gap={2} flexWrap="wrap">
                             <FieldTitleLabel label="show.warehouses.city">
-                                <TextField source="city" />
+                                <TextField source="city" emptyText="N/A" />
                             </FieldTitleLabel>
                             <FieldTitleLabel label="show.warehouses.district">
-                                <TextField source="district" />
+                                <TextField source="district" emptyText="N/A" />
                             </FieldTitleLabel>
                             <FieldTitleLabel label="show.warehouses.country">
-                                <ReferenceField source="country_id" reference="countries">
+                                <ReferenceField source="country_id" reference="countries" emptyText="N/A">
                                     <TextField source="name" />
                                 </ReferenceField>
                             </FieldTitleLabel>
                             <FieldTitleLabel label="show.warehouses.zip_code">
-                                <TextField source="zip_code" />
+                                <TextField source="zip_code" emptyText="N/A" />
                             </FieldTitleLabel>
                         </Box>
                         <Box display="flex" gap={2}>
                             <FieldTitleLabel label="show.warehouses.latitude">
-                                <TextField source="lat" />
+                                <TextField source="lat" emptyText="N/A" />
                             </FieldTitleLabel>
                             <FieldTitleLabel label="show.warehouses.longitude">
-                                <TextField source="lon" />
+                                <TextField source="lon" emptyText="N/A" />
                             </FieldTitleLabel>
                         </Box>
                     </Section>
@@ -153,16 +153,16 @@ export const WarehousesShow = () => (
                     {/* Contactos */}
                     <Section title="show.warehouses.contacts" icon={<ContactMail />}>
                         <FieldTitleLabel label="show.warehouses.email">
-                            <TextField source="email" />
+                            <TextField source="email" emptyText="N/A" />
                         </FieldTitleLabel>
                         <FieldTitleLabel label="show.warehouses.contact">
                             <Box display="flex" gap={2}>
-                                <TextField source="contact" />
-                                <TextField source="phone" />
+                                <TextField source="contact" emptyText="N/A" />
+                                <TextField source="phone" emptyText="N/A" />
                             </Box>
                         </FieldTitleLabel>
                         <FieldTitleLabel label="show.warehouses.website">
-                            <TextField source="website" />
+                            <TextField source="website" emptyText="N/A" />
                         </FieldTitleLabel>
                     </Section>
                 </Grid>
@@ -179,13 +179,13 @@ export const WarehousesShow = () => (
                     <Section title="show.warehouses.logs" icon={<AccessTimeFilled />}>
                         <Box display="flex" gap={2} flexWrap="wrap">
                             <FieldTitleLabel label="show.warehouses.created_date">
-                                <DateField source="created_date" showTime />
+                                <DateField source="created_date" showTime emptyText="N/A" />
                             </FieldTitleLabel>
                             <FieldTitleLabel label="show.warehouses.last_modified">
-                                <DateField source="last_modified" showTime />
+                                <DateField source="last_modified" showTime emptyText="N/A" />
                             </FieldTitleLabel>
                             <FieldTitleLabel label="show.warehouses.last_modified_user">
-                                <ReferenceField source="last_modified_user_id" reference="users">
+                                <ReferenceField source="last_modified_user_id" reference="users" emptyText="N/A">
                                     <TextField source="username" />
                                 </ReferenceField>
                             </FieldTitleLabel>
