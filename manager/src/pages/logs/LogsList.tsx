@@ -40,10 +40,10 @@ export const LogsList = () => {
                     primaryText={record => translate(`show.dashboard.log_type.${record.type?.type?.toLowerCase() || "unknown"}`)}
                     secondaryText={record => record.message}
                     tertiaryText={record => new Date(record.timestamp).toLocaleString()}
-                    linkType={"edit"}
+                    linkType="show"
                 />
             ) : (
-                <DatagridConfigurable rowClick={false} bulkActionButtons={false} >
+                <DatagridConfigurable rowClick="show" bulkActionButtons={false}>
                     <FunctionField
                         label="resources.logs.fields.category" 
                         render={record => {
@@ -70,7 +70,7 @@ export const LogsList = () => {
                         )}
                     />
                     <TextField source="message" label="resources.logs.fields.message" />
-                </DatagridConfigurable >
+                </DatagridConfigurable>
             )}
         </List>
     );

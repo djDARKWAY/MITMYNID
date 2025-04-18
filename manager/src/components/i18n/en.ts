@@ -552,6 +552,17 @@ const englishMessages: TranslationMessages = {
         admin: "Administrator",
       },
     },
+    logs: {
+      details: "Log Details",
+      type: "Type",
+      message: "Message",
+      timestamp: "Date/Time",
+      data: "Metadata",
+      metadata: {
+        key: "Key",
+        value: "Value",
+      },
+    },
   },
 };
 

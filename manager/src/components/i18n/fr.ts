@@ -564,6 +564,17 @@ const frenchMessages: TranslationMessages = {
         admin: "Administrateur",
       },
     },
+    logs: {
+      details: "Détails du journal",
+      type: "Type",
+      message: "Message",
+      timestamp: "Date/Heure",
+      data: "Métadonnées",
+      metadata: {
+        key: "Clé",
+        value: "Valeur",
+      },
+    },
   },
 };
 

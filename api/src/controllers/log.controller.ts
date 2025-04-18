@@ -69,4 +69,21 @@ export class LogController {
     const logTypes = await this.logTypeRepository.find();
     return logTypes.map((logType) => logType.type);
   }
+
+  @get("/logs/{id}")
+  @response(200, {
+    description: "Log model instance with details",
+    content: {
+      "application/json": {
+        schema: getModelSchemaRef(Log, { includeRelations: true }),
+      },
+    },
+  })
+  async findById(
+    @param.path.number("id") id: number
+  ): Promise<Log> {
+    return this.logRepository.findById(id, {
+      include: [{ relation: "type" }],
+    });
+  }
 }

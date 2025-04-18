@@ -558,6 +558,17 @@ const portugueseMessages: TranslationMessages = {
         admin: "Administrador",
       }
     },
+    logs: {
+      details: "Detalhes do Log",
+      type: "Tipo",
+      message: "Mensagem",
+      timestamp: "Data/Hora",
+      data: "Metadados",
+      metadata: {
+        key: "Chave",
+        value: "Valor",
+      }
+    },
   },
 };
 

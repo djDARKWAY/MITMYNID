@@ -561,6 +561,17 @@ const spanishMessages: TranslationMessages = {
         admin: "Administrador",
       },
     },
+    logs: {
+      details: "Detalles del Log",
+      type: "Tipo",
+      message: "Mensaje",
+      timestamp: "Fecha/Hora",
+      data: "Metadatos",
+      metadata: {
+        key: "Clave",
+        value: "Valor",
+      },
+    },
   },
 };
 
