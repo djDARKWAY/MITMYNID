@@ -48,7 +48,7 @@ const UserDetails = () => {
     return (
         <Paper elevation={3} sx={{ padding: 2, borderRadius: 1, backgroundColor: "background.paper" }}>
             <Grid container spacing={2.5}>
-                <Grid item xs={12} md={4}>
+                <Grid item xs={12} md={6}>
                     <Card variant="outlined" sx={{ mb: 3 }}>
                         <CardContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <Box
@@ -102,7 +102,7 @@ const UserDetails = () => {
                     </Section>
                 </Grid>
 
-                <Grid item xs={12} md={8}>
+                <Grid item xs={12} md={6}>
                     <Section title="show.users.contacts" icon={<PhoneIphone />}>
                         <Box display="flex" gap={2}>
                             <FieldTitleLabel label="show.users.phone">
