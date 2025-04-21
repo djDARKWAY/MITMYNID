@@ -83,24 +83,12 @@ export class AccessPoint extends Entity {
   created_date: string;
 
   @property({
-    type: "date",
-    required: true,
-    postgresql: {
-      columnName: "last_modified",
-      dataType: "timestamp with time zone",
-      nullable: "NO",
-      default: "NOW()",
-    },
-  })
-  last_modified: string;
-
-  @property({
     type: "boolean",
     required: true,
     postgresql: {
       columnName: "is_active",
       dataType: "boolean",
-      nullable: "YES",
+      nullable: "NO",
       default: true,
     },
   })
@@ -113,10 +101,23 @@ export class AccessPoint extends Entity {
   warehouse_id?: number;
 
   @property({
-    type: 'string',
+    type: "date",
+    required: true,
     postgresql: {
-      columnName: 'last_modified_user_id',
+      columnName: "last_modified",
+      dataType: "timestamp with time zone",
+      nullable: "NO",
+      default: "NOW()",
+    },
+  })
+  last_modified: string;
+
+  @property({
+    type: "string",
+    postgresql: {
+      columnName: "last_modified_user_id",
       dataType: "uuid",
+      nullable: "YES",
     },
   })
   last_modified_user_id?: string;

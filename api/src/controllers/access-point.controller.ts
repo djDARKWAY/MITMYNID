@@ -42,6 +42,7 @@ export class AccessPointController {
 
   // POST endpoint:
   @post("/access-points")
+  @authenticate("jwt")
   @response(200, {
     description: "AccessPoint model instance",
     content: { "application/json": { schema: getModelSchemaRef(AccessPoint) } },
@@ -52,15 +53,13 @@ export class AccessPointController {
         "application/json": {
           schema: getModelSchemaRef(AccessPoint, {
             title: "NewAccessPoint",
-            exclude: ["id"],
+            exclude: ["id", "created_date", "last_modified", "last_modified_user_id"],
           }),
         },
       },
     })
-    accessPoint: Omit<
-      AccessPoint,
-      "id" | "created_date" | "last_modified" | "last_modified_user"
-    >
+    accessPoint: Omit<AccessPoint, "id" | "created_date" | "last_modified" | "last_modified_user_id">,
+    @inject(SecurityBindings.USER) currentUser: UserProfile
   ): Promise<AccessPoint> {
     this.validateAccessPoints(accessPoint);
 
@@ -68,6 +67,7 @@ export class AccessPointController {
       ...accessPoint,
       created_date: new Date().toISOString(),
       last_modified: new Date().toISOString(),
+      last_modified_user_id: currentUser.id,
     });
   }
 

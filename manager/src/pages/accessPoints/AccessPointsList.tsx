@@ -1,4 +1,4 @@
-import { List, Datagrid, TextField, FunctionField, SimpleList, usePermissions, ReferenceField, WithRecord } from "react-admin";
+import { List, Datagrid, TextField, FunctionField, SimpleList, usePermissions, ReferenceField, WithRecord, CreateButton, TopToolbar } from "react-admin";
 import { useTheme } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CustomEmptyPage from "../../components/general/CustomEmptyPage";
@@ -7,6 +7,12 @@ import { AccessPointsFilters } from "./AccessPointsFilter";
 import { Edit, Delete } from '@mui/icons-material';
 import CustomButtonToolTip, { commonListCSS } from "../../components/general/CustomButtonToolTip";
 import CustomConfirmButtonToolTip from "../../components/general/CustomConfirmButtonToolTip";
+
+const ListActions = () => (
+    <TopToolbar>
+        <CreateButton />
+    </TopToolbar>
+);
 
 export const AccessPointsList = () => {
     const { permissions } = usePermissions();
@@ -22,6 +28,7 @@ export const AccessPointsList = () => {
             empty={<CustomEmptyPage />}
             exporter={false}
             title="resources.accessPoints.name"
+            actions={<ListActions />}
             sx={{ paddingLeft: '10px' }}
         >
             {isSmall ? (
