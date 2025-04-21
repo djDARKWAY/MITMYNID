@@ -1,6 +1,7 @@
 import { UsersCreate } from "./UsersCreate";
 import { UsersEdit } from "./UsersEdit";
 import { UsersList } from "./UsersList";
+import { UsersShow } from "./UsersShow";
 
 export const users = (permissions?: string[]) => {
   //console.log(permissions)
@@ -15,6 +16,7 @@ export const users = (permissions?: string[]) => {
         list: UsersList,
         create: UsersCreate,
         edit: UsersEdit,
+        show: UsersShow,
       };
       break;
     }

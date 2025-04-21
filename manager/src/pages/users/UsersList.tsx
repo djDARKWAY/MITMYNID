@@ -64,7 +64,7 @@ export const UsersList = () => {
             linkType={"edit"} /> 
             
         : 
-        <Datagrid bulkActionButtons={false}>
+        <Datagrid rowClick="show" bulkActionButtons={false}>
             <FunctionField label="resources.utilizadores.fields.nome" source="person_name" render={(record : Users) => (
                 <Box sx={{display: 'flex', gap: '10px', alignItems: 'center'}}>
                     <Box>

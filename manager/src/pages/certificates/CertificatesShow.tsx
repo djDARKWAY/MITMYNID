@@ -33,19 +33,6 @@ const FieldTitleLabel = ({ label, children }: { label: string; children: ReactNo
     );
 };
 
-const JsonField = ({ source }: { source: string }) => {
-    const record = useRecordContext();
-    if (!record || !record[source]) return null;
-
-    return (
-        <Card variant="outlined" sx={{ my: 1, p: 1, bgcolor: "InfoBackground", maxWidth: "100%", overflowX: "auto" }}>
-            <Typography variant="body2" sx={{ whiteSpace: "pre-wrap", fontFamily: "monospace", wordBreak: "break-word" }}>
-                {JSON.stringify(record[source], null, 2)}
-            </Typography>
-        </Card>
-    );
-};
-
 export const CertificatesShow = () => (
     <Show>
         <Paper elevation={3} sx={{ padding: 2, borderRadius: 1, backgroundColor: "background.paper" }}>
