@@ -33,6 +33,13 @@ export const UsersCreate = () => {
     if (isChecked && userName.length > 0) {
       data.username = userName;
     }
+    if (data.phone) {
+      data.phone = parseInt(data.phone, 10);
+    }
+  
+    if (data.mobile) {
+      data.mobile = parseInt(data.mobile, 10);
+    }
 
     return data
   };

@@ -1,4 +1,4 @@
-import { Create, SimpleForm, TextInput, ReferenceInput, SelectInput, Toolbar, SaveButton } from "react-admin";
+import { Create, SimpleForm, TextInput, ReferenceInput, SelectInput, Toolbar, SaveButton, required } from "react-admin";
 import { Typography, Divider, Box, Button } from "@mui/material";
 import { Home, ContactMail, Language, Person, DoDisturb } from "@mui/icons-material";
 import { Link } from "react-router-dom";
@@ -6,7 +6,9 @@ import { Link } from "react-router-dom";
 const FLAG_BASE_URL = import.meta.env.VITE_FLAG_BASE_URL;
 
 export const WarehousesCreate = () => (
-    <Create>
+    <Create transform={(data) => ({
+        ...data,
+    })}>
         <SimpleForm toolbar={<CustomToolbar />}>
             {/* Identificação */}
             <Box display="flex" alignItems="center">
@@ -14,7 +16,7 @@ export const WarehousesCreate = () => (
                 <Typography variant="h6" sx={{ ml: 1 }}>Identificação</Typography>
             </Box>
             <Divider sx={{ mb: 3 }} />
-            <TextInput source="name" label="show.warehouses.name" fullWidth />
+            <TextInput source="name" label="show.warehouses.name" fullWidth validate={[required()]} />
 
             {/* Localização */}
             <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
@@ -22,24 +24,28 @@ export const WarehousesCreate = () => (
                 <Typography variant="h6" sx={{ ml: 1 }}>Localização</Typography>
             </Box>
             <Divider sx={{ mb: 3 }} />
-            <TextInput source="address" label="show.warehouses.address" fullWidth />
+            <TextInput source="address" label="show.warehouses.address" fullWidth validate={[required()]} />
             <Box display="flex" gap={2} width="100%" alignItems="center">
                 <Box sx={{ width: "50%" }}>
                     <ReferenceInput source="country_id" reference="countries" label="show.warehouses.country" perPage={180} sort={{ field: 'name', order: 'ASC' }}>
-                        <SelectInput optionText={record => (
-                            <Box display="flex" alignItems="center">
-                                {record.flag_url && (
-                                    <img src={`${FLAG_BASE_URL}/${record.flag_url}`} alt={record.name} width={20} height={15} style={{ borderRadius: "3px", marginRight: 8 }} />
-                                )}
-                                {record.name}
-                            </Box>
-                        )} fullWidth />
+                        <SelectInput 
+                            optionText={record => (
+                                <Box display="flex" alignItems="center">
+                                    {record.flag_url && (
+                                        <img src={`${FLAG_BASE_URL}/${record.flag_url}`} alt={record.name} width={20} height={15} style={{ borderRadius: "3px", marginRight: 8 }} />
+                                    )}
+                                    {record.name}
+                                </Box>
+                            )} 
+                            fullWidth 
+                            validate={[required()]} 
+                        />
                     </ReferenceInput>
                 </Box>
-                <TextInput source="city" label="show.warehouses.city" sx={{ width: "50%" }} />
+                <TextInput source="city" label="show.warehouses.city" sx={{ width: "50%" }} validate={[required()]} />
             </Box>
-            <TextInput source="district" label="show.warehouses.district" fullWidth />
-            <TextInput source="zip_code" label="show.warehouses.zip_code" fullWidth />
+            <TextInput source="district" label="show.warehouses.district" fullWidth validate={[required()]} />
+            <TextInput source="zip_code" label="show.warehouses.zip_code" fullWidth validate={[required()]} />
 
             {/* Contactos */}
             <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
