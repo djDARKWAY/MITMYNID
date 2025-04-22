@@ -8,7 +8,7 @@ import { Users } from "../../utils/types";
 import CustomPagination, { perPageDefault } from "../../components/general/CustomPagination";
 import { url } from "../../App";
 import adjustDateWithoutTime from "../../components/general/adjustDateWTime";
-import { Edit, Delete } from '@mui/icons-material';
+import { Edit, Delete, Block } from '@mui/icons-material';
 import CustomButtonToolTip, { commonListCSS } from "../../components/general/CustomButtonToolTip";
 import CustomConfirmButtonToolTip from "../../components/general/CustomConfirmButtonToolTip";
 import { responsiveListFilter } from "../../components/general/customCSS";
@@ -30,8 +30,20 @@ export const UsersList = () => {
             });
             notify('User deleted successfully', { type: 'success' });
         } catch (error) {
-            console.error('Error in soft delete:', error);
             notify('Error deleting user', { type: 'error' });
+        }
+    };
+
+    const handleBlockUser = async (id: string) => {
+        try {
+            await dataProvider.update('users', { 
+                id: id, 
+                data: { blocked: true }, 
+                previousData: { id } 
+            });
+            notify('User blocked successfully', { type: 'success' });
+        } catch (error) {
+            notify('Error blocking user', { type: 'error' });
         }
     };
 
@@ -101,6 +113,16 @@ export const UsersList = () => {
                             id={record.id} 
                             resource={"users"}
                             sx={commonListCSS}
+                            />
+                            <CustomConfirmButtonToolTip 
+                            sx={commonListCSS}
+                            label={"Block User"}
+                            color="warning"
+                            icon={<Block />} 
+                            id={record.id} 
+                            disabled={record.blocked}
+                            resource={"users"}
+                            customAction={() => handleBlockUser(record.id)}
                             />
                             <CustomConfirmButtonToolTip 
                             sx={commonListCSS}
