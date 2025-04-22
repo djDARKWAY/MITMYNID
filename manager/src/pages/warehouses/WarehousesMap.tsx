@@ -174,10 +174,11 @@ const WarehousesMap: React.FC = () => {
                     boxShadow: "0 2px 5px rgba(0, 0, 0, 0.4)",
                     width: "auto",
                     padding: "5px",
+                    paddingBottom: "0px",
                     gap: "5px",
                     display: "flex",
                     flexDirection: "row",
-                    alignItems: "center"
+                    alignItems: "center",
                 }}
             >
                 <TextField
