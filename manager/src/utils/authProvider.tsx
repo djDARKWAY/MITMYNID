@@ -50,10 +50,12 @@ export const authProvider = {
       const userData = await userResponse.json();
 
       const userTheme = userData.theme || "light";
+      const userLanguage = userData.language || "pt";
 
       return Promise.resolve({
         redirectTo: "/dashboard",
         theme: userTheme,
+        language: userLanguage
       });
     } catch {
       localStorage.removeItem("token");
@@ -170,13 +172,10 @@ export const authProvider = {
       const newProfile = {
         id: data.id,
         fullName: data.person_name,
-        avatar: data.photo
-          ? `${import.meta.env.VITE_REST_API}${data.photo}`
-          : "",
-        favTheme: data.prefs_util?.tema_fav,
-        favLang: data.prefs_util?.lang_fav,
-        theme: data.theme || "light",
-      };
+        avatar: data.photo ? `${import.meta.env.VITE_REST_API}${data.photo}` : '',
+        theme: data.theme || 'light',
+        language: data.language || 'pt'
+      }
 
       localStorage.setItem("profile", JSON.stringify(newProfile));
 

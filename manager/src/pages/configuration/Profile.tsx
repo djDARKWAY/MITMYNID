@@ -40,9 +40,10 @@ const themes = [
 ];
 
 const langs = [
-  { id: 'pt', name: 'Português' },
-  { id: 'en', name: 'English' },
-  { id: 'fr', name: 'Français' }
+  { id: 'pt-pt', name: 'Português' },
+  { id: 'en-us', name: 'English' },
+  { id: 'fr', name: 'Français' },
+  { id: 'es', name: 'Español' },
 ];
 
 function formatLogo(value: any) {
@@ -73,30 +74,19 @@ const Profile = () => {
       fullName: data.person_name,
       //@ts-ignore
       avatar: data.photo ? url + data.photo : '',
-      // Usar o novo campo theme em vez de prefs_util.tema_fav
-      theme: data.theme || 'light', 
-      // Manter o campo para o idioma favorito por enquanto
-      favLang: data.prefs_util ? data.prefs_util.lang_fav : null,
+      // Usar os novos campos theme e language
+      theme: data.theme || 'light',
+      language: data.language || 'pt',
     }));
 
-    // Usar diretamente o campo theme em vez de prefs_util.tema_fav
+    // Usar diretamente o campo theme
     if (data.theme && data.theme !== theme) {
       setTheme(data.theme);
     }
 
-    // Manter o comportamento do lang_fav por enquanto
-    if (data.prefs_util && data.prefs_util.lang_fav && data.prefs_util.lang_fav !== locale) {
-      switch (data.prefs_util.lang_fav) {
-        case 'pt':
-          setLocale('pt')
-          break;
-        case 'en':
-          setLocale('en')
-          break;
-        case 'fr':
-          setLocale('fr')
-          break;
-      }
+    // Usar diretamente o campo language
+    if (data.language && data.language !== locale) {
+      setLocale(data.language);
     }
 
     if (identity) refetch();
@@ -180,10 +170,10 @@ const Profile = () => {
             <Box width={'100%'}>
               <Box display={{ xs: 'block', md: 'flex' }} sx={{ flexWrap: { xs: 'none', md: 'wrap' } }}>
                 <Box flex={1} mr={{ xs: 0, md: '0.5em' }}>
-                  <SelectInput choices={langs} fullWidth source="prefs_util.lang_fav" sx={{ marginTop: '0px' }} label="resources.utilizadores.fields.lang_fav" />
+                  {/* Agora usando o campo language direto */}
+                  <SelectInput choices={langs} fullWidth source="language" sx={{ marginTop: '0px' }} label="resources.utilizadores.fields.lang_fav" />
                 </Box>
                 <Box flex={1} ml={{ xs: 0, md: '0.5em' }}>
-                  {/* Aqui mudamos do campo prefs_util.tema_fav para theme */}
                   <SelectInput choices={themes} fullWidth source="theme" sx={{ marginTop: '0px' }} label="resources.utilizadores.fields.tema_fav" />
                 </Box>
               </Box>
