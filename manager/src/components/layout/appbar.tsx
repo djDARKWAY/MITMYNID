@@ -35,12 +35,10 @@ const CustomUserMenu = () => (
 );
 
 const AppToolbar = () => {
-
   return (
     <>
       <RefreshIconButton />
       <ToggleThemeButton />
-      {/* <LocalesMenuButton/> */}
     </>
   );
 };
