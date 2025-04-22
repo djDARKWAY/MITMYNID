@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import Grid from '@mui/material/Grid';
-import { useLogin, useNotify, useTranslate } from 'react-admin';
+import { useLogin, useNotify, useTranslate, useTheme as useThemeRA } from 'react-admin';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useState } from 'react';
 import Copyright from './Copyright';
@@ -18,6 +18,8 @@ export default function SignIn() {
   const login = useLogin();
   const notify = useNotify();
   const translate = useTranslate();
+  const [theme, setTheme] = useThemeRA();
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -25,7 +27,12 @@ export default function SignIn() {
       username: data.get('username'),
       password: data.get('password'),
     })
-      .catch((err) => {
+      .then((response: any) => {
+        if (response?.theme) {
+          setTheme(response.theme);
+        }
+      })
+      .catch(() => {
         notify('Utilizador ou palavra-passe inválidos', { type: 'warning' });
       });
   };

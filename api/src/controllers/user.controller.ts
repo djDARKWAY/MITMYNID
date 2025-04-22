@@ -339,10 +339,10 @@ export class UserController {
     description: "User PATCH success",
   })
   @authenticate("jwt")
-  /*@authorize({
+  @authorize({
     allowedRoles: ['ADMIN', 'OCORRENCIAS_ENT_supervisor'],
     voters: [basicAuthorization],
-  })*/
+  })
   async updateById(
     @param.path.string("id") id: string,
     @requestBody({
@@ -356,14 +356,24 @@ export class UserController {
   ): Promise<User | void | Response> {
     let omitArray = ["roles", "password", "token", "prefs_util", "photo"];
 
-    //detalhes do utilizador que está a tentar aceder
     const accessUser = await this.userRepository.findById(id);
 
-    //verifica se é o proprio
+    if (!user.hasOwnProperty('warehouse_id')) {
+      user.warehouse_id = accessUser.warehouse_id;
+    } else if (user.warehouse_id !== null && typeof user.warehouse_id !== 'number') {
+      const parsedWarehouseId = Number(user.warehouse_id);
+      if (isNaN(parsedWarehouseId)) {
+        return this.response
+          .status(422)
+          .send({ message: "Invalid warehouse_id. It must be a number or NULL." });
+      }
+      user.warehouse_id = parsedWarehouseId;
+    }
+
     if (!this.user.roles.includes("ADMIN") && this.user[securityId] !== id) {
       return this.response
         .status(422)
-        .send({ message: "Acess não autorizado" });
+        .send({ message: "Acesso não autorizado" });
     }
 
     if (user.email && user.email !== accessUser.email)

@@ -59,36 +59,27 @@ const MyLayout = ({
     const { data: identity, isLoading } = useGetIdentity();
 
     useEffect(() => {
-
-        if(isLoading || !identity || initialLoad.current) return;
+        if (isLoading || !identity || initialLoad.current) return;
 
         initialLoad.current = true;
 
-        if(!theme && identity.favTheme){
-            switch(identity.favTheme){
-                case 'light':
-                    setTheme('light')
-                    break;
-                case 'dark':
-                    setTheme('dark')
-                    break;
-            }
+        if (identity.theme) {
+            setTheme(identity.theme);
         }
 
-        if(!locale && identity.favLang){
-            switch(identity.favLang){
+        if (!locale && identity.favLang) {
+            switch (identity.favLang) {
                 case 'pt':
-                    setLocale('pt')
+                    setLocale('pt');
                     break;
                 case 'en':
-                    setLocale('en')
+                    setLocale('en');
                     break;
                 case 'fr':
-                    setLocale('fr')
+                    setLocale('fr');
                     break;
             }
         }
-
     }, [isLoading]);
 
     return (

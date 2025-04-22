@@ -282,8 +282,45 @@ export class User extends Entity {
   last_access?: string;
 
   @property({
+    type: "string",
+    postgresql: {
+      columnName: "theme",
+      dataType: "text",
+      nullable: "YES",
+    },
+    jsonSchema: {
+      type: "string",
+      nullable: true,
+    },
+  })
+  theme?: string;
+
+  @property({
+    type: "string",
+    postgresql: {
+      columnName: "language",
+      dataType: "text",
+      nullable: "YES",
+    },
+    jsonSchema: {
+      type: "string",
+      nullable: true,
+    },
+  })
+  language?: string;
+
+  @property({
     type: 'number',
     required: false,
+    postgresql: {
+      columnName: "warehouse_id",
+      dataType: "integer",
+      nullable: "YES",
+    },
+    jsonSchema: {
+      type: "number",
+      nullable: true,
+    },
   })
   warehouse_id?: number;
 

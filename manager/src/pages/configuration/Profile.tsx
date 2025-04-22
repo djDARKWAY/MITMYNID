@@ -39,7 +39,6 @@ const themes = [
   { id: 'dark', name: 'Dark' }
 ];
 
-
 const langs = [
   { id: 'pt', name: 'Português' },
   { id: 'en', name: 'English' },
@@ -74,21 +73,18 @@ const Profile = () => {
       fullName: data.person_name,
       //@ts-ignore
       avatar: data.photo ? url + data.photo : '',
-      favTheme: data.prefs_util ? data.prefs_util.tema_fav : null,
+      // Usar o novo campo theme em vez de prefs_util.tema_fav
+      theme: data.theme || 'light', 
+      // Manter o campo para o idioma favorito por enquanto
       favLang: data.prefs_util ? data.prefs_util.lang_fav : null,
     }));
 
-    if (data.prefs_util && data.prefs_util.tema_fav && data.prefs_util.tema_fav !== theme) {
-      switch (data.prefs_util.tema_fav) {
-        case 'light':
-          setTheme('light')
-          break;
-        case 'dark':
-          setTheme('dark')
-          break;
-      }
+    // Usar diretamente o campo theme em vez de prefs_util.tema_fav
+    if (data.theme && data.theme !== theme) {
+      setTheme(data.theme);
     }
 
+    // Manter o comportamento do lang_fav por enquanto
     if (data.prefs_util && data.prefs_util.lang_fav && data.prefs_util.lang_fav !== locale) {
       switch (data.prefs_util.lang_fav) {
         case 'pt':
@@ -187,7 +183,8 @@ const Profile = () => {
                   <SelectInput choices={langs} fullWidth source="prefs_util.lang_fav" sx={{ marginTop: '0px' }} label="resources.utilizadores.fields.lang_fav" />
                 </Box>
                 <Box flex={1} ml={{ xs: 0, md: '0.5em' }}>
-                  <SelectInput choices={themes} fullWidth source="prefs_util.tema_fav" sx={{ marginTop: '0px' }} label="resources.utilizadores.fields.tema_fav" />
+                  {/* Aqui mudamos do campo prefs_util.tema_fav para theme */}
+                  <SelectInput choices={themes} fullWidth source="theme" sx={{ marginTop: '0px' }} label="resources.utilizadores.fields.tema_fav" />
                 </Box>
               </Box>
             </Box>
