@@ -1,9 +1,17 @@
-import React, { useState } from "react";
-import { Alert, Box, Button, Card, CardContent, Grid, Snackbar, Stack, Typography, Dialog, DialogTitle, DialogContent, DialogActions, MenuItem, Select, FormControl, IconButton } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Alert, Box, Button, Card, CardContent, Grid, Snackbar, Stack, Typography, Dialog, DialogTitle, DialogContent, DialogActions, MenuItem, Select, FormControl, IconButton, InputLabel, CircularProgress } from "@mui/material";
 import { UploadFile, CheckCircle, RadioButtonUnchecked, Warning, Delete } from "@mui/icons-material";
 import JSZip from "jszip";
 import { useDropzone } from "react-dropzone";
 import { useTheme } from "@mui/material/styles";
+
+// Define the AccessPoint interface
+interface AccessPoint {
+  id: number;
+  location_description: string;
+  ip_address: string;
+  is_active: boolean;
+}
 
 const CertificatesUpload: React.FC = () => {
   const theme = useTheme();
@@ -12,6 +20,30 @@ const CertificatesUpload: React.FC = () => {
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "info" as "error" | "success" });
   const [confirmDialog, setConfirmDialog] = useState({ open: false, title: "", message: "", onConfirm: () => {}, onCancel: () => {} });
   const certTypes = ["srv_cert", "priv_key", "int_cert"];
+  
+  const [accessPoints, setAccessPoints] = useState<AccessPoint[]>([]);
+  const [selectedAccessPoint, setSelectedAccessPoint] = useState<number | "">("");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchAccessPoints = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${import.meta.env.VITE_REST_API}/access-points`);
+        if (!response.ok) {
+          throw new Error("Erro ao obter os Access Points");
+        }
+        const data = await response.json();
+        setAccessPoints(data);
+      } catch (error) {
+        showNotification("Erro ao obter os Access Points", "error");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAccessPoints();
+  }, []);
 
   const showNotification = (message: string, severity: "error" | "success") =>
     setSnackbar({ open: true, message, severity });
@@ -75,43 +107,60 @@ const CertificatesUpload: React.FC = () => {
     setProgress(updatedProgress);
   };
 
-  const reassignFile = (fromKey: string, toKey: string) => {
-    if (fromKey === toKey) return;
-
-    setFiles((prev) => {
-      const updated = { ...prev };
-      const temp = updated[fromKey];
-      updated[fromKey] = updated[toKey];
-      updated[toKey] = temp;
-      return updated;
-    });
-
-    setProgress((prev) => {
-      const updated = { ...prev };
-      const temp = updated[fromKey];
-      updated[fromKey] = updated[toKey];
-      updated[toKey] = temp;
-      return updated;
-    });
-
-    showNotification("Ficheiro reassignado com sucesso.", "success");
-  };
-
   const removeFile = (key: string) => {
     setFiles((prev) => ({ ...prev, [key]: null }));
     setProgress((prev) => ({ ...prev, [key]: false }));
   };
 
-  const isSubmitEnabled = progress.srv_cert && progress.priv_key && progress.int_cert;
+  const isSubmitEnabled = progress.srv_cert && progress.priv_key && progress.int_cert && selectedAccessPoint !== "";
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => acceptedFiles.forEach(handleFileUpload),
     multiple: false,
   });
 
+  const handleSubmit = async () => {
+    if (!files.srv_cert || !files.int_cert || !files.priv_key || !selectedAccessPoint) {
+      showNotification("Todos os ficheiros e o Access Point devem ser selecionados.", "error");
+      return;
+    }
+  
+    const formData = {
+      name: files.srv_cert.name,
+      srv_cert: await files.srv_cert.text(),
+      int_cert: await files.int_cert.text(),
+      priv_key: await files.priv_key.text(),
+      issue_date: new Date().toISOString(),
+      expiration_date: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString(),
+      is_active: true,
+    };
+  
+    try {
+      const response = await fetch(`${import.meta.env.VITE_REST_API}/certificates`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Erro ao enviar os certificados para o servidor.");
+      }
+  
+      showNotification("Certificados enviados com sucesso.", "success");
+      setFiles({ srv_cert: null, int_cert: null, priv_key: null });
+      setProgress({ srv_cert: false, int_cert: false, priv_key: false });
+      setSelectedAccessPoint("");
+    } catch (error) {
+      showNotification("Erro ao enviar os certificados para o servidor.", "error");
+    }
+  };  
+
   return (
     <Box sx={{ width: "100%", mt: 4, paddingLeft: "10px" }}>
       <Typography variant="h4" gutterBottom fontWeight="bold">
-        Carregamento de Certificados SSL
+        Certificados SSL
       </Typography>
       <Typography variant="body1" sx={{ mb: 3 }}>
         Pode carregar um ficheiro ZIP com todos os certificados ou fazer o upload individualmente.
@@ -206,34 +255,14 @@ const CertificatesUpload: React.FC = () => {
                       </Typography>
                     </Box>
                     {files[key] && (
-                      <Box display="flex">
-                        <FormControl size="small" sx={{ minWidth: 120, mr: 1 }}>
-                          <Select
-                            value={key}
-                            onChange={(e) => reassignFile(key, e.target.value)}
-                            variant="outlined"
-                            size="small"
-                          >
-                            {certTypes.map((type) => (
-                              <MenuItem key={type} value={type} disabled={type === key}>
-                                {type === "srv_cert"
-                                  ? "Cert. Servidor"
-                                  : type === "priv_key"
-                                  ? "Chave Privada"
-                                  : "Cert. Interm."}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                        <IconButton
-                          size="small"
-                          color="error"
-                          onClick={() => removeFile(key)}
-                          sx={{ padding: 1 }}
-                        >
-                          <Delete fontSize="small" />
-                        </IconButton>
-                      </Box>
+                      <IconButton
+                        size="small"
+                        color="error"
+                        onClick={() => removeFile(key)}
+                        sx={{ padding: 1 }}
+                      >
+                        <Delete fontSize="small" />
+                      </IconButton>
                     )}
                   </Box>
                 ))}
@@ -241,10 +270,60 @@ const CertificatesUpload: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
+
+        <Grid item xs={12}>
+          <Card variant="outlined">
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Access Point
+              </Typography>
+              <Typography variant="body2" sx={{ mb: 2, color: theme.palette.text.secondary }}>
+                Selecione o Access Point para o qual deseja aplicar os certificados.
+              </Typography>
+              
+              <FormControl fullWidth variant="outlined">
+                <InputLabel id="access-point-select-label">Access Point</InputLabel>
+                <Select
+                  labelId="access-point-select-label"
+                  id="access-point-select"
+                  value={selectedAccessPoint}
+                  onChange={(e) => setSelectedAccessPoint(e.target.value as number)}
+                  label="Access Point"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <MenuItem value="">
+                      <Box display="flex" alignItems="center">
+                        <CircularProgress size={20} sx={{ mr: 1 }} />
+                        A carregar...
+                      </Box>
+                    </MenuItem>
+                  ) : (
+                    [
+                      <MenuItem value="" key="none" disabled>
+                        Selecione um Access Point
+                      </MenuItem>,
+                      ...accessPoints.map(ap => (
+                        <MenuItem key={ap.id} value={ap.id}>
+                          {`${ap.location_description} (${ap.ip_address})${!ap.is_active ? " - Inativo" : ""}`}
+                        </MenuItem>
+                      ))
+                    ]
+                  )}
+                </Select>
+              </FormControl>
+            </CardContent>
+          </Card>
+        </Grid>
       </Grid>
 
       <Box display="flex" justifyContent="flex-end" sx={{ mt: 2 }}>
-        <Button variant="contained" color="primary" disabled={!isSubmitEnabled}>
+        <Button 
+          variant="contained" 
+          color="primary" 
+          disabled={!isSubmitEnabled} 
+          onClick={handleSubmit}
+        >
           Submeter
         </Button>
       </Box>

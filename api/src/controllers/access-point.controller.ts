@@ -51,20 +51,26 @@ export class AccessPointController {
     @requestBody({
       content: {
         "application/json": {
-          schema: getModelSchemaRef(AccessPoint, {
-            title: "NewAccessPoint",
-            exclude: ["id", "created_date", "last_modified", "last_modified_user_id"],
-          }),
+          schema: {
+            ...getModelSchemaRef(AccessPoint, {
+              title: "NewAccessPoint",
+              exclude: ["id", "created_date", "last_modified", "last_modified_user_id", "certificate_id", "is_active"],
+            }),
+          },
         },
       },
     })
-    accessPoint: Omit<AccessPoint, "id" | "created_date" | "last_modified" | "last_modified_user_id">,
+    accessPoint: Omit<AccessPoint, "id" | "created_date" | "last_modified" | "last_modified_user_id" | "certificate_id" | "is_active">,
     @inject(SecurityBindings.USER) currentUser: UserProfile
   ): Promise<AccessPoint> {
-    this.validateAccessPoints(accessPoint);
+    this.validateAccessPoints({
+      ...accessPoint,
+      is_active: false,
+    });
 
     return this.accessPointRepository.create({
       ...accessPoint,
+      is_active: false,
       created_date: new Date().toISOString(),
       last_modified: new Date().toISOString(),
       last_modified_user_id: currentUser.id,
@@ -334,10 +340,7 @@ export class AccessPointController {
           { condition: !accessPoint.ip_address, message: "O endereço IP é obrigatório!" },
           { condition: !/^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(accessPoint.ip_address) && !/^([0-9a-fA-F]{1,4}:){7}([0-9a-fA-F]{1,4})$/.test(accessPoint.ip_address), message: "O endereço IP deve ser um IPv4 ou IPv6 válido!"},
         ],
-        is_active: [
-          { condition: accessPoint.is_active === undefined, message: "O estado do AP é obrigatório!" },
-          { condition: typeof accessPoint.is_active !== "boolean", message: "O estado do AP deve ser um valor booleano!" },
-        ],
+        // Remove is_active validation since we're forcing it to false
       };
 
     Object.entries(rules).forEach(([field, validations]) => {

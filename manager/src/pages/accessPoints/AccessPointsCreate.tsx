@@ -1,4 +1,4 @@
-import { Create, SimpleForm, TextInput, ReferenceInput, SelectInput, Toolbar, SaveButton, BooleanInput, required } from "react-admin";
+import { Create, SimpleForm, TextInput, ReferenceInput, SelectInput, Toolbar, SaveButton, required } from "react-admin";
 import { Typography, Divider, Box, Button } from "@mui/material";
 import { Person, Settings, Home, DoDisturb, CardMembership, AccessTimeFilled } from "@mui/icons-material";
 import { Link } from "react-router-dom";
@@ -35,16 +35,6 @@ export const AccessPointsCreate = () => (
                 <TextInput source="ap_software" label="show.accessPoints.software" fullWidth />
                 <TextInput source="software_version" label="show.accessPoints.software_version" fullWidth sx={{ width: "25%" }} />
             </Box>
-            
-            {/* Certificado */}
-            <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
-                <CardMembership />
-                <Typography variant="h6" sx={{ ml: 1 }}>Certificado</Typography>
-            </Box>
-            <Divider sx={{ mb: 3 }} />
-            <ReferenceInput source="certificate_id" reference="certificates" label="show.accessPoints.certificate">
-                <SelectInput optionText="name" fullWidth />
-            </ReferenceInput>
         </SimpleForm>
     </Create>
 );

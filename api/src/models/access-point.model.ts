@@ -89,7 +89,7 @@ export class AccessPoint extends Entity {
       columnName: "is_active",
       dataType: "boolean",
       nullable: "NO",
-      default: true,
+      default: false,
     },
   })
   is_active: boolean;

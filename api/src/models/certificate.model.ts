@@ -59,7 +59,6 @@ export class Certificate extends Entity {
 
   @property({
     type: "string",
-    required: true,
     postgresql: {
       columnName: "file_path",
       dataType: "text",

@@ -48,6 +48,7 @@ export class CertificateController {
     description: "Certificate model instance",
     content: { "application/json": { schema: getModelSchemaRef(Certificate) } },
   })
+  @authenticate("jwt")
   async create(
     @requestBody({
       content: {
@@ -55,19 +56,23 @@ export class CertificateController {
           schema: getModelSchemaRef(Certificate, {
             title: "NewCertificate",
             exclude: ["id"],
-            optional: ["last_modified", "last_modified_user_id", "srv_cert", "int_cert", "priv_key"],
+            optional: ["last_modified", "last_modified_user_id"],
           }),
         },
       },
     })
-    certificate: Omit<Certificate, "id" | "last_modified" | "last_modified_user_id">
+    certificate: Omit<Certificate, "id" >,
+    @inject(SecurityBindings.USER) currentUser: UserProfile
   ): Promise<Certificate> {
     this.validateCertificates(certificate);
 
-    return this.certificateRepository.create({
-      ...certificate,
-      last_modified: new Date().toISOString(),
-    });
+    const now = new Date();
+    certificate.issue_date = now.toISOString();
+    certificate.expiration_date = new Date(now.setFullYear(now.getFullYear() + 1)).toISOString();
+    certificate.last_modified = new Date().toISOString();
+    certificate.last_modified_user_id = currentUser.id;
+
+    return this.certificateRepository.create(certificate);
   }
 
   // GET endpoints:
@@ -323,11 +328,6 @@ export class CertificateController {
       name: [
         { condition: !certificate.name, message: "O nome do certificado é obrigatório!" },
         { condition: certificate.name?.length > 255, message: "O nome do certificado deve ter no máximo 255 caracteres!" }
-      ],
-      file_path: [
-        { condition: !certificate.file_path, message: "O caminho do ficheiro é obrigatório!" },
-        { condition: !(certificate.file_path?.startsWith("/") ?? false), message: "O caminho do ficheiro deve começar por '/'!" },
-        { condition: !/\.(pem|crt|key|jks)$/.test(certificate.file_path || ''), message: "O ficheiro deve ser um ficheiro de certificado válido!" }
       ],
       dates: [
         { condition: !certificate.issue_date || isNaN(Date.parse(certificate.issue_date)), message: "A data de emissão é obrigatória e deve ser válida!" },
