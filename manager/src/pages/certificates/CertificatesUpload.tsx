@@ -124,18 +124,19 @@ const CertificatesUpload: React.FC = () => {
       return;
     }
   
-    const formData = {
-      name: files.srv_cert.name,
-      srv_cert: await files.srv_cert.text(),
-      int_cert: await files.int_cert.text(),
-      priv_key: await files.priv_key.text(),
-      issue_date: new Date().toISOString(),
-      expiration_date: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString(),
-      is_active: true,
-    };
-  
+    setLoading(true);
     try {
-      const response = await fetch(`${import.meta.env.VITE_REST_API}/certificates`, {
+      const formData = {
+        name: files.srv_cert.name,
+        srv_cert: await files.srv_cert.text(),
+        int_cert: await files.int_cert.text(),
+        priv_key: await files.priv_key.text(),
+        issue_date: new Date().toISOString(),
+        expiration_date: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString(),
+        is_active: true,
+      };
+  
+      const certificateResponse = await fetch(`${import.meta.env.VITE_REST_API}/certificates`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -144,16 +145,36 @@ const CertificatesUpload: React.FC = () => {
         body: JSON.stringify(formData),
       });
   
-      if (!response.ok) {
+      if (!certificateResponse.ok) {
         throw new Error("Erro ao enviar os certificados para o servidor.");
       }
   
-      showNotification("Certificados enviados com sucesso.", "success");
+      const newCertificate = await certificateResponse.json();
+      const certificateId = newCertificate.id;
+  
+      const accessPointResponse = await fetch(`${import.meta.env.VITE_REST_API}/access-points/${selectedAccessPoint}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
+          certificate_id: certificateId,
+        }),
+      });
+  
+      if (!accessPointResponse.ok) {
+        throw new Error("Certificado criado, mas houve um erro ao associá-lo ao Access Point.");
+      }
+  
+      showNotification("Certificados enviados e associados com sucesso.", "success");
       setFiles({ srv_cert: null, int_cert: null, priv_key: null });
       setProgress({ srv_cert: false, int_cert: false, priv_key: false });
       setSelectedAccessPoint("");
     } catch (error) {
-      showNotification("Erro ao enviar os certificados para o servidor.", "error");
+      showNotification(error instanceof Error ? error.message : "Erro ao processar a operação.", "error");
+    } finally {
+      setLoading(false);
     }
   };  
 
