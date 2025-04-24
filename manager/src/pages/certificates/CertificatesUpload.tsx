@@ -5,14 +5,6 @@ import JSZip from "jszip";
 import { useDropzone } from "react-dropzone";
 import { useTheme } from "@mui/material/styles";
 
-// Define the AccessPoint interface
-interface AccessPoint {
-  id: number;
-  location_description: string;
-  ip_address: string;
-  is_active: boolean;
-}
-
 const CertificatesUpload: React.FC = () => {
   const theme = useTheme();
   const [files, setFiles] = useState<Record<string, File | null>>({});
@@ -21,7 +13,7 @@ const CertificatesUpload: React.FC = () => {
   const [confirmDialog, setConfirmDialog] = useState({ open: false, title: "", message: "", onConfirm: () => {}, onCancel: () => {} });
   const certTypes = ["srv_cert", "priv_key", "int_cert"];
   
-  const [accessPoints, setAccessPoints] = useState<AccessPoint[]>([]);
+  const [accessPoints, setAccessPoints] = useState<{ id: number; location_description: string; ip_address: string; is_active: boolean }[]>([]);
   const [selectedAccessPoint, setSelectedAccessPoint] = useState<number | "">("");
   const [loading, setLoading] = useState(false);
 
@@ -83,13 +75,9 @@ const CertificatesUpload: React.FC = () => {
           const lower = filename.toLowerCase();
 
           const accepted = lower.endsWith(".crt") || lower.endsWith(".pem")
-            ? await processFile("srv_cert", file)
-            : lower.endsWith(".key")
-            ? await processFile("priv_key", file)
-            : lower.endsWith(".ca-bundle")
-            ? await processFile("int_cert", file)
-            : false;
-
+            ? await processFile("srv_cert", file) : lower.endsWith(".key")
+            ? await processFile("priv_key", file) : lower.endsWith(".ca-bundle")
+            ? await processFile("int_cert", file) : false;
           if (accepted) filesProcessed++;
         }
 
@@ -110,6 +98,21 @@ const CertificatesUpload: React.FC = () => {
   const removeFile = (key: string) => {
     setFiles((prev) => ({ ...prev, [key]: null }));
     setProgress((prev) => ({ ...prev, [key]: false }));
+  };
+
+  const moveFile = (fromKey: string, toKey: string) => {
+    if (files[fromKey] && fromKey !== toKey) {
+      setFiles((prev) => ({
+        ...prev,
+        [toKey]: prev[fromKey],
+        [fromKey]: prev[toKey],
+      }));
+      setProgress((prev) => ({
+        ...prev,
+        [toKey]: prev[fromKey] !== null,
+        [fromKey]: prev[toKey] !== null,
+      }));
+    }
   };
 
   const isSubmitEnabled = progress.srv_cert && progress.priv_key && progress.int_cert && selectedAccessPoint !== "";
@@ -189,33 +192,18 @@ const CertificatesUpload: React.FC = () => {
 
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
-          <Card variant="outlined">
+          <Card variant="outlined" sx={{ height: "100%" }}>
             <CardContent>
               <Box
                 {...getRootProps()}
-                sx={{
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  border: "2px dashed #5384ED",
-                  textAlign: "center",
-                  cursor: "pointer",
-                  borderRadius: "8px",
-                  transition: "all 0.3s ease",
-                  padding: "40px",
-                  "&:hover": { backgroundColor: "#f5f5f5" },
-                }}
-              >
-                <input {...getInputProps()} />
+                sx={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", border: "2px dashed #5384ED", textAlign: "center", cursor: "pointer", borderRadius: "8px", transition: "all 0.3s ease", padding: "40px", "&:hover": { backgroundColor: "#f5f5f5" } }}>
+                  <input {...getInputProps()} />
                 <UploadFile sx={{ fontSize: 50, color: "#5384ED" }} />
                 <Typography variant="h6" sx={{ mt: 2, fontWeight: "bold", color: "#5384ED" }}>
-                  Arraste e solte os certificados aqui ou clique
+                  Arraste e solte os certificados ou clique aqui
                 </Typography>
                 <Typography variant="body2" sx={{ mt: 1, color: "gray" }}>
-                  Apenas ficheiros: .zip, .crt, .pem, .key, .ca-bundle
+                  Ficheiros suportados: .zip, .crt, .pem, .key, .ca-bundle
                 </Typography>
               </Box>
 
@@ -236,7 +224,7 @@ const CertificatesUpload: React.FC = () => {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <Card variant="outlined">
+          <Card variant="outlined" sx={{ height: "100%" }}>
             <CardContent>
               <Typography variant="h6" gutterBottom>
                 Ficheiros carregados
@@ -276,14 +264,35 @@ const CertificatesUpload: React.FC = () => {
                       </Typography>
                     </Box>
                     {files[key] && (
-                      <IconButton
-                        size="small"
-                        color="error"
-                        onClick={() => removeFile(key)}
-                        sx={{ padding: 1 }}
-                      >
-                        <Delete fontSize="small" />
-                      </IconButton>
+                      <>
+                        <FormControl size="small" sx={{ mr: 1 }}>
+                          <Select
+                            value=""
+                            onChange={(e) => moveFile(key, e.target.value as string)}
+                            displayEmpty
+                          >
+                            {certTypes
+                              .filter((type) => type !== key)
+                              .map((type) => (
+                                <MenuItem key={type} value={type}>
+                                  {type === "srv_cert"
+                                    ? "Certificado do Servidor"
+                                    : type === "priv_key"
+                                    ? "Chave Privada"
+                                    : "Certificado Intermediário"}
+                                </MenuItem>
+                              ))}
+                          </Select>
+                        </FormControl>
+                        <IconButton
+                          size="small"
+                          color="error"
+                          onClick={() => removeFile(key)}
+                          sx={{ padding: 1 }}
+                        >
+                          <Delete fontSize="small" />
+                        </IconButton>
+                      </>
                     )}
                   </Box>
                 ))}
@@ -291,51 +300,51 @@ const CertificatesUpload: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
+      </Grid>
 
-        <Grid item xs={12}>
-          <Card variant="outlined">
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Access Point
-              </Typography>
-              <Typography variant="body2" sx={{ mb: 2, color: theme.palette.text.secondary }}>
-                Selecione o Access Point para o qual deseja aplicar os certificados.
-              </Typography>
-              
-              <FormControl fullWidth variant="outlined">
-                <InputLabel id="access-point-select-label">Access Point</InputLabel>
-                <Select
-                  labelId="access-point-select-label"
-                  id="access-point-select"
-                  value={selectedAccessPoint}
-                  onChange={(e) => setSelectedAccessPoint(e.target.value as number)}
-                  label="Access Point"
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <MenuItem value="">
-                      <Box display="flex" alignItems="center">
-                        <CircularProgress size={20} sx={{ mr: 1 }} />
-                        A carregar...
-                      </Box>
-                    </MenuItem>
-                  ) : (
-                    [
-                      <MenuItem value="" key="none" disabled>
-                        Selecione um Access Point
-                      </MenuItem>,
-                      ...accessPoints.map(ap => (
-                        <MenuItem key={ap.id} value={ap.id}>
-                          {`${ap.location_description} (${ap.ip_address})${!ap.is_active ? " - Inativo" : ""}`}
-                        </MenuItem>
-                      ))
-                    ]
-                  )}
-                </Select>
-              </FormControl>
-            </CardContent>
-          </Card>
-        </Grid>
+      <Grid item xs={12} sx={{ mt: 2 }}>
+        <Card variant="outlined">
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              Access Point
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 2, color: theme.palette.text.secondary }}>
+              Selecione o Access Point para o qual deseja aplicar os certificados.
+            </Typography>
+            
+            <FormControl fullWidth variant="outlined">
+              <InputLabel id="access-point-select-label">Access Point</InputLabel>
+              <Select
+                labelId="access-point-select-label"
+                id="access-point-select"
+                value={selectedAccessPoint}
+                onChange={(e) => setSelectedAccessPoint(e.target.value as number)}
+                label="Access Point"
+                disabled={loading}
+              >
+                {loading ? (
+                  <MenuItem value="">
+                    <Box display="flex" alignItems="center">
+                      <CircularProgress size={20} sx={{ mr: 1 }} />
+                      A carregar...
+                    </Box>
+                  </MenuItem>
+                ) : (
+                  [
+                    <MenuItem value="" key="none" disabled>
+                      Selecione um Access Point
+                    </MenuItem>,
+                    ...accessPoints.map(ap => (
+                      <MenuItem key={ap.id} value={ap.id}>
+                        {`${ap.location_description} (${ap.ip_address})${!ap.is_active ? " - Inativo" : ""}`}
+                      </MenuItem>
+                    ))
+                  ]
+                )}
+              </Select>
+            </FormControl>
+          </CardContent>
+        </Card>
       </Grid>
 
       <Box display="flex" justifyContent="flex-end" sx={{ mt: 2 }}>
