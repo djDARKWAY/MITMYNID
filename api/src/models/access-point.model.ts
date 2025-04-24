@@ -95,7 +95,7 @@ export class AccessPoint extends Entity {
   is_active: boolean;
 
   @belongsTo(() => Certificate, { name: "certificate" })
-  certificate_id?: number;
+  certificate_id?: number | null;
 
   @belongsTo(() => Warehouse, { name: "warehouse" })
   warehouse_id?: number;

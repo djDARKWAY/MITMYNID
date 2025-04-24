@@ -29,7 +29,7 @@ const CertificatesUpload: React.FC = () => {
     const fetchAccessPoints = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`${import.meta.env.VITE_REST_API}/access-points`);
+        const response = await fetch(`${import.meta.env.VITE_REST_API}/access-points/no-cert`);
         if (!response.ok) {
           throw new Error("Erro ao obter os Access Points");
         }

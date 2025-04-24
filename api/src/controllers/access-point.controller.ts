@@ -194,6 +194,47 @@ export class AccessPointController {
     return apSoftware;
   }
 
+  @get("/access-points/no-cert")
+  @response(200, {
+    description: "Array of AccessPoint model instances with certificate_id NULL",
+    content: {
+      "application/json": {
+        schema: {
+          type: "array",
+          items: getModelSchemaRef(AccessPoint, { includeRelations: true }),
+        },
+      },
+    },
+  })
+  async findWithoutCertificate(
+    @inject(RestBindings.Http.RESPONSE) response: Response,
+    @param.filter(AccessPoint) filter?: Filter<AccessPoint>
+  ): Promise<AccessPoint[]> {
+    filter = filter || {};
+    filter.where = {
+      ...filter.where,
+      certificate_id: { eq: null },
+    };
+
+    const countResult = await this.accessPointRepository.count(filter.where);
+    response.setHeader("x-total-count", countResult.count);
+    response.setHeader("Access-Control-Expose-Headers", "x-total-count");
+
+    return this.accessPointRepository.find({
+      ...filter,
+      include: [{ relation: "warehouse" }],
+      fields: {
+        id: true,
+        location_description: true,
+        ip_address: true,
+        ap_software: true,
+        software_version: true,
+        is_active: true,
+        warehouse_id: true,
+      },
+    });
+  }
+
   // PATCH endpoint:
   @patch("/access-points/{id}")
   @authenticate("jwt")
