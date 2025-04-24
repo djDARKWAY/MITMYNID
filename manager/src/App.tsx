@@ -22,6 +22,7 @@ import Profile from './pages/configuration/Profile';
 import { Unauthorized } from './components/general/Unauthorized';
 import StatusTest from './pages/status/StatusTest';
 import StatusTestv2 from './pages/status/StatusTestv2';
+import CertificatesUpload from './pages/certificates/CertificatesUpload';
 
 // Resources
 import { roles } from './pages/roles';
@@ -108,6 +109,7 @@ const App = () => {
                   <Route path="/status-testv2" element={<StatusTestv2 />} />
                   <Route path="/unauthorized" key={"/unauthorized"} element={<Unauthorized />} />
                   <Route path="/users-logs" element={<UsersLogs />} />
+                  <Route path="/upload" element={<CertificatesUpload />} />
                 </CustomRoutes>,
               ]}
             </Admin>

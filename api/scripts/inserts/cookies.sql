@@ -1,7 +1,7 @@
 INSERT INTO auth.cookies_type
 (id, title, description, short_desc, optional, tags)
 VALUES(1, 'NECESSÁRIO',
-'Os Cookies são arquivos enviados a um navegador por meio de um servidor web para registrar as atividades do utilizador num site específico.
+'Os Cookies são ficheiros enviados a um navegador por meio de um servidor web para registrar as atividades do utilizador num site específico.
 A primeira finalidade dos Cookies é facilitar ao utilizador um acesso mais rápido aos serviços selecionados.
 Além disso, os Cookies personalizam os serviços oferecidos pelo Site, facilitando e oferecendo a cada utilizador informações que são de seu interesse ou que podem ser de seu interesse, com base no uso que faz dos Serviços.
 

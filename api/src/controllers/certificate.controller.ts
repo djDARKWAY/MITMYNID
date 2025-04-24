@@ -193,7 +193,7 @@ export class CertificateController {
 
       return updatedCertificate;
     } catch (error) {
-      throw new HttpErrors.BadRequest(`Erro ao carregar o arquivo: ${error.message}`);
+      throw new HttpErrors.BadRequest(`Erro ao carregar o ficheiro: ${error.message}`);
     }
   }
 
