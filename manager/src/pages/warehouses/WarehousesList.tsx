@@ -46,7 +46,8 @@ const WarehouseCard = ({ record, selected, onToggle, showCheckboxes }: {
                 </CardContent>
             </Card>
             {record.country?.flag_url && (
-                <div
+                <Link
+                    to={`/warehouses/${record.id}/show`}
                     style={{
                         position: "absolute",
                         bottom: 0,
@@ -58,7 +59,8 @@ const WarehouseCard = ({ record, selected, onToggle, showCheckboxes }: {
                         backgroundPosition: "center",
                         opacity: 0.6,
                         maskImage: 'linear-gradient(to top left, black 15%, transparent 52%)',
-                        WebkitMaskImage: 'linear-gradient(to top left, black 10%, transparent 52%)'
+                        WebkitMaskImage: 'linear-gradient(to top left, black 10%, transparent 52%)',
+                        display: "block",
                     }}
                 />
             )}
