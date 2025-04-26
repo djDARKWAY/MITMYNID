@@ -74,8 +74,8 @@ export const CertificatesShow = () => (
                     {/* Conteúdo */}
                     <Section title="show.certificates.content" icon={<FeedOutlined />}>
                         <Box sx={{ height: 425, flexDirection: "column", overflow: "auto" }}>
-                            <Card variant="outlined" sx={{ p: 1, bgcolor: "InfoBackground" }}>
-                                <Box display="flex" gap={2} flexWrap="wrap" sx={{ mt: 1 }}>
+                            <Card variant="outlined" sx={{ p: 2, bgcolor: "InfoBackground" }}>
+                                <Box display="flex" gap={2} flexWrap="wrap">
                                     <Box sx={{ flex: 1 }}>
                                         <Typography variant="body2" sx={{ fontWeight: "bold", color: "gray", mb: 1 }}>
                                             {useTranslate()("show.certificates.srv_cert")}

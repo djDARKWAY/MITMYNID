@@ -78,16 +78,15 @@ export const AccessPointsShow = () => (
                         </FieldTitleLabel>
                     </Section>
                 </Grid>
-
                 <Grid item xs={12} md={6}>
                     {/* Configuração Técnica */}
                     <Section title="show.accessPoints.configuration" icon={<SettingsIcon />}>
-                        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                        <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
                             <FieldTitleLabel label="show.accessPoints.software">
                                 <TextField source="ap_software" emptyText="N/A" /> (v. <TextField source="software_version" emptyText="N/A" />)
                             </FieldTitleLabel>
                             <FieldTitleLabel label="PMode">
-                                <Card variant="outlined" sx={{ p: 1, bgcolor: "InfoBackground", maxHeight: 277, overflow: "auto" }}>
+                                <Card variant="outlined" sx={{ marginTop: 1, p: 2, bgcolor: "InfoBackground", maxHeight: 277, minHeight: 277, overflow: "auto" }}>
                                     <XmlField source="pmode" />
                                 </Card>
                             </FieldTitleLabel>
