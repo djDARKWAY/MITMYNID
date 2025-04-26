@@ -149,6 +149,9 @@ const darkTheme = {
             "&:nth-of-type(even)": {
               backgroundColor: "rgb(81, 84, 93, 0.12)",
             },
+            "&:nth-of-type(odd)": {
+              backgroundColor: "rgb(81, 84, 93, 0.08)",
+            },
             "&:hover": {
               backgroundColor: "rgb(81, 84, 93, 0.35)",
             },
@@ -231,7 +234,7 @@ const darkTheme = {
           border: "1px solid #494950",
           color: "white",
           "&.RaList-content": {
-            marginTop: "14px",
+            marginTop: "4px",
           },
         },
       },
