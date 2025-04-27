@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Edit, TabbedForm, TextInput, DateInput, Toolbar, SaveButton, useRecordContext, useInput, useRedirect } from "react-admin";
 import { Typography, Divider, Box, Button, Card, CardContent, Paper } from "@mui/material";
-import { CalendarToday, Person, DoDisturb, UploadFile, Delete, Download } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { CalendarToday, Person, DoDisturb, UploadFile } from "@mui/icons-material";
+import { useTheme } from "@mui/material/styles";
 
 interface CertificatePreviewProps {
   source: string;
@@ -10,8 +10,10 @@ interface CertificatePreviewProps {
 }
 
 const CertificatePreview: React.FC<CertificatePreviewProps> = ({ source, label }) => {
+  const theme = useTheme();
   const record = useRecordContext();
   const [certificate, setCertificate] = useState<string | null>(null);
+  
   const { field } = useInput({ source });
   const displayValue = certificate !== null ? certificate : record?.[source] || '';
 
@@ -25,17 +27,9 @@ const CertificatePreview: React.FC<CertificatePreviewProps> = ({ source, label }
     }
   };
 
-  const handleDownload = () => {
-    const blob = new Blob([displayValue], { type: "text/plain" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = `${source}.crt`;
-    link.click();
-  };
-
   const handleDelete = () => {
-    setCertificate(null);
-    field.onChange(null);
+    setCertificate('');
+    field.onChange('');
   };
 
   return (
@@ -43,40 +37,47 @@ const CertificatePreview: React.FC<CertificatePreviewProps> = ({ source, label }
       <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>
         {label}
       </Typography>
+      
       <Paper 
         variant="outlined" 
         sx={{ 
           p: 2, 
-          height: '100%', // Fixed height
-          overflowY: 'auto', // Enable vertical scrollbar
+          height: '400px',
+          overflow: 'auto',
           fontFamily: 'monospace',
           fontSize: '0.75rem',
           whiteSpace: 'pre-wrap',
           wordBreak: 'break-all',
           mb: 1,
-          bgcolor: '#f5f5f5'
+          bgcolor: theme.palette.background.default,
+          color: theme.palette.text.primary
         }}
       >
         {displayValue}
       </Paper>
-      <Box display="flex" justifyContent="space-between" gap={1}>
-        {displayValue && (
-          <Button
-            variant="contained"
-            startIcon={<Download />}
-            onClick={handleDownload}
-            sx={{ flex: 1 }}
-          >
-            Transferir
-          </Button>
-        )}
+      
+      <Box display="flex" justifyContent="center" gap={1} sx={{ mt: 0.5 }}>
+        <Button
+          variant="contained"
+          startIcon={<UploadFile />}
+          onClick={() => {
+            const element = document.createElement("a");
+            const file = new Blob([displayValue], { type: "text/plain" });
+            element.href = URL.createObjectURL(file);
+            element.download = `${source}.crt`;
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+          }}
+        >
+          Transferir
+        </Button>
         <Button
           variant="contained"
           component="label"
           startIcon={<UploadFile />}
-          sx={{ flex: 1 }}
         >
-          {displayValue ? "Editar" : "Importar"}
+          Editar
           <input
             type="file"
             accept=".crt,.pem,.key,.ca-bundle"
@@ -87,36 +88,22 @@ const CertificatePreview: React.FC<CertificatePreviewProps> = ({ source, label }
             }}
           />
         </Button>
-        {displayValue && (
-          <Button
-            variant="contained"
-            color="error"
-            startIcon={<Delete />}
-            onClick={handleDelete}
-            sx={{ flex: 1 }}
-          >
-            Eliminar
-          </Button>
-        )}
+        <Button
+          variant="contained"
+          color="error"
+          onClick={handleDelete}
+        >
+          Eliminar
+        </Button>
       </Box>
-      <input 
-        type="hidden" 
-        {...field}
-        value={certificate !== null ? certificate : record?.[source] || ''}
-      />
+      
+      <input type="hidden" {...field} value={certificate !== null ? certificate : record?.[source] || ''} />
     </Box>
   );
 };
 
-export const CertificatesEdit = () => {
-  const redirect = useRedirect();
-
-  const handleSave = () => {
-    redirect("show", "/certificates");
-  };
-
-  return (
-    <Edit mutationOptions={{ onSuccess: handleSave }}>
+export const CertificatesEdit = () => (
+    <Edit>
         <TabbedForm toolbar={<CustomToolbar />}>
             <TabbedForm.Tab label="Identificação">
                 <Box display="flex" alignItems="center">
@@ -127,6 +114,7 @@ export const CertificatesEdit = () => {
                 <TextInput source="name" label="show.certificates.name" fullWidth />
                 <TextInput source="file_path" label="show.certificates.file_path" fullWidth />
             </TabbedForm.Tab>
+
             <TabbedForm.Tab label="Detalhes">
                 <Box display="flex" alignItems="center">
                     <CalendarToday />
@@ -139,11 +127,12 @@ export const CertificatesEdit = () => {
                     <DateInput source="expiration_date" label="show.certificates.expiration_date" fullWidth />
                 </Box>
             </TabbedForm.Tab>
+
             <TabbedForm.Tab label="Conteúdo">
                 <Card variant="outlined" sx={{ mb: 2 }}>
                     <CardContent>
                         <Typography variant="body2" sx={{ mb: 2, color: 'text.secondary' }}>
-                            Para alterar um certificado, clique no botão "Editar" abaixo de cada campo. As alterações só serão guardadas ao clicar em "Guardar".
+                            Para alterar um certificado, clique no botão "Editar" abaixo de cada campo. As alterações só serão salvas ao clicar em "Guardar".
                         </Typography>
                         <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gap={2}>
                             <CertificatePreview 
@@ -164,12 +153,28 @@ export const CertificatesEdit = () => {
             </TabbedForm.Tab>
         </TabbedForm>
     </Edit>
-  );
-};
-
-const CustomToolbar = () => (
-    <Toolbar>
-        <SaveButton />
-        <Button component={Link} to="/certificates" startIcon={<DoDisturb />} color="primary" size="small" sx={{ ml: 2 }}>Cancelar</Button>
-    </Toolbar>
 );
+
+const CustomToolbar = () => {
+    const redirect = useRedirect();
+    const record = useRecordContext();
+
+    return (
+        <Toolbar>
+            <SaveButton
+                mutationOptions={{
+                    onSuccess: () => redirect(`/certificates/${record?.id}/show`),
+                }}
+            />
+            <Button
+                onClick={() => redirect(`/certificates/${record?.id}/show`)}
+                startIcon={<DoDisturb />}
+                color="primary"
+                size="small"
+                sx={{ ml: 2 }}
+            >
+                Cancelar
+            </Button>
+        </Toolbar>
+    );
+};
