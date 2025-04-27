@@ -78,8 +78,9 @@ export const AccessPointsShow = () => (
                         </FieldTitleLabel>
                     </Section>
                 </Grid>
+
+                {/* Configuração Técnica */}
                 <Grid item xs={12} md={6}>
-                    {/* Configuração Técnica */}
                     <Section title="show.accessPoints.configuration" icon={<SettingsIcon />}>
                         <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
                             <FieldTitleLabel label="show.accessPoints.software">
