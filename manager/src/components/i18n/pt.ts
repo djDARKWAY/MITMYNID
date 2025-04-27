@@ -482,6 +482,7 @@ const portugueseMessages: TranslationMessages = {
       last_modified: "Última modificação",
       srv_cert: "Certificado do Servidor (SC)",
       int_cert: "Certificado Intermediário (CA)",
+      edit_instruction: "Para alterar um certificado, clique no botão 'Editar' abaixo de cada campo. As alterações só serão guardadas ao clicar em 'Guardar'."
     },
     warehouses: {
       identification: "Identificação",

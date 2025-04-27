@@ -488,6 +488,7 @@ const frenchMessages: TranslationMessages = {
       details: "Détails",
       srv_cert: "Certificado du Serveur (SC)",
       int_cert: "Certificado Intermédiaire (CA)",
+      edit_instruction: "Pour modifier un certificat, cliquez sur le bouton 'Modifier' sous chaque champ. Les modifications ne seront enregistrées qu'en cliquant sur 'Enregistrer'.",
     },
     warehouses: {
       identification: "Identification",

@@ -476,6 +476,7 @@ const englishMessages: TranslationMessages = {
       last_modified: "Last Modified",
       srv_cert: "Server Certificate (SC)",
       int_cert: "Intermediate Certificate (CA)",
+      edit_instruction: "To edit a certificate, click the 'Edit' button below each field. Changes will only be saved when you click 'Save'.",
     },
     warehouses: {
       identification: "Identification",
