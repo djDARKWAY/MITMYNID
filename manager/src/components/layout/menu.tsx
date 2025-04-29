@@ -4,7 +4,6 @@ import {
   Insights,
   CellTowerRounded,
   CardMembershipRounded,
-  CreditScoreRounded,
   WifiTetheringErrorRounded,
   HowToRegRounded,
   PeopleAltRounded,
@@ -16,6 +15,7 @@ import {
   SignalWifi4BarLock,
   WarehouseRounded,
   ManageAccountsRounded,
+  FileUploadRounded,
   MapRounded
 } from "@mui/icons-material";
 import {
@@ -184,11 +184,11 @@ const MyMenu = ({ dense = false }: MenuProps) => {
 
     {permissions.includes("ADMIN") && (
       <MenuItemLink
-        to={{ pathname: "/." }}
+        to={{ pathname: "/upload" }}
         className={"submenuItem " + (open ? "open" : "close")}
-        primaryText={translate(`resources.certificates.validations`)}
+        primaryText={translate(`resources.certificates.upload`)}
         sx={{ color: !open ? "transparent" : "default" }}
-        leftIcon={<CreditScoreRounded />}
+        leftIcon={<FileUploadRounded />}
         dense={dense}
       />
     )}

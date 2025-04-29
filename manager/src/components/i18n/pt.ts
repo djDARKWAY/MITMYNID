@@ -1,3 +1,4 @@
+import { update } from "lodash";
 import { TranslationMessages } from "react-admin";
 
 const portugueseMessages: TranslationMessages = {
@@ -271,6 +272,7 @@ const portugueseMessages: TranslationMessages = {
     },
     certificates: {
       name: "Certificado",
+      upload: "Vincular ficheiros",
       list: "Gestão de certificados",
       validations: "Validações",
       fields: {

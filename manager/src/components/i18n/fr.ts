@@ -274,6 +274,7 @@ const frenchMessages: TranslationMessages = {
     certificates: {
       name: "Certificats",
       list: "Gestion des certificats",
+      upload: "Vinculer des fichiers",
       validations: "Validations",
       fields: {
         name: "Nom",

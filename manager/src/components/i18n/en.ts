@@ -265,6 +265,7 @@ const englishMessages: TranslationMessages = {
     certificates: {
       name: "Certificates",
       list: "Certificate management",
+      upload: "Upload files",
       validations: "Validations",
       fields: {
         name: "Name",

@@ -274,6 +274,7 @@ const spanishMessages: TranslationMessages = {
     certificates: {
       name: "Certificados",
       list: "Gestión de certificados",
+      upload: "Vincular archivos",
       validations: "Validaciones",
       fields: {
         name: "Nombre",
