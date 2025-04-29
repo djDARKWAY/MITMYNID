@@ -18,6 +18,7 @@ export const WarehousesEdit = () => (
                 <TextInput 
                     source="name" 
                     label="show.warehouses.name" 
+                    fullWidth
                     validate={[
                         value => value && value.length <= 255 ? undefined : "O nome deve ter no máximo 255 caracteres"
                     ]}
@@ -42,7 +43,7 @@ export const WarehousesEdit = () => (
                 <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2} sx={{ width: "100%" }}>
                     <TextInput 
                         source="city" 
-                        label="show.warehouses.city" 
+                        label="show.warehouses.city"
                         validate={[
                             value => value && value.length <= 100 ? undefined : "A cidade deve ter no máximo 100 caracteres"
                         ]}
@@ -99,14 +100,16 @@ export const WarehousesEdit = () => (
                 <Divider sx={{ mb: 3 }} />
                 <TextInput 
                     source="email" 
-                    label="show.warehouses.email" 
+                    label="show.warehouses.email"
+                    fullWidth
                     validate={[
                         value => value && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? undefined : "O email deve ser válido"
                     ]}
                 />
                 <TextInput 
                     source="contact" 
-                    label="show.warehouses.contact" 
+                    label="show.warehouses.contact"
+                    fullWidth
                     validate={[
                         value => value && /^[a-zA-Z\s]+$/.test(value) ? undefined : "O contacto deve conter apenas letras e espaços",
                         value => value && value.length <= 255 ? undefined : "O contacto deve ter no máximo 255 caracteres"
@@ -114,7 +117,8 @@ export const WarehousesEdit = () => (
                 />
                 <TextInput 
                     source="phone" 
-                    label="show.warehouses.phone" 
+                    label="show.warehouses.phone"
+                    fullWidth
                     validate={[
                         value => value && value.length <= 20 ? undefined : "O telefone deve ter no máximo 20 caracteres"
                     ]}
