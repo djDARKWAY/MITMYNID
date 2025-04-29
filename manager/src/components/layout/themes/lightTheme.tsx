@@ -220,7 +220,8 @@ const lightTheme = {
     MuiSelect: {
       styleOverrides: {
         root: {
-          marginTop: "-5px",
+          marginTop: "0px",
+          marginBottom: "0px",
         },
       },
     },

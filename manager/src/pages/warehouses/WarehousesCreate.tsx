@@ -9,14 +9,21 @@ export const WarehousesCreate = () => (
     <Create transform={(data) => ({
         ...data,
     })}>
-        <SimpleForm toolbar={<CustomToolbar />}>
+        <SimpleForm toolbar={<CustomToolbar />} warnWhenUnsavedChanges>
             {/* Identificação */}
             <Box display="flex" alignItems="center">
                 <Person />
                 <Typography variant="h6" sx={{ ml: 1 }}>Identificação</Typography>
             </Box>
             <Divider sx={{ mb: 3 }} />
-            <TextInput source="name" label="show.warehouses.name" fullWidth validate={[required()]} />
+            <TextInput 
+                source="name" 
+                label="show.warehouses.name" 
+                fullWidth 
+                validate={[
+                    value => value && value.length <= 255 ? undefined : "O nome deve ter no máximo 255 caracteres"
+                ]}
+            />
 
             {/* Localização */}
             <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
@@ -24,7 +31,14 @@ export const WarehousesCreate = () => (
                 <Typography variant="h6" sx={{ ml: 1 }}>Localização</Typography>
             </Box>
             <Divider sx={{ mb: 3 }} />
-            <TextInput source="address" label="show.warehouses.address" fullWidth validate={[required()]} />
+            <TextInput 
+                source="address" 
+                label="show.warehouses.address" 
+                fullWidth 
+                validate={[
+                    value => value && value.length <= 255 ? undefined : "O endereço deve ter no máximo 255 caracteres"
+                ]}
+            />
             <Box display="flex" gap={2} width="100%" alignItems="center">
                 <Box sx={{ width: "50%" }}>
                     <ReferenceInput source="country_id" reference="countries" label="show.warehouses.country" perPage={180} sort={{ field: 'name', order: 'ASC' }}>
@@ -38,14 +52,50 @@ export const WarehousesCreate = () => (
                                 </Box>
                             )} 
                             fullWidth 
-                            validate={[required()]} 
                         />
                     </ReferenceInput>
                 </Box>
-                <TextInput source="city" label="show.warehouses.city" sx={{ width: "50%" }} validate={[required()]} />
+                <TextInput 
+                    source="city" 
+                    label="show.warehouses.city" 
+                    sx={{ width: "50%" }} 
+                    validate={[
+                        value => value && value.length <= 100 ? undefined : "A cidade deve ter no máximo 100 caracteres"
+                    ]}
+                />
             </Box>
-            <TextInput source="district" label="show.warehouses.district" fullWidth validate={[required()]} />
-            <TextInput source="zip_code" label="show.warehouses.zip_code" fullWidth validate={[required()]} />
+            <TextInput 
+                source="district" 
+                label="show.warehouses.district" 
+                fullWidth 
+                validate={[
+                    value => value && value.length <= 100 ? undefined : "O distrito deve ter no máximo 100 caracteres"
+                ]}
+            />
+            <TextInput 
+                source="zip_code" 
+                label="show.warehouses.zip_code" 
+                fullWidth 
+                validate={[
+                    value => value && value.length <= 20 ? undefined : "O código postal deve ter no máximo 20 caracteres"
+                ]}
+            />
+            <Box display="flex" gap={2} width="100%" alignItems="center">
+                <TextInput 
+                    source="lat" 
+                    label="show.warehouses.latitude" 
+                    validate={[
+                        value => (value >= -90 && value <= 90) ? undefined : "A latitude deve estar entre -90 e 90"
+                    ]}
+                />
+                <TextInput 
+                    source="lon" 
+                    label="show.warehouses.longitude" 
+                    validate={[
+                        value => (value >= -180 && value <= 180) ? undefined : "A longitude deve estar entre -180 e 180"
+                    ]}
+                />
+            </Box>
 
             {/* Contactos */}
             <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
@@ -53,9 +103,31 @@ export const WarehousesCreate = () => (
                 <Typography variant="h6" sx={{ ml: 1 }}>Contactos</Typography>
             </Box>
             <Divider sx={{ mb: 3 }} />
-            <TextInput source="email" label="show.warehouses.email" fullWidth />
-            <TextInput source="contact" label="show.warehouses.contact" fullWidth />
-            <TextInput source="phone" label="show.warehouses.phone" fullWidth />
+            <TextInput 
+                source="email" 
+                label="show.warehouses.email" 
+                fullWidth 
+                validate={[
+                    value => value && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? undefined : "O email deve ser válido"
+                ]}
+            />
+            <TextInput 
+                source="contact" 
+                label="show.warehouses.contact" 
+                fullWidth 
+                validate={[
+                    value => value && /^[a-zA-Z\s]+$/.test(value) ? undefined : "O contacto deve conter apenas letras e espaços",
+                    value => value && value.length <= 255 ? undefined : "O contacto deve ter no máximo 255 caracteres"
+                ]}
+            />
+            <TextInput 
+                source="phone" 
+                label="show.warehouses.phone" 
+                fullWidth 
+                validate={[
+                    value => value && value.length <= 20 ? undefined : "O telefone deve ter no máximo 20 caracteres"
+                ]}
+            />
 
             {/* Website */}
             <Box display="flex" alignItems="center" sx={{ mt: 3 }}>
@@ -63,7 +135,15 @@ export const WarehousesCreate = () => (
                 <Typography variant="h6" sx={{ ml: 1 }}>Website</Typography>
             </Box>
             <Divider sx={{ mb: 3 }} />
-            <TextInput source="website" label="show.warehouses.website" fullWidth />
+            <TextInput 
+                source="website" 
+                label="show.warehouses.website" 
+                fullWidth 
+                validate={[
+                    value => value && /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w-]*)*\/?$/.test(value) ? undefined : "O website deve ser um URL válido",
+                    value => value && value.length <= 255 ? undefined : "O website deve ter no máximo 255 caracteres"
+                ]}
+            />
         </SimpleForm>
     </Create>
 );

@@ -310,7 +310,13 @@ export class WarehouseController {
     // Optional fields
     if (warehouse.email) validate(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(warehouse.email), "email", "O email não é válido!");
     if (warehouse.website) validate(!/^(https?:\/\/)?[^\s$.?#].[^\s]*$/.test(warehouse.website), "website", "O website deve ser uma URL válida!");
-    if (warehouse.lat) validate(warehouse.lat < -90 || warehouse.lat > 90, "lat", "A latitude deve estar entre -90 e 90!");
-    if (warehouse.lon) validate(warehouse.lon < -180 || warehouse.lon > 180, "lon", "A longitude deve estar entre -180 e 180!");  
+    if (warehouse.lat) {
+      validate(warehouse.lat < -90 || warehouse.lat > 90, "lat", "A latitude deve estar entre -90 e 90!");
+      warehouse.lat = parseFloat(warehouse.lat.toFixed(7));
+    }
+    if (warehouse.lon) {
+      validate(warehouse.lon < -180 || warehouse.lon > 180, "lon", "A longitude deve estar entre -180 e 180!");
+      warehouse.lon = parseFloat(warehouse.lon.toFixed(7));
+    }  
   }
 }
