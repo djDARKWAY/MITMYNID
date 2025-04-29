@@ -10,6 +10,7 @@ const CertificatePreview = ({ source, label }: { source: string; label: string }
   const [certificate, setCertificate] = useState<string | null>(null);
   const { field } = useInput({ source });
   const displayValue = certificate ?? (record?.[source] || '');
+  const isEmpty = !displayValue;
 
   const handleFileUpload = async (file: File) => {
     try {
@@ -36,8 +37,6 @@ const CertificatePreview = ({ source, label }: { source: string; label: string }
     document.body.removeChild(element);
   };
 
-  const isEmpty = !displayValue;
-
   return (
     <Box display="flex" flexDirection="column" sx={{ width: '100%' }}>
       <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 'bold' }}>
@@ -62,23 +61,7 @@ const CertificatePreview = ({ source, label }: { source: string; label: string }
       </Paper>
       <Box display="flex" justifyContent="space-between" gap={1} sx={{ mt: 1, width: '100%' }}>
         {isEmpty ? (
-          <Button
-            variant="contained"
-            component="label"
-            startIcon={<UploadFile />}
-            sx={{ flex: 1 }}
-          >
-            Editar
-            <input
-              type="file"
-              accept=".crt,.pem,.key,.ca-bundle"
-              hidden
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) handleFileUpload(file);
-              }}
-            />
-          </Button>
+          <FileUploadButton handleFileUpload={handleFileUpload} label="Carregar" fullWidth />
         ) : (
           <>
             <Button
@@ -89,23 +72,7 @@ const CertificatePreview = ({ source, label }: { source: string; label: string }
             >
               Transferir
             </Button>
-            <Button
-              variant="contained"
-              component="label"
-              startIcon={<UploadFile />}
-              sx={{ flex: 1 }}
-            >
-              Editar
-              <input
-                type="file"
-                accept=".crt,.pem,.key,.ca-bundle"
-                hidden
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) handleFileUpload(file);
-                }}
-              />
-            </Button>
+            <FileUploadButton handleFileUpload={handleFileUpload} label="Editar" />
             <Button
               variant="contained"
               color="error"
@@ -122,6 +89,26 @@ const CertificatePreview = ({ source, label }: { source: string; label: string }
   );
 };
 
+const FileUploadButton: React.FC<{ handleFileUpload: (file: File) => void; label: string; fullWidth?: boolean }> = ({ handleFileUpload, label, fullWidth = false }) => (
+  <Button
+    variant="contained"
+    component="label"
+    startIcon={<UploadFile />}
+    sx={{ flex: fullWidth ? 1 : 'auto' }}
+  >
+    {label}
+    <input
+      type="file"
+      accept=".crt,.pem,.key,.ca-bundle"
+      hidden
+      onChange={(e) => {
+        const file = e.target.files?.[0];
+        if (file) handleFileUpload(file);
+      }}
+    />
+  </Button>
+);
+
 export const CertificatesEdit = () => {
   const translate = useTranslate();
 
@@ -135,10 +122,9 @@ export const CertificatesEdit = () => {
         </TabbedForm.Tab>
         <TabbedForm.Tab label="Detalhes">
           <SectionHeader icon={<CalendarToday />} title="Detalhes" />
-          <TextInput source="issuer_url" label="show.certificates.issuer_url" fullWidth />
-          <Box display="flex" gap={2} sx={{ width: "100%" }}>
-            <DateInput source="issue_date" label="show.certificates.issue_date" fullWidth />
-            <DateInput source="expiration_date" label="show.certificates.expiration_date" fullWidth />
+          <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap={2} sx={{ width: '100%' }}>
+            <TextInput source="issuer_name" label="show.certificates.issuer_name" fullWidth />
+            <TextInput source="issuer_url" label="show.certificates.issuer_url" fullWidth />
           </Box>
         </TabbedForm.Tab>
         <TabbedForm.Tab label="Conteúdo">

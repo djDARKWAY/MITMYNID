@@ -89,22 +89,22 @@ export class Certificate extends Entity {
 
   @property({
     type: "date",
-    required: true,
+    required: false,
     postgresql: {
       columnName: "issue_date",
       dataType: "date",
-      nullable: "NO",
+      nullable: "YES",
     },
   })
   issue_date: string;
 
   @property({
     type: "date",
-    required: true,
+    required: false,
     postgresql: {
       columnName: "expiration_date",
       dataType: "date",
-      nullable: "NO",
+      nullable: "YES",
     },
   })
   expiration_date: string;

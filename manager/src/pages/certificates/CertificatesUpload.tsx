@@ -42,7 +42,19 @@ const CertificatesUpload: React.FC = () => {
 
   const showConfirmDialog = (title: string, message: string): Promise<boolean> =>
     new Promise((resolve) =>
-      setConfirmDialog({ open: true, title, message, onConfirm: () => resolve(true), onCancel: () => resolve(false) })
+      setConfirmDialog({
+        open: true,
+        title,
+        message,
+        onConfirm: () => {
+          setConfirmDialog({ open: false, title: "", message: "", onConfirm: () => {}, onCancel: () => {} });
+          resolve(true);
+        },
+        onCancel: () => {
+          setConfirmDialog({ open: false, title: "", message: "", onConfirm: () => {}, onCancel: () => {} });
+          resolve(false);
+        },
+      })
     );
 
   const promptReplace = async (key: string): Promise<boolean> => {
@@ -105,12 +117,12 @@ const CertificatesUpload: React.FC = () => {
       setFiles((prev) => ({
         ...prev,
         [toKey]: prev[fromKey],
-        [fromKey]: prev[toKey],
+        [fromKey]: null,
       }));
       setProgress((prev) => ({
         ...prev,
-        [toKey]: prev[fromKey] !== null,
-        [fromKey]: prev[toKey] !== null,
+        [toKey]: true,
+        [fromKey]: false,
       }));
     }
   };

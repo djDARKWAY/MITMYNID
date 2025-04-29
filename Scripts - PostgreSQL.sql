@@ -11,8 +11,8 @@ CREATE TABLE network.certificate (
   file_path TEXT,                                                 -- Caminho para o certificado
   issuer_url TEXT,                                                -- URL da entidade emissora
   issuer_name TEXT,                                               -- Entidade emissora
-  issue_date DATE NOT NULL,                                       -- Data de emissão ou criação
-  expiration_date DATE NOT NULL,                                  -- Data de validade ou expiração
+  issue_date DATE,                                                -- Data de emissão ou criação
+  expiration_date DATE,                                           -- Data de validade ou expiração
   is_active BOOLEAN NOT NULL DEFAULT false,                       -- Estado de expiração (expirado/não-expirado)
   last_modified TIMESTAMP WITH TIME ZONE DEFAULT NOW(),           -- Data e hora da última atualização
   last_modified_user_id UUID,                                     -- [FK] Referência para o utilizador

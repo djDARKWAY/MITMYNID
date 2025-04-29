@@ -30,6 +30,7 @@ import { SecurityBindings, UserProfile } from '@loopback/security';
 import { inject } from "@loopback/core";
 import { LogService } from "../services/log.service";
 import * as useragent from 'useragent';
+import * as forge from 'node-forge';
 
 const { BlobServiceClient } = require('@azure/storage-blob');
 dotenv.config({ path: "src/controllers/specs/azure/.env" });
@@ -61,17 +62,41 @@ export class CertificateController {
         },
       },
     })
-    certificate: Omit<Certificate, "id" >,
+    certificate: Omit<Certificate, "id">,
     @inject(SecurityBindings.USER) currentUser: UserProfile
   ): Promise<Certificate> {
     this.validateCertificates(certificate);
-
+    
+    if (certificate.srv_cert) {
+      try {
+        const parsedCert = forge.pki.certificateFromPem(certificate.srv_cert);
+        certificate.issue_date = parsedCert.validity.notBefore.toISOString();
+        certificate.expiration_date = parsedCert.validity.notAfter.toISOString();
+        const issuerCN = parsedCert.issuer.getField("CN");
+        certificate.issuer_name = issuerCN ? issuerCN.value : "";
+      } catch (error) {
+        throw new HttpErrors.BadRequest("Falha ao analisar o certificado público para extrair as datas.");
+      }
+    } else if (certificate.issue_date) {
+      const issueDate = new Date(certificate.issue_date);
+      if (isNaN(issueDate.getTime())) {
+        throw new HttpErrors.BadRequest('A data de emissão deve ser válida!');
+      }
+      certificate.issue_date = issueDate.toISOString();
+      
+      if (certificate.expiration_date) {
+        const expirationDate = new Date(certificate.expiration_date);
+        if (isNaN(expirationDate.getTime())) {
+          throw new HttpErrors.BadRequest('A data de expiração deve ser válida!');
+        }
+        certificate.expiration_date = expirationDate.toISOString();
+      }
+    }
+    
     const now = new Date();
-    certificate.issue_date = now.toISOString();
-    certificate.expiration_date = new Date(now.setFullYear(now.getFullYear() + 1)).toISOString();
-    certificate.last_modified = new Date().toISOString();
+    certificate.last_modified = now.toISOString();
     certificate.last_modified_user_id = currentUser.id;
-
+    
     return this.certificateRepository.create(certificate);
   }
 
@@ -217,7 +242,25 @@ export class CertificateController {
     if (!existingCertificate) {
       throw new HttpErrors.NotFound('Certificado não encontrado!');
     }
-    const { last_modified_user_id, ...certificateData } = certificate;
+
+    const { expiration_date, last_modified_user_id, ...certificateData } = certificate;
+
+    if (certificate.srv_cert) {
+      try {
+        const parsedCert = forge.pki.certificateFromPem(certificate.srv_cert);
+        certificateData.issue_date = parsedCert.validity.notBefore.toISOString();
+        const issuerCN = parsedCert.issuer.getField("CN");
+        certificateData.issuer_name = issuerCN ? issuerCN.value : "";
+      } catch (error) {
+        throw new HttpErrors.BadRequest("Falha ao analisar o certificado público para extrair os dados.");
+      }
+    } else if (certificate.issue_date) {
+      const issueDate = new Date(certificate.issue_date);
+      if (isNaN(issueDate.getTime())) {
+        throw new HttpErrors.BadRequest('A data de emissão deve ser válida!');
+      }
+      certificateData.issue_date = issueDate.toISOString();
+    }
 
     await this.certificateRepository.updateById(id, {
       ...certificateData,
