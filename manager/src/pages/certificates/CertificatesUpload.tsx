@@ -4,9 +4,11 @@ import { UploadFile, CheckCircle, RadioButtonUnchecked, Warning, Delete } from "
 import JSZip from "jszip";
 import { useDropzone } from "react-dropzone";
 import { useTheme } from "@mui/material/styles";
+import { useTranslate } from "react-admin";
 
 const CertificatesUpload: React.FC = () => {
   const theme = useTheme();
+  const translate = useTranslate();
   const [files, setFiles] = useState<Record<string, File | null>>({});
   const [progress, setProgress] = useState<Record<string, boolean>>({});
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "info" as "error" | "success" });
@@ -23,44 +25,43 @@ const CertificatesUpload: React.FC = () => {
       try {
         const response = await fetch(`${import.meta.env.VITE_REST_API}/access-points/no-cert`);
         if (!response.ok) {
-          throw new Error("Erro ao obter os Access Points");
+          throw new Error(translate("show.certificates.upload.error_fetch_access_points"));
         }
         const data = await response.json();
         setAccessPoints(data);
       } catch (error) {
-        showNotification("Erro ao obter os Access Points", "error");
+        showNotification(translate("show.certificates.upload.error_fetch_access_points"), "error");
       } finally {
         setLoading(false);
       }
     };
 
     fetchAccessPoints();
-  }, []);
+  }, [translate]);
 
   const showNotification = (message: string, severity: "error" | "success") =>
     setSnackbar({ open: true, message, severity });
 
   const showConfirmDialog = (title: string, message: string): Promise<boolean> =>
-    new Promise((resolve) =>
+    new Promise((resolve) => {
+      const resolveAndClose = (result: boolean) => {
+        setConfirmDialog({ open: false, title: "", message: "", onConfirm: () => {}, onCancel: () => {} });
+        resolve(result);
+      };
+
       setConfirmDialog({
         open: true,
         title,
         message,
-        onConfirm: () => {
-          setConfirmDialog({ open: false, title: "", message: "", onConfirm: () => {}, onCancel: () => {} });
-          resolve(true);
-        },
-        onCancel: () => {
-          setConfirmDialog({ open: false, title: "", message: "", onConfirm: () => {}, onCancel: () => {} });
-          resolve(false);
-        },
-      })
-    );
+        onConfirm: () => resolveAndClose(true),
+        onCancel: () => resolveAndClose(false),
+      });
+    });
 
   const promptReplace = async (key: string): Promise<boolean> => {
     if (!files[key]) return true;
-    const fileType = { srv_cert: "Certificado do Servidor", priv_key: "Chave Privada", int_cert: "Certificado Intermediário" }[key];
-    return await showConfirmDialog("Substituir Ficheiro", `Já existe um ficheiro para "${fileType}". Deseja substituir?`);
+    const fileType = { srv_cert: translate("show.certificates.upload.server_certificate"), priv_key: translate("show.certificates.upload.private_key"), int_cert: translate("show.certificates.upload.intermediate_certificate") }[key];
+    return await showConfirmDialog(translate("show.certificates.upload.replace_file"), `${translate("show.certificates.upload.file_exists")} "${fileType}". ${translate("show.certificates.upload.replace_question")}`);
   };
 
   const handleFileUpload = async (uploadedFile: File) => {
@@ -93,14 +94,14 @@ const CertificatesUpload: React.FC = () => {
           if (accepted) filesProcessed++;
         }
 
-        showNotification(filesProcessed ? `${filesProcessed} ficheiro(s) carregado(s) com sucesso.` : "Nenhum ficheiro válido encontrado no ZIP.", filesProcessed ? "success" : "error");
+        showNotification(filesProcessed ? translate("show.certificates.upload.file_uploaded_success", { count: filesProcessed }) : translate("show.certificates.upload.invalid_zip_file"), filesProcessed ? "success" : "error");
       } catch {
-        showNotification("Erro ao processar o arquivo ZIP.", "error");
+        showNotification(translate("show.certificates.upload.error_process_zip"), "error");
       }
     } else {
       const fileKey = { crt: "srv_cert", pem: "srv_cert", key: "priv_key", "ca-bundle": "int_cert" }[fileExtension || ""];
-      if (fileKey && (await processFile(fileKey, uploadedFile))) showNotification("Ficheiro carregado com sucesso.", "success");
-      else showNotification("Formato de ficheiro não suportado.", "error");
+      if (fileKey && (await processFile(fileKey, uploadedFile))) showNotification(translate("show.certificates.upload.file_uploaded_success"), "success");
+      else showNotification(translate("show.certificates.upload.unsupported_file_format"), "error");
     }
 
     setFiles(updatedFiles);
@@ -135,7 +136,7 @@ const CertificatesUpload: React.FC = () => {
 
   const handleSubmit = async () => {
     if (!files.srv_cert || !files.int_cert || !files.priv_key || !selectedAccessPoint) {
-      showNotification("Todos os ficheiros e o Access Point devem ser selecionados.", "error");
+      showNotification(translate("show.certificates.upload.all_fields_required"), "error");
       return;
     }
   
@@ -161,7 +162,7 @@ const CertificatesUpload: React.FC = () => {
       });
   
       if (!certificateResponse.ok) {
-        throw new Error("Erro ao enviar os certificados para o servidor.");
+        throw new Error(translate("show.certificates.upload.error_send_certificates"));
       }
   
       const newCertificate = await certificateResponse.json();
@@ -179,15 +180,15 @@ const CertificatesUpload: React.FC = () => {
       });
   
       if (!accessPointResponse.ok) {
-        throw new Error("Certificado criado, mas houve um erro ao associá-lo ao Access Point.");
+        throw new Error(translate("show.certificates.upload.error_associate_access_point"));
       }
   
-      showNotification("Certificados enviados e associados com sucesso.", "success");
+      showNotification(translate("show.certificates.upload.certificates_sent_success"), "success");
       setFiles({ srv_cert: null, int_cert: null, priv_key: null });
       setProgress({ srv_cert: false, int_cert: false, priv_key: false });
       setSelectedAccessPoint("");
     } catch (error) {
-      showNotification(error instanceof Error ? error.message : "Erro ao processar a operação.", "error");
+      showNotification(error instanceof Error ? error.message : translate("show.certificates.upload.error_process_operation"), "error");
     } finally {
       setLoading(false);
     }
@@ -196,10 +197,10 @@ const CertificatesUpload: React.FC = () => {
   return (
     <Box sx={{ width: "100%", mt: 4, paddingLeft: "10px" }}>
       <Typography variant="h4" gutterBottom fontWeight="bold">
-        Certificados SSL
+        {translate("show.certificates.upload.certificados_ssl")}
       </Typography>
       <Typography variant="body1" sx={{ mb: 3 }}>
-        Pode carregar um ficheiro ZIP com todos os certificados ou fazer o upload individualmente.
+        {translate("show.certificates.upload.upload_instructions")}
       </Typography>
 
       <Grid container spacing={2}>
@@ -212,10 +213,10 @@ const CertificatesUpload: React.FC = () => {
                   <input {...getInputProps()} />
                 <UploadFile sx={{ fontSize: 50, color: "#5384ED" }} />
                 <Typography variant="h6" sx={{ mt: 2, fontWeight: "bold", color: "#5384ED" }}>
-                  Arraste e solte os certificados ou clique aqui
+                  {translate("show.certificates.upload.drag_drop_text")}
                 </Typography>
                 <Typography variant="body2" sx={{ mt: 1, color: "gray" }}>
-                  Ficheiros suportados: .zip, .crt, .pem, .key, .ca-bundle
+                  {translate("show.certificates.upload.supported_files")}
                 </Typography>
               </Box>
 
@@ -239,7 +240,7 @@ const CertificatesUpload: React.FC = () => {
           <Card variant="outlined" sx={{ height: "100%" }}>
             <CardContent>
               <Typography variant="h6" gutterBottom>
-                Ficheiros carregados
+                {translate("show.certificates.upload.uploaded_files")}
               </Typography>
               <Stack spacing={1}>
                 {certTypes.map((key) => (
@@ -262,17 +263,17 @@ const CertificatesUpload: React.FC = () => {
                         sx={{ color: theme.palette.text.primary }}
                       >
                         {key === "srv_cert"
-                          ? "Certificado do Servidor"
+                          ? translate("show.certificates.upload.server_certificate")
                           : key === "priv_key"
-                          ? "Chave Privada"
-                          : "Certificado Intermediário"}
+                          ? translate("show.certificates.upload.private_key")
+                          : translate("show.certificates.upload.intermediate_certificate")}
                       </Typography>
                         
                       <Typography
                         variant="body2"
                         sx={{ color: theme.palette.text.secondary, fontStyle: files[key] ? "normal" : "italic" }}
                       >
-                        {files[key]?.name || "Nenhum ficheiro carregado"}
+                        {files[key]?.name || translate("show.certificates.upload.no_file_uploaded")}
                       </Typography>
                     </Box>
                     {files[key] && (
@@ -288,10 +289,10 @@ const CertificatesUpload: React.FC = () => {
                               .map((type) => (
                                 <MenuItem key={type} value={type}>
                                   {type === "srv_cert"
-                                    ? "Certificado do Servidor"
+                                    ? translate("show.certificates.upload.server_certificate")
                                     : type === "priv_key"
-                                    ? "Chave Privada"
-                                    : "Certificado Intermediário"}
+                                    ? translate("show.certificates.upload.private_key")
+                                    : translate("show.certificates.upload.intermediate_certificate")}
                                 </MenuItem>
                               ))}
                           </Select>
@@ -318,37 +319,37 @@ const CertificatesUpload: React.FC = () => {
         <Card variant="outlined">
           <CardContent>
             <Typography variant="h6" gutterBottom>
-              Access Point
+              {translate("show.certificates.upload.access_points")}
             </Typography>
             <Typography variant="body2" sx={{ mb: 2, color: theme.palette.text.secondary }}>
-              Selecione o Access Point para o qual deseja aplicar os certificados.
+              {translate("show.certificates.upload.access_points_info")}
             </Typography>
             
             <FormControl fullWidth variant="outlined">
-              <InputLabel id="access-point-select-label">Access Point</InputLabel>
+              <InputLabel id="access-point-select-label">{translate("show.certificates.upload.access_points")}</InputLabel>
               <Select
                 labelId="access-point-select-label"
                 id="access-point-select"
                 value={selectedAccessPoint}
                 onChange={(e) => setSelectedAccessPoint(e.target.value as number)}
-                label="Access Point"
+                label={translate("show.certificates.upload.access_points")}
                 disabled={loading}
               >
                 {loading ? (
                   <MenuItem value="">
                     <Box display="flex" alignItems="center">
                       <CircularProgress size={20} sx={{ mr: 1 }} />
-                      A carregar...
+                      {translate("show.certificates.upload.loading")}
                     </Box>
                   </MenuItem>
                 ) : (
                   [
                     <MenuItem value="" key="none" disabled>
-                      Selecione um Access Point
+                      {translate("show.certificates.upload.select_access_point")}
                     </MenuItem>,
                     ...accessPoints.map(ap => (
                       <MenuItem key={ap.id} value={ap.id}>
-                        {`${ap.location_description} (${ap.ip_address})${!ap.is_active ? " - Inativo" : ""}`}
+                        {`${ap.location_description} (${ap.ip_address})${!ap.is_active ? translate("show.certificates.upload.inactive") : ""}`}
                       </MenuItem>
                     ))
                   ]
@@ -366,7 +367,7 @@ const CertificatesUpload: React.FC = () => {
           disabled={!isSubmitEnabled} 
           onClick={handleSubmit}
         >
-          Submeter
+          {translate("show.certificates.upload.submit")}
         </Button>
       </Box>
 
@@ -380,10 +381,10 @@ const CertificatesUpload: React.FC = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={confirmDialog.onCancel} color="primary">
-            Cancelar
+            {translate("show.certificates.upload.cancel")}
           </Button>
           <Button onClick={confirmDialog.onConfirm} color="primary" variant="contained" autoFocus>
-            Confirmar
+            {translate("show.certificates.upload.confirm")}
           </Button>
         </DialogActions>
       </Dialog>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Edit, TabbedForm, TextInput, DateInput, Toolbar, SaveButton, useRecordContext, useInput, useRedirect, useTranslate } from "react-admin";
+import { Edit, TabbedForm, TextInput, DateInput, Toolbar, SaveButton, useRecordContext, useInput, useRedirect, useTranslate, required } from "react-admin";
 import { Typography, Divider, Box, Button, Paper } from "@mui/material";
 import { CalendarToday, Person, DoDisturb, UploadFile, Delete } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
@@ -117,14 +117,47 @@ export const CertificatesEdit = () => {
       <TabbedForm toolbar={<CustomToolbar />}>
         <TabbedForm.Tab label="Identificação">
           <SectionHeader icon={<Person />} title="Identificação" />
-          <TextInput source="name" label="show.certificates.name" fullWidth />
-          <TextInput source="file_path" label="show.certificates.file_path" fullWidth />
+          <TextInput 
+              source="name" 
+              label="show.certificates.name" 
+              fullWidth 
+              validate={[
+                required(),
+                value => value && value.length <= 255 ? undefined : "O nome deve ter no máximo 255 caracteres"
+              ]}
+          />
+          <TextInput 
+              source="file_path" 
+              label="show.certificates.file_path" 
+              fullWidth 
+              validate={[
+                value => !value || value.length <= 255 ? undefined : "O caminho do ficheiro deve ter no máximo 255 caracteres"
+              ]}
+          />
         </TabbedForm.Tab>
         <TabbedForm.Tab label="Detalhes">
           <SectionHeader icon={<CalendarToday />} title="Detalhes" />
           <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap={2} sx={{ width: '100%' }}>
-            <TextInput source="issuer_name" label="show.certificates.issuer_name" fullWidth />
-            <TextInput source="issuer_url" label="show.certificates.issuer_url" fullWidth />
+            <TextInput 
+              source="issuer_name" 
+              label="show.certificates.issuer_name" 
+              fullWidth 
+              validate={[
+                value => !value || value.length <= 255 ? undefined : "O nome da entidade emissora deve ter no máximo 255 caracteres"
+              ]}
+            />
+            <TextInput 
+              source="issuer_url" 
+              label="show.certificates.issuer_url" 
+              fullWidth 
+              validate={[
+                value => {
+                  if(!value) return undefined;
+                  const urlRegex = /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w-]*)*\/?$/;
+                  return urlRegex.test(value) ? undefined : "A URL da entidade emissora deve ser válida";
+                }
+              ]}
+            />
           </Box>
         </TabbedForm.Tab>
         <TabbedForm.Tab label="Conteúdo">
