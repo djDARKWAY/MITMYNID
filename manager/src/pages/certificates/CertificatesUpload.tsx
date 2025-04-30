@@ -245,16 +245,16 @@ const CertificatesUpload: React.FC = () => {
               <Stack spacing={1}>
                 {certTypes.map((key) => (
                   <Box
-                    key={key}
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      padding: 1,
-                      borderRadius: 1,
-                      backgroundColor: progress[key] ? "#f0f7ff" : "transparent",
-                      border: progress[key] ? "1px solid #c2e0ff" : "1px solid #e0e0e0",
-                    }}
-                  >
+                  key={key}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    p: 1,
+                    borderRadius: 1,
+                    backgroundColor: progress[key] ? theme.palette.action.selected : "transparent",
+                    border: `1px solid ${progress[key] ? theme.palette.primary.main : theme.palette.divider}`,
+                  }}
+                >
                     {progress[key] ? <CheckCircle sx={{ color: "#4caf50" }} /> : <RadioButtonUnchecked sx={{ color: "#9e9e9e" }} />}
                     <Box ml={1} flex={1}>
                       <Typography
