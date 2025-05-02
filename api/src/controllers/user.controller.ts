@@ -769,7 +769,11 @@ export class UserController {
           .send({ message: "User is not blocked" });
       }
 
-      await this.userRepository.updateById(id, { blocked: false });
+      await this.userRepository.updateById(id, { 
+        blocked: false,
+        login_attempts: 0 
+      });
+      
       await this.logService.logUserEdit(
         this.user.person_name,
         id,

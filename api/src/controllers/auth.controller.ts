@@ -137,8 +137,60 @@ export class AuthController {
       os: agent.os.toString(),
     };
 
+    const existingUser = await this.userRepository.findOne({
+      where: { username: credentials.username },
+    });
+
+    if (!existingUser) {
+      await this.logService.logLoginFailure(
+        credentials.username, 
+        ip as string, 
+        'User not found', 
+        deviceInfo
+      );
+      throw new Error('USER_NOT_FOUND');
+    }
+
+    if (!existingUser.active) {
+      await this.logService.logLoginFailure(
+        credentials.username, 
+        ip as string, 
+        'Account blocked', 
+        deviceInfo
+      );
+      throw new Error('ACCOUNT_BLOCKED');
+    }
+
+    if (existingUser.login_attempts && existingUser.login_attempts >= 5) {
+      try {
+        await this.userRepository.updateById(existingUser.id, { 
+          blocked: true 
+        });
+        
+        await this.logService.logLoginFailure(
+          credentials.username, 
+          ip as string, 
+          'Account blocked after 5 failed attempts', 
+          deviceInfo
+        );
+      } catch (updateErr) {
+        console.error('Error updating user blocked status:', updateErr);
+      }
+      
+      throw new Error('ACCOUNT_BLOCKED_MAX_ATTEMPTS');
+    }
+
     try {
       const user = await this.authService.verifyCredentials(credentials);
+      
+      try {
+        await this.userRepository.updateById(user.id, { 
+          login_attempts: 0 
+        });
+      } catch (updateErr) {
+        console.error('Error resetting login attempts:', updateErr);
+      }
+      
       const userProfile = this.authService.convertToUserProfile(user);
       const token = await this.jwtService.generateToken(userProfile);
       const decodedToken = decode(token) as JWT;
@@ -154,28 +206,65 @@ export class AuthController {
         validity: tokenValidaty.toISOString(),
       });
 
-      await this.logService.logLoginSuccess(user.person_name, ip as string, {
-        device: deviceInfo.device,
-        os: deviceInfo.os,
-      }, userProfile[securityId]);
+      await this.logService.logLoginSuccess(
+        user.person_name, 
+        ip as string, 
+        deviceInfo, 
+        userProfile[securityId]
+      );
 
       return { token: token };
     } catch (err) {
-      if (err.code === 'USER_NOT_FOUND') {
-        await this.logService.logLoginFailure(credentials.username, ip as string, 'User not found', {
-          device: deviceInfo.device,
-          os: deviceInfo.os,
-        });
-      } else if (err.code === 'INVALID_PASSWORD') {
-        await this.logService.logLoginFailure(credentials.username, ip as string, 'Invalid password', {
-          device: deviceInfo.device,
-          os: deviceInfo.os,
-        });
+      const isCredentialError = 
+        err.name === 'UnauthorizedError' ||
+        (err.message && (
+          err.message.includes('Invalid credentials') || 
+          err.message.includes('Utilizador ou palavra-passe inválidos')
+        ));
+      
+      if (isCredentialError && existingUser) {
+        try {
+          const currentAttempts = existingUser.login_attempts || 0;
+          const newAttempts = currentAttempts + 1;
+          
+          console.log(`Current login_attempts: ${currentAttempts}`);
+          console.log(`Setting login_attempts to ${newAttempts} for user ${existingUser.username} (ID: ${existingUser.id})`);
+          
+          await this.userRepository.updateById(existingUser.id, { 
+            login_attempts: newAttempts 
+          });
+          
+          if (newAttempts >= 5) {
+            await this.userRepository.updateById(existingUser.id, { 
+              blocked: true 
+            });
+            
+            await this.logService.logLoginFailure(
+              credentials.username, 
+              ip as string, 
+              'Account blocked after 5 failed attempts', 
+              deviceInfo
+            );
+            
+            throw new Error('ACCOUNT_BLOCKED_MAX_ATTEMPTS');
+          }
+          
+          await this.logService.logLoginFailure(
+            credentials.username, 
+            ip as string, 
+            `Invalid password (attempt ${newAttempts} of 5)`, 
+            deviceInfo
+          );
+        } catch (updateErr) {
+          console.error('Error updating login attempts:', updateErr);
+        }
       } else {
-        await this.logService.logLoginFailure(credentials.username, ip as string, err.message, {
-          device: deviceInfo.device,
-          os: deviceInfo.os,
-        });
+        await this.logService.logLoginFailure(
+          credentials.username, 
+          ip as string, 
+          err.message, 
+          deviceInfo
+        );
       }
       throw err;
     }

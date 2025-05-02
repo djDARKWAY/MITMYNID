@@ -324,6 +324,22 @@ export class User extends Entity {
   })
   warehouse_id?: number;
 
+  @property({
+    type: "number",
+    default: 0,
+    required: false,
+    postgresql: {
+      columnName: "login_attempts",
+      dataType: "integer",
+      nullable: "YES",
+    },
+    jsonSchema: {
+      type: "number",
+      nullable: true,
+    },
+  })
+  login_attempts?: number;
+
   @hasMany(() => Role, {
     through: {
       model: () => UserRole,
