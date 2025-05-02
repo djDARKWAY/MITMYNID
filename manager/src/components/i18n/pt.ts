@@ -464,6 +464,17 @@ const portugueseMessages: TranslationMessages = {
       logs: "Registos",
       configuration: "Configuração técnica",
       identification: "Identificação",
+      pdf: {
+        title: "Lista de Pontos de Acesso",
+        warehouse: "Armazém",
+        location: "Localização",
+        ip: "Endereço IP",
+        software: "Software",
+        status: "Estado",
+        active: "Ativo",
+        inactive: "Inativo",
+        export: "Exportar"
+      },
     },
     certificates: {
       identification: "Identificação",

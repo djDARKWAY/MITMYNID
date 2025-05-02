@@ -458,6 +458,17 @@ const englishMessages: TranslationMessages = {
       logs: "Logs",
       configuration: "Technical Configuration",
       identification: "Identification",
+      pdf: {
+        title: "Access Points List",
+        warehouse: "Warehouse",
+        location: "Location",
+        ip: "IP Address",
+        software: "Software",
+        status: "Status",
+        active: "Active",
+        inactive: "Inactive",
+        export: "Export",
+      },
     },
     certificates: {
       identification: "Identification",

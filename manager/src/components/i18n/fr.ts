@@ -470,6 +470,17 @@ const frenchMessages: TranslationMessages = {
       logs: "Journaux",
       configuration: "Configuration technique",
       identification: "Identification",
+      pdf: {
+        title: "Liste des Points d'Accès",
+        warehouse: "Entrepôt",
+        location: "Localisation",
+        ip: "Adresse IP",
+        software: "Logiciel",
+        status: "État",
+        active: "Actif",
+        inactive: "Inactif",
+        export: "Exporter",
+      },
     },
     certificates: {
       identification: "Identification",

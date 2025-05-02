@@ -1,4 +1,4 @@
-import { List, Datagrid, TextField, FunctionField, SimpleList, usePermissions, ReferenceField, WithRecord, CreateButton, TopToolbar } from "react-admin";
+import { List, Datagrid, TextField, FunctionField, SimpleList, usePermissions, ReferenceField, WithRecord, CreateButton, TopToolbar, useDataProvider, useTranslate, FilterButton, useListContext } from "react-admin";
 import { useTheme } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CustomEmptyPage from "../../components/general/CustomEmptyPage";
@@ -7,12 +7,104 @@ import { AccessPointsFilters } from "./AccessPointsFilter";
 import { Edit, Delete } from '@mui/icons-material';
 import CustomButtonToolTip, { commonListCSS } from "../../components/general/CustomButtonToolTip";
 import CustomConfirmButtonToolTip from "../../components/general/CustomConfirmButtonToolTip";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import { Button } from '@mui/material';
+import DownloadIcon from '@mui/icons-material/Download';
 
-const ListActions = () => (
-    <TopToolbar>
-        <CreateButton />
-    </TopToolbar>
-);
+const exportToPDF = (data: any[], translate: (key: string) => string, hasFilters: boolean = false) => {
+    const doc = new jsPDF();
+    const currentDate = new Date().toLocaleDateString('pt-PT').replace(/\//g, '-');
+    const currentTime = new Date().toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const title = translate("show.accessPoints.pdf.title");
+    const subtitle = `${currentDate} ${currentTime}`;
+
+    const titleWidth = doc.getTextWidth(title);
+    const subtitleWidth = doc.getTextWidth(subtitle);
+
+    const titleXPosition = (pageWidth - titleWidth) / 2;
+    const subtitleXPosition = (pageWidth - subtitleWidth) / 2;
+
+    doc.addImage('/MMN_V_RGB_PNG.png', 'SVG', pageWidth - 29, 10, 19, 15);
+
+    const titleYPosition = 25;
+    const subtitleYPosition = titleYPosition + 6;
+
+    doc.text(title, titleXPosition, titleYPosition);
+    doc.setFontSize(10);
+    doc.setTextColor(150);
+    doc.text(subtitle, subtitleXPosition, subtitleYPosition);
+
+    autoTable(doc, {
+        startY: subtitleYPosition + 10,
+        head: [[
+            translate("show.accessPoints.pdf.warehouse"),
+            translate("show.accessPoints.pdf.location"),
+            "IPv4",
+            translate("show.accessPoints.pdf.inactive")
+        ]],
+        body: data.map(item => [
+            item.warehouse?.name || "—",
+            item.location_description,
+            item.ip_address,
+            item.is_active ? "" : "X",
+        ]),
+        headStyles: { fillColor: [83, 132, 237] },
+        columnStyles: {
+            3: { halign: 'center' }
+        },
+        styles: {
+            fontSize: 9,
+            cellPadding: 2
+        },
+        didDrawPage: (data) => {
+            const pageText = `${doc.getCurrentPageInfo().pageNumber}`;
+            doc.setFontSize(10);
+            doc.setTextColor(150);
+            doc.text(pageText, pageWidth - 20, doc.internal.pageSize.getHeight() - 10, { align: 'right' });
+        }
+    });
+
+    doc.save(`access-points${hasFilters ? '-filtered' : ''}-${currentDate}.pdf`);
+};
+
+const ListActions = () => {
+    const dataProvider = useDataProvider();
+    const translate = useTranslate();
+    const { filterValues } = useListContext();
+    
+    const handleExportPDF = async () => {
+        const hasActiveFilters = Object.keys(filterValues).length > 0;
+        
+        const { data } = await dataProvider.getList('access-points', {
+            pagination: { page: 1, perPage: 1000 },
+            sort: { field: 'id', order: 'ASC' },
+            filter: filterValues,
+        });
+        
+        exportToPDF(data, translate, hasActiveFilters);
+    };
+
+    return (
+        <TopToolbar>
+            <CreateButton />
+            <FilterButton />
+            <Button
+                startIcon={<DownloadIcon />}
+                onClick={handleExportPDF}
+                color="primary"
+                variant="text"
+                sx={{
+                    textTransform: 'none', fontWeight: 'bold', fontSize: '14px', color: '#90CAF9', '&:hover': { backgroundColor: 'rgba(144, 202, 249, 0.04)' },
+                }}
+            >
+                {translate("show.accessPoints.pdf.export")}
+            </Button>
+        </TopToolbar>
+    );
+};
 
 export const AccessPointsList = () => {
     const { permissions } = usePermissions();

@@ -467,6 +467,17 @@ const spanishMessages: TranslationMessages = {
       logs: "Registros",
       configuration: "Configuración técnica",
       identification: "Identificación",
+      pdf: {
+        title: "Lista de Puntos de Acceso",
+        warehouse: "Almacén",
+        location: "Ubicación",
+        ip: "Dirección IP",
+        software: "Software",
+        status: "Estado",
+        active: "Activo",
+        inactive: "Inactivo",
+        export: "Exportar",
+      },
     },
     certificates: {
       identification: "Identificación",
