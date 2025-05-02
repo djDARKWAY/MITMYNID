@@ -496,6 +496,15 @@ const portugueseMessages: TranslationMessages = {
       int_cert: "Certificado Intermediário (CA)",
       priv_key: "Chave Privada (PK)",
       edit_instruction: "Para alterar um certificado, clique no botão 'Editar' abaixo de cada campo. As alterações só serão guardadas ao clicar em 'Guardar'.",
+      pdf: {
+        export: "Exportar",
+        title: "Lista de Certificados",
+        name: "Nome",
+        issuer: "Emissor",
+        issueDate: "Emissão",
+        expirationDate: "Expiração",
+        inactive: "Inativo",
+      },
       upload: {
         certificados_ssl: "Certificados SSL",
         upload_instructions: "Carregue os seus certificados SSL para os associar a um ponto de acesso.",

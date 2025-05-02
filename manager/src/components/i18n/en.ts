@@ -490,6 +490,15 @@ const englishMessages: TranslationMessages = {
       int_cert: "Intermediate Certificate (CA)",
       priv_key: "Private Key (PK)",
       edit_instruction: "To edit a certificate, click the 'Edit' button below each field. Changes will only be saved when you click 'Save'.",
+      pdf: {
+        export: "Export",
+        title: "Certificate List",
+        name: "Name",
+        issuer: "Issuer",
+        issueDate: "Issue Date",
+        expirationDate: "Expiration Date",
+        inactive: "Inactive",
+      },
       upload: {
         ssl_certificates: "SSL Certificates",
         upload_instructions: "Upload your SSL certificates to associate them with an access point.",
