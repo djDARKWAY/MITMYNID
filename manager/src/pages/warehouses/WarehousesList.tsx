@@ -1,7 +1,7 @@
 import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
-import { TopToolbar, CreateButton, FilterButton } from "react-admin";
-import { List, useListContext, usePermissions, useDataProvider } from "react-admin";
+import { TopToolbar, CreateButton, FilterButton, useTranslate, useListContext, usePermissions, useDataProvider } from "react-admin";
+import { List } from "react-admin";
 import { Card, CardContent, Typography, Grid, Paper, useTheme, Checkbox, Button, Box } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import CustomEmptyPage from "../../components/general/CustomEmptyPage";
@@ -9,8 +9,106 @@ import CustomPagination, { perPageDefault } from "../../components/general/Custo
 import { WarehousesFilters } from "./WarehousesFilter";
 import { Delete } from "@mui/icons-material";
 import CustomConfirmButtonToolTip from "../../components/general/CustomConfirmButtonToolTip";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import DownloadIcon from '@mui/icons-material/Download';
 
 const FLAG_BASE_URL = import.meta.env.VITE_FLAG_BASE_URL;
+
+const exportToPDF = (data: any[], translate: (key: string) => string, hasFilters: boolean = false) => {
+    const doc = new jsPDF();
+    const currentDate = new Date();
+    const formattedDate = currentDate.toLocaleDateString('pt-PT').replace(/\//g, '-');
+    const formattedTime = currentDate.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const title = translate("show.warehouses.pdf.title");
+    const subtitle = `${formattedDate} ${formattedTime}`;
+
+    doc.addImage('/MMN_V_RGB_PNG.png', 'SVG', pageWidth - 29, 10, 19, 15);
+    doc.text(title, (pageWidth - doc.getTextWidth(title)) / 2, 25);
+    doc.setFontSize(10).setTextColor(150).text(subtitle, (pageWidth - doc.getTextWidth(subtitle)) / 2, 31);
+
+    console.log(data);
+    
+    autoTable(doc, {
+        startY: 41,
+        head: [[
+            translate("show.warehouses.pdf.name"),
+            translate("show.warehouses.pdf.address"),
+            translate("show.warehouses.pdf.country")
+        ]],
+        body: data.map(item => [
+            item.name,
+            `${item.address || "—"}, ${item.city}${item.district ? `, ${item.district}` : ""}`,
+            item.country?.name || "—",
+        ]),
+        headStyles: { fillColor: [83, 132, 237] },
+        styles: { fontSize: 9, cellPadding: 2 },
+        didDrawPage: () => {
+            doc.setFontSize(10).setTextColor(150).text(
+                `${doc.getCurrentPageInfo().pageNumber}`,
+                pageWidth - 20,
+                doc.internal.pageSize.getHeight() - 10,
+                { align: 'right' }
+            );
+        }
+    });
+
+    doc.save(`warehouses${hasFilters ? '-filtered' : ''}-${formattedDate}.pdf`);
+};
+
+const ListActions = () => {
+    const dataProvider = useDataProvider();
+    const translate = useTranslate();
+    const { filterValues } = useListContext();
+    const [showCheckboxes, setShowCheckboxes] = useState(false);
+    const theme = useTheme();
+    
+    const handleExportPDF = async () => {
+        const hasActiveFilters = Object.keys(filterValues).length > 0;
+        
+        const { data } = await dataProvider.getList('warehouses', {
+            pagination: { page: 1, perPage: 1000 },
+            sort: { field: 'id', order: 'ASC' },
+            filter: filterValues,
+        });
+        
+        exportToPDF(data, translate, hasActiveFilters);
+    };
+
+    return (
+        <TopToolbar>
+            <Button 
+                onClick={() => {
+                    setShowCheckboxes(!showCheckboxes);
+                }}
+                sx={{ 
+                    textTransform: "none", 
+                    marginLeft: "10px", 
+                    color: theme.palette.primary.main, 
+                    backgroundColor: "transparent", 
+                    "&:hover": { backgroundColor: "transparent" } 
+                }}
+            >
+                {showCheckboxes ? "Desativar seleção múltipla" : "Ativar seleção múltipla"}
+            </Button>
+            <FilterButton />
+            <CreateButton label="Criar" icon={<AddIcon />} />
+            <Button
+                startIcon={<DownloadIcon />}
+                onClick={handleExportPDF}
+                color="primary"
+                variant="text"
+                sx={{
+                    textTransform: 'none', fontWeight: 'bold', fontSize: '14px', color: '#90CAF9', '&:hover': { backgroundColor: 'rgba(144, 202, 249, 0.04)' },
+                }}
+            >
+                {translate("show.warehouses.pdf.export")}
+            </Button>
+        </TopToolbar>
+    );
+};
 
 const WarehouseCard = ({ record, selected, onToggle, showCheckboxes }: { 
     record?: { id: number | string; name: string; city: string; district?: string; zip_code: string; country?: { name: string; flag_url?: string } }; 
@@ -129,27 +227,7 @@ export const WarehousesList = () => {
                 exporter={false}
                 title="resources.warehouses.name"
                 sx={{ paddingLeft: "10px", paddingBottom: showCheckboxes && selectedIds.length > 0 ? '70px' : '0' }}
-                actions={
-                    <TopToolbar>
-                        <Button 
-                            onClick={() => {
-                                setShowCheckboxes(!showCheckboxes);
-                                if (showCheckboxes) setSelectedIds([]);
-                            }}
-                            sx={{ 
-                                textTransform: "none", 
-                                marginLeft: "10px", 
-                                color: theme.palette.primary.main, 
-                                backgroundColor: "transparent", 
-                                "&:hover": { backgroundColor: "transparent" } 
-                            }}
-                        >
-                            {showCheckboxes ? "Desativar seleção múltipla" : "Ativar seleção múltipla"}
-                        </Button>
-                        <FilterButton />
-                        <CreateButton label="Criar" icon={<AddIcon />} />
-                    </TopToolbar>
-                }
+                actions={<ListActions />}
             >
                 <WarehousesCardList 
                     showCheckboxes={showCheckboxes} 

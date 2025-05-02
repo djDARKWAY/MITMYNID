@@ -14,31 +14,20 @@ import DownloadIcon from '@mui/icons-material/Download';
 
 const exportToPDF = (data: any[], translate: (key: string) => string, hasFilters: boolean = false) => {
     const doc = new jsPDF();
-    const currentDate = new Date().toLocaleDateString('pt-PT').replace(/\//g, '-');
-    const currentTime = new Date().toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
+    const currentDate = new Date();
+    const formattedDate = currentDate.toLocaleDateString('pt-PT').replace(/\//g, '-');
+    const formattedTime = currentDate.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
 
     const pageWidth = doc.internal.pageSize.getWidth();
     const title = translate("show.accessPoints.pdf.title");
-    const subtitle = `${currentDate} ${currentTime}`;
-
-    const titleWidth = doc.getTextWidth(title);
-    const subtitleWidth = doc.getTextWidth(subtitle);
-
-    const titleXPosition = (pageWidth - titleWidth) / 2;
-    const subtitleXPosition = (pageWidth - subtitleWidth) / 2;
+    const subtitle = `${formattedDate} ${formattedTime}`;
 
     doc.addImage('/MMN_V_RGB_PNG.png', 'SVG', pageWidth - 29, 10, 19, 15);
-
-    const titleYPosition = 25;
-    const subtitleYPosition = titleYPosition + 6;
-
-    doc.text(title, titleXPosition, titleYPosition);
-    doc.setFontSize(10);
-    doc.setTextColor(150);
-    doc.text(subtitle, subtitleXPosition, subtitleYPosition);
+    doc.text(title, (pageWidth - doc.getTextWidth(title)) / 2, 25);
+    doc.setFontSize(10).setTextColor(150).text(subtitle, (pageWidth - doc.getTextWidth(subtitle)) / 2, 31);
 
     autoTable(doc, {
-        startY: subtitleYPosition + 10,
+        startY: 41,
         head: [[
             translate("show.accessPoints.pdf.warehouse"),
             translate("show.accessPoints.pdf.location"),
@@ -52,22 +41,19 @@ const exportToPDF = (data: any[], translate: (key: string) => string, hasFilters
             item.is_active ? "" : "X",
         ]),
         headStyles: { fillColor: [83, 132, 237] },
-        columnStyles: {
-            3: { halign: 'center' }
-        },
-        styles: {
-            fontSize: 9,
-            cellPadding: 2
-        },
-        didDrawPage: (data) => {
-            const pageText = `${doc.getCurrentPageInfo().pageNumber}`;
-            doc.setFontSize(10);
-            doc.setTextColor(150);
-            doc.text(pageText, pageWidth - 20, doc.internal.pageSize.getHeight() - 10, { align: 'right' });
+        columnStyles: { 3: { halign: 'center' } },
+        styles: { fontSize: 9, cellPadding: 2 },
+        didDrawPage: () => {
+            doc.setFontSize(10).setTextColor(150).text(
+                `${doc.getCurrentPageInfo().pageNumber}`,
+                pageWidth - 20,
+                doc.internal.pageSize.getHeight() - 10,
+                { align: 'right' }
+            );
         }
     });
 
-    doc.save(`access-points${hasFilters ? '-filtered' : ''}-${currentDate}.pdf`);
+    doc.save(`access-points${hasFilters ? '-filtered' : ''}-${formattedDate}.pdf`);
 };
 
 const ListActions = () => {

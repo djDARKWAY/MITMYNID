@@ -552,7 +552,13 @@ const spanishMessages: TranslationMessages = {
       logs: "Registros",
       map: "Mapa",
       latitude: "Latitud",
-        
+      pdf: {
+        title: "Lista de Entidades",
+        name: "Nombre",
+        address: "Dirección",
+        country: "País",
+        export: "Exportar",
+      },
     },
     validateUsers: {
       person_name: "Nombre de la persona",

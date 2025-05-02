@@ -544,6 +544,13 @@ const englishMessages: TranslationMessages = {
       map: "Map",
       latitude: "Latitude",
       longitude: "Longitude",
+      pdf: {
+        title: "Entity List",
+        name: "Name",
+        address: "Address",
+        country: "Country",
+        export: "Export",
+      },
     },
     validateUsers: {
       person_name: "Person Name",

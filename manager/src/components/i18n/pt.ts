@@ -550,6 +550,13 @@ const portugueseMessages: TranslationMessages = {
       map: "Mapa",
       latitude: "Latitude",
       longitude: "Longitude",
+      pdf: {
+        title: "Lista de Entidades",
+        name: "Nome",
+        address: "Morada",
+        country: "País",
+        export: "Exportar",
+      }
     },
     validateUsers: {
       person_name: "Nome da pessoa",

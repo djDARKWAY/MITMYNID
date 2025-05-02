@@ -556,6 +556,13 @@ const frenchMessages: TranslationMessages = {
       map: "Carte",
       latitude: "Latitude",
       longitude: "Longitude",
+      pdf: {
+        title: "Liste des Entités",
+        name: "Nom",
+        address: "Adresse",
+        country: "Pays",
+        export: "Exporter",
+      },
     },
     validateUsers: {
       person_name: "Nom de la personne",

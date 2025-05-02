@@ -116,6 +116,7 @@ export class WarehouseController {
       fields: {
         id: true,
         name: true,
+        address: true,
         city: true,
         district: true,
         country_id: true,
