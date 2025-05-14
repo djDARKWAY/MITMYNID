@@ -1,10 +1,9 @@
 import { inject, Getter } from '@loopback/core';
-import { DefaultCrudRepository, repository, HasManyThroughRepositoryFactory, HasOneRepositoryFactory, BelongsToAccessor } from '@loopback/repository';
+import { DefaultCrudRepository, repository, HasManyThroughRepositoryFactory, BelongsToAccessor } from '@loopback/repository';
 import { DbDataSource } from '../datasources';
-import { User, UserRelations, Role, UserRole, PrefsUtil } from '../models';
+import { User, UserRelations, Role, UserRole } from '../models';
 import { UserRoleRepository } from './user-role.repository';
 import { RoleRepository } from './role.repository';
-import { PrefsUtilRepository } from './prefs-util.repository';
 
 export type Credentials = {
   username: string;
@@ -33,21 +32,15 @@ export class UserRepository extends DefaultCrudRepository<
     typeof User.prototype.id
   >;
 
-  public readonly prefs_util: HasOneRepositoryFactory<PrefsUtil, typeof User.prototype.id>;
-
-
   constructor(
     @inject('datasources.db') dataSource: DbDataSource,
     @repository.getter('UserRoleRepository') protected userRoleRepositoryGetter: Getter<UserRoleRepository>,
     @repository.getter('RoleRepository') protected roleRepositoryGetter: Getter<RoleRepository>,
-    @repository.getter('PrefsUtilRepository') protected prefsUtilRepositoryGetter: Getter<PrefsUtilRepository>,
     @repository(RoleRepository) public roleRepository: RoleRepository,
   ) {
     super(User, dataSource);
     this.roles = this.createHasManyThroughRepositoryFactoryFor('roles', roleRepositoryGetter, userRoleRepositoryGetter,);
     this.registerInclusionResolver('roles', this.roles.inclusionResolver);
-    this.prefs_util = this.createHasOneRepositoryFactoryFor('prefs_util', prefsUtilRepositoryGetter);
-    this.registerInclusionResolver('prefs_util', this.prefs_util.inclusionResolver);
   }
 
   async findCredentials(id: typeof User.prototype.id):
@@ -61,7 +54,6 @@ export class UserRepository extends DefaultCrudRepository<
       throw err;
     }
   }
-
 
   async findRoles(id: typeof User.prototype.id): Promise<string[]> {
 
@@ -98,8 +90,5 @@ export class UserRepository extends DefaultCrudRepository<
     return userRoles
 
   }
-
-
-
 
 }

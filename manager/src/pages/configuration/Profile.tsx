@@ -19,8 +19,7 @@ import {
   Datagrid,
   TabbedForm,
   DateField,
-  SelectInput,
-  WithRecord
+  SelectInput
 } from "react-admin";
 import { customDropZone } from "../../components/general/customCSS";
 import PlaceholderDropZone from "../../components/general/PlaceholderDropZone";
@@ -65,8 +64,6 @@ const Profile = () => {
 
   const onSettled = (data?: Users) => {
 
-    // notify('ra.notification.updated');
-
     if (!data) return;
 
     localStorage.setItem('profile', JSON.stringify({
@@ -74,17 +71,14 @@ const Profile = () => {
       fullName: data.person_name,
       //@ts-ignore
       avatar: data.photo ? url + data.photo : '',
-      // Usar os novos campos theme e language
       theme: data.theme || 'light',
       language: data.language || 'pt',
     }));
 
-    // Usar diretamente o campo theme
     if (data.theme && data.theme !== theme) {
       setTheme(data.theme);
     }
 
-    // Usar diretamente o campo language
     if (data.language && data.language !== locale) {
       setLocale(data.language);
     }
@@ -97,13 +91,7 @@ const Profile = () => {
       id={identity.id as string}
       resource="users"
       queryOptions={{
-        meta: {
-          include: [
-            {
-              relation: 'prefs_util'
-            }
-          ]
-        }
+        meta: {}
       }}
       mutationMode="pessimistic"
       mutationOptions={{ onSettled }}
@@ -165,20 +153,15 @@ const Profile = () => {
             </ImageInput>
           </Box>
         </TabbedForm.Tab>
-        <TabbedForm.Tab label={'resources.utilizadores.tabs.prefs_util'}>
-          <WithRecord render={(record: Users) => (
-            <Box width={'100%'}>
-              <Box display={{ xs: 'block', md: 'flex' }} sx={{ flexWrap: { xs: 'none', md: 'wrap' } }}>
-                <Box flex={1} mr={{ xs: 0, md: '0.5em' }}>
-                  {/* Agora usando o campo language direto */}
-                  <SelectInput choices={langs} fullWidth source="language" sx={{ marginTop: '0px' }} label="resources.utilizadores.fields.lang_fav" />
-                </Box>
-                <Box flex={1} ml={{ xs: 0, md: '0.5em' }}>
-                  <SelectInput choices={themes} fullWidth source="theme" sx={{ marginTop: '0px' }} label="resources.utilizadores.fields.tema_fav" />
-                </Box>
-              </Box>
+        <TabbedForm.Tab label="resources.utilizadores.tabs.prefs_util">
+          <Box display="flex" sx={{ flexWrap: 'wrap', width: '100%' }}>
+            <Box flex={1} sx={{ width: '50%', pr: 1 }}>
+              <SelectInput choices={langs} fullWidth source="language" label="resources.utilizadores.fields.lang_fav" />
             </Box>
-          )} />
+            <Box flex={1} sx={{ width: '50%', pl: 1 }}>
+              <SelectInput choices={themes} fullWidth source="theme" label="resources.utilizadores.fields.tema_fav" />
+            </Box>
+          </Box>
         </TabbedForm.Tab>
         <TabbedForm.Tab label={'resources.app-users-sessions.name'}>
           <Box sx={{ width: '100%' }}>

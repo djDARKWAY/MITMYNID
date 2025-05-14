@@ -24,8 +24,8 @@ import _ from 'lodash';
 import { log } from '../interceptors/log';
 import { EmailServiceBindings, PasswordHasherBindings, TokenServiceBindings, UserServiceBindings } from '../keys';
 import { basicAuthorization } from '../middlewares/auth.middleware';
-import { PrefsUtil, User } from '../models';
-import { AppUsersSessionRepository, PrefsUtilRepository, RoleRepository, UserRepository, UserRoleRepository } from '../repositories';
+import { User } from '../models';
+import { AppUsersSessionRepository, RoleRepository, UserRepository, UserRoleRepository } from '../repositories';
 import { CustomUserService, PasswordHasher } from '../services';
 import { CredentialsSignInRequestBody } from './specs/user-controller.specs';
 import { SecurityBindings, securityId, UserProfile } from '@loopback/security';
@@ -41,7 +41,6 @@ export class UserController {
     @repository(UserRepository) public userRepository: UserRepository,
     @repository(UserRoleRepository) public userRoleRepository: UserRoleRepository,
     @repository(RoleRepository) public roleRepository: RoleRepository,
-    @repository(PrefsUtilRepository) public prefsUserRepository: PrefsUtilRepository,
     @inject(PasswordHasherBindings.PASSWORD_HASHER) public passwordHasher: PasswordHasher,
     @inject(TokenServiceBindings.TOKEN_SERVICE) public jwtService: TokenService,
     @inject(UserServiceBindings.USER_SERVICE) public userService: CustomUserService,
@@ -109,14 +108,6 @@ export class UserController {
           const savedUser = await this.userRepository
             .create(_.omit(newUserRequest, ["roles", "blocked", "active"]))
             .then(async (user) => {
-              const prefsUtil = {
-                id_utilizador: user.id,
-                lang_fav: undefined,
-                tema_fav: undefined,
-              } as PrefsUtil;
-
-              await this.prefsUserRepository.create(prefsUtil);
-
               if (roles.length > 0) {
                 for (const value of roles) {
                   await this.userRoleRepository.create({
@@ -138,14 +129,6 @@ export class UserController {
       const savedUser = await this.userRepository
         .create(_.omit(newUserRequest, ["roles", "blocked", "active"]))
         .then(async (user) => {
-          const prefsUtil = {
-            id_utilizador: user.id,
-            lang_fav: undefined,
-            tema_fav: undefined,
-          } as PrefsUtil;
-
-          await this.prefsUserRepository.create(prefsUtil);
-
           if (roles.length > 0) {
             for (const value of roles) {
               await this.userRoleRepository.create({
@@ -354,7 +337,7 @@ export class UserController {
     })
     user: User
   ): Promise<User | void | Response> {
-    let omitArray = ["roles", "password", "token", "prefs_util", "photo"];
+    let omitArray = ["roles", "password", "token", "photo"];
 
     const accessUser = await this.userRepository.findById(id);
 
@@ -450,13 +433,6 @@ export class UserController {
             }
           }
 
-          if (user.prefs_util) {
-            await this.prefsUserRepository
-              .updateById(id, user.prefs_util)
-              .catch((err) => {
-                console.log("ERROR:", err);
-              });
-          }
           await this.logService.logUserEdit(this.user.person_name, id, this.response.req?.ip ?? 'unknown', this.user.person_name, {
             device: this.response.req?.headers['user-agent'] ?? 'unknown',
             os: 'unknown',
@@ -510,7 +486,6 @@ export class UserController {
         .send({ message: "Não tem permissões para eliminar utilizadores" });
     } else {
       try {
-        await this.prefsUserRepository.deleteAll({ id_utilizador: id });
         await this.appUsersSessionRepository.deleteAll({ app_users_id: id });
         await this.userRoleRepository.deleteAll({ app_users_id: id });
         await this.userRepository.deleteById(id);
@@ -736,7 +711,6 @@ export class UserController {
           .send({ message: "Utilizador não encontrado ou já validado" });
       }
       
-      await this.prefsUserRepository.deleteAll({ id_utilizador: id });
       await this.appUsersSessionRepository.deleteAll({ app_users_id: id });
       await this.userRoleRepository.deleteAll({ app_users_id: id });
       await this.userRepository.deleteById(id);

@@ -12,12 +12,10 @@ import {
   useGetIdentity,
   PasswordInput,
   TabbedForm,
-  WithRecord,
   ReferenceManyField,
   Datagrid,
   Pagination,
   DateField,
-  SelectInput,
   useNotify
 } from "react-admin";
 import RolesInput from "./RolesInput";
@@ -27,18 +25,6 @@ import ToolbarEditForm from "../../components/general/ToolbarEditForm";
 import { customDropZone } from "../../components/general/customCSS";
 import PlaceholderDropZone from "../../components/general/PlaceholderDropZone";
 import { url } from "../../App";
-
-const themes = [
-  { id: 'light', name: 'Light' },
-  { id: 'dark', name: 'Dark' }
-];
-
-
-const langs = [
-  { id: 'pt', name: 'Português' },
-  { id: 'en', name: 'English' },
-  { id: 'fr', name: 'Français' }
-];
 
 function formatLogo(value: any) {
   if (typeof value === "string") { // Value is null or the url string from the backend, wrap it in an object so the form input can handle it
@@ -72,7 +58,7 @@ export const UsersEdit = () => {
       // O campo 'photo' será o mesmo que o backend já possui, então remova-o para não sobrescrever
       delete data.photo;
     }
-
+    
     return data
   };
 
@@ -82,9 +68,6 @@ export const UsersEdit = () => {
       queryOptions={{
         meta: {
           include: [
-            {
-              relation: 'prefs_util'
-            },
             {
               relation: "roles",
             }
@@ -178,20 +161,6 @@ export const UsersEdit = () => {
               <ImageField source="src" />
             </ImageInput>
           </Box>
-        </TabbedForm.Tab>
-        <TabbedForm.Tab label={'resources.utilizadores.tabs.prefs_util'}>
-          <WithRecord render={(record: Users) => (
-            <Box width={'100%'}>
-              <Box display={{ xs: 'block', md: 'flex' }} sx={{ flexWrap: { xs: 'none', md: 'wrap' } }}>
-                <Box flex={1} mr={{ xs: 0, md: '0.5em' }}>
-                  <SelectInput choices={langs} fullWidth source="prefs_util.lang_fav" sx={{ marginTop: '0px' }} label="resources.utilizadores.fields.lang_fav" />
-                </Box>
-                <Box flex={1} ml={{ xs: 0, md: '0.5em' }}>
-                  <SelectInput choices={themes} fullWidth source="prefs_util.tema_fav" sx={{ marginTop: '0px' }} label="resources.utilizadores.fields.tema_fav" />
-                </Box>
-              </Box>
-            </Box>
-          )} />
         </TabbedForm.Tab>
         {permissions.includes('ADMIN') && <TabbedForm.Tab label={'resources.app-users-sessions.name'}>
           <Box sx={{ width: '100%' }}>

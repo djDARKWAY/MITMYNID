@@ -3,8 +3,8 @@ import { inject, intercept } from "@loopback/core";
 import { repository } from "@loopback/repository";
 import { post, requestBody, get, Response, Request, RestBindings } from "@loopback/rest";
 import { AuthServiceBindings, EmailServiceBindings, PasswordHasherBindings, TokenServiceBindings } from "../keys";
-import { PedidosRemocao, PrefsUtil, User } from "../models";
-import { UserRepository, UserRoleRepository, RoleRepository, Credentials, AppUsersSessionRepository, SignInCredentials, AppUsersRegisterRepository, PrefsUtilRepository, PedidosRemocaoRepository, AppUsersAuthenticatorRepository } from "../repositories";
+import { PedidosRemocao, User } from "../models";
+import { UserRepository, UserRoleRepository, RoleRepository, Credentials, AppUsersSessionRepository, SignInCredentials, AppUsersRegisterRepository, PedidosRemocaoRepository, AppUsersAuthenticatorRepository } from "../repositories";
 import { PasswordHasher } from "../services";
 import {
   CredentialsLoginRequestBody,
@@ -23,7 +23,6 @@ export class AuthController {
   constructor(
     @repository(UserRepository) public userRepository: UserRepository,
     @repository(UserRoleRepository) public userRoleRepository: UserRoleRepository,
-    @repository(PrefsUtilRepository) public prefsUserRepository: PrefsUtilRepository,
     @repository(PedidosRemocaoRepository) public pedidosRemocaoRepository: PedidosRemocaoRepository,
     @repository(RoleRepository) public roleRepository: RoleRepository,
     @inject(PasswordHasherBindings.PASSWORD_HASHER) public passwordHasher: PasswordHasher,
@@ -324,7 +323,7 @@ export class AuthController {
   async printCurrentUser(
     @inject(SecurityBindings.USER) currentUserProfile: UserProfile,
   ): Promise<User> {
-    return this.userRepository.findById(currentUserProfile[securityId], { include: [{ relation: 'prefs_util' }] });
+    return this.userRepository.findById(currentUserProfile[securityId]);
   }
   
   @post('/auth/register', {
@@ -402,14 +401,6 @@ export class AuthController {
       nif: credentials.nif,
       active: false
     }).then(async (value) => {
-
-      const prefsUtil = {
-        id_utilizador: value.id,
-        lang_fav: undefined,
-        tema_fav: undefined
-      } as PrefsUtil;
-
-      await this.prefsUserRepository.create(prefsUtil);
 
       //role de utilizador
       await this.userRoleRepository.create({

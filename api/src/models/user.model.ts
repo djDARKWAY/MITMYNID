@@ -3,13 +3,11 @@ import {
   model,
   property,
   hasMany,
-  hasOne,
   belongsTo,
 } from "@loopback/repository";
 import { imageData } from "../types";
 import { Role } from "./role.model";
 import { UserRole } from "./user-role.model";
-import { PrefsUtil } from "./prefs-util.model";
 
 @model({
   settings: {
@@ -349,8 +347,6 @@ export class User extends Entity {
   })
   roles: Role[] | string[];
 
-  @hasOne(() => PrefsUtil, { keyFrom: "id", keyTo: "id_utilizador" })
-  prefs_util?: PrefsUtil;
   // Define well-known properties here
 
   // Indexer property to allow additional data

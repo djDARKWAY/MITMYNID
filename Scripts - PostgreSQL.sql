@@ -83,7 +83,7 @@ CREATE TABLE network.accesspoint (
 
 -- Criação da tabela "country"
 CREATE TABLE network.country (
-  id CHAR(2) NOT NULL,                                            -- [PK] Código do país (ISO 3166-1 alpha-2)
+  id CHAR(6) NOT NULL,                                            -- [PK] Código do país (ISO 3166-1 alpha-2)
   name VARCHAR(100),                                              -- Nome do país [inglês]
   country_code INTEGER NOT NULL                                   -- Código do número de telemóvel
   flag_url TEXT                                                   -- URL da bandeira
