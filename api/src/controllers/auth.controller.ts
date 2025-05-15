@@ -211,7 +211,6 @@ export class AuthController {
         deviceInfo, 
         userProfile[securityId]
       );
-
       return { token: token };
     } catch (err) {
       const isCredentialError = 

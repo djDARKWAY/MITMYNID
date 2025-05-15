@@ -381,7 +381,6 @@ export class AccessPointController {
           { condition: !accessPoint.ip_address, message: "O endereço IP é obrigatório!" },
           { condition: !/^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(accessPoint.ip_address) && !/^([0-9a-fA-F]{1,4}:){7}([0-9a-fA-F]{1,4})$/.test(accessPoint.ip_address), message: "O endereço IP deve ser um IPv4 ou IPv6 válido!"},
         ],
-        // Remove is_active validation since we're forcing it to false
       };
 
     Object.entries(rules).forEach(([field, validations]) => {

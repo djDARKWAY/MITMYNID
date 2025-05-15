@@ -62,7 +62,7 @@ const JsonField = ({ source }: { source: string }) => {
 export const LogsShow = () => (
     <Show>
         <Paper elevation={3} sx={{ padding: 2, borderRadius: 1, backgroundColor: "background.paper" }}>
-            <Grid container spacing={2.5}>
+            <Grid container marginBottom={-2}>
                 <Grid item xs={12} md={6}>
                     {/* Log Details */}
                     <Section title="show.logs.details" icon={<Info />}>

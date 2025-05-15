@@ -103,7 +103,7 @@ const ListActions = () => {
                     '&:hover': { backgroundColor: 'rgba(144, 202, 249, 0.04)' },
                 }}
             >
-                {translate("show.logs.pdf.export")}
+                {translate("show.certificates.pdf.export")}
             </Button>
         </TopToolbar>
     );

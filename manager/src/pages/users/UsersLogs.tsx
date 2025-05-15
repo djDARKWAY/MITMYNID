@@ -1,9 +1,9 @@
-import { Datagrid, List, FunctionField, usePermissions, TextField, useTranslate, useDataProvider, useNotify, useRefresh } from "react-admin";
+import { Datagrid, List, FunctionField, usePermissions, TextField, useTranslate, useDataProvider, useNotify, useRefresh, Title } from "react-admin";
 import { Box, Typography, Tooltip, IconButton } from "@mui/material";
 import { LockOpen, Delete, History } from "@mui/icons-material";
 import CustomEmptyPage from "../../components/general/CustomEmptyPage";
 import CustomPagination, { perPageDefault } from "../../components/general/CustomPagination";
-import CustomButtonToolTip, { commonListCSS } from "../../components/general/CustomButtonToolTip";
+import { commonListCSS } from "../../components/general/CustomButtonToolTip";
 import CustomConfirmButtonToolTip from "../../components/general/CustomConfirmButtonToolTip";
 import { url } from "../../App";
 
@@ -48,7 +48,7 @@ const UsersLogs = () => {
             exporter={false}
             pagination={<CustomPagination />}
             perPage={perPageDefault}
-            title={translate("resources.users.blocked_users")}
+            title="Contas restritas"
           >
             <Datagrid bulkActionButtons={false} rowClick={false}>
               <FunctionField
@@ -130,7 +130,7 @@ const UsersLogs = () => {
             exporter={false}
             pagination={<CustomPagination />}
             perPage={perPageDefault}
-            title={translate("resources.users.deleted_users")}
+            title={false}
           >
             <Datagrid bulkActionButtons={false} rowClick={false}>
               <FunctionField

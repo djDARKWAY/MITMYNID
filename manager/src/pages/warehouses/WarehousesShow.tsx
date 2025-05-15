@@ -56,7 +56,7 @@ const WarehouseMap = () => {
     const record = useRecordContext();
     const [position, setPosition] = useState<[number, number] | null>(null);
     const [markerIcon, setMarkerIcon] = useState<L.Icon | null>(null);
-    const zoomLevel = 15;
+    const zoomLevel = 16;
     
     useEffect(() => {
         if (record && typeof record.lat !== "undefined" && typeof record.lon !== "undefined") {
