@@ -72,6 +72,7 @@ export const AccessPointsEdit = () => {
                             source="ap_software" 
                             label="show.accessPoints.software" 
                             fullWidth 
+                            sx={{ flex: 2 }}
                             validate={[
                                 value => value && value.length <= 255 
                                     ? undefined 
@@ -82,15 +83,19 @@ export const AccessPointsEdit = () => {
                             source="software_version" 
                             label="show.accessPoints.software_version" 
                             fullWidth 
-                            sx={{ width: "25%" }} 
+                            sx={{ flex: 1 }}
                             validate={[
                                 value => value && value.length <= 255 
                                     ? undefined 
                                     : "A versão do software deve ter no máximo 255 caracteres"
                             ]}
                         />
+                        <BooleanInput 
+                            source="is_active" 
+                            label="show.accessPoints.is_active" 
+                            sx={{ alignSelf: "center", flex: 0.3, mt: 1 }}
+                        />
                     </Box>
-                    <BooleanInput source="is_active" label="show.accessPoints.is_active" />
                 </TabbedForm.Tab>
             </TabbedForm>
         </Edit>

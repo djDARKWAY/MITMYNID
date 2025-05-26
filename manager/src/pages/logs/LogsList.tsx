@@ -6,7 +6,6 @@ import CustomPagination, { perPageDefault } from "../../components/general/Custo
 import { LogsFilters } from "./LogsFilter";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import DownloadIcon from '@mui/icons-material/Download';
 
 const getBackgroundColor = (logType: string) => {
     switch (logType) {
@@ -90,21 +89,6 @@ const ListActions = () => {
     return (
         <TopToolbar>
             <FilterButton />
-            <Button
-                startIcon={<DownloadIcon />}
-                onClick={handleExportPDF}
-                color="primary"
-                variant="text"
-                sx={{
-                    textTransform: 'none', 
-                    fontWeight: 'bold', 
-                    fontSize: '14px', 
-                    color: '#90CAF9', 
-                    '&:hover': { backgroundColor: 'rgba(144, 202, 249, 0.04)' },
-                }}
-            >
-                {translate("show.certificates.pdf.export")}
-            </Button>
         </TopToolbar>
     );
 };
@@ -151,7 +135,7 @@ export const LogsList = () => {
                         }}
                     />
                     <FunctionField 
-                        label="resources.logs.fields.timestamp"  
+                        label="resources.logs.fields.timestamp"
                         render={record => (
                             <div>
                                 {new Date(record.timestamp).toLocaleString('pt-PT', { 

@@ -58,11 +58,10 @@ const exportToPDF = (data: any[], translate: (key: string) => string, hasFilters
     doc.save(`warehouses${hasFilters ? '-filtered' : ''}-${formattedDate}.pdf`);
 };
 
-const ListActions = () => {
+const ListActions = ({ showCheckboxes, setShowCheckboxes }: { showCheckboxes: boolean; setShowCheckboxes: React.Dispatch<React.SetStateAction<boolean>> }) => {
     const dataProvider = useDataProvider();
     const translate = useTranslate();
     const { filterValues } = useListContext();
-    const [showCheckboxes, setShowCheckboxes] = useState(false);
     const theme = useTheme();
     
     const handleExportPDF = async () => {
@@ -227,7 +226,7 @@ export const WarehousesList = () => {
                 exporter={false}
                 title="resources.warehouses.name"
                 sx={{ paddingLeft: "10px", paddingBottom: showCheckboxes && selectedIds.length > 0 ? '70px' : '0' }}
-                actions={<ListActions />}
+                actions={<ListActions showCheckboxes={showCheckboxes} setShowCheckboxes={setShowCheckboxes} />}
             >
                 <WarehousesCardList 
                     showCheckboxes={showCheckboxes} 

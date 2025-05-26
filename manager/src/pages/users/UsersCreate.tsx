@@ -124,7 +124,7 @@ export const UsersCreate = () => {
                   size="small"
                   fullWidth
                   filterToQuery={(searchText: string) => ({ localidade: `%${searchText}%` })}
-                  label="resources.utilizadores.fields.warehouse"
+                  label="resources.warehouses.name"
                   validate={required()}
                 />
               </ReferenceInput>

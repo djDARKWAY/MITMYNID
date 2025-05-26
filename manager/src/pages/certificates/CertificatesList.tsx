@@ -1,4 +1,4 @@
-import { List, Datagrid, TextField, FunctionField, SimpleList, usePermissions, DateField, WithRecord, TopToolbar, CreateButton, FilterButton, useTranslate, useListContext, useDataProvider } from "react-admin";
+import { List, Datagrid, TextField, FunctionField, SimpleList, usePermissions, DateField, WithRecord, TopToolbar, FilterButton, useTranslate, useListContext, useDataProvider } from "react-admin";
 import { useTheme } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { Button } from '@mui/material';
@@ -36,7 +36,6 @@ const exportToPDF = (data: any[], translate: (key: string) => string, hasFilters
             translate("show.certificates.pdf.inactive")
         ]],
         body: data.map(item => {
-            // Format dates
             const issueDate = item.issue_date ? new Date(item.issue_date).toLocaleDateString('pt-PT') : "—";
             const expirationDate = item.expiration_date ? new Date(item.expiration_date).toLocaleDateString('pt-PT') : "—";
             
@@ -83,7 +82,6 @@ const ListActions = () => {
 
     return (
         <TopToolbar>
-            <CreateButton />
             <FilterButton />
             <Button
                 startIcon={<DownloadIcon />}

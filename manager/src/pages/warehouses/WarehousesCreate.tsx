@@ -39,61 +39,61 @@ export const WarehousesCreate = () => (
                     value => value && value.length <= 255 ? undefined : "O endereço deve ter no máximo 255 caracteres"
                 ]}
             />
-            <Box display="flex" gap={2} width="100%" alignItems="center">
-                <Box sx={{ width: "50%" }}>
-                    <ReferenceInput source="country_id" reference="countries" label="show.warehouses.country" perPage={180} sort={{ field: 'name', order: 'ASC' }}>
-                        <SelectInput 
-                            optionText={record => (
-                                <Box display="flex" alignItems="center">
-                                    {record.flag_url && (
-                                        <img src={`${FLAG_BASE_URL}/${record.flag_url}`} alt={record.name} width={20} height={15} style={{ borderRadius: "3px", marginRight: 8 }} />
-                                    )}
-                                    {record.name}
-                                </Box>
-                            )} 
-                            fullWidth 
-                        />
-                    </ReferenceInput>
-                </Box>
+            <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2} sx={{ width: "100%" }}>
                 <TextInput 
                     source="city" 
-                    label="show.warehouses.city" 
-                    sx={{ width: "50%" }} 
+                    label="show.warehouses.city"
                     validate={[
                         value => value && value.length <= 100 ? undefined : "A cidade deve ter no máximo 100 caracteres"
                     ]}
                 />
+                <TextInput 
+                    source="district" 
+                    label="show.warehouses.district" 
+                    validate={[
+                        value => value && value.length <= 100 ? undefined : "O distrito deve ter no máximo 100 caracteres"
+                    ]}
+                />
+                <TextInput 
+                    source="zip_code" 
+                    label="show.warehouses.zip_code" 
+                    validate={[
+                        value => value && value.length <= 20 ? undefined : "O código postal deve ter no máximo 20 caracteres"
+                    ]}
+                />
             </Box>
-            <TextInput 
-                source="district" 
-                label="show.warehouses.district" 
-                fullWidth 
-                validate={[
-                    value => value && value.length <= 100 ? undefined : "O distrito deve ter no máximo 100 caracteres"
-                ]}
-            />
-            <TextInput 
-                source="zip_code" 
-                label="show.warehouses.zip_code" 
-                fullWidth 
-                validate={[
-                    value => value && value.length <= 20 ? undefined : "O código postal deve ter no máximo 20 caracteres"
-                ]}
-            />
-            <Box display="flex" gap={2} width="100%" alignItems="center">
+            <Box display="grid" gridTemplateColumns="2fr 1fr 1fr" gap={2} sx={{ width: "100%", alignItems: "center" }}>
+                <ReferenceInput source="country_id" reference="countries" label="show.warehouses.country" perPage={180} sort={{ field: 'name', order: 'ASC' }}>
+                    <SelectInput 
+                        optionText={record => (
+                            <Box display="flex" alignItems="center">
+                                {record.flag_url && (
+                                    <img src={`${FLAG_BASE_URL}/${record.flag_url}`} alt={record.name} width={20} height={15} style={{ borderRadius: "3px", marginRight: 8 }} />
+                                )}
+                                {record.name}
+                            </Box>
+                        )}
+                        fullWidth 
+                        sx={{ mt: 0, mb: 0 }}
+                    />
+                </ReferenceInput>
                 <TextInput 
                     source="lat" 
                     label="show.warehouses.latitude" 
+                    fullWidth
+                    sx={{ mt: 0, mb: 0 }}
                     validate={[
                         value => (value >= -90 && value <= 90) ? undefined : "A latitude deve estar entre -90 e 90"
-                    ]}
+                    ]} 
                 />
                 <TextInput 
                     source="lon" 
                     label="show.warehouses.longitude" 
+                    fullWidth
+                    sx={{ mt: 0, mb: 0 }}
                     validate={[
                         value => (value >= -180 && value <= 180) ? undefined : "A longitude deve estar entre -180 e 180"
-                    ]}
+                    ]} 
                 />
             </Box>
 
@@ -108,7 +108,7 @@ export const WarehousesCreate = () => (
                 label="show.warehouses.email" 
                 fullWidth 
                 validate={[
-                    value => value && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? undefined : "O email deve ser válido"
+                    value => !value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? undefined : "O email deve ser válido"
                 ]}
             />
             <TextInput 
@@ -116,8 +116,8 @@ export const WarehousesCreate = () => (
                 label="show.warehouses.contact" 
                 fullWidth 
                 validate={[
-                    value => value && /^[a-zA-Z\s]+$/.test(value) ? undefined : "O contacto deve conter apenas letras e espaços",
-                    value => value && value.length <= 255 ? undefined : "O contacto deve ter no máximo 255 caracteres"
+                    value => !value || /^[a-zA-Z\s]+$/.test(value) ? undefined : "O contacto deve conter apenas letras e espaços",
+                    value => !value || value.length <= 255 ? undefined : "O contacto deve ter no máximo 255 caracteres"
                 ]}
             />
             <TextInput 
@@ -125,7 +125,7 @@ export const WarehousesCreate = () => (
                 label="show.warehouses.phone" 
                 fullWidth 
                 validate={[
-                    value => value && value.length <= 20 ? undefined : "O telefone deve ter no máximo 20 caracteres"
+                    value => !value || value.length <= 20 ? undefined : "O telefone deve ter no máximo 20 caracteres"
                 ]}
             />
 
@@ -140,8 +140,8 @@ export const WarehousesCreate = () => (
                 label="show.warehouses.website" 
                 fullWidth 
                 validate={[
-                    value => value && /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w-]*)*\/?$/.test(value) ? undefined : "O website deve ser um URL válido",
-                    value => value && value.length <= 255 ? undefined : "O website deve ter no máximo 255 caracteres"
+                    value => !value || /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w-]*)*\/?$/.test(value) ? undefined : "O website deve ser um URL válido",
+                    value => !value || value.length <= 255 ? undefined : "O website deve ter no máximo 255 caracteres"
                 ]}
             />
         </SimpleForm>

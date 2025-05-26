@@ -63,7 +63,7 @@ export const LogsShow = () => (
     <Show>
         <Paper elevation={3} sx={{ padding: 2, borderRadius: 1, backgroundColor: "background.paper" }}>
             <Grid container marginBottom={-2}>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={6} sx={{ pr: { md: 2, xs: 0 }, mb: { xs: 2, md: 0 } }}>
                     {/* Log Details */}
                     <Section title="show.logs.details" icon={<Info />}>
                         <Box display="flex" gap={2} flexWrap="wrap">
