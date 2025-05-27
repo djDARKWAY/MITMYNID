@@ -51,7 +51,7 @@ const LogsStats = () => {
                                     width: "100px",
                                     height: "23px",
                                     borderRadius: "8px",
-                                    backgroundColor: getBackgroundColor(log.type?.type || "UNKNOWN"),
+                                    backgroundColor: getBackgroundColor(log.type?.type || "N/A"),
                                     color: "#fff",
                                     fontWeight: "bold",
                                     fontSize: "0.7rem",
@@ -59,7 +59,7 @@ const LogsStats = () => {
                                     mr: 1,
                                 }}
                             >
-                                {translate(`show.dashboard.log_type.${log.type?.type?.toLowerCase() || "unknown"}`)}
+                                {translate(`show.dashboard.log_type.${log.type?.type?.toLowerCase() || "N/A"}`)}
                             </Box>
                             <Typography variant="body2" sx={{ flex: 3, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                                 {log.message || "-"}

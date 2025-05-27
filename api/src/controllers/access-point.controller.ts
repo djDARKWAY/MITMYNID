@@ -262,7 +262,7 @@ export class AccessPointController {
       
       const updatedAccessPoint = await this.accessPointRepository.findById(id);
 
-      const userAgentHeader = this.request.headers["user-agent"] || "unknown";
+      const userAgentHeader = this.request.headers["user-agent"] || "N/A";
       const agent = useragent.parse(userAgentHeader);
       const deviceInfo = {
         device: agent.device.toString(),
@@ -270,10 +270,10 @@ export class AccessPointController {
       };
 
       await this.logService.logAccessPointChange(
-        currentUser.person_name || "unknown",
-        updatedAccessPoint.id || "unknown",
-        this.request.ip || "unknown",
-        currentUser.id || "unknown",
+        currentUser.person_name || "N/A",
+        updatedAccessPoint.id || "N/A",
+        this.request.ip || "N/A",
+        currentUser.id || "N/A",
         deviceInfo
       );
     } catch (error) {
@@ -299,7 +299,7 @@ export class AccessPointController {
 
     await this.accessPointRepository.deleteById(id);
 
-    const userAgentHeader = this.request.headers["user-agent"] || "unknown";
+    const userAgentHeader = this.request.headers["user-agent"] || "N/A";
     const agent = useragent.parse(userAgentHeader);
     const deviceInfo = {
       device: agent.device.toString(),
@@ -307,10 +307,10 @@ export class AccessPointController {
     };
 
     await this.logService.logAccessPointDelete(
-      currentUser.person_name || "unknown",
+      currentUser.person_name || "N/A",
       id,
-      this.request.ip || "unknown",
-      currentUser.id || "unknown",
+      this.request.ip || "N/A",
+      currentUser.id || "N/A",
       deviceInfo
     );
   }
@@ -341,7 +341,7 @@ export class AccessPointController {
     });
     await this.accessPointRepository.deleteAll({ id: { inq: ids } });
 
-    const userAgentHeader = this.request.headers["user-agent"] || "unknown";
+    const userAgentHeader = this.request.headers["user-agent"] || "N/A";
     const agent = useragent.parse(userAgentHeader);
     const deviceInfo = {
       device: agent.device.toString(),
@@ -350,10 +350,10 @@ export class AccessPointController {
 
     for (const ap of accessPointsToDelete) {
       await this.logService.logAccessPointDelete(
-        currentUser.person_name || "unknown",
-        ap.id || "unknown",
-        this.request.ip || "unknown",
-        currentUser.id || "unknown",
+        currentUser.person_name || "N/A",
+        ap.id || "N/A",
+        this.request.ip || "N/A",
+        currentUser.id || "N/A",
         deviceInfo
       );
     }

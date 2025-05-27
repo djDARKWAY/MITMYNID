@@ -244,9 +244,9 @@ const WarehousesMap: React.FC = () => {
                         }}>
                             <Popup>
                                 <div style={{ fontFamily: 'Arial, sans-serif', color: '#2c3e50', maxWidth: '240px', lineHeight: 1.4 }}>
-                                    <h3 style={{ margin: '0 0 8px', fontSize: '16px', fontWeight: '600', borderBottom: '1px solid #e0e0e0', paddingBottom: '4px' }}>{c.name}</h3>
-                                    <p style={{ margin: '6px 0', fontSize: '14px' }}><strong>Localização:</strong> {c.city}, {c.district}</p>
-                                    <p style={{ margin: '6px 0', fontSize: '14px' }}><strong>Código Postal:</strong> {c.zip_code}</p>
+                                    <h3 style={{ margin: '0 0 8px', fontSize: '16px', fontWeight: '600', borderBottom: '1px solid #e0e0e0', paddingBottom: '4px' }}>{c.name || 'N/A'}</h3>
+                                    <p style={{ margin: '6px 0', fontSize: '14px' }}><strong>Localização:</strong> {c.city || 'N/A'}, {c.district || 'N/A'}</p>
+                                    <p style={{ margin: '6px 0', fontSize: '14px' }}><strong>Código Postal:</strong> {c.zip_code || 'N/A'}</p>
                                     {selectedWarehouse?.id === c.id && userLocation && (
                                         <p style={{ margin: '6px 0', fontSize: '14px' }}><strong>Distância:</strong> {Math.round(selectedWarehouse.distance)} km</p>
                                     )}

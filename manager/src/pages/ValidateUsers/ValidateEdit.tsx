@@ -18,12 +18,6 @@ export const ValidateEdit = () => {
         <Labeled label={translate("show.validateUsers.email")}>
           <TextField source="email" />
         </Labeled>
-        <Labeled label={translate("show.validateUsers.validation_date")}>
-          <FunctionField
-            source="validation_date"
-            render={(record) => new Date(record.validation_date).toLocaleDateString()}
-          />
-        </Labeled>
       </SimpleForm>
     </Edit>
   );

@@ -666,11 +666,11 @@ export class UserController {
     await this.logService.logUserEdit(
       this.user.person_name,
       id,
-      this.response.req?.ip ?? "unknown",
+      this.response.req?.ip ?? "N/A",
       `User validated and assigned USER role`,
       {
-        device: this.response.req?.headers["user-agent"] ?? "unknown",
-        os: "unknown",
+        device: this.response.req?.headers["user-agent"] ?? "N/A",
+        os: "N/A",
       }
     );
 
@@ -751,11 +751,11 @@ export class UserController {
       await this.logService.logUserEdit(
         this.user.person_name,
         id,
-        this.response.req?.ip ?? "unknown",
+        this.response.req?.ip ?? "N/A",
         this.user.person_name,
         {
-          device: this.response.req?.headers["user-agent"] ?? "unknown",
-          os: "unknown",
+          device: this.response.req?.headers["user-agent"] ?? "N/A",
+          os: "N/A",
         }
       );
     } catch (err) {
@@ -789,11 +789,11 @@ export class UserController {
       await this.logService.logUserEdit(
         this.user.person_name,
         id,
-        this.response.req?.ip ?? "unknown",
+        this.response.req?.ip ?? "N/A",
         this.user.person_name,
         {
-          device: this.response.req?.headers["user-agent"] ?? "unknown",
-          os: "unknown",
+          device: this.response.req?.headers["user-agent"] ?? "N/A",
+          os: "N/A",
         }
       );
     } catch (err) {

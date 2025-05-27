@@ -41,7 +41,7 @@ const exportToPDF = (data: any[], translate: (key: string) => string, hasFilters
             translate("show.logs.pdf.message")
         ]],
         body: data.map(item => {
-            const logType = item.type?.type?.toLowerCase() || "unknown";
+            const logType = item.type?.type?.toLowerCase() || "N/A"
             const translatedLogType = translate(`show.dashboard.log_type.${logType}`);
             const formattedTimestamp = new Date(item.timestamp).toLocaleString('pt-PT', {
                 day: '2-digit', month: '2-digit', year: 'numeric',
@@ -114,7 +114,7 @@ export const LogsList = () => {
         >
             {isSmall ? (
                 <SimpleList
-                    primaryText={record => translate(`show.dashboard.log_type.${record.type?.type?.toLowerCase() || "unknown"}`)}
+                    primaryText={record => translate(`show.dashboard.log_type.${record.type?.type?.toLowerCase() || "N/A"}`)}
                     secondaryText={record => record.message}
                     tertiaryText={record => new Date(record.timestamp).toLocaleString()}
                     linkType="show"
@@ -124,7 +124,7 @@ export const LogsList = () => {
                     <FunctionField
                         label="resources.logs.fields.category" 
                         render={record => {
-                            const logType = record.type?.type?.toLowerCase() || "unknown"; 
+                            const logType = record.type?.type?.toLowerCase() || "N/A"; 
                             const translatedLogType = translate(`show.dashboard.log_type.${logType}`);
 
                             return (

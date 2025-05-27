@@ -71,13 +71,13 @@ export const LogsShow = () => (
                                 <Typography variant="body2" sx={{ fontWeight: "bold", color: "gray" }}>
                                     {useTranslate()("show.logs.type")}
                                 </Typography>
-                                <TextField source="type.type" />
+                                <TextField source="type.type" emptyText="N/A" />
                             </Box>
                             <Box>
                                 <Typography variant="body2" sx={{ fontWeight: "bold", color: "gray" }}>
                                     {useTranslate()("show.logs.message")}
                                 </Typography>
-                                <TextField source="message" />
+                                <TextField source="message" emptyText="N/A" />
                             </Box>
                         </Box>
                     </Section>
@@ -90,7 +90,7 @@ export const LogsShow = () => (
                             <Typography variant="body2" sx={{ fontWeight: "bold", color: "gray" }}>
                                 {useTranslate()("show.logs.timestamp")}
                             </Typography>
-                            <DateField source="timestamp" showTime />
+                            <DateField source="timestamp" showTime emptyText="N/A" />
                         </Box>
                     </Section>
                 </Grid>
