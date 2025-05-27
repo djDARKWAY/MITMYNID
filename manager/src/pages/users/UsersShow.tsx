@@ -1,6 +1,6 @@
-import { Show, TextField, BooleanField, DateField, useTranslate, useRecordContext, ReferenceField } from "react-admin";
+import { Show, TextField, BooleanField, DateField, useTranslate, useRecordContext } from "react-admin";
 import { Typography, Divider, Box, Card, CardContent, Grid, Paper, Stack } from "@mui/material";
-import { PersonOutlined, PhoneIphone, Warehouse, AccountBox, CalendarToday } from "@mui/icons-material";
+import { PersonOutlined, PhoneIphone, AccountBox, CalendarToday } from "@mui/icons-material";
 import { ReactNode } from "react";
 import { url } from "../../App";
 
@@ -73,10 +73,10 @@ const UserDetails = () => {
                             
                             <Box textAlign="center">
                                 <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                                    {record?.person_name}
+                                    <TextField source="person_name" record={record} emptyText="N/A" />
                                 </Typography>
                                 <Typography variant="body2" sx={{ color: "gray" }}>
-                                    {record?.username}
+                                    <TextField source="username" record={record} emptyText="N/A" />
                                 </Typography>
                             </Box>
                         </CardContent>
@@ -84,19 +84,20 @@ const UserDetails = () => {
 
                     <Section title="show.users.personal_info" icon={<PersonOutlined />}>
                         <FieldTitleLabel label="show.users.nif">
-                            <TextField source="nif" />
+                            <TextField source="nif" record={record} emptyText="N/A" />
                         </FieldTitleLabel>
                         <Box display="flex" gap={2}>
                             <FieldTitleLabel label="show.users.cc">
-                                <TextField source="nic" />{" "}<TextField source="cc_num" />
+                                <TextField source="nic" record={record} emptyText="N/A" />{" "}
+                                <TextField source="cc_num" record={record} emptyText="N/A" />
                             </FieldTitleLabel>
                         </Box>
                         <Box display="flex" gap={2}>
                             <FieldTitleLabel label="show.users.address">
-                                <TextField source="address" sx={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} />
+                                <TextField source="address" record={record} emptyText="N/A" />
                             </FieldTitleLabel>
                             <FieldTitleLabel label="show.users.post_code">
-                                <TextField source="post_code" sx={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} />
+                                <TextField source="post_code" record={record} emptyText="N/A" />
                             </FieldTitleLabel>
                         </Box>
                     </Section>
@@ -106,27 +107,27 @@ const UserDetails = () => {
                     <Section title="show.users.contacts" icon={<PhoneIphone />}>
                         <Box display="flex" gap={2}>
                             <FieldTitleLabel label="show.users.phone">
-                                <TextField source="phone" />
+                                <TextField source="phone" record={record} emptyText="N/A" />
                             </FieldTitleLabel>
                             <FieldTitleLabel label="show.users.mobile">
-                                <TextField source="mobile" />
+                                <TextField source="mobile" record={record} emptyText="N/A" />
                             </FieldTitleLabel>
                         </Box>
                         <FieldTitleLabel label="show.users.email">
-                            <TextField source="email" />
+                            <TextField source="email" record={record} emptyText="N/A" />
                         </FieldTitleLabel>
                     </Section>
 
                     <Section title="show.users.status" icon={<AccountBox />}>
                         <Box display="flex" gap={2}>
                             <FieldTitleLabel label="show.users.active">
-                                <BooleanField source="active" />
+                                <BooleanField source="active" record={record} emptyText="N/A" />
                             </FieldTitleLabel>
                             <FieldTitleLabel label="show.users.blocked">
-                                <BooleanField source="blocked" />
+                                <BooleanField source="blocked" record={record} emptyText="N/A" />
                             </FieldTitleLabel>
                             <FieldTitleLabel label="show.users.deleted">
-                                <BooleanField source="deleted" />
+                                <BooleanField source="deleted" record={record} emptyText="N/A" />
                             </FieldTitleLabel>
                         </Box>
                     </Section>
@@ -134,10 +135,10 @@ const UserDetails = () => {
                     <Section title="show.users.logs" icon={<CalendarToday />}>
                         <Box display="flex" gap={2} flexWrap="wrap">
                             <FieldTitleLabel label="show.users.validation_date">
-                                <DateField source="validation_date" />
+                                <DateField source="validation_date" record={record} emptyText="N/A" />
                             </FieldTitleLabel>
                             <FieldTitleLabel label="show.users.last_access">
-                                <DateField source="last_access" />
+                                <DateField source="last_access" record={record} emptyText="N/A" />
                             </FieldTitleLabel>
                         </Box>
                     </Section>

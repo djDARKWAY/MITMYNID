@@ -197,7 +197,15 @@ const UsersLogs = () => {
                         icon={<Delete />}
                         id={record.id}
                         resource={"users"}
-                        customAction={() => handleCustomAction(record.id, `users/${record.id}/recover`, "Utilizador restaurado com sucesso", "Erro ao restaurar utilizador")}
+                        customAction={async () => {
+                          try {
+                            await dataProvider.delete("users", { id: record.id });
+                            notify("Utilizador eliminado permanentemente com sucesso", { type: "success" });
+                            refresh();
+                          } catch (error) {
+                            notify("Erro ao eliminar utilizador permanentemente", { type: "error" });
+                          }
+                        }}
                       />
                     </>
                   </Box>

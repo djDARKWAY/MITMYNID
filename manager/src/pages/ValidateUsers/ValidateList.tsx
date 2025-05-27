@@ -20,7 +20,7 @@ export const ValidateList = () => {
         <TextField source="username" label="resources.utilizadores.fields.username" />
         <TextField source="email" label="Email" />
         <TextField source="nif" label="NIF" />
-        <EditButton label="Ações"/>
+        <EditButton label="Ver detalhes"/>
         <DeleteButton 
           mutationMode="pessimistic"
           confirmTitle={translate('resources.utilizadores.confirm.title')}

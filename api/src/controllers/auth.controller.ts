@@ -398,7 +398,8 @@ export class AuthController {
       email: credentials.email,
       username: credentials.username,
       nif: credentials.nif,
-      active: false
+      active: false,
+      validation_date: undefined
     }).then(async (value) => {
 
       //role de utilizador
@@ -406,17 +407,6 @@ export class AuthController {
         role_id: '78950dce-2093-4679-b59c-73f9cad3abad',
         app_users_id: value.id
       });
-
-      const encryptedString = encodeURIComponent(randomBytes(64).toString('base64url'));
-
-      await this.appUsersRegisterRepository.create({
-        app_users_id: value.id,
-        code: encryptedString,
-        type: 1,
-      });
-
-      // Temporarily disable email sending
-      // this.emailService.sendMailRegister('pt-pt', credentials.email, credentials.person_name, encryptedString);
     });
 
     return this.response.status(201).send({ message: 'Utilizador registado com sucesso' });
