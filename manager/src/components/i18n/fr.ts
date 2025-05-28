@@ -455,6 +455,14 @@ const frenchMessages: TranslationMessages = {
     },
   },
   show: {
+    register: {
+      password_requirements: "Le mot de passe doit contenir :",
+      min_8_chars: "Au moins 8 caractères",
+      uppercase: "Une lettre majuscule",
+      lowercase: "Une lettre minuscule",
+      number: "Un chiffre",
+      special_char: "Un caractère spécial",
+    },
     accessPoints: {
       location_description: "Localisation",
       ip_address: "Adresse IP",

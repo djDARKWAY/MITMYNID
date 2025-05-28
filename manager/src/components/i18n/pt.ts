@@ -449,6 +449,14 @@ const portugueseMessages: TranslationMessages = {
     },
   },
   show: {
+    register: {
+      password_requirements: "A palavra-passe deve conter:",
+      min_8_chars: "Pelo menos 8 caracteres",
+      uppercase: "Uma letra maiúscula",
+      lowercase: "Uma letra minúscula",
+      number: "Um número",
+      special_char: "Um carácter especial",
+    },
     accessPoints: {
       location_description: "Localização",
       ip_address: "Endereço IP",

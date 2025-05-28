@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography, CssBaseline, Checkbox, FormControlLabel, Grid, Link, LinearProgress } from "@mui/material";
+import { Box, Button, TextField, Typography, CssBaseline, Checkbox, FormControlLabel, Grid, Link, LinearProgress, Fade, Tooltip } from "@mui/material";
 import { useNotify, useTranslate, Notification } from "react-admin";
 import { useNavigate } from "react-router-dom";
 import { useCallback, useState } from "react";
@@ -6,6 +6,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import zxcvbn from "zxcvbn";
 import { url } from "../../App";
 import Copyright from "./Copyright";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 
 const theme = createTheme({
   palette: {
@@ -22,6 +24,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [passwordFocused, setPasswordFocused] = useState(false);
 
   const sanitizeInput = (input: string | null | undefined): string => {
     if (!input) return "";
@@ -119,7 +122,11 @@ export default function Register() {
         const responseData = await response.json();
 
         if (response.ok) {
-          notify("ra.notification.register_user", { type: "success" });
+          notify(translate("ra.notification.register_user", { _: "Registo efetuado com sucesso! Será redirecionado para o login." }), {
+            type: "success",
+            autoHideDuration: 2000,
+            anchorOrigin: { vertical: 'top', horizontal: 'center' }
+          });
           setTimeout(() => navigate("/login"), 2000);
         } else {
           notify(responseData.message || responseData.error?.message || "ra.notification.error_register_user", { type: "error" });
@@ -153,17 +160,48 @@ export default function Register() {
                 <TextField name="nif" label={translate("resources.users.fields.nif")} fullWidth required margin="dense" size="small" />
               </Grid>
               <Grid item xs={12} sm={skipConfirmPassword ? 12 : 6}>
-                <TextField
-                  name="password"
-                  label={translate("resources.users.fields.password")}
-                  type={skipConfirmPassword ? "text" : "password"}
-                  fullWidth
-                  required
-                  margin="dense"
-                  size="small"
-                  value={password}
-                  onChange={handlePasswordChange}
-                />
+                <Tooltip
+                  open={passwordFocused}
+                  placement={skipConfirmPassword ? "right" : "left"}
+                  title={
+                    <Box sx={{ backgroundColor: '#FCFCFE', color: '#222', borderRadius: 2, boxShadow: 3, p: 2, minWidth: 220, border: '1px solid #e0e0e0' }}>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#1976D2', mb: 0.5 }}>
+                      {translate("show.register.password_requirements")}
+                      </Typography>
+                      {[
+                      { test: password.length >= 8, label: translate("show.register.min_8_chars") },
+                      { test: /[A-Z]/.test(password), label: translate("show.register.uppercase") },
+                      { test: /[a-z]/.test(password), label: translate("show.register.lowercase") },
+                      { test: /[0-9]/.test(password), label: translate("show.register.number") },
+                      { test: /[^A-Za-z0-9]/.test(password), label: translate("show.register.special_char") }
+                      ].map(({ test, label }, i) => (
+                      <Box key={i} component="li" sx={{ display: 'flex', alignItems: 'center', gap: 1, whiteSpace: 'nowrap', listStyle: 'none', pl: 0 }}>
+                        {test ? <CheckCircleIcon sx={{ color: '#1976D2', fontSize: 20 }} /> : <RadioButtonUncheckedIcon sx={{ color: '#1976D2', fontSize: 20 }} />}
+                        <span style={{ marginLeft: 6 }}>{label}</span>
+                      </Box>
+                      ))}
+                    </Box>
+                  }
+                  arrow
+                  componentsProps={{
+                    tooltip: { sx: { backgroundColor: 'transparent', boxShadow: 'none', p: 0, m: 0, maxWidth: 300 } },
+                    arrow: { sx: { color: '#FCFCFE', filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.08))' } },
+                  }}
+                >
+                  <TextField
+                    name="password"
+                    label={translate("resources.users.fields.password")}
+                    type={skipConfirmPassword ? "text" : "password"}
+                    fullWidth
+                    required
+                    margin="dense"
+                    size="small"
+                    value={password}
+                    onChange={handlePasswordChange}
+                    onFocus={() => setPasswordFocused(true)}
+                    onBlur={() => setPasswordFocused(false)}
+                  />
+                </Tooltip>
               </Grid>
               {!skipConfirmPassword && (
                 <Grid item xs={12} sm={6}>
@@ -179,15 +217,23 @@ export default function Register() {
                 </Grid>
               )}
             </Grid>
-            <LinearProgress variant="determinate" value={(passwordStrength + 1) * 20} sx={{ height: 6, borderRadius: 1, mt: 1 }} />
-            <Typography variant="caption" sx={{ mt: 1, textAlign: "center", display: "block" }}>
-              {getPasswordStrengthLabel()}
-            </Typography>
+            <Fade in={!!password} timeout={400} unmountOnExit>
+              <Box>
+                <LinearProgress
+                  variant="determinate"
+                  value={password ? (passwordStrength + 1) * 20 : 0}
+                  sx={{ height: 6, borderRadius: 1, mt: 1 }}
+                />
+                <Typography variant="caption" sx={{ mt: 1, textAlign: "center", display: "block" }}>
+                  {getPasswordStrengthLabel()}
+                </Typography>
+              </Box>
+            </Fade>
             <FormControlLabel
               control={<Checkbox checked={skipConfirmPassword} onChange={(e) => setSkipConfirmPassword(e.target.checked)} />}
               label={translate("resources.users.fields.show_password")}
             />
-            <Button type="submit" fullWidth variant="contained" color="primary" sx={{ mt: 1, color: "#FFFFFF" }}>
+            <Button type="submit" fullWidth variant="contained">
               {translate("ra.auth.sign_up")}
             </Button>
             <Grid item xs sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>

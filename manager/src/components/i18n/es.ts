@@ -452,6 +452,14 @@ const spanishMessages: TranslationMessages = {
     },
   },
   show: {
+    register: {
+      password_requirements: "La contraseña debe contener:",
+      min_8_chars: "Al menos 8 caracteres",
+      uppercase: "Una letra mayúscula",
+      lowercase: "Una letra minúscula",
+      number: "Un número",
+      special_char: "Un carácter especial",
+    },
     accessPoints: {
       location_description: "Ubicación",
       ip_address: "Dirección IP",

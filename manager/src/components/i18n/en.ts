@@ -443,6 +443,14 @@ const englishMessages: TranslationMessages = {
     },
   },
   show: {
+    register: {
+      password_requirements: "The password must contain:",
+      min_8_chars: "At least 8 characters",
+      uppercase: "An uppercase letter",
+      lowercase: "A lowercase letter",
+      number: "A number",
+      special_char: "A special character",
+    },
     accessPoints: {
       location_description: "Location",
       ip_address: "IP address",
