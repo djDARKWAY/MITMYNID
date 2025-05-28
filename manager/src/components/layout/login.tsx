@@ -10,10 +10,12 @@ import { useLogin, useNotify, useTranslate, useTheme as useThemeRA } from 'react
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useState } from 'react';
 import Copyright from './Copyright';
+import './css/form-shake.css';
 
 export default function SignIn() {
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [shake, setShake] = useState(false);
 
   const login = useLogin();
   const notify = useNotify();
@@ -23,9 +25,18 @@ export default function SignIn() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const username = data.get('username')?.toString().trim();
+    const password = data.get('password')?.toString().trim();
+    // Validação simples dos campos obrigatórios
+    if (!username || !password) {
+      setShake(true);
+      setTimeout(() => setShake(false), 600);
+      notify('Preencha todos os campos obrigatórios.', { type: 'warning' });
+      return;
+    }
     login({
-      username: data.get('username'),
-      password: data.get('password'),
+      username,
+      password,
     })
       .then((response: any) => {
         if (response?.theme) {
@@ -33,6 +44,8 @@ export default function SignIn() {
         }
       })
       .catch(() => {
+        setShake(true);
+        setTimeout(() => setShake(false), 600);
         notify('Utilizador ou palavra-passe inválidos', { type: 'warning' });
       });
   };
@@ -41,7 +54,7 @@ export default function SignIn() {
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <CssBaseline />
       <Box sx={{ flex: '95%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '400px', margin: '5px' }}>
+        <Box className={shake ? 'shake' : ''} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '400px', margin: '5px' }}>
           <img src='MMN_H_RGB.svg' alt="logo" style={{ height: 70 }} />
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 4 }}>
             <TextInput

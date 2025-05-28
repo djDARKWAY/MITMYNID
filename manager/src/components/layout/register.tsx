@@ -9,6 +9,7 @@ import Copyright from "./Copyright";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import ReCAPTCHA from "react-google-recaptcha";
+import './css/form-shake.css';
 
 const theme = createTheme({
   palette: {
@@ -30,6 +31,7 @@ export default function Register() {
   const [passwordFocused, setPasswordFocused] = useState(false);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [shake, setShake] = useState(false);
 
   const sanitizeInput = (input: string | null | undefined): string => {
     if (!input) return "";
@@ -45,6 +47,12 @@ export default function Register() {
   const getPasswordStrengthLabel = (): string => {
     const labels = ["Muito Fraca", "Fraca", "Média", "Forte", "Muito Forte"];
     return labels[passwordStrength];
+  };
+
+  // Função para disparar shake quando há erros
+  const triggerShake = () => {
+    setShake(true);
+    setTimeout(() => setShake(false), 600);
   };
 
   const validateFields = (data: { [key: string]: string }, confirmPassword?: string): boolean => {
@@ -101,6 +109,9 @@ export default function Register() {
       }
     }
     setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) {
+      triggerShake();
+    }
     return Object.keys(newErrors).length === 0;
   };
 
@@ -114,6 +125,7 @@ export default function Register() {
       if (!recaptchaToken) {
         notify("Por favor, conclua o reCAPTCHA.", { type: "warning" });
         setLoading(false);
+        triggerShake();
         return;
       }
 
@@ -128,6 +140,7 @@ export default function Register() {
       const confirmPassword = sanitizeInput(formData.get("confirm_password") as string);
       if (!validateFields(data, confirmPassword)) {
         setLoading(false);
+        // triggerShake já chamado em validateFields
         return;
       }
 
@@ -148,17 +161,18 @@ export default function Register() {
           });
           setTimeout(() => {
             navigate("/login");
-            // Não fazer setLoading(false) aqui, pois o redirect vai acontecer
           }, 2000);
-          return; // Garante que não faz setLoading(false) depois
+          return;
         } else {
           notify(responseData.message || responseData.error?.message || "ra.notification.error_register_user", { type: "error" });
           setLoading(false);
+          triggerShake();
         }
       } catch (error) {
         console.log("Registration error:", error);
         notify("ra.notification.error_register_user", { type: "error" });
         setLoading(false);
+        triggerShake();
       }
     },
     [notify, translate, navigate, skipConfirmPassword, recaptchaToken, loading]
@@ -169,7 +183,7 @@ export default function Register() {
       <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
         <CssBaseline />
         <Box sx={{ flex: '95%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", maxWidth: 500, width: "100%", margin: '5px' }}>
+          <Box className={shake ? 'shake' : ''} sx={{ display: "flex", flexDirection: "column", alignItems: "center", maxWidth: 500, width: "100%", margin: '5px' }}>
             <img src="MMN_H_RGB.svg" alt="logo" style={{ height: 70 }} />
             <Box component="form" onSubmit={handleSubmit} sx={{ width: "100%" }}>
               <Grid container spacing={0.1} columnSpacing={1.5} sx={{ "& .MuiOutlinedInput-root": { borderRadius: 3 } }}>
