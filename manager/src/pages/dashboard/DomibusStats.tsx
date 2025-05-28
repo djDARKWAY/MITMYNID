@@ -31,7 +31,7 @@ const DomibusStats = () => {
         const fetchDomibusData = async () => {
             try {
                 const data = await dataProvider.fetchDomibus("domibus/ext/monitoring/application/status");
-                setServices(data.services || []);
+                setServices((data && data.services) ? data.services : []);
                 setError(null);
             } catch (error) {
                 setError(translate('show.dashboard.error_request_failed'));

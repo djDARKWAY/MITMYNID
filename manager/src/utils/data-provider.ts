@@ -334,13 +334,13 @@ const lb4Provider = (
       });
 
       if (!response.ok) {
-        throw new Error(`Network response was not ok: ${response.status}`);
+        return null; // Retorna null em caso de erro HTTP
       }
 
       return await response.json();
     } catch (error) {
-      console.error("Error fetching from Domibus:", error);
-      throw error;
+      // Silencia o erro e retorna null
+      return null;
     }
   },
 });

@@ -3,7 +3,7 @@ import { inject, intercept } from "@loopback/core";
 import { repository } from "@loopback/repository";
 import { post, requestBody, get, Response, Request, RestBindings } from "@loopback/rest";
 import { AuthServiceBindings, EmailServiceBindings, PasswordHasherBindings, TokenServiceBindings } from "../keys";
-import { PedidosRemocao, User } from "../models";
+import { User } from "../models";
 import { UserRepository, UserRoleRepository, RoleRepository, Credentials, AppUsersSessionRepository, SignInCredentials, AppUsersRegisterRepository, PedidosRemocaoRepository, AppUsersAuthenticatorRepository } from "../repositories";
 import { PasswordHasher } from "../services";
 import {

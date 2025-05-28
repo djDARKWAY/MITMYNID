@@ -1,4 +1,4 @@
-import { Show, TextField, BooleanField, DateField, useTranslate, useRecordContext } from "react-admin";
+import { Show, TextField, DateField, useTranslate, useRecordContext } from "react-admin";
 import { Typography, Divider, Box, Card, CardContent, Grid, Paper, Stack } from "@mui/material";
 import { PersonOutlined, PhoneIphone, AccountBox, CalendarToday, CheckCircle, Cancel } from "@mui/icons-material";
 import { ReactNode } from "react";

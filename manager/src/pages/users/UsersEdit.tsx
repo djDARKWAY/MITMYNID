@@ -1,23 +1,5 @@
 import { Box } from "@mui/material";
-import {
-  usePermissions,
-  Edit,
-  TextInput,
-  required,
-  BooleanInput,
-  FunctionField,
-  ImageField,
-  ImageInput,
-  Loading,
-  useGetIdentity,
-  PasswordInput,
-  TabbedForm,
-  ReferenceManyField,
-  Datagrid,
-  Pagination,
-  DateField,
-  useNotify
-} from "react-admin";
+import { usePermissions, Edit, TextInput, required, BooleanInput, FunctionField, ImageField, ImageInput, Loading, useGetIdentity, PasswordInput, TabbedForm, ReferenceManyField, Datagrid, Pagination, DateField, useNotify } from "react-admin";
 import RolesInput from "./RolesInput";
 import validateUsersEditForm from "./validators/UsersEditValidation";
 import { Users } from "../../utils/types";
@@ -27,9 +9,9 @@ import PlaceholderDropZone from "../../components/general/PlaceholderDropZone";
 import { url } from "../../App";
 
 function formatLogo(value: any) {
-  if (typeof value === "string") { // Value is null or the url string from the backend, wrap it in an object so the form input can handle it
+  if (typeof value === "string") {
     return { src: url + value };
-  } else {  // Else a new image is selected which results in a value object already having a preview link under the url key
+  } else {  
     return value;
   }
 }
@@ -53,9 +35,7 @@ export const UsersEdit = () => {
 
     if (data.tempRoles) delete data.tempRoles;
 
-    // Se a foto vier como string (valor atual) mantenha o campo omitindo alteração
     if (data.photo && typeof data.photo === "string") {
-      // O campo 'photo' será o mesmo que o backend já possui, então remova-o para não sobrescrever
       delete data.photo;
     }
     
@@ -124,27 +104,24 @@ export const UsersEdit = () => {
               </Box>
             </Box>
 
-            <FunctionField label={false} fullWidth sx={{ width: '100%' }} render={(record: any) => identity && record.id !== identity.id && permissions.includes('ADMIN')
-              ?
-              <Box
-                // display={{xs: 'block', md: 'flex'}}
-                sx={{
-                  flexWrap: { xs: 'wrap', md: 'nowrap' },
-                  flexDirection: 'row',
-                  display: { xs: 'block', md: 'flex' },
-                  gap: '1em',
-                  alignItems: 'center'
-                }}>
-                <RolesInput />
-              </Box>
-              :
-              null
+            <FunctionField label={false} fullWidth sx={{ width: '100%' }} render={(record: any) => 
+              permissions.includes('ADMIN') ? (
+                <Box
+                  sx={{
+                    flexWrap: { xs: 'wrap', md: 'nowrap' },
+                    flexDirection: 'row',
+                    display: { xs: 'block', md: 'flex' },
+                    gap: '1em',
+                    alignItems: 'center'
+                  }}>
+                  <RolesInput />
+                </Box>
+              ) : null
             } />
-            <FunctionField label={false} render={(record: any) => identity && record.id !== identity.id && permissions.includes('ADMIN')
-              ?
-              <BooleanInput sx={{ width: 'max-content' }} label="resources.utilizadores.fields.ativo" source="active" />
-              :
-              null
+            <FunctionField label={false} render={(record: any) => 
+              permissions.includes('ADMIN') ? (
+                <BooleanInput sx={{ width: 'max-content' }} label="resources.utilizadores.fields.ativo" source="active" />
+              ) : null
             } />
             <ImageInput
               maxSize={5000000}
