@@ -324,6 +324,9 @@ const frenchMessages: TranslationMessages = {
           show_password: "Montrer le mot de passe",
         },
       },
+      error: {
+        confirm_password: "Les mots de passe ne correspondent pas",
+      },
     },
     utilizadores: {
       name: "Utilisateurs",

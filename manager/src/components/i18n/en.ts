@@ -1,3 +1,4 @@
+import { error } from "console";
 import { TranslationMessages } from "react-admin";
 
 const englishMessages: TranslationMessages = {
@@ -313,6 +314,9 @@ const englishMessages: TranslationMessages = {
         password: "Password",
         confirm_password: "Confirm Password",
         show_password: "Show Password",
+      },
+      error: {
+        confirm_password: "The passwords doesn't match",
       },
     },
     utilizadores: {

@@ -320,6 +320,9 @@ const portugueseMessages: TranslationMessages = {
         confirm_password: "Confirmar palavra-passe",
         show_password: "Mostrar palavra-passe",
       },
+      error: {
+        confirm_password: "As palavras-passe não coincidem",
+      },
     },
     utilizadores: {
       name: "Utilizadores",

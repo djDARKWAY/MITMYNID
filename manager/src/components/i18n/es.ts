@@ -322,6 +322,9 @@ const spanishMessages: TranslationMessages = {
         confirm_password: "Confirmar contraseña",
         show_password: "Mostrar contraseña",
       },
+      error: {
+        confirm_password: "Las contraseñas no coinciden",
+      },
     },
     utilizadores: {
       name: "Usuarios",

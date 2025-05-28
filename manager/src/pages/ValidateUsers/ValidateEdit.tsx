@@ -1,10 +1,8 @@
 import { useTranslate, Edit, SimpleForm, TextField, Labeled } from "react-admin";
 import { ToolbarValidateForm } from "../../components/general/ToolbarEditForm";
-import { useTheme } from "@mui/material";
 
 export const ValidateEdit = () => {
   const translate = useTranslate();
-  const theme = useTheme();
 
   return (
     <Edit title={translate("show.validateUsers.validate")}>
