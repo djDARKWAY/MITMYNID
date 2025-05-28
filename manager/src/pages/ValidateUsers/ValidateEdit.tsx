@@ -1,4 +1,4 @@
-import { useTranslate, Edit, SimpleForm, TextField, Labeled, FunctionField } from "react-admin";
+import { useTranslate, Edit, SimpleForm, TextField, Labeled } from "react-admin";
 import { ToolbarValidateForm } from "../../components/general/ToolbarEditForm";
 import { useTheme } from "@mui/material";
 

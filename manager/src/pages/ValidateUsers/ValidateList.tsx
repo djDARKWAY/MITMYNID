@@ -23,8 +23,9 @@ export const ValidateList = () => {
         <EditButton label="Ver detalhes"/>
         <DeleteButton 
           mutationMode="pessimistic"
-          confirmTitle={translate('resources.utilizadores.confirm.title')}
-          confirmContent={translate('resources.utilizadores.confirm.content')} 
+          confirmTitle={"Apagar item"}
+          confirmContent={"Tem a certeza que deseja apagar este item?"} 
+          label={translate('ra.action.delete')}
         />
       </Datagrid>
     </List>
