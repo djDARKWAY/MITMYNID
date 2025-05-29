@@ -39,6 +39,26 @@ const CertificatesUpload: React.FC = () => {
     fetchAccessPoints();
   }, [translate]);
 
+  const getCertificateType = async (file: File): Promise<string | null> => {
+    try {
+      const content = await file.text();
+      const filename = file.name.toLowerCase();
+      const extension = filename.split('.').pop();
+      const isPrivKey = content.includes('PRIVATE KEY') || extension === 'key';
+      if (isPrivKey) return 'priv_key';
+
+      const isCert = content.includes('CERTIFICATE') || ['crt', 'pem', 'ca-bundle'].includes(extension!);
+      if (isCert) {
+        const intHints = ['ca:true', 'certificate authority', 'ca', 'intermediate', 'bundle'];
+        const isIntermediate = intHints.some(hint => content.toLowerCase().includes(hint) || filename.includes(hint));
+        return isIntermediate ? 'int_cert' : 'srv_cert';
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  };
+
   const showNotification = (message: string, severity: "error" | "success") =>
     setSnackbar({ open: true, message, severity });
 
@@ -85,13 +105,13 @@ const CertificatesUpload: React.FC = () => {
           if (zip.files[filename].dir) continue;
           const fileData = await zip.files[filename].async("uint8array");
           const file = new File([fileData], filename);
-          const lower = filename.toLowerCase();
-
-          const accepted = lower.endsWith(".crt") || lower.endsWith(".pem")
-            ? await processFile("srv_cert", file) : lower.endsWith(".key")
-            ? await processFile("priv_key", file) : lower.endsWith(".ca-bundle")
-            ? await processFile("int_cert", file) : false;
-          if (accepted) filesProcessed++;
+          
+          // Determine file type from content and extension
+          const fileType = await getCertificateType(file);
+          
+          if (fileType && await processFile(fileType, file)) {
+            filesProcessed++;
+          }
         }
 
         showNotification(filesProcessed ? translate("show.certificates.upload.file_uploaded_success", { count: filesProcessed }) : translate("show.certificates.upload.invalid_zip_file"), filesProcessed ? "success" : "error");
@@ -99,9 +119,14 @@ const CertificatesUpload: React.FC = () => {
         showNotification(translate("show.certificates.upload.error_process_zip"), "error");
       }
     } else {
-      const fileKey = { crt: "srv_cert", pem: "srv_cert", key: "priv_key", "ca-bundle": "int_cert" }[fileExtension || ""];
-      if (fileKey && (await processFile(fileKey, uploadedFile))) showNotification(translate("show.certificates.upload.file_uploaded_success"), "success");
-      else showNotification(translate("show.certificates.upload.unsupported_file_format"), "error");
+      // Determine file type from content and extension
+      const fileType = await getCertificateType(uploadedFile);
+      
+      if (fileType && (await processFile(fileType, uploadedFile))) {
+        showNotification(translate("show.certificates.upload.file_uploaded_success"), "success");
+      } else {
+        showNotification(translate("show.certificates.upload.unsupported_file_format"), "error");
+      }
     }
 
     setFiles(updatedFiles);
