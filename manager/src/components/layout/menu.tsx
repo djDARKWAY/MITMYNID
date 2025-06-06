@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import {
   Key,
-  Insights,
+  Dashboard,
   CellTowerRounded,
   CardMembershipRounded,
   WifiTetheringErrorRounded,
@@ -16,7 +16,8 @@ import {
   WarehouseRounded,
   ManageAccountsRounded,
   FileUploadRounded,
-  MapRounded
+  MapRounded,
+  Help
 } from "@mui/icons-material";
 import {
   useTranslate,
@@ -27,7 +28,7 @@ import {
   useStore,
 } from "react-admin";
 import SubMenu from "./submenu";
-import { Box, Divider } from "@mui/material";
+import { Box, Divider, IconButton, Tooltip } from "@mui/material"; // Adicione IconButton e Tooltip
 import { Link } from "react-router-dom";
 
 type MenuName =
@@ -53,8 +54,8 @@ const MyMenu = ({ dense = false }: MenuProps) => {
   const [state, setState] = useState({
     menuSeguranca: resource === "menuSeguranca" ? true : false,
     menuAccessPoint: resource === "menuAccessPoint" ? true : false,
-    menuCertificados: resource === "menuConfig" ? true : false,
-    menuMonitorizacao: resource === "menuConfig" ? true : false,
+    menuCertificados: resource === "menuCertificados" ? true : false,
+    menuMonitorizacao: resource === "menuMonitorizacao" ? true : false,
     menuConfig: resource === "menuConfig" ? true : false,
     menuArmazens: resource === "menuArmazens" ? true : false,
   });
@@ -78,6 +79,8 @@ const MyMenu = ({ dense = false }: MenuProps) => {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
           }),
+        position: "relative",
+        minHeight: "100vh",
       }}
     >
       <Box sx={{ padding: "10px 0px 10px 0px" }}>
@@ -132,7 +135,7 @@ const MyMenu = ({ dense = false }: MenuProps) => {
         sx={{
           color: (theme) => (!open ? theme.sidebar.background : "default"),
         }}
-        leftIcon={<Insights />}
+        leftIcon={<Dashboard />}
         dense={dense}
       />
 
@@ -302,6 +305,36 @@ const MyMenu = ({ dense = false }: MenuProps) => {
   </SubMenu>
 )}
 
+      <Box
+        sx={{
+          position: "absolute",
+          left: 0,
+          bottom: 42,
+          width: "100%",
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          p: 2,
+        }}
+      >
+        <Tooltip title={translate("Ajuda e Suporte")}>
+          <IconButton
+            component={Link}
+            to="/faq/dashboard"
+            color="primary"
+            sx={{
+              background: (theme) => theme.palette.background.paper,
+              boxShadow: 1,
+              "&:hover": {
+                background: (theme) => theme.palette.action.hover,
+              },
+            }}
+            size="large"
+          >
+            <Help />
+          </IconButton>
+        </Tooltip>
+      </Box>
     </Box>
   ) : null;
 };

@@ -33,7 +33,7 @@ const FlyIntroduction: React.FC = () => {
     const map = useMap();
 
     useEffect(() => {
-        map.flyToBounds([[43.154311, -10.526570], [35.96125, -5.189159]], { duration: 1 });
+        map.flyToBounds([[43.154311, -10.526570], [35.96125, -5.189159]], { duration: 0.75 });
     }, [map]);
 
     return null;

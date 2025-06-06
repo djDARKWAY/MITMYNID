@@ -24,6 +24,14 @@ import StatusTest from './pages/status/StatusTest';
 import StatusTestv2 from './pages/status/StatusTestv2';
 import CertificatesUpload from './pages/certificates/CertificatesUpload';
 
+// FAQ
+import FAQList from './pages/faq/faqDashboard';
+import FaqWarehouse from './pages/faq/faqWarehouse';
+import FaqWarehouseMap from './pages/faq/faqWarehouseMap';
+import FaqCertificate from './pages/faq/faqCertificate';
+import FaqCertificateUpload from './pages/faq/faqCertificateUpload';
+import FaqAccessPoints from './pages/faq/faqAccessPoints';
+
 // Resources
 import { roles } from './pages/roles';
 import { users } from './pages/users';
@@ -97,20 +105,43 @@ const App = () => {
                 <Resource name="logs" {...logs(permissions)} />,
 
                 <CustomRoutes>
+                  {/* Dashboard */}
                   <Route path="/dashboard" element={<Dashboard />} />
+                              
+                  {/* Configurações */}
                   <Route path="/configuration" element={<Configuration />} />
                   <Route path="/profile" element={<Profile />} />
+                              
+                  {/* Certificados */}
                   <Route path="/certificates" element={<CertificatesList />} />
+                  <Route path="/upload" element={<CertificatesUpload />} />
+                              
+                  {/* Pontos de Acesso */}
                   <Route path="/access-points" element={<AccessPointsList />} />
+                              
+                  {/* Armazéns */}
                   <Route path="/warehouses" element={<WarehousesList />} />
                   <Route path="/warehouses-map" element={<WarehousesMap />} />
+                              
+                  {/* Logs */}
                   <Route path="/logs" element={<LogsList />} />
+                  <Route path="/users-logs" element={<UsersLogs />} />
+                              
+                  {/* Status */}
                   <Route path="/status-test" element={<StatusTest />} />
                   <Route path="/status-testv2" element={<StatusTestv2 />} />
+                              
+                  {/* FAQ */}
+                  <Route path="/faq/dashboard" element={<FAQList />} />
+                  <Route path="/faq/warehouse" element={<FaqWarehouse />} />
+                  <Route path="/faq/map" element={<FaqWarehouseMap />} />
+                  <Route path="/faq/certificate" element={<FaqCertificate /> } />
+                  <Route path="/faq/upload" element={<FaqCertificateUpload />} />
+                  <Route path="/faq/access-points" element={<FaqAccessPoints />} />
+
+                  {/* 404 */}
                   <Route path="/unauthorized" key={"/unauthorized"} element={<Unauthorized />} />
-                  <Route path="/users-logs" element={<UsersLogs />} />
-                  <Route path="/upload" element={<CertificatesUpload />} />
-                </CustomRoutes>,
+                </CustomRoutes>
               ]}
             </Admin>
           } />

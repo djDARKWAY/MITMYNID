@@ -24,13 +24,5 @@ export const AccessPointsFilters = (permissions: string[]) => {
     <SelectInput key="ap_software" source="ap_software" label="pos.accessPoints.ap_software" choices={softwareChoices.map(software => ({ id: software, name: software }))} fullWidth resettable />,
     <SelectInput key="is_active" source="is_active" label="pos.accessPoints.is_active" choices={[{ id: true, name: "pos.labels.active" }, { id: false, name: "pos.labels.inactive" }, ]} fullWidth resettable />,
   ];
-{/*
-  if (permissions.includes('ADMIN')) {
-    filters.push(
-      <TextInput key="admin_only_field" source="admin_only_field" size="small" label="pos.labels.admin" fullWidth resettable />
-    );
-  }
-*/}
-
   return filters;
 };
